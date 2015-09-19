@@ -1,0 +1,11 @@
+
+Tests can invoke other tests, either synchronously or threaded.
+Threaded tests can interact with each other.
+
+Actor:  Can be another test or just a set of behaviors
+Bound:  How far test objects can reach
+
+TestObject: Actor, Command, Element, Endpoint, Logic (Process, Fork), Transport
+            Notice (Alert, Exception, Message), Lookup (Database, ...)
+            Location, Bound
+            TestCase, TestBundle, Log, Result
