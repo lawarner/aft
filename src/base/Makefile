@@ -17,6 +17,8 @@
 
 # Simple makefile for the aft package
 
+# Note the base directory holds primary base and abstract classes
+
 TOP = ../..
 INCDIR = $(TOP)/src
 
@@ -25,12 +27,12 @@ CC = g++
 #CCFLAGS = -Wall -g -O2 -I$(TOP) -I$(INCDIR)
 CCFLAGS = -Wall -g -I$(TOP) -I$(INCDIR)
 
-OBJS := logger.o testcase.o
+OBJS := blob.o context.o result.o testobject.o
 
 SRCS := $(OBJS:.o=.cpp)
 INCS = $(OBJS:.o=.h)
 
-LIBR = libaftcore.a
+LIBR = libaftbase.a
 
 
 .cpp.o: ; $(CC) $(CCFLAGS) -c $<

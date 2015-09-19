@@ -14,14 +14,24 @@
  *   limitations under the License.
  */
 
-#include "testobject.h"
+#include "testcase.h"
+using namespace aft::core;
 
-using namespace aft;
 
-core::TestObject::TestObject()
+bool
+TestCase::open()
 {
+    return false;
 }
 
-core::TestObject::~TestObject()
+bool
+TestCase::run()
 {
+    return false;
+}
+
+void
+TestCase::close()
+{
+
 }

@@ -17,7 +17,11 @@
 
 # Simple makefile for the aft package
 
-TOP = ..
+TOP = ../..
+INCDIR = $(TOP)/include
+
+CC = g++
+CCFLAGS = $(INCS)
 
 ARMPREFIX=arm-linux-gnueabihf
 ARMAR=$(ARMPREFIX)-ar
@@ -27,28 +31,32 @@ ANDROIDPREFIX=arm-linux-androideabi
 ANDROIDAR=$(ANDROIDPREFIX)-ar
 ANDROIDCC=$(ANDROIDPREFIX)-g++
 
-LIBSDIR = $(TOP)/lib
-LIBAFT = $(LIBSDIR)/libaft.a
+LIBAFT = $(TOP)/lib/libaft.a
 
-SUBDIRS = base core tests
-# storage transport plugin ui
+LDFLAGS = -pthread
+LDLIBS =
 
-PROGRAMS =
+SUBDIRS =
+
+OBJS := t_logger.o t_result.o
+SRCS := $(OBJS:.o=.cpp)
+INCS := -I$(TOP)/src
+
+PROGRAMS = t_logger t_result
+
+DEPCPPFLAGS = -I. $(INCS)
+DEPLIBS = $(LIBAFT)
+
+.cpp.o: ; $(CC) $(CCFLAGS) -c $<
 
 all: subdirs $(PROGRAMS)
-
-lib: $(LIBAFT)
-
-$(LIBAFT):
-	mkdir -p $(LIBSDIR)
-	rm -f tests/*.o
-	$(AR) rsv $@ */*.o
 
 subdirs:
 	for dir in $(SUBDIRS); do \
 		make -C $$dir; \
 	done
 
+$(PROGRAMS): $(DEPLIBS)
 
 arm:
 	for dir in $(SUBDIRS); do \
@@ -65,9 +73,15 @@ clean:
 	for dir in $(SUBDIRS); do \
 		make -C $$dir clean; \
 	done
+	rm -f $(OBJS) $(PROGRAMS)
 
 .PHONY: depends
-depends:
+depends: $(SRCS)
 	for dir in $(SUBDIRS); do \
 		make -C $$dir depends; \
 	done
+	$(CC) $(DEPCPPFLAGS) -MM $(SRCS) > .makedepends
+	touch .mkdep-timestamp
+
+.makedepends:
+include .makedepends

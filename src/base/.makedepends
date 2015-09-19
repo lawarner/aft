@@ -1,0 +1,4 @@
+blob.o: blob.cpp blob.h
+context.o: context.cpp context.h
+result.o: result.cpp result.h
+testobject.o: testobject.cpp testobject.h iterator.h serialize.h

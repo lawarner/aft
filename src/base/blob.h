@@ -15,21 +15,37 @@
  *   limitations under the License.
  */
 
+#include <string>
+#include <vector>
+
+
 namespace aft
 {
-namespace core
+namespace base
 {
 
 /**
- *  The root of all (evil) testing.
- *  Everything that can appear in a test case is derived from this class.
+ *  Serialized representation of a class instance.
+ *
+ *  This class holds the data is serialize by any class that implements the
+ *  SerializeContract interface.  Each Blob holds data, members (other Blobs)
+ *  or both data and blobs.
+ *  Blobs can optionally be named.
  */
-class TestObject
+class Blob
 {
+public:
+    Blob(const std::string& name, void* data = 0);
+    virtual ~Blob();
+
+    bool addData(void* data);
+    bool addMember(Blob* blob);
+
 protected:
-    TestObject();
-    virtual ~TestObject();
+    const std::string name_;
+    void* data_;
+    std::vector<Blob*> members_;
 };
 
-} // namespace core
+} // namespace base
 } // namespace aft

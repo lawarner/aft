@@ -1,6 +1,12 @@
 # aft
 Abstract Framework for Testing
 
+### NOTE THIS IS NOT WORKING YET
+
+##### Please note that this project is in early stages.
+##### Only base and core classes are being written now.
+##### Try again later.
+
 AFT is a toolkit for automated testing.  The core logic of defining and executing 
 automated tests is abstracted from any underlying specifics, such as platform, 
 database, transport, etc.  AFT includes a plug-in architecture to apply testing to 
