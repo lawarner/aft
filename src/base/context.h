@@ -21,10 +21,11 @@
 
 namespace aft
 {
-namespace core
+namespace base
 {
 // Forward reference
 class PropertyHandler;
+class TObject;
 
 
 /**
@@ -38,23 +39,30 @@ typedef std::map<std::string, PropertyHandler*> Properties;
  *  Context and environment runtime information.
  *
  *  Contexts carry runtime information and are passed loosely between objects.
- *  This base carries a dictionary of properties that subclasses uses.  These properties
+ *  This base class carries a dictionary of properties that subclasses can use.
+ *  These properties
  *  store items such as the current test case, transports, ui, logs, etc.
  */
 class Context
 {
-protected:
-    Context();
+public:
     virtual ~Context();
 
-    bool addProperty(const std::string& propertyName, PropertyHandler* handler);
+public:
+    /** Apply this context to test object and return the result. */
+    TObject& apply(const TObject& testObject);
+
+protected:
+    Context();
 
 public:
+    bool addProperty(const std::string& propertyName, PropertyHandler* handler);
+
     PropertyHandler* handler(const std::string& propertyName) const;
 
 protected:
     Properties properties_;
 };
 
-} // namespace core
+} // namespace base
 } // namespace aft

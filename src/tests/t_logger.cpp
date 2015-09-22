@@ -14,15 +14,23 @@
  *   limitations under the License.
  */
 
-#include <iostream>
 #include <core/logger.h>
+#include <gtest/gtest.h>
 using namespace aft;
 
-int main(int argc, const char* argv[])
+namespace
 {
-    std::cout << "Testing . . ." << std::endl;
 
+TEST(LoggerTest, TerminalLog)
+{
+    ASSERT_TRUE(core::aftlog != 0);
     core::aftlog << "This is a log message." << std::endl;
+}
 
-    return 0;
+} // namespace
+
+int main(int argc, char* argv[])
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

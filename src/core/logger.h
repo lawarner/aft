@@ -19,6 +19,11 @@
 
 namespace aft
 {
+namespace base
+{
+    class Context;
+}
+
 namespace core
 {
 
@@ -71,11 +76,20 @@ public:
     Logger(AftLogType logType, const std::string& file = std::string());
     virtual ~Logger();
 
+    /**
+     *  Set up standard loggers aftalert, aftaudit and aftlog based on the context.
+     *  Note that the context must have a logging context.
+     */
+    static void initStandardLoggers(aft::base::Context* context);
+
     void setLogLevel(AftLogLevel level = Debug);
     void setLowLogLevel(AftLogLevel level = Debug);
     void writeAlert(const std::string& msg);
     void writeAudit(const std::string& msg);
     void writeLog(const std::string& msg);
+
+private:
+    void openLogFile(const std::string& file, bool buffered);
 
 private:
     AftLogLevel lowLogLevel_;

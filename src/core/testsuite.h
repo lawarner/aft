@@ -1,3 +1,4 @@
+#pragma once
 /*
  *   Copyright 2015 Andy Warner
  *
@@ -14,35 +15,25 @@
  *   limitations under the License.
  */
 
-#include "base/context.h"
-#include "testcase.h"
-using namespace aft::core;
+#include "base/tobject.h"
 
-
-TestCase::TestCase(const std::string& name)
-    : TObjectContainer(name)
+namespace aft
 {
+namespace base
+{
+    class Context;
 }
 
-TestCase::~TestCase()
-{
-}
-
-bool
-TestCase::open()
-{
-    return false;
-}
-
-aft::base::TObject&
-TestCase::run(aft::base::Context* context)
-{
-    TObject result("Result");
-    return result;
-}
-
-void
-TestCase::close()
+namespace core
 {
 
-}
+class TestSuite : public aft::base::TObjectContainer
+{
+public:
+    bool open();
+    base::TObject& run(base::Context* context);
+    void close();
+};
+
+} // namespace core
+} // namespace aft

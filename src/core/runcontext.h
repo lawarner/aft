@@ -1,3 +1,4 @@
+#pragma once
 /*
  *   Copyright 2015 Andy Warner
  *
@@ -15,34 +16,25 @@
  */
 
 #include "base/context.h"
-#include "testcase.h"
-using namespace aft::core;
 
 
-TestCase::TestCase(const std::string& name)
-    : TObjectContainer(name)
+namespace aft
 {
-}
-
-TestCase::~TestCase()
-{
-}
-
-bool
-TestCase::open()
-{
-    return false;
-}
-
-aft::base::TObject&
-TestCase::run(aft::base::Context* context)
-{
-    TObject result("Result");
-    return result;
-}
-
-void
-TestCase::close()
+namespace core
 {
 
-}
+/**
+ *  Context used to run test cases.
+ */
+class RunContext : public aft::base::Context
+{
+public:
+    RunContext();
+    virtual ~RunContext();
+
+    // logger, readers, writers, dispositions
+    // gui
+};
+
+} // namespace core
+} // namespace aft

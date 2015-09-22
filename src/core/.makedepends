@@ -1,3 +1,7 @@
 logger.o: logger.cpp logger.h
-testcase.o: testcase.cpp testcase.h ../../src/base/testobject.h \
- ../../src/base/iterator.h ../../src/base/serialize.h
+testcase.o: testcase.cpp ../../src/base/context.h testcase.h \
+ ../../src/base/tobject.h ../../src/base/serialize.h \
+ ../../src/base/tobjectiterator.h ../../src/base/tobjecttree.h
+testsuite.o: testsuite.cpp ../../src/base/context.h testsuite.h \
+ ../../src/base/tobject.h ../../src/base/serialize.h \
+ ../../src/base/tobjectiterator.h ../../src/base/tobjecttree.h

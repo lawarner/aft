@@ -9,3 +9,16 @@ TestObject: Actor, Command, Element, Endpoint, Logic (Process, Fork), Transport
             Notice (Alert, Exception, Message), Lookup (Database, ...)
             Location, Bound
             TestCase, TestBundle, Log, Result
+
+Import hints for tests from unit tests defined using googletest, or other framework.
+
+Switch to CMake
+
+
+TO has:
+  Tree<TO*> children_;
+
+Tree<T>
+  typedef Iterator<Tree<T> > iterator;
+
+Iterator<Tree<TO*> >

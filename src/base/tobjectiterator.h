@@ -15,49 +15,49 @@
  *   limitations under the License.
  */
 
+
 namespace aft
 {
 namespace base
 {
 // Forward reference
-class Command;
 class TObject;
+class TObjectIterator;
+class TObjectTree;
 
-
-class Result
+/**
+ *  Contract that elements of a Iterator must implement
+ */
+class TObjectIteratorContract
 {
 public:
-    enum ResultType
-    {
-        UNKNOWN = -1,
-        FATAL,
-        BOOLEAN,
-        COMMAND,
-        ITERATOR,
-        TOBJECT
-    };
+    virtual TObjectIterator& begin() = 0;
+    virtual TObjectIterator& end() = 0;
+    virtual TObjectIterator& next() = 0;
+};
 
-    Result(ResultType type = BOOLEAN);
-    virtual ~Result();
+/**
+ *  Iterator class for TObjects.
+ *
+ *  This may be templatized later, but I doubt it.
+ */
+class TObjectIterator
+{
+public:
+    TObjectIterator();
+    TObjectIterator(TObjectTree* data);
 
-    ResultType getType() const;
-    bool getValue(bool& value) const;
-    bool getValue(Command*& command) const;
-    bool getValue(TObject*& object) const;
-    void setValue(bool value);
-    void setValue(Command* command);
-    void setValue(TObject* object);
+    TObjectIterator& operator=(const TObjectIterator& other);
 
-private:
-    ResultType type_;
-    bool isValueSet_;
-    union Values
-    {
-        bool flag_;
-        Command* command_;
-        void* iterator_;
-        TObject* object_;
-    } value_;
+    bool operator!=(const TObjectIterator& other);
+
+    TObject& operator*();
+
+    TObject* operator->();
+
+    TObjectIterator& operator++();
+
+    TObjectTree* data_;
 };
 
 } // namespace base

@@ -120,39 +120,44 @@ Logger::Logger(AftLogType logType, const std::string& file)
     : lowLogLevel_(Debug)
     , streamBuf_(logType)
 {
-    //if (logType == AUDIT)
-    if (logType != INVALID)
+    openLogFile(file, logType != INVALID);
+}
+
+void
+Logger::openLogFile(const std::string& file, bool buffered)
+{
+    string logFile;
+    if (file.empty())
     {
-        if (file.empty())
+        logFile = "/dev/tty";
+    } else {
+        if (file[0] != '/' || file[0] != '.')
         {
-            // As daemon, trying to open tty will fail
-            if (!streamBuf_.open("/dev/tty", ios::out))
-            {
-                cerr << "Failed to open /dev/tty for logging" << endl;
-                streamBuf_.open("/dev/null", ios::out);
-            }
+            const char* home = getenv("HOME");
+            if (!home || !home[0]) home = "/tmp";
+            logFile = string(home) + "/logs/" + file;
         } else {
-            string logFile;
-            if (file[0] != '/' || file[0] != '.')
-            {
-                const char* home = getenv("HOME");
-                if (!home || !home[0]) home = "/tmp";
-                logFile = string(home) + "/logs/" + file;
-            } else {
-                logFile = file;
-            }
-            if (!streamBuf_.open(logFile.c_str(), ios::out /*| ios::app*/))
-            {
-                cerr << "Could not open file " << logFile << endl;
-            }
+            logFile = file;
+        }
+    }
+
+    if (buffered)
+    {
+        if (streamBuf_.is_open()) streamBuf_.close();
+
+        if (!streamBuf_.open(logFile.c_str(), ios::out))
+        {
+            cerr << "Could not open file " << logFile << ".  Using /dev/null instead." << endl;
+            streamBuf_.open("/dev/null", ios::out);
         }
         ostream::rdbuf(&streamBuf_);
     } else {
-        if (file.empty())
+        if (is_open()) close();
+
+        open(logFile.c_str());
+        if (!is_open())
         {
-            open("/dev/tty");
-        } else {
-            open(file.c_str());
+            open("dev/null");
         }
     }
 }
@@ -160,6 +165,11 @@ Logger::Logger(AftLogType logType, const std::string& file)
 Logger::~Logger()
 {
     close();
+}
+
+void initStandardLoggers(base::Context* context)
+{
+
 }
 
 void Logger::setLogLevel(core::AftLogLevel level)

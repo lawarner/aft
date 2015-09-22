@@ -14,35 +14,16 @@
  *   limitations under the License.
  */
 
-#include "base/context.h"
-#include "testcase.h"
+#include "runcontext.h"
 using namespace aft::core;
 
 
-TestCase::TestCase(const std::string& name)
-    : TObjectContainer(name)
+RunContext::RunContext()
 {
 }
 
-TestCase::~TestCase()
+RunContext::~RunContext()
 {
 }
 
-bool
-TestCase::open()
-{
-    return false;
-}
 
-aft::base::TObject&
-TestCase::run(aft::base::Context* context)
-{
-    TObject result("Result");
-    return result;
-}
-
-void
-TestCase::close()
-{
-
-}

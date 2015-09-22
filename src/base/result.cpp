@@ -52,9 +52,9 @@ bool Result::getValue(Command*& command) const
     return true;
 }
 
-bool Result::getValue(TestObject*& object) const
+bool Result::getValue(TObject*& object) const
 {
-    if (!isValueSet_ || type_ != TESTOBJECT) return false;
+    if (!isValueSet_ || type_ != TOBJECT) return false;
 
     object = value_.object_;
     return true;
@@ -73,7 +73,7 @@ void Result::setValue(Command* command)
     isValueSet_ = true;
 }
 
-void Result::setValue(TestObject* object)
+void Result::setValue(TObject* object)
 {
     value_.object_ = object;
     isValueSet_ = true;

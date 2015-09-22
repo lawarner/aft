@@ -27,7 +27,7 @@ ANDROIDCC=$(ANDROIDPREFIX)-g++
 
 BACKUPFILE = ~/Downloads/srcrepo/aft-src-`date +%Y%j`.tar.bz2
 
-LIBR = libaft.a
+LIBR = lib/libaft.a
 
 SUBDIRS = src
 # doc examples
@@ -66,6 +66,7 @@ clean:
 	for dir in $(SUBDIRS); do \
 		make -C $$dir clean; \
 	done
+	rm $(LIBR)
 
 .PHONY: depends
 depends:

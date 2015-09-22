@@ -15,19 +15,51 @@
  *   limitations under the License.
  */
 
-#include "base/testobject.h"
+#include <string>
+#include "base/tobject.h"
 
 namespace aft
 {
+// Forward reference
+namespace base
+{
+    class Context;
+}
+
 namespace core
 {
 
-class TestCase : public aft::base::TestObjectContainer
+/**
+ * Contains a test case that can be run.
+ */
+class TestCase : public aft::base::TObjectContainer
 {
 public:
+    TestCase(const std::string& name = std::string());
+    virtual ~TestCase();
+
+    /** Open the test case */
     bool open();
-    bool run();
+
+    /**
+     *  Run the test case within a context.
+     *
+     *  The test case is run by iterating the objects in this container
+     *  and executing them in the context.
+     *
+     *  @param context The context (environment) where objects are run.  The Context
+     *         past in will likely be modified as a side effect of running.
+     *  @return A TObject, typically a Result specifying the final outcome of running
+     *          this test case.
+     */
+    base::TObject& run(base::Context* context);
+
+    /** Close the test case */
     void close();
+
+    //TODO Branch(true, false, exception)
+private:
+
 };
 
 } // namespace core

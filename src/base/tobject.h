@@ -16,9 +16,9 @@
  */
 
 #include <string>
-#include <vector>
-#include "iterator.h"
 #include "serialize.h"
+#include "tobjectiterator.h"
+#include "tobjecttree.h"
 
 
 namespace aft
@@ -26,59 +26,80 @@ namespace aft
 namespace base
 {
 // Forward reference
-class TestObject;
+class Context;
 
-typedef std::string TestObjectKey;
-typedef std::vector<TestObject*> Children;
-typedef Iterator<Children::iterator> ContainerIterator;
+typedef std::string TObjectKey;
 
 
 /**
  *  The root of all (evil) testing.
  *  Everything that can appear in a test case is derived from this class.
  */
-class TestObject : public SerializeContract
+class TObject : public SerializeContract
 {
 public:
+    enum State
+    {
+        INVALID = -1,
+        UNINITIALIZED,
+        INITAL,
+        PREPARED,
+        RUNNING,
+        PAUSED,
+        STOPPED,
+        FINISHED_BAD,
+        FINISHED_GOOD
+    };
+
+    TObject(const std::string& name = std::string());
+
+    virtual ~TObject();
+
+    const std::string& getName() const;
+    State getState() const;
+    virtual TObject& run(Context* context);
+
+    virtual bool operator==(const TObject& other);
+
     // Implement SerializeContract
     virtual Blob* serialize();
     virtual bool deserialize(const Blob* blob);
 
 protected:
-    TestObject();
-    virtual ~TestObject();
+    std::string name_;
+    State state_;
 };
 
 
+typedef TObjectTree Children;
+
 /**
  *  Test object that contains other test objects.
- *  It contains a tree of of child test objects and a set of iterators and visitors.
+ *  It contains a tree of of child test objects and a set of visitors.
  */
-class TestObjectContainer : public TestObject, public IteratorContract<Children::iterator>
+class TObjectContainer : public TObject
 {
 public:
 
-    typedef ContainerIterator iterator;
+    typedef TObjectIterator iterator;
 
-    bool add(TestObject* testObject);
-    TestObject* find(const TestObjectKey& key);
-    bool remove(TestObject* testObject);
+    bool add(TObject* testObject);
+    TObject* find(const TObjectKey& key);
+    bool remove(TObject* testObject);
 
-    // Implement IteratorContract
-    ContainerIterator& begin();
-    ContainerIterator& end();
-    ContainerIterator& next();
 
-    // Implement SerializeContract
+    // Visitors
+    virtual TObject& run(Context* context);
+
+    // Override parent SerializeContract
     virtual Blob* serialize();
     virtual bool deserialize(const Blob* blob);
 
 protected:
-    TestObjectContainer();
-    virtual ~TestObjectContainer();
+    TObjectContainer(const std::string& name = std::string());
+    virtual ~TObjectContainer();
 
-    Children children_;
-    iterator iterator_;
+    Children* children_;
 };
 
 } // namespace base

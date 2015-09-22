@@ -14,41 +14,34 @@
  *   limitations under the License.
  */
 
-#include <base/result.h>
-#include <base/tobject.h>
-#include <core/logger.h>
-#include <gtest/gtest.h>
+#include "base/context.h"
+#include "testsuite.h"
 using namespace aft::base;
 using namespace aft::core;
 
-namespace
-{
 
-TEST(ResultTest, Boolean)
+bool
+TestSuite::open()
 {
-    Result testResult;	// defaults to BOOLEAN
-    bool value;
-    testResult.setValue(true);
-    ASSERT_TRUE(testResult.getValue(value));
-    EXPECT_EQ(value, true);
+    return true;
 }
 
-TEST(ResultTest, TObject)
+TObject&
+TestSuite::run(Context* context)
 {
-    Result testResult(Result::TOBJECT);
-    TObject obj("Test Object");
-    testResult.setValue(&obj);
+    base::TObjectContainer::iterator iter;
+    TObject result("Result");
+    if (!children_) return result;
 
-    TObject* objPtr;
-    ASSERT_TRUE(testResult.getValue(objPtr));
-    EXPECT_EQ(&obj, objPtr);
+    for (iter = children_->begin(); iter != children_->end(); ++iter)
+    {
+        result = iter->run(context);
+    }
+    return result;
 }
 
-} // namespace
-
-int main(int argc, char* argv[])
+void
+TestSuite::close()
 {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
 
+}

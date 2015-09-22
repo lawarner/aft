@@ -14,40 +14,43 @@
  *   limitations under the License.
  */
 
-#include "context.h"
-#include "tobject.h"
+#include "tobjectiterator.h"
+#include "tobjecttree.h"
 using namespace aft::base;
 
-Context::Context()
+
+TObjectIterator::TObjectIterator() { }
+
+TObjectIterator::TObjectIterator(TObjectTree* data)
+    : data_(data)
 {
 }
 
-Context::~Context()
+TObjectIterator& TObjectIterator::operator=(const TObjectIterator& other)
 {
-}
-
-bool
-Context::addProperty(const std::string& propertyName, PropertyHandler* handler)
-{
-    if (!handler || properties_.find(propertyName) != properties_.end())
+    if (*this != other)
     {
-        return false;
+        data_ = other.data_;
     }
-    properties_[propertyName] = handler;
-    return true;
+    return *this;
 }
 
-TObject&
-Context::apply(const TObject& testObject)
+bool TObjectIterator::operator!=(const TObjectIterator& other)
 {
-    return const_cast<TObject&>(testObject);
+    return data_ != other.data_;
 }
 
-PropertyHandler*
-Context::handler(const std::string& propertyName) const
+TObject& TObjectIterator::operator*()
 {
-    Properties::const_iterator it = properties_.find(propertyName);
-    if (it == properties_.end()) return 0;
+    return *data_->getValue();
+}
 
-    return it->second;
+TObject* TObjectIterator::operator->()
+{
+    return data_->getValue();
+}
+
+TObjectIterator& TObjectIterator::operator++()
+{
+    return data_->next();
 }

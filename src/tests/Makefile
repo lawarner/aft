@@ -18,7 +18,8 @@
 # Simple makefile for the aft package
 
 TOP = ../..
-INCDIR = $(TOP)/include
+INCDIR = $(TOP)/src
+INCS := -I$(INCDIR)
 
 CC = g++
 CCFLAGS = $(INCS)
@@ -32,20 +33,20 @@ ANDROIDAR=$(ANDROIDPREFIX)-ar
 ANDROIDCC=$(ANDROIDPREFIX)-g++
 
 LIBAFT = $(TOP)/lib/libaft.a
+LIBGTEST = /usr/local/lib/libgtest.a
 
 LDFLAGS = -pthread
 LDLIBS =
 
 SUBDIRS =
 
-OBJS := t_logger.o t_result.o
+OBJS := t_basetests.o t_logger.o t_result.o
 SRCS := $(OBJS:.o=.cpp)
-INCS := -I$(TOP)/src
 
-PROGRAMS = t_logger t_result
+PROGRAMS = t_basetests t_logger t_result
 
 DEPCPPFLAGS = -I. $(INCS)
-DEPLIBS = $(LIBAFT)
+DEPLIBS = $(LIBAFT) $(LIBGTEST)
 
 .cpp.o: ; $(CC) $(CCFLAGS) -c $<
 

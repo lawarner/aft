@@ -1,2 +1,3 @@
-t_logger.o: t_logger.cpp ../../src/core/logger.h
-t_result.o: t_result.cpp ../../src/base/result.h ../../src/core/logger.h
+t_basetests.o: t_basetests.cpp
+t_logger.o: t_logger.cpp
+t_result.o: t_result.cpp

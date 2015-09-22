@@ -1,4 +1,11 @@
 blob.o: blob.cpp blob.h
-context.o: context.cpp context.h
+consumer.o: consumer.cpp consumer.h
+context.o: context.cpp context.h tobject.h serialize.h tobjectiterator.h \
+ tobjecttree.h
+producer.o: producer.cpp producer.h
+propertyhandler.o: propertyhandler.cpp context.h propertyhandler.h
 result.o: result.cpp result.h
-testobject.o: testobject.cpp testobject.h iterator.h serialize.h
+tobject.o: tobject.cpp context.h tobject.h serialize.h tobjectiterator.h \
+ tobjecttree.h
+tobjectiterator.o: tobjectiterator.cpp tobjectiterator.h tobjecttree.h \
+ serialize.h

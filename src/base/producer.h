@@ -15,49 +15,41 @@
  *   limitations under the License.
  */
 
+#include <vector>
+
 namespace aft
 {
 namespace base
 {
 // Forward reference
-class Command;
+class Blob;
 class TObject;
 
-
-class Result
+/**
+ *  Interface used by the producer to call when data is available.
+ */
+class ReaderContract
 {
 public:
-    enum ResultType
-    {
-        UNKNOWN = -1,
-        FATAL,
-        BOOLEAN,
-        COMMAND,
-        ITERATOR,
-        TOBJECT
-    };
+    virtual void dataAvailable(TObject& object) = 0;
+    virtual void dataAvailable(Blob& blob) = 0;
+};
 
-    Result(ResultType type = BOOLEAN);
-    virtual ~Result();
+/**
+ *  Interface that classes must implement that produce data.
+ */
+class ProducerContract
+{
+public:
+    virtual bool read(TObject& object) = 0;
+    virtual bool read(Blob& blob) = 0;
+    virtual bool hasData() = 0;
 
-    ResultType getType() const;
-    bool getValue(bool& value) const;
-    bool getValue(Command*& command) const;
-    bool getValue(TObject*& object) const;
-    void setValue(bool value);
-    void setValue(Command* command);
-    void setValue(TObject* object);
+    virtual bool registerDataCallback(const ReaderContract* reader);
+    virtual bool unregisterDataCallback(const ReaderContract* reader);
 
-private:
-    ResultType type_;
-    bool isValueSet_;
-    union Values
-    {
-        bool flag_;
-        Command* command_;
-        void* iterator_;
-        TObject* object_;
-    } value_;
+protected:
+    std::vector<ReaderContract*> readers_;
 };
 
 } // namespace base

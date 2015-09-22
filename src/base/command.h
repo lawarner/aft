@@ -15,7 +15,7 @@
  *   limitations under the License.
  */
 
-#include "base/testobject.h"
+#include "base/tobject.h"
 
 namespace aft
 {
@@ -25,7 +25,7 @@ namespace base
 class Context;
 class Result;
 
-class Command : public aft::base::TestObjectContainer
+class Command : public aft::base::TObjectContainer
 {
 public:
     virtual Result& execute(Context& context) = 0;

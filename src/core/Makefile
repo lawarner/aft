@@ -25,7 +25,7 @@ CC = g++
 #CCFLAGS = -Wall -g -O2 -I$(TOP) -I$(INCDIR)
 CCFLAGS = -Wall -g -I$(TOP) -I$(INCDIR)
 
-OBJS := logger.o testcase.o
+OBJS := logger.o runcontext.o testcase.o testsuite.o
 
 SRCS := $(OBJS:.o=.cpp)
 INCS = $(OBJS:.o=.h)

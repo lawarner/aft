@@ -19,16 +19,13 @@ namespace aft
 {
 namespace base
 {
-
-template <typename D>
-class Iterator
-{
-
-public:
-    D data_;
-};
+// Forward reference
+template <typename D> class Iterator;
 
 
+/**
+ *  Contract that elements of a Iterator must implement
+ */
 template <typename D>
 class IteratorContract
 {
@@ -36,6 +33,54 @@ public:
     virtual Iterator<D>& begin() = 0;
     virtual Iterator<D>& end() = 0;
     virtual Iterator<D>& next() = 0;
+};
+
+//TODO TreeIteratorContract with hasChildren(), nextSibling()
+
+
+/**
+ *  Base iterator class.
+ *  Elements must implement IteratorContract.
+ *
+ *  Template parameters:
+ *   D = Data type of elements
+ */
+template <typename D>
+class Iterator
+{
+public:
+    Iterator<D>() { }
+    Iterator<D>(D data)
+        : data_(&data)
+    {
+    }
+    Iterator& operator=(const Iterator& other)
+    {
+        data_ = other.data_;
+        return *this;
+    }
+
+    bool operator!=(const Iterator& other)
+    {
+        return data_ != other.data_;
+    }
+
+    D& operator*()
+    {
+        return *data_;
+    }
+
+    D* operator->()
+    {
+        return data_;
+    }
+
+    Iterator& operator++()
+    {
+        return data_->next();
+    }
+
+    IteratorContract<D>* data_;
 };
 
 } // namespace base
