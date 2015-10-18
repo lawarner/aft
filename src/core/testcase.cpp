@@ -15,7 +15,9 @@
  */
 
 #include "base/context.h"
+#include "base/result.h"
 #include "testcase.h"
+using namespace aft;
 using namespace aft::core;
 
 
@@ -34,10 +36,16 @@ TestCase::open()
     return false;
 }
 
-aft::base::TObject&
-TestCase::run(aft::base::Context* context)
+bool
+TestCase::rewind(base::Context* context)
 {
-    TObject result("Result");
+    return base::TObjectContainer::rewind(context);
+}
+
+const base::Result
+TestCase::run(base::Context* context)
+{
+    base::Result result(true);
     return result;
 }
 

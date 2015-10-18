@@ -15,8 +15,10 @@
  */
 
 #include "base/context.h"
+#include "base/result.h"
+#include "base/tobjecttree.h"
 #include "testsuite.h"
-using namespace aft::base;
+using namespace aft;
 using namespace aft::core;
 
 
@@ -26,11 +28,17 @@ TestSuite::open()
     return true;
 }
 
-TObject&
-TestSuite::run(Context* context)
+bool
+TestSuite::rewind(base::Context* context)
+{
+    return TObjectContainer::rewind(context);
+}
+
+const base::Result
+TestSuite::run(base::Context* context)
 {
     base::TObjectContainer::iterator iter;
-    TObject result("Result");
+    base::Result result(false);
     if (!children_) return result;
 
     for (iter = children_->begin(); iter != children_->end(); ++iter)

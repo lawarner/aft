@@ -1,3 +1,4 @@
+
 #pragma once
 /*
  *   Copyright 2015 Andy Warner
@@ -15,7 +16,6 @@
  *   limitations under the License.
  */
 
-
 namespace aft
 {
 namespace base
@@ -23,7 +23,9 @@ namespace base
 // Forward reference
 class TObject;
 class TObjectIterator;
+class TObjectIteratorImpl;
 class TObjectTree;
+
 
 /**
  *  Contract that elements of a Iterator must implement
@@ -31,33 +33,57 @@ class TObjectTree;
 class TObjectIteratorContract
 {
 public:
-    virtual TObjectIterator& begin() = 0;
-    virtual TObjectIterator& end() = 0;
-    virtual TObjectIterator& next() = 0;
+    virtual TObjectIterator begin() = 0;
+    virtual TObjectIterator end() = 0;
+    virtual TObjectIterator& next(TObjectIterator& iter) = 0;
 };
 
 /**
  *  Iterator class for TObjects.
  *
  *  This may be templatized later, but I doubt it.
+ *  The implementation of the iterator is hidden in the TObjectIteratorImpl
+ *  opaque inner class.
  */
 class TObjectIterator
 {
 public:
-    TObjectIterator();
-    TObjectIterator(TObjectTree* data);
+    /**
+     *  Construct TObject iterator.
+     *
+     *  @param atBegin If true then iterator starts pointing to first child,
+     *                 otherwise points to end().
+     */
+    TObjectIterator(bool atBegin = true);
+    /**
+     *  Construct TObject iterator.
+     *
+     *  TODO This will later become a private constructor, only called from TObjectContainer
+     *
+     *  @param root Starts iterator pointing to root of tree.
+     *  @param atBegin If true then iterator starts pointing to first child,
+     *                 otherwise points to end().
+     */
+    TObjectIterator(TObjectTree* root, bool atBegin = true);
+    /** Destruct a TObject iterator. */
+    ~TObjectIterator();
+
+    TObject* get();
 
     TObjectIterator& operator=(const TObjectIterator& other);
 
+    bool operator==(const TObjectIterator& other);
     bool operator!=(const TObjectIterator& other);
 
-    TObject& operator*();
+    TObject* operator*();
 
     TObject* operator->();
 
     TObjectIterator& operator++();
 
-    TObjectTree* data_;
+private:
+    TObjectTree* root_;
+    TObjectIteratorImpl& impl_;
 };
 
 } // namespace base

@@ -77,10 +77,14 @@ public:
     virtual ~Logger();
 
     /**
-     *  Set up standard loggers aftalert, aftaudit and aftlog based on the context.
-     *  Note that the context must have a logging context.
+     *  Set up standard loggers aftalert, aftaudit and aftlog based on a logging
+     *  configuration.  This is typically called in a run context
+     *
+     * Note: This currently just take sthe string parameter as a prefix for the
+     *       log file name.  It appends audit.log and log.log.
+     *       This will be replaced with a LogConfig parameter.
      */
-    static void initStandardLoggers(aft::base::Context* context);
+    static void initStandardLoggers(const std::string& logConfig);
 
     void setLogLevel(AftLogLevel level = Debug);
     void setLowLogLevel(AftLogLevel level = Debug);

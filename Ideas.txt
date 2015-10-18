@@ -1,24 +1,100 @@
-
+Random Ideas:
+------------
 Tests can invoke other tests, either synchronously or threaded.
 Threaded tests can interact with each other.
 
 Actor:  Can be another test or just a set of behaviors
 Bound:  How far test objects can reach
 
-TestObject: Actor, Command, Element, Endpoint, Logic (Process, Fork), Transport
-            Notice (Alert, Exception, Message), Lookup (Database, ...)
-            Location, Bound
-            TestCase, TestBundle, Log, Result
-
 Import hints for tests from unit tests defined using googletest, or other framework.
+
+Provide a import/export using protobuf as syntax
 
 Switch to CMake
 
+-----------------------------------------------------------------
+Producer, Consumer, Processor interfaces  (short lingo: prod, cons, proc)
 
-TO has:
-  Tree<TO*> children_;
+Processor isa Producer, Consumer
 
-Tree<T>
-  typedef Iterator<Tree<T> > iterator;
+Cons -> FilterProc -> Prod
 
-Iterator<Tree<TO*> >
+Cons1 --\___MergerProc -> Prod
+Cons2 --/
+
+Cons -> SplitProc ___/--> Prod1   // either or both paths taken
+                     \--> Prod2
+
+ConsCommands --\__--> ConveyerBeltProc --> Prod
+ConsObjects  --/
+---------------------------------------------------------------
+About Tobject's:
+---------------
+Meant to hold a single test, thus the name T(est)Object.
+However, that is just the basic usage.  It can also be a container of other 
+TObject's.  Or TObject can hold a single (const) value, such as a return 
+value or sort of enum (think handler commands, etc.).
+
+The class structure will probably go to all templates, once the rest is settled down:
+        TObject has:
+            Tree<TO*> children_;
+
+        Tree<T>
+        typedef Iterator<Tree<T> > iterator;
+
+        Iterator<Tree<TO*> >
+For now, it is:
+        TObjectContainer isa TObject, has:
+            TObjectTree* children_;
+
+        TObjectTree : SerializeContract, TObjectIteratorContract, has:
+            TObject* value_;
+            vector<TObject*> children_;
+
+Need consts for TObjectTrue, TObjectFalse (TObjectBool), nil, etc.
+
+Here are some possible TObject's:
+          Actor, Command, Element, Endpoint, Logic (Process, Fork), Transport
+          Notice (Alert, Exception, Message), Lookup (Database, ...)
+          Location, Bound
+          TestCase, TestBundle, Log, Result
+
+---------------------------------------------------------------
+TODO PlugIn factory interface, general extensibility.
+
+? How do final implementation instances get chosen, if multiple exist?
+Maybe default behavior is to do a lazy instantiation when parsing the input.
+Then first instance resolvable is the winner.  This implies a specific order
+of search, i.e., a PATH
+
+Can have "final" state that does not allow (further) plug-ins.
+---------------------------------------------------------------
+TODO Exception handling
+
+dispositions?
+-----------------------------------------------------------------
+Should serialization be related to plugin?
+-----------------------------------------------------------------
+Need a Mega Evil Corp (MEC) class which is a generic factory superclass.
+
+Each set of classes that need a factory can register and use this.
+MEC handles factories for built-ins, serialized and plug-in.
+
+-----------------------------------------------------------------
+At the base/core level, the UI must be abstracted.  An abstract UI can handle
+the following types:
+- batch: initial testcase loaded, any prompts come from input file, output to file.
+- tty:   prompts testcase, inputs, outputs.  finally command prompt.  can also
+         prompt along as input is needed.
+- html:  webforms, tables, pagers, frames(?)
+- gui:   regular UI with menu, widgets
+
+The different types vary in their interaction.  But for each piece of data, a
+UI would have the following possible interactions:
+- input:   prompt directly for info
+- output:  display info directly
+- push:    prepare output and send to UI
+- pull:    call UI hook to get info
+- get:     the UI calls this to request info from the model
+- put:     the UI calls this to give info to the model
+-----------------------------------------------------------------

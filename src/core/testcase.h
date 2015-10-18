@@ -41,6 +41,8 @@ public:
     /** Open the test case */
     bool open();
 
+    virtual bool rewind(base::Context* context);
+
     /**
      *  Run the test case within a context.
      *
@@ -52,7 +54,7 @@ public:
      *  @return A TObject, typically a Result specifying the final outcome of running
      *          this test case.
      */
-    base::TObject& run(base::Context* context);
+    virtual const base::Result run(base::Context* context);
 
     /** Close the test case */
     void close();

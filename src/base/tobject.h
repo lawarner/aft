@@ -18,7 +18,6 @@
 #include <string>
 #include "serialize.h"
 #include "tobjectiterator.h"
-#include "tobjecttree.h"
 
 
 namespace aft
@@ -27,6 +26,9 @@ namespace base
 {
 // Forward reference
 class Context;
+class Result;
+class TObjectTree;
+
 
 typedef std::string TObjectKey;
 
@@ -51,23 +53,54 @@ public:
         FINISHED_GOOD
     };
 
+    /** Construct a TObject with a given, optional name */
     TObject(const std::string& name = std::string());
 
+    /** Destruct a TObject */
     virtual ~TObject();
 
+    /** Get the name of this TObject */
     const std::string& getName() const;
+    /** Get the current state of this TObject */
     State getState() const;
-    virtual TObject& run(Context* context);
 
-    virtual bool operator==(const TObject& other);
+    //TODO change to return a TOBool instead of bool
+    /** Rewind to initial state, if possible.
+     *  @param context Context of run state.  If 0 then goes to default,
+     *                 non-contextual run state.
+     *  @return false if could not successfully rewind,
+     *          otherwise returns true.
+     */
+    virtual bool rewind(Context* context);
+
+    /** Run in the given context.
+     *
+     *  Subclasses must implement specific behavior.  This base method is a
+     *  pass-thru.  The returned result is a wrapper for 'this'.
+     */
+    virtual const Result run(Context* context = 0);
+
+    /** Test if equal to another TObject */
+    virtual bool operator==(const TObject& other) const;
+
+    /** Test if not equal to another TObject */
+    virtual bool operator!=(const TObject& other) const;
 
     // Implement SerializeContract
     virtual Blob* serialize();
     virtual bool deserialize(const Blob* blob);
 
+    //TODO implement pluggable contract
+    //TODO cast operators for frequent autoconversions:
+    //     i.e., if (tobj == false) // false is TObjectBool(true) which is singleton
+    //TODO usage counter
+
 protected:
     std::string name_;
     State state_;
+
+    //TODO a public dictionary of TObject's
+    // bool isTemp; // not stored in dictionary
 };
 
 
@@ -83,22 +116,33 @@ public:
 
     typedef TObjectIterator iterator;
 
-    bool add(TObject* testObject);
-    TObject* find(const TObjectKey& key);
-    bool remove(TObject* testObject);
+    /** Add an object to the list of children objects.
+     *  Returns the child's TObjectTree wrapper. */
+    TObjectTree* add(TObject* tObject, TObjectTree* tObjWrapper = 0);
 
+    /** Find the object with given name among children */
+    TObject* find(const TObjectKey& key);
+
+    /** Remove a child object from children list. */
+    bool remove(TObject* tObject);
+
+    Children* getChildren() const;
 
     // Visitors
-    virtual TObject& run(Context* context);
+    virtual const Result run(Context* context = 0);
 
     // Override parent SerializeContract
     virtual Blob* serialize();
     virtual bool deserialize(const Blob* blob);
 
 protected:
+    /** Construct a TObjectContainer with a given, optional name */
     TObjectContainer(const std::string& name = std::string());
+
+    /** Destruct a TObjectContainer */
     virtual ~TObjectContainer();
 
+    /** List of children objects. */
     Children* children_;
 };
 

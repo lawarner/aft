@@ -15,33 +15,35 @@
  *   limitations under the License.
  */
 
-#include "base/context.h"
-
-
 namespace aft
 {
-namespace core
+namespace base
 {
 // Forward reference
-class LogHandler;
+class Blob;
+class Context;
+class TObject;
+
 
 /**
- *  Context used to run test cases.
+ *  Any class supporting plugins must implement the PluginContract.
+ *
+ *  The primary extension mechanism in AFT is the plugin.  These are contained in
+ *  dynamically loadable bundles that adhere to the FactoryContract interface.
+ *  
  */
-class RunContext : public aft::base::Context
+class PluginContract
 {
 public:
-    RunContext();
-    virtual ~RunContext();
+    virtual bool loadPlugins() = 0;
+    virtual void unloadPlugins() = 0;
 
-    void setupLogs(const std::string& logConfig);
+    virtual TObject* createInstance(const Blob* blob = 0, const Context* context = 0) = 0;
 
-    // gui, dispositions, procs/prods/cons
-    // Need RunVisitor
-
-private:
-    LogHandler& logHandler_;
+    virtual static const std::string& describe() const = 0;
+    virtual bool activate() = 0;
+    virtual bool deactive() = 0;
 };
 
-} // namespace core
+} // namespace base
 } // namespace aft

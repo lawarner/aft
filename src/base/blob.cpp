@@ -40,3 +40,22 @@ bool Blob::addMember(Blob* blob)
     members_.push_back(blob);
     return true;
 }
+
+const void*
+Blob::getData() const
+{
+    return data_;
+}
+
+const std::vector<Blob*>&
+Blob::getMembers() const
+{
+    return members_;
+}
+
+const std::string&
+Blob::getName() const
+{
+    return name_;
+}
+

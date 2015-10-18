@@ -31,7 +31,9 @@ class TestSuite : public aft::base::TObjectContainer
 {
 public:
     bool open();
-    base::TObject& run(base::Context* context);
+
+    bool rewind(base::Context* context);
+    const base::Result run(base::Context* context);
     void close();
 };
 

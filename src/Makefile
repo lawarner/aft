@@ -30,14 +30,21 @@ ANDROIDCC=$(ANDROIDPREFIX)-g++
 LIBSDIR = $(TOP)/lib
 LIBAFT = $(LIBSDIR)/libaft.a
 
-SUBDIRS = base core tests
+SUBDIRS = base core
 # storage transport plugin ui
 
-PROGRAMS =
+PROGRAMS = tests
 
-all: subdirs $(PROGRAMS)
+all: subdirs lib $(PROGRAMS)
 
-lib: $(LIBAFT)
+.PHONY: lib
+lib:
+	rm -f $(LIBAFT)
+	make $(LIBAFT)
+
+.PHONY: tests
+tests: lib
+	make -C tests
 
 $(LIBAFT):
 	mkdir -p $(LIBSDIR)
@@ -62,12 +69,12 @@ android:
 
 .PHONY: clean
 clean:
-	for dir in $(SUBDIRS); do \
+	for dir in $(SUBDIRS) tests; do \
 		make -C $$dir clean; \
 	done
 
 .PHONY: depends
 depends:
-	for dir in $(SUBDIRS); do \
+	for dir in $(SUBDIRS) tests; do \
 		make -C $$dir depends; \
 	done

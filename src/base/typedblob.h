@@ -15,8 +15,7 @@
  *   limitations under the License.
  */
 
-#include <string>
-#include <vector>
+#include "blob.h"
 
 
 namespace aft
@@ -25,29 +24,37 @@ namespace base
 {
 
 /**
- *  Serialized representation of a class instance.
+ *  A "typed" Blob
  *
- *  This class holds the data that is serialize by any class that implements the
+ *  This class holds the data is serialize by any class that implements the
  *  SerializeContract interface.  Each Blob holds data, members (other Blobs)
  *  or both data and blobs.
  *  Blobs can optionally be named.
  */
-class Blob
+class TypedBlob : public Blob
 {
 public:
-    Blob(const std::string& name, void* data = 0);
-    virtual ~Blob();
+    enum Type
+    {
+        UNKNOWN = -1,
+        RAWDATA,
+        STRING,
+        JSON,
+        COMMAND,
+        URL
+    };
 
-    bool addData(void* data);
-    bool addMember(Blob* blob);
-    const void* getData() const;
-    const std::vector<Blob*>& getMembers() const;
-    const std::string& getName() const;
+public:
+    TypedBlob(const std::string& name, void* data = 0);
+    TypedBlob(const std::string& name, Type type, const std::string& stringData);
+    virtual ~TypedBlob();
+
+    const std::string& getString() const;
+    Type getType() const;
 
 protected:
-    const std::string name_;
-    void* data_;
-    std::vector<Blob*> members_;
+    Type type_;
+    std::string stringData_;
 };
 
 } // namespace base

@@ -14,16 +14,32 @@
  *   limitations under the License.
  */
 
+#include <iostream>
 #include "context.h"
+#include "result.h"
 #include "tobject.h"
+#include "tobjecttree.h"
 
 using namespace aft::base;
 
 
+static bool findVisitor(TObject* obj, void* data)
+{
+    if (!obj || !data) return false;
+
+    const std::string* name = (const std::string *) data;
+    if (obj->getName() == *name)
+    {
+        return true;
+    }
+    return false;
+}
+
 static bool runVisitor(TObject* obj, void* data)
 {
-    Context* context = (Context*) data;
-    TObject& testObject =  obj->run(context);
+    std::cout << "Run visitor " << obj->getName() << std::endl;
+//    Context* context = (Context*) data;
+//    const Result result = obj->run(context);
 
     return true;
 }
@@ -53,16 +69,24 @@ TObject::getState() const
     return state_;
 }
 
-TObject&
+bool TObject::rewind(Context* context)
+{
+    return false;
+}
+
+const Result
 TObject::run(Context* context)
 {
 // check state_ is INITIAL
     //TODO: return context->runner(testObject);
 //    return const_cast<TObject&>(testObject);
-    return const_cast<TObject&>(*this);
+//    return const_cast<TObject&>(*this);
+    Result result(Result::TOBJECT);
+    result.setValue(this);
+    return result;
 }
 
-bool TObject::operator==(const TObject& other)
+bool TObject::operator==(const TObject& other) const
 {
     if (getName() == other.getName() &&
         getState() == other.getState())
@@ -71,6 +95,11 @@ bool TObject::operator==(const TObject& other)
     }
 
     return false;
+}
+
+bool TObject::operator!=(const TObject& other) const
+{
+    return !operator==(other);
 }
 
 Blob*
@@ -86,7 +115,7 @@ TObject::deserialize(const Blob* blob)
 }
 
 
-// -----------------------------------
+// -------------------------------------
 
 TObjectContainer::TObjectContainer(const std::string& name)
     : TObject(name)
@@ -100,18 +129,33 @@ TObjectContainer::~TObjectContainer()
 }
 
 
-bool TObjectContainer::add(TObject* testObject)
+TObjectTree*
+TObjectContainer::add(TObject* tObject, TObjectTree* tObjWrapper)
 {
     if (!children_)
     {
-        children_ = new Children;
+        children_ = new TObjectTree(this);
     }
-    return children_->add(testObject);
+
+    if (tObjWrapper)
+    {
+        return tObjWrapper->add(tObject);
+    }
+
+    return children_->add(tObject);
 }
 
 TObject*
 TObjectContainer::find(const TObjectKey& key)
 {
+    TObjectTree::Children::iterator it;
+    it = children_->visitUntil(findVisitor, (void *)&key);
+
+    if (it != children_->getChildren().end())
+    {
+        return (*it)->getValue();
+    }
+
     return 0;
 }
 
@@ -122,21 +166,24 @@ bool TObjectContainer::remove(TObject* testObject)
     return children_->remove(testObject);
 }
 
-TObject&
+Children* TObjectContainer::getChildren() const
+{
+    return children_;
+}
+
+const Result
 TObjectContainer::run(Context* context)
 {
-    children_->visit(runVisitor, context);
-//    return const_cast<TObject&>(*this);
-    return *this;
-/*
-    TObject current = testObject;
-    Children::iterator it;
-    for (it = children_->begin(); it != children_->end(); ++it)
+    bool retval;
+    if (children_)
     {
-        current = (*it).run(context, current);
+        retval = children_->visit(runVisitor, context);
+    } else {
+        retval = runVisitor(this, context);
     }
-    return const_cast<TObject&>(current);
-*/
+
+    Result result(retval);
+    return result;
 }
 
 

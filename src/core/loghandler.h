@@ -15,32 +15,34 @@
  *   limitations under the License.
  */
 
-#include "base/context.h"
+#include "base/propertyhandler.h"
 
 
 namespace aft
 {
+namespace base
+{
+    class TObject;
+}
+
 namespace core
 {
-// Forward reference
-class LogHandler;
 
 /**
- *  Context used to run test cases.
+ *  Handler for logging in a context.
  */
-class RunContext : public aft::base::Context
+class LogHandler : public aft::base::PropertyHandler
 {
 public:
-    RunContext();
-    virtual ~RunContext();
+    LogHandler();
+    virtual ~LogHandler();
 
-    void setupLogs(const std::string& logConfig);
+    virtual aft::base::TObject& handle(const aft::base::TObject& tObject);
+    virtual aft::base::TObject& handle(aft::base::Context* context,
+                                       const aft::base::TObject& tObject);
 
-    // gui, dispositions, procs/prods/cons
-    // Need RunVisitor
-
-private:
-    LogHandler& logHandler_;
+    // Convenience methods
+    void setup(const std::string& logConfig);
 };
 
 } // namespace core

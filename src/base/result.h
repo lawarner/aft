@@ -23,7 +23,10 @@ namespace base
 class Command;
 class TObject;
 
-
+/**
+ * This is a handy wrapper for return types, since it can have various types.
+ * This should replace many cases where a reference to a TObject is returned.
+ */
 class Result
 {
 public:
@@ -38,6 +41,10 @@ public:
     };
 
     Result(ResultType type = BOOLEAN);
+    Result(bool value);
+    Result(Command* command);
+    Result(TObject* object);
+
     virtual ~Result();
 
     ResultType getType() const;
@@ -47,6 +54,9 @@ public:
     void setValue(bool value);
     void setValue(Command* command);
     void setValue(TObject* object);
+
+    // Copy constructor and assignment operators
+    // (for now the default do shallow copies, as needed)
 
 private:
     ResultType type_;

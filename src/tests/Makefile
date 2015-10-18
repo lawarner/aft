@@ -22,7 +22,7 @@ INCDIR = $(TOP)/src
 INCS := -I$(INCDIR)
 
 CC = g++
-CCFLAGS = $(INCS)
+CCFLAGS = -g $(INCS)
 
 ARMPREFIX=arm-linux-gnueabihf
 ARMAR=$(ARMPREFIX)-ar
@@ -50,7 +50,8 @@ DEPLIBS = $(LIBAFT) $(LIBGTEST)
 
 .cpp.o: ; $(CC) $(CCFLAGS) -c $<
 
-all: subdirs $(PROGRAMS)
+all: $(PROGRAMS)
+# subdirs
 
 subdirs:
 	for dir in $(SUBDIRS); do \

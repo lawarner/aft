@@ -1,4 +1,3 @@
-#pragma once
 /*
  *   Copyright 2015 Andy Warner
  *
@@ -15,33 +14,39 @@
  *   limitations under the License.
  */
 
-#include "base/context.h"
+#include "typedblob.h"
+using namespace aft::base;
 
 
-namespace aft
+TypedBlob::TypedBlob(const std::string& name, void* data)
+    : Blob(name, data)
+    , type_(RAWDATA)
 {
-namespace core
+}
+
+TypedBlob::TypedBlob(const std::string& name, TypedBlob::Type type,
+                     const std::string& stringData)
+    : Blob(name)
+    , type_(type)
+    , stringData_(stringData)
 {
-// Forward reference
-class LogHandler;
+    //TODO assert type not UNKNOWN or RAWDATA
+}
 
-/**
- *  Context used to run test cases.
- */
-class RunContext : public aft::base::Context
+TypedBlob::~TypedBlob()
 {
-public:
-    RunContext();
-    virtual ~RunContext();
+}
 
-    void setupLogs(const std::string& logConfig);
+const std::string&
+TypedBlob::getString() const
+{
+    return stringData_;
+}
 
-    // gui, dispositions, procs/prods/cons
-    // Need RunVisitor
+TypedBlob::Type
+TypedBlob::getType() const
+{
+    return type_;
+}
 
-private:
-    LogHandler& logHandler_;
-};
 
-} // namespace core
-} // namespace aft

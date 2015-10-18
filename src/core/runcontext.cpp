@@ -14,16 +14,24 @@
  *   limitations under the License.
  */
 
+#include "loghandler.h"
 #include "runcontext.h"
 using namespace aft::core;
 
 
 RunContext::RunContext()
+    : logHandler_(*new LogHandler)
 {
 }
 
 RunContext::~RunContext()
 {
+    delete &logHandler_;
+}
+
+void RunContext::setupLogs(const std::string& logConfig)
+{
+    logHandler_.setup(logConfig);
 }
 
 

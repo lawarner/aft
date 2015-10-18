@@ -40,11 +40,6 @@ all: $(PROGRAMS) subdirs
 doc:
 	make -C doc
 
-# Backup the whole source dir.
-#  Probably want to do "make clean" beforehand, but not required.
-backup:
-	tar cvaf $(BACKUPFILE) --exclude='.git/*' -C .. sockstr
-
 subdirs:
 	for dir in $(SUBDIRS); do \
 		make -C $$dir; \
@@ -66,7 +61,7 @@ clean:
 	for dir in $(SUBDIRS); do \
 		make -C $$dir clean; \
 	done
-	rm $(LIBR)
+	rm -f $(LIBR)
 
 .PHONY: depends
 depends:

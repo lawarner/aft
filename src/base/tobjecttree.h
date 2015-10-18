@@ -16,6 +16,7 @@
  */
 
 #include <vector>
+#include "tobject.h"
 #include "tobjectiterator.h"
 #include "serialize.h"
 
@@ -35,13 +36,9 @@ class TObjectTree : public SerializeContract, public TObjectIteratorContract
 public:
     TObjectTree()
         : value_(0)
-        , tObjectIter_(this)
-        , parentIter_(true)
     { }
     TObjectTree(TObject* value)
         : value_(value)
-        , tObjectIter_(this)
-        , parentIter_(true)
     { }
     virtual ~TObjectTree() { }
 
@@ -53,18 +50,38 @@ public:
     /** Define a vistor function for TObject */
     typedef bool (*Visitor)(TObject* obj, void* data);
 
-    bool add(TObject* obj)
+    TObjectTree* add(TObject* obj)
     {
-        children_.push_back(new TObjectTree(obj));
-        return true;
+        if (!obj) return 0;
+
+        TObjectTree* wrapper = new TObjectTree(obj);
+        children_.push_back(wrapper);
+        return wrapper;
+    }
+    Children& getChildren()
+    {
+        return children_;
     }
     const Children& getChildren() const
     {
         return children_;
     }
 
+    /** Find the child tree of the object among children */
+    TObjectTree* find(TObject* obj)
+    {
+        Children::iterator it;
+        for (it = children_.begin(); it != children_.end(); ++it)
+        {
+            if ((*it)->getValue() == obj) return *it;
+        }
+        return 0;
+    }
+
     TObject* getValue() const { return value_; }
 
+    /** Remove tree wrapper of object from children.
+     *  The object itself is not deleted. */
     bool remove(TObject* obj)
     {
         Children::iterator it;
@@ -79,6 +96,7 @@ public:
         }
         return false;
     }
+
     /**
      *  Visits this tree's value followed by each childs value.
      *
@@ -87,14 +105,14 @@ public:
      */
     bool visit(Visitor visitor, void* data)
     {
-        if (!visitor(value_, data))
+        if (value_ && !visitor(value_, data))
         {
             return false;
         }
         Children::iterator it;
         for (it = children_.begin(); it != children_.end(); ++it)
         {
-            if (!visitor((*it)->getValue(), data))
+            if (!(*it)->visit(visitor, data))
             {
                 return false;
             }
@@ -102,30 +120,41 @@ public:
         return true;
     }
 
-    // Implement TObjectIteratorContract
-    TObjectIterator& begin()
+    /**
+     *  Visits this tree's children and stops on true.
+     *
+     *  @param visitor Function pointer to visitor
+     *  @param data Extra opaque data past on each element visited
+     */
+    Children::iterator visitUntil(Visitor visitor, void* data)
     {
-        parentIter_ = true;
-        return tObjectIter_;
-    }
-
-    TObjectIterator& end()
-    {
-        parentIter_ = false;
-        curr_ = children_.end();
-        return tObjectIter_;
-    }
-
-    TObjectIterator& next()
-    {
-        if (parentIter_ == true)
+        Children::iterator it;
+        for (it = children_.begin(); it != children_.end(); ++it)
         {
-            parentIter_ = false;
-            curr_ = children_.begin();
-        } else {
-            ++curr_;
+            if (visitor((*it)->getValue(), data))
+            {
+                break;
+            }
         }
-        return tObjectIter_;
+        return it;
+    }
+
+    // Implement TObjectIteratorContract
+    TObjectIterator begin()
+    {
+        TObjectIterator iterBegin(this);
+        return iterBegin;
+    }
+
+    TObjectIterator end()
+    {
+        TObjectIterator iterEnd(0, false);
+        return iterEnd;
+    }
+
+    TObjectIterator& next(TObjectIterator& iter)
+    {
+        return ++iter;
     }
 
     // Implement SerializeContract
@@ -133,6 +162,7 @@ public:
     {
         return 0;
     }
+
     virtual bool deserialize(const Blob* blob)
     {
         return false;
@@ -142,10 +172,6 @@ protected:
     /** This nodes value */
     TObject* value_;
     Children children_;
-    /** Current position in iterator */
-    Children::iterator curr_;		// This is bad and will be moved ...
-    TObjectIterator tObjectIter_;
-    bool parentIter_;
 };
 
 } // namespace base

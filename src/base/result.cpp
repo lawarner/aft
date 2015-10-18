@@ -25,6 +25,24 @@ Result::Result(ResultType type)
 
 }
 
+Result::Result(bool value)
+    : type_(BOOLEAN)
+{
+    setValue(value);
+}
+
+Result::Result(Command* command)
+    : type_(COMMAND)
+{
+    setValue(command);
+}
+
+Result::Result(TObject* object)
+    : type_(TOBJECT)
+{
+    setValue(object);
+}
+
 Result::~Result()
 {
 

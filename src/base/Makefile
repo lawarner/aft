@@ -27,8 +27,8 @@ CC = g++
 #CCFLAGS = -Wall -g -O2 -I$(TOP) -I$(INCDIR)
 CCFLAGS = -Wall -g -I$(TOP) -I$(INCDIR)
 
-OBJS := blob.o consumer.o context.o producer.o propertyhandler.o result.o \
-    tobject.o tobjectiterator.o
+OBJS := blob.o consumer.o context.o factory.o producer.o propertyhandler.o result.o \
+    tobasictypes.o tobject.o tobjectiterator.o typedblob.o
 
 SRCS := $(OBJS:.o=.cpp)
 INCS = $(OBJS:.o=.h)

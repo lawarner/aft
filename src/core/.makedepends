@@ -1,4 +1,7 @@
 logger.o: logger.cpp logger.h
+loghandler.o: loghandler.cpp logger.h loghandler.h \
+ ../../src/base/propertyhandler.h
+runcontext.o: runcontext.cpp runcontext.h ../../src/base/context.h
 testcase.o: testcase.cpp ../../src/base/context.h testcase.h \
  ../../src/base/tobject.h ../../src/base/serialize.h \
  ../../src/base/tobjectiterator.h ../../src/base/tobjecttree.h

@@ -157,7 +157,7 @@ Logger::openLogFile(const std::string& file, bool buffered)
         open(logFile.c_str());
         if (!is_open())
         {
-            open("dev/null");
+            open("/dev/null");
         }
     }
 }
@@ -167,9 +167,14 @@ Logger::~Logger()
     close();
 }
 
-void initStandardLoggers(base::Context* context)
+void Logger::initStandardLoggers(const std::string& logConfig)
 {
+// aftalert logger remains as tty  *new Logger(ALERT)
+    if (aftaudit.is_open()) aftaudit.close();
+    aftaudit.openLogFile(logConfig + "audit.log", true);
 
+    if (aftlog.is_open()) aftlog.close();
+    aftlog.openLogFile(logConfig + "log.log", true);
 }
 
 void Logger::setLogLevel(core::AftLogLevel level)
