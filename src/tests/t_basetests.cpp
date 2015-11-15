@@ -28,6 +28,20 @@
 using namespace aft::base;
 using namespace aft::core;
 
+class RunVisitor : public VisitorContract
+{
+public:
+    virtual Result visit(TObject* obj, void* data)
+    {
+        if (!obj || !data) return Result(false);
+
+        TOString* message = (TOString *) data;
+        std::cout << obj->getName() << ": " << message->getValue() << std::endl;
+        return Result(true);
+    }
+
+};
+
 static bool runVisitor(TObject* obj, void* data)
 {
     if (!obj || !data) return false;
@@ -128,6 +142,10 @@ TEST(BasePackageTest, TObjectTree)
     }
     std::cout << "Visit populated tree" << std::endl;
     tree.visit(runVisitor, &message);
+
+    std::cout << "Visit using new style visitor class." << std::endl;
+    RunVisitor rv;
+    tree.visit(rv, &message);
 }
 
 TEST(BasePackageTest, TObjectContainer)

@@ -1,15 +1,17 @@
 blob.o: blob.cpp blob.h
 consumer.o: consumer.cpp consumer.h
-context.o: context.cpp context.h tobject.h serialize.h tobjectiterator.h
-factory.o: factory.cpp factory.h tobasictypes.h tobject.h serialize.h \
+context.o: context.cpp context.h visitor.h result.h tobject.h serialize.h \
  tobjectiterator.h
+factory.o: factory.cpp factory.h tobasictypes.h tobject.h result.h \
+ serialize.h tobjectiterator.h
 producer.o: producer.cpp producer.h
-propertyhandler.o: propertyhandler.cpp context.h propertyhandler.h
+propertyhandler.o: propertyhandler.cpp context.h visitor.h result.h \
+ propertyhandler.h
 result.o: result.cpp result.h
 tobasictypes.o: tobasictypes.cpp result.h tobasictypes.h tobject.h \
  serialize.h tobjectiterator.h
-tobject.o: tobject.cpp context.h result.h tobject.h serialize.h \
- tobjectiterator.h tobjecttree.h
+tobject.o: tobject.cpp callback.h context.h visitor.h result.h \
+ tobasictypes.h tobject.h serialize.h tobjectiterator.h tobjecttree.h
 tobjectiterator.o: tobjectiterator.cpp tobjectiterator.h tobjecttree.h \
- tobject.h serialize.h
+ tobject.h result.h serialize.h visitor.h
 typedblob.o: typedblob.cpp typedblob.h blob.h

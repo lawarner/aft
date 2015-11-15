@@ -17,6 +17,7 @@
 
 #include <map>
 #include <string>
+#include "visitor.h"
 
 
 namespace aft
@@ -53,15 +54,24 @@ public:
     TObject& apply(const TObject& testObject);
 
 protected:
+    /** Construct a context with default visitor */
     Context();
+
+    /** Construct a context with a given visitor */
+    Context(VisitorContract& visitor);
 
 public:
     bool addProperty(const std::string& propertyName, PropertyHandler* handler);
+
+    VisitorContract& getVisitor() const;
 
     PropertyHandler* handler(const std::string& propertyName) const;
 
 protected:
     Properties properties_;
+
+    /** Default visitor */
+    VisitorContract& visitor_;
 };
 
 } // namespace base

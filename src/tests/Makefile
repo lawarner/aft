@@ -40,10 +40,10 @@ LDLIBS =
 
 SUBDIRS =
 
-OBJS := t_basetests.o t_logger.o t_result.o
+OBJS := t_basetests.o t_logger.o t_osdep.o t_result.o
 SRCS := $(OBJS:.o=.cpp)
 
-PROGRAMS = t_basetests t_logger t_result
+PROGRAMS = t_basetests t_logger t_osdep t_result
 
 DEPCPPFLAGS = -I. $(INCS)
 DEPLIBS = $(LIBAFT) $(LIBGTEST)

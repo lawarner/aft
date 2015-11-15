@@ -18,9 +18,19 @@
 #include "tobject.h"
 using namespace aft::base;
 
+Visitor defaultVisitor;
+
+
 Context::Context()
+    : visitor_(defaultVisitor)
 {
 }
+
+Context::Context(VisitorContract& visitor)
+    : visitor_(visitor)
+{
+}
+
 
 Context::~Context()
 {
@@ -41,6 +51,13 @@ TObject&
 Context::apply(const TObject& testObject)
 {
     return const_cast<TObject&>(testObject);
+}
+
+
+VisitorContract&
+Context::getVisitor() const
+{
+    return visitor_;
 }
 
 PropertyHandler*

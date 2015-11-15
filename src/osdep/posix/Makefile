@@ -17,9 +17,7 @@
 
 # Simple makefile for the aft package
 
-# Note the base directory holds primary base and abstract classes
-
-TOP = ../..
+TOP = ../../..
 INCDIR = $(TOP)/src
 
 #AR = ar
@@ -27,13 +25,12 @@ CC = g++
 #CCFLAGS = -Wall -g -O2 -I$(TOP) -I$(INCDIR)
 CCFLAGS = -Wall -g -I$(TOP) -I$(INCDIR)
 
-OBJS := blob.o consumer.o context.o factory.o producer.o propertyhandler.o result.o \
-    thread.o tobasictypes.o tobject.o tobjectiterator.o typedblob.o
+OBJS := posixthread.o
 
 SRCS := $(OBJS:.o=.cpp)
 INCS = $(OBJS:.o=.h)
 
-LIBR = libaftbase.a
+LIBR = libaftposix.a
 
 
 .cpp.o: ; $(CC) $(CCFLAGS) -c $<

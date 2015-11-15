@@ -16,6 +16,7 @@
  */
 
 #include <string>
+#include "result.h"
 #include "serialize.h"
 #include "tobjectiterator.h"
 
@@ -25,8 +26,8 @@ namespace aft
 namespace base
 {
 // Forward reference
+class Callback;
 class Context;
-class Result;
 class TObjectTree;
 
 
@@ -44,7 +45,7 @@ public:
     {
         INVALID = -1,
         UNINITIALIZED,
-        INITAL,
+        INITIAL,
         PREPARED,
         RUNNING,
         PAUSED,
@@ -61,6 +62,9 @@ public:
 
     /** Get the name of this TObject */
     const std::string& getName() const;
+    /** Get the current result of this TObject */
+    const Result& getResult() const;
+    
     /** Get the current state of this TObject */
     State getState() const;
 
@@ -80,6 +84,19 @@ public:
      */
     virtual const Result run(Context* context = 0);
 
+    /** Start this TObject in the given context asynchronously.
+     *
+     *  Subclasses must implement specific behavior.  This base method is a
+     *  pass-thru and does not start a thread, as it returns immediately.
+     *  If the context is 0 then starts non-contextually.
+     *  This implementation returns true and passed a Result(this) to the callback
+     *  (if any).
+     *  Typically a sub-class would return the result of starting the thread,
+     *  either a TOBool or perhaps a TOThread, etc.  Then when the thread finishes
+     *  the final result is delivered to the callback.
+     */
+    virtual const Result start(Context* context = 0, Callback* callback = 0);
+
     /** Test if equal to another TObject */
     virtual bool operator==(const TObject& other) const;
 
@@ -98,6 +115,7 @@ public:
 protected:
     std::string name_;
     State state_;
+    Result result_;
 
     //TODO a public dictionary of TObject's
     // bool isTemp; // not stored in dictionary
@@ -107,8 +125,9 @@ protected:
 typedef TObjectTree Children;
 
 /**
- *  Test object that contains other test objects.
- *  It contains a tree of of child test objects and a set of visitors.
+ *  A TObject that contains other TObjects.
+ *
+ *  It contains a tree of child TObjects and a set of visitors.
  */
 class TObjectContainer : public TObject
 {
@@ -130,6 +149,7 @@ public:
 
     // Visitors
     virtual const Result run(Context* context = 0);
+    virtual const Result start(Context* context = 0, Callback* callback = 0);
 
     // Override parent SerializeContract
     virtual Blob* serialize();

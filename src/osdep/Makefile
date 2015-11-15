@@ -17,42 +17,49 @@
 
 # Simple makefile for the aft package
 
-# Note the base directory holds primary base and abstract classes
-
 TOP = ../..
-INCDIR = $(TOP)/src
 
-#AR = ar
-CC = g++
-#CCFLAGS = -Wall -g -O2 -I$(TOP) -I$(INCDIR)
-CCFLAGS = -Wall -g -I$(TOP) -I$(INCDIR)
+ARMPREFIX=arm-linux-gnueabihf
+ARMAR=$(ARMPREFIX)-ar
+ARMCC=$(ARMPREFIX)-g++
 
-OBJS := blob.o consumer.o context.o factory.o producer.o propertyhandler.o result.o \
-    thread.o tobasictypes.o tobject.o tobjectiterator.o typedblob.o
+ANDROIDPREFIX=arm-linux-androideabi
+ANDROIDAR=$(ANDROIDPREFIX)-ar
+ANDROIDCC=$(ANDROIDPREFIX)-g++
 
-SRCS := $(OBJS:.o=.cpp)
-INCS = $(OBJS:.o=.h)
+LIBSDIR = $(TOP)/lib
+LIBAFT = $(LIBSDIR)/libaft.a
 
-LIBR = libaftbase.a
+SUBDIRS = posix
+
+PROGRAMS =
+
+all: subdirs $(PROGRAMS)
+
+subdirs:
+	for dir in $(SUBDIRS); do \
+		make -C $$dir; \
+	done
 
 
-.cpp.o: ; $(CC) $(CCFLAGS) -c $<
+arm:
+	for dir in $(SUBDIRS); do \
+		make -C $$dir CC=$(ARMCC) AR=$(ARMAR) ; \
+	done
 
-
-all: $(LIBR)
-
-$(LIBR): $(OBJS)
-	$(AR) rsv $@ $(OBJS)
-
+android:
+	for dir in $(SUBDIRS); do \
+		make -C $$dir CC=$(ANDROIDCC) AR=$(ANDROIDAR) ; \
+	done
 
 .PHONY: clean
 clean:
-	rm -f $(OBJS) $(LIBR)
+	for dir in $(SUBDIRS) ; do \
+		make -C $$dir clean; \
+	done
 
 .PHONY: depends
-depends: $(SRCS) $(INCS)
-	$(CC) -I$(TOP) -I$(INCDIR) -MM $(SRCS) > .makedepends
-	touch .mkdep-timestamp
-
-.makedepends:
-include .makedepends
+depends:
+	for dir in $(SUBDIRS) ; do \
+		make -C $$dir depends; \
+	done

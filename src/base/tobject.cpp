@@ -15,8 +15,10 @@
  */
 
 #include <iostream>
+#include "callback.h"
 #include "context.h"
 #include "result.h"
+#include "tobasictypes.h"
 #include "tobject.h"
 #include "tobjecttree.h"
 
@@ -48,6 +50,7 @@ static bool runVisitor(TObject* obj, void* data)
 TObject::TObject(const std::string& name)
     : name_(name)
     , state_(UNINITIALIZED)
+    , result_(Result(false))
 {
 
 }
@@ -63,6 +66,12 @@ TObject::getName() const
     return name_;
 }
 
+const Result&
+TObject::getResult() const
+{
+    return result_;
+}
+
 TObject::State
 TObject::getState() const
 {
@@ -71,6 +80,7 @@ TObject::getState() const
 
 bool TObject::rewind(Context* context)
 {
+    result_ = Result(false);
     return false;
 }
 
@@ -81,9 +91,21 @@ TObject::run(Context* context)
     //TODO: return context->runner(testObject);
 //    return const_cast<TObject&>(testObject);
 //    return const_cast<TObject&>(*this);
-    Result result(Result::TOBJECT);
-    result.setValue(this);
-    return result;
+    result_ = Result(this);
+    return result_;
+}
+
+const Result
+TObject::start(Context* context, Callback* callback)
+{
+    Result result = run(context);
+    if (callback)
+    {
+        callback->callback(&result);
+    }
+
+    result_ = Result(true);
+    return result_;
 }
 
 bool TObject::operator==(const TObject& other) const
@@ -182,8 +204,22 @@ TObjectContainer::run(Context* context)
         retval = runVisitor(this, context);
     }
 
-    Result result(retval);
-    return result;
+    result_ = Result(retval);
+    return result_;
+}
+
+const Result
+TObjectContainer::start(Context* context, Callback* callback)
+{
+    //TODO theader ...
+    Result result = run(context);
+    if (callback)
+    {
+        callback->callback(&result);
+    }
+
+    result_ = Result(true);
+    return result_;
 }
 
 

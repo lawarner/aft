@@ -17,22 +17,22 @@ Producer, Consumer, Processor interfaces  (short lingo: prod, cons, proc)
 
 Processor isa Producer, Consumer
 
-Cons -> FilterProc -> Prod
+Prod -> FilterProc -> Cons
 
-Cons1 --\___MergerProc -> Prod
-Cons2 --/
+Prod1 --\___MergerProc -> Cons
+Prod2 --/
 
-Cons -> SplitProc ___/--> Prod1   // either or both paths taken
-                     \--> Prod2
+Prod -> SplitProc ___/--> Cons1   // either or both paths taken
+                     \--> Cons2
 
-ConsCommands --\__--> ConveyerBeltProc --> Prod
-ConsObjects  --/
+ProdCommands --\__--> ConveyerBeltProc --> Cons
+ProdObjects  --/
 ---------------------------------------------------------------
 About Tobject's:
 ---------------
 Meant to hold a single test, thus the name T(est)Object.
 However, that is just the basic usage.  It can also be a container of other 
-TObject's.  Or TObject can hold a single (const) value, such as a return 
+TObject's.  Or a TObject can hold a single (const) value, such as a return 
 value or sort of enum (think handler commands, etc.).
 
 The class structure will probably go to all templates, once the rest is settled down:
@@ -51,7 +51,7 @@ For now, it is:
             TObject* value_;
             vector<TObject*> children_;
 
-Need consts for TObjectTrue, TObjectFalse (TObjectBool), nil, etc.
+Need consts for TObjectTrue, TObjectFalse (TOBool), nil, etc.
 
 Here are some possible TObject's:
           Actor, Command, Element, Endpoint, Logic (Process, Fork), Transport

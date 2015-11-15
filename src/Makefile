@@ -30,7 +30,7 @@ ANDROIDCC=$(ANDROIDPREFIX)-g++
 LIBSDIR = $(TOP)/lib
 LIBAFT = $(LIBSDIR)/libaft.a
 
-SUBDIRS = base core
+SUBDIRS = base core osdep
 # storage transport plugin ui
 
 PROGRAMS = tests
@@ -49,7 +49,7 @@ tests: lib
 $(LIBAFT):
 	mkdir -p $(LIBSDIR)
 	rm -f tests/*.o
-	$(AR) rsv $@ */*.o
+	$(AR) rsv $@ */*.o */*/*.o
 
 subdirs:
 	for dir in $(SUBDIRS); do \

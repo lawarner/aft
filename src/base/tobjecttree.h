@@ -19,6 +19,7 @@
 #include "tobject.h"
 #include "tobjectiterator.h"
 #include "serialize.h"
+#include "visitor.h"
 
 
 namespace aft
@@ -29,17 +30,26 @@ namespace base
 
 /**
  *  A simple tree based on a recursive std::vector.
- *  It provides a depth-first visitor pattern and is serializable.
+ *
+ *  It provides a depth-first visitor pattern, a depth-first iterator interface
+ *  and is serializable.
+ *  This class has no ownership of the TObjects that it holds, thus allowing
+ *  easy shared pooling of TObjects.
+ *  Trees can be empty, hold a single "root" TObject and/or hold a list of children.
+ *  Note that the root object is optional.
  */
 class TObjectTree : public SerializeContract, public TObjectIteratorContract
 {
 public:
+    /** Construct an empty TObjectTree */
     TObjectTree()
         : value_(0)
     { }
+    /** Construct a TObjectTree with a root TObjectTree */
     TObjectTree(TObject* value)
         : value_(value)
     { }
+    /** Destruct TObjectTree */
     virtual ~TObjectTree() { }
 
 public:
@@ -47,9 +57,7 @@ public:
     typedef typename std::vector<TObjectTree*> Children;
     typedef TObjectIterator iterator;
 
-    /** Define a vistor function for TObject */
-    typedef bool (*Visitor)(TObject* obj, void* data);
-
+    /** Append a TObject to the list of children. */
     TObjectTree* add(TObject* obj)
     {
         if (!obj) return 0;
@@ -58,16 +66,26 @@ public:
         children_.push_back(wrapper);
         return wrapper;
     }
+
+    /** Get underlying storage of the list of children.
+     *  This call should not be necessary (outside of core classes) and
+     *  its use is discouraged.
+     *  It may be deprecated or removed in the future. */
     Children& getChildren()
     {
         return children_;
     }
+
+    /** Get underlying storage of the list of children as a const.
+     *  This call should not be necessary (outside of core classes) and
+     *  its use is discouraged.
+     *  It may be deprecated or removed in the future. */
     const Children& getChildren() const
     {
         return children_;
     }
 
-    /** Find the child tree of the object among children */
+    /** Find the child tree wrapper of the object among children */
     TObjectTree* find(TObject* obj)
     {
         Children::iterator it;
@@ -78,6 +96,7 @@ public:
         return 0;
     }
 
+    /** Return the TObject wrapped by this tree.  It may be null. */
     TObject* getValue() const { return value_; }
 
     /** Remove tree wrapper of object from children.
@@ -98,12 +117,16 @@ public:
     }
 
     /**
-     *  Visits this tree's value followed by each childs value.
+     *  Visits this tree's value followed by each childs value, recursively.
      *
-     *  @param visitor Function pointer to visitor
+     *  Child nodes in the tree are visited in a depth-first order, after first
+     *  visting the root node.  Visiting stops if the visitor returns false.
+     *
+     *  @param visitor Pointer to C function visitor
      *  @param data Extra opaque data past on each element visited
+     *  @return false when the vistor returns false for any child, otherwise true.
      */
-    bool visit(Visitor visitor, void* data)
+    bool visit(BVisitor visitor, void* data)
     {
         if (value_ && !visitor(value_, data))
         {
@@ -121,12 +144,44 @@ public:
     }
 
     /**
+     *  A more updated visitor.
+     *  Returns true after visiting all children.  If any child TObject returns a false
+     *  Result, then the TObject is returned wrapped in a Result.
+     */
+    Result visit(VisitorContract& visitor, void* data)
+    {
+        bool boolResult;
+        if (value_)
+        {
+            Result result = visitor.visit(value_, data);
+            if (result.getValue(boolResult) && !boolResult)
+            {
+                return Result(value_);
+            }
+        }
+        Children::iterator it;
+        for (it = children_.begin(); it != children_.end(); ++it)
+        {
+            Result result = (*it)->visit(visitor, data);
+            if (result.getValue(boolResult) && !boolResult)
+            {
+                return Result(*it);
+            }
+        }
+        return Result(true);
+    }
+
+    /**
      *  Visits this tree's children and stops on true.
      *
-     *  @param visitor Function pointer to visitor
+     *  Only direct child nodes in the tree are visited.  This method does
+     *  not vist the root node.
+     *
+     *  @param visitor Pointer to C function visitor
      *  @param data Extra opaque data past on each element visited
+     *  @return the iterator pointing to the child that returns true
      */
-    Children::iterator visitUntil(Visitor visitor, void* data)
+    Children::iterator visitUntil(BVisitor visitor, void* data)
     {
         Children::iterator it;
         for (it = children_.begin(); it != children_.end(); ++it)
@@ -169,8 +224,9 @@ public:
     }
 
 protected:
-    /** This nodes value */
+    /** The tree root value (optional). */
     TObject* value_;
+    /** List of children. */
     Children children_;
 };
 

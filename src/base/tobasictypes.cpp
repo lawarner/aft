@@ -26,6 +26,7 @@ TOBool::TOBool(bool value, const std::string& name)
     : TObject(name)
     , value_(value)
 {
+    state_ = INITIAL;
 }
 
 TOBool::~TOBool()

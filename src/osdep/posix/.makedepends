@@ -1,0 +1,3 @@
+posixthread.o: posixthread.cpp posixthread.h ../../../src/base/thread.h \
+ ../../../src/base/result.h ../../../src/base/tobject.h \
+ ../../../src/base/serialize.h ../../../src/base/tobjectiterator.h

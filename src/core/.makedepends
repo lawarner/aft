@@ -1,10 +1,16 @@
 logger.o: logger.cpp logger.h
 loghandler.o: loghandler.cpp logger.h loghandler.h \
- ../../src/base/propertyhandler.h
-runcontext.o: runcontext.cpp runcontext.h ../../src/base/context.h
-testcase.o: testcase.cpp ../../src/base/context.h testcase.h \
+ ../../src/base/propertyhandler.h ../../src/base/tobasictypes.h \
+ ../../src/base/tobject.h ../../src/base/result.h \
+ ../../src/base/serialize.h ../../src/base/tobjectiterator.h
+runcontext.o: runcontext.cpp loghandler.h \
+ ../../src/base/propertyhandler.h runcontext.h ../../src/base/context.h \
+ ../../src/base/visitor.h ../../src/base/result.h
+testcase.o: testcase.cpp ../../src/base/context.h \
+ ../../src/base/visitor.h ../../src/base/result.h testcase.h \
  ../../src/base/tobject.h ../../src/base/serialize.h \
- ../../src/base/tobjectiterator.h ../../src/base/tobjecttree.h
-testsuite.o: testsuite.cpp ../../src/base/context.h testsuite.h \
- ../../src/base/tobject.h ../../src/base/serialize.h \
- ../../src/base/tobjectiterator.h ../../src/base/tobjecttree.h
+ ../../src/base/tobjectiterator.h
+testsuite.o: testsuite.cpp ../../src/base/context.h \
+ ../../src/base/visitor.h ../../src/base/result.h \
+ ../../src/base/tobjecttree.h ../../src/base/tobject.h \
+ ../../src/base/serialize.h ../../src/base/tobjectiterator.h testsuite.h
