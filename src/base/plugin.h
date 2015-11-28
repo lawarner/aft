@@ -15,11 +15,14 @@
  *   limitations under the License.
  */
 
+#include <string>
+
 namespace aft
 {
 namespace base
 {
 // Forward reference
+class BaseFactory;
 class Blob;
 class Context;
 class TObject;
@@ -40,9 +43,59 @@ public:
 
     virtual TObject* createInstance(const Blob* blob = 0, const Context* context = 0) = 0;
 
-    virtual static const std::string& describe() const = 0;
-    virtual bool activate() = 0;
-    virtual bool deactive() = 0;
+    virtual const std::string describePlugins() const = 0;
+};
+
+
+/**
+ *  Plug-in loader interface.
+ *
+ *  Note that loadable plugins have the following structure:
+ *
+ *  BaseFactory* initialize()
+ *  void deinitialize()
+ *  The rest of the .so file contains various TObject implementations that
+ *  are instantiated by the returned factory.
+ */
+class PluginLoaderContract
+{
+public:
+    virtual ~PluginLoaderContract() { }
+
+    virtual BaseFactory* loadBundle(const std::string& bundleName) = 0;
+    virtual void setPath(const std::string& path) = 0;
+    virtual void unloadBundle() = 0;
+};
+
+
+/**
+ *  Base implementation of PluginContract.
+ *
+ *  When implementing a Plugin capable class it is often useful to sub-class from
+ *  BasePlugin instead of implementing the PluginContract interface.
+ */
+class BasePlugin : public PluginContract
+{
+public:
+    BasePlugin(const std::string& bundleName, const std::string& path = std::string());
+
+    virtual ~BasePlugin();
+
+    virtual bool loadPlugins();
+    virtual void unloadPlugins();
+
+    virtual TObject* createInstance(const Blob* blob = 0, const Context* context = 0);
+
+    virtual const std::string describePlugins() const;
+
+    virtual BaseFactory* getFactory() const;
+    virtual PluginLoaderContract* getPluginLoader() const;
+
+protected:
+    const std::string bundleName_;
+    const std::string path_;
+    BaseFactory* factory_;
+    PluginLoaderContract* loader_;
 };
 
 } // namespace base

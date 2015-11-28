@@ -35,22 +35,26 @@ ANDROIDCC=$(ANDROIDPREFIX)-g++
 LIBAFT = $(TOP)/lib/libaft.a
 LIBGTEST = /usr/local/lib/libgtest.a
 
-LDFLAGS = -pthread
+LDFLAGS = -pthread -Wl,--no-as-needed -ldl
 LDLIBS =
+
+PLUGINOBJ = sample_plugin.o
+PLUGINSRC = $(PLUGINOBJ:.o=.cpp)
+PLUGINSO = sample_plugin.so
 
 SUBDIRS =
 
-OBJS := t_basetests.o t_logger.o t_osdep.o t_result.o
+OBJS := t_basetests.o t_logger.o t_osdep.o t_plugin.o t_result.o
 SRCS := $(OBJS:.o=.cpp)
 
-PROGRAMS = t_basetests t_logger t_osdep t_result
+PROGRAMS = t_basetests t_logger t_osdep t_plugin t_result
 
 DEPCPPFLAGS = -I. $(INCS)
 DEPLIBS = $(LIBAFT) $(LIBGTEST)
 
 .cpp.o: ; $(CC) $(CCFLAGS) -c $<
 
-all: $(PROGRAMS)
+all: $(PROGRAMS) $(PLUGINSO)
 # subdirs
 
 subdirs:
@@ -59,6 +63,9 @@ subdirs:
 	done
 
 $(PROGRAMS): $(DEPLIBS)
+
+$(PLUGINSO): $(LIBAFT) $(PLUGINSRC)
+	$(CC) -fPIC -shared $(INCS) $(PLUGINSRC) $(LIBAFT) -o $(PLUGINSO)
 
 arm:
 	for dir in $(SUBDIRS); do \
@@ -75,7 +82,7 @@ clean:
 	for dir in $(SUBDIRS); do \
 		make -C $$dir clean; \
 	done
-	rm -f $(OBJS) $(PROGRAMS)
+	rm -f $(OBJS) $(PROGRAMS) $(PLUGINOBJ) $(PLUGINSO)
 
 .PHONY: depends
 depends: $(SRCS)

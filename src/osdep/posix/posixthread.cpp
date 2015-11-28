@@ -19,10 +19,9 @@
 #include "osdep/platform.h"
 #include "base/callback.h"
 
-
 using namespace aft::base;
 using namespace aft::osdep;
-using namespace std;
+
 
 class aft::osdep::PosixThreadImpl
 {

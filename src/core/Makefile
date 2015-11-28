@@ -23,7 +23,7 @@ INCDIR = $(TOP)/src
 #AR = ar
 CC = g++
 #CCFLAGS = -Wall -g -O2 -I$(TOP) -I$(INCDIR)
-CCFLAGS = -Wall -g -I$(TOP) -I$(INCDIR)
+CCFLAGS = -Wall -g -fPIC -I$(TOP) -I$(INCDIR)
 
 OBJS := logger.o loghandler.o runcontext.o testcase.o testsuite.o
 

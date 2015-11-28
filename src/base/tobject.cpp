@@ -18,6 +18,7 @@
 #include "callback.h"
 #include "context.h"
 #include "result.h"
+#include "thread.h"
 #include "tobasictypes.h"
 #include "tobject.h"
 #include "tobjecttree.h"
@@ -98,14 +99,12 @@ TObject::run(Context* context)
 const Result
 TObject::start(Context* context, Callback* callback)
 {
-    Result result = run(context);
-    if (callback)
-    {
-        callback->callback(&result);
-    }
+    ThreadManager* tman = ThreadManager::instance();
+    ThreadHandler* thread = tman->thread(this, context);
+    thread->notify(callback);
+    thread->run();
 
-    result_ = Result(true);
-    return result_;
+    return thread->getResult();
 }
 
 bool TObject::operator==(const TObject& other) const

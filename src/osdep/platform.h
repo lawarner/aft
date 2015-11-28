@@ -18,10 +18,8 @@
 #define PLATFORM Posix
 #define PLATFORM_NAME "Posix"
 
-/** TODO maybe these should be reversed, i.e.:
- *       #define PosixThreadHandler PlatformThreadHandler
- *  and osdep class be in aft::platform namespace.
- */
+#define PosixPluginLoader PlatformPluginLoader
 #define PosixThreadHandler PlatformThreadHandler 
 
+#include "osdep/posix/posixpluginloader.h"
 #include "osdep/posix/posixthread.h"

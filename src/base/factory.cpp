@@ -62,10 +62,10 @@ bool BaseFactory::deinit()
 {
     if (deinitPointer_)
     {
-        typedef bool (*DeInit)();
-        return (*(DeInit)deinitPointer_)();
+        typedef void (*DeInit)();
+        (*(DeInit)deinitPointer_)();
     }
-    return false;
+    return true;
 }
 
 void BaseFactory::setDeinit(void* deinit)

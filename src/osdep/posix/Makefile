@@ -23,9 +23,9 @@ INCDIR = $(TOP)/src
 #AR = ar
 CC = g++
 #CCFLAGS = -Wall -g -O2 -I$(TOP) -I$(INCDIR)
-CCFLAGS = -Wall -g -I$(TOP) -I$(INCDIR)
+CCFLAGS = -Wall -g -fPIC -I$(TOP) -I$(INCDIR)
 
-OBJS := posixthread.o
+OBJS := posixpluginloader.o posixthread.o
 
 SRCS := $(OBJS:.o=.cpp)
 INCS = $(OBJS:.o=.h)
