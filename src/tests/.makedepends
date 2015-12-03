@@ -12,7 +12,8 @@ t_osdep.o: t_osdep.cpp ../../src/base/callback.h ../../src/base/context.h \
  ../../src/base/tobjectiterator.h ../../src/base/tobasictypes.h
 t_plugin.o: t_plugin.cpp ../../src/base/factory.h ../../src/base/plugin.h \
  ../../src/base/tobject.h ../../src/base/result.h \
- ../../src/base/serialize.h ../../src/base/tobjectiterator.h
+ ../../src/base/serialize.h ../../src/base/tobjectiterator.h \
+ ../../src/base/typedblob.h ../../src/base/blob.h
 t_result.o: t_result.cpp ../../src/base/result.h ../../src/base/tobject.h \
  ../../src/base/serialize.h ../../src/base/tobjectiterator.h \
  ../../src/core/logger.h

@@ -48,6 +48,30 @@ Result::~Result()
 
 }
 
+std::string
+Result::asString() const
+{
+    switch (type_)
+    {
+    case UNKNOWN:
+        return "(unknown)";
+    case FATAL:
+        return "(FATAL)";
+    case BOOLEAN:
+        return (value_.flag_ ? "true" : "false");
+    case COMMAND:
+        return "(Command)";
+    case ITERATOR:
+        return "(Iterator)";
+    case TOBJECT:
+        return "(TObject)";
+    default:
+        return "(bad result type)";
+    }
+    return "";  // not reached
+}
+
+
 Result::ResultType
 Result::getType() const
 {

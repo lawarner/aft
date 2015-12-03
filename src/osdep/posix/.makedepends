@@ -1,10 +1,11 @@
-posixpluginloader.o: posixpluginloader.cpp ../../../src/osdep/platform.h \
- ../../../src/osdep/posix/posixpluginloader.h \
+posixpluginloader.o: posixpluginloader.cpp ../../../src/base/factory.h \
+ ../../../src/osdep/platform.h \
+ ../../../src/osdep/posix/posixpluginloader.h ../../../src/base/plugin.h \
  ../../../src/osdep/posix/posixthread.h ../../../src/base/thread.h \
  ../../../src/base/result.h ../../../src/base/tobject.h \
  ../../../src/base/serialize.h ../../../src/base/tobjectiterator.h
 posixthread.o: posixthread.cpp ../../../src/osdep/platform.h \
- ../../../src/osdep/posix/posixpluginloader.h \
+ ../../../src/osdep/posix/posixpluginloader.h ../../../src/base/plugin.h \
  ../../../src/osdep/posix/posixthread.h ../../../src/base/thread.h \
  ../../../src/base/result.h ../../../src/base/tobject.h \
  ../../../src/base/serialize.h ../../../src/base/tobjectiterator.h \

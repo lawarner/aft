@@ -15,6 +15,8 @@
  *   limitations under the License.
  */
 
+#include <string>
+
 namespace aft
 {
 namespace base
@@ -27,6 +29,7 @@ class TObject;
  * This is a handy wrapper for return types, since it can have various types.
  * This should replace many cases where a reference to a TObject is returned.
  */
+//TODO make serializable
 class Result
 {
 public:
@@ -46,6 +49,8 @@ public:
     Result(TObject* object);
 
     virtual ~Result();
+
+    std::string asString() const;
 
     ResultType getType() const;
     bool getValue(bool& value) const;

@@ -34,6 +34,11 @@ BasePlugin::~BasePlugin()
     delete loader_;
 }
 
+bool BasePlugin::isLoaded() const
+{
+    return factory_ != 0;
+}
+
 bool BasePlugin::loadPlugins()
 {
     if (!path_.empty())

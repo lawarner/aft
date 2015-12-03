@@ -26,6 +26,7 @@ namespace base
 // Forward reference
 class Blob;
 class Context;
+class PluginContract;
 class TObject;
 
 
@@ -120,11 +121,16 @@ public:
     /** Load a factory from a bundle.
      *
      *  The factory will be added to its category.
-     *  @param bundleName Past to the delegate in order to load the bundle.
+     *  @param bundleName Name of the bundle used by the delegate in order to load the bundle.
+     *  @param path Path to find plugin bundle.
+     *  @return Pointer to the plugin object used.  The caller has ownership of this object.
      */
-    FactoryContract* loadBundle(const std::string& bundleName);
-    /** Unload a factory bundle. */
-    bool unloadBundle(FactoryContract* factoryClass);
+    PluginContract* loadBundle(const std::string& bundleName,
+                                const std::string& path = std::string());
+    FactoryContract* loadBundle(PluginContract& plugin);
+
+    /** Unload a factory plugin bundle. */
+    bool unloadBundle(PluginContract* plugin);
 
     /** Add a factory to its category */
     void addFactory(const FactoryContract* factoryClass);
@@ -149,6 +155,7 @@ public:
                        const Blob* parameters = 0, const Context* context = 0);
 
 protected:
+    /** Dictionary of factories, grouped by category. */
     std::map<std::string, FactoryList > factories_;
     //TODO loader delegate
 };

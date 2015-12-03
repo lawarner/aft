@@ -16,6 +16,7 @@
 
 #include <algorithm>
 #include "factory.h"
+#include "plugin.h"
 #include "tobasictypes.h"
 using namespace aft::base;
 
@@ -82,15 +83,47 @@ MecFactory::~MecFactory()
 {
 }
 
-FactoryContract*
-MecFactory::loadBundle(const std::string& bundleName)
+PluginContract*
+MecFactory::loadBundle(const std::string& bundleName, const std::string& path)
 {
-    //TODO use delegate
-    return 0;
+    BasePlugin* plugin = new BasePlugin(bundleName, path);
+    if (!loadBundle(*plugin))
+    {
+        delete plugin;
+        return 0;
+    }
+
+    return plugin;
 }
 
-bool MecFactory::unloadBundle(FactoryContract* factoryClass)
+FactoryContract*
+MecFactory::loadBundle(PluginContract& plugin)
 {
+    if (!plugin.isLoaded() && !plugin.loadPlugins())
+    {
+        return 0;
+    }
+
+    BaseFactory* factory = plugin.getFactory();
+    if (factory)
+    {
+        addFactory(factory);
+    }
+
+    return factory;
+}
+
+bool MecFactory::unloadBundle(PluginContract* plugin)
+{
+    if (!plugin) return false;
+
+    BaseFactory* factory = plugin->getFactory();
+    if (factory)
+    {
+        removeFactory(factory);
+        return true;
+    }
+
     return false;
 }
 

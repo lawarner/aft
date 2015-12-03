@@ -27,9 +27,11 @@ using namespace aft::base;
 namespace
 {
 
+const std::string BUNDLE_NAME("sample_plugin");
+
 TEST(PluginTest, BasePlugin)
 {
-    BasePlugin plugin("sample_plugin", ".");
+    BasePlugin plugin(BUNDLE_NAME, ".");
     std::cout << "Initial describe: " << plugin.describePlugins() << std::endl;
 
     EXPECT_TRUE(plugin.loadPlugins());
@@ -38,15 +40,63 @@ TEST(PluginTest, BasePlugin)
     EXPECT_TRUE(plugin.getFactory() != 0);
     EXPECT_TRUE(plugin.getPluginLoader() != 0);
 
-    TypedBlob valueBlob("valueBlob", TypedBlob::STRING, "Sample TObject");
-    TObject* tobject = plugin.createInstance(&valueBlob);
+    TypedBlob blob("valueBlob", TypedBlob::STRING, "Sample TObject");
+    TObject* tobject = plugin.createInstance(&blob);
     EXPECT_TRUE(tobject != 0);
 
+    //TODO check results
     tobject->run();
     delete tobject;
 
     plugin.unloadPlugins();
     std::cout << "After describe: " << plugin.describePlugins() << std::endl;
+}
+
+TEST(PluginTest, MecFactoryFactory)
+{
+    BasePlugin plugin(BUNDLE_NAME, ".");
+    EXPECT_TRUE(plugin.loadPlugins());
+
+    BaseFactory* factory = plugin.getFactory();
+    EXPECT_TRUE(factory != 0);
+
+    MecFactory mec;   // probably will become a singleton interface
+    mec.addFactory(factory);
+
+    const std::string objectName("anObject");
+    TypedBlob blob("valueBlob", TypedBlob::STRING, "Sample TObject");
+    TObject* tobj = mec.construct(factory->category(), objectName, &blob);
+    EXPECT_TRUE(tobj != 0);
+    EXPECT_EQ(tobj->getName(), objectName);
+
+    //TODO check results
+    tobj->run();
+    free(tobj);
+
+    mec.removeFactory(factory);
+    plugin.unloadPlugins();
+}
+
+TEST(PluginTest, MecFactoryBundle)
+{
+    MecFactory mec;
+    PluginContract* plugin = mec.loadBundle(BUNDLE_NAME, ".");
+    EXPECT_TRUE(plugin != 0);
+    FactoryContract* factory = plugin->getFactory();
+    EXPECT_TRUE(factory != 0);
+
+    const std::string objectName("anObject");
+    TypedBlob blob("valueBlob", TypedBlob::STRING, "Sample TObject");
+    TObject* tobj = mec.construct(factory->category(), objectName, &blob);
+    EXPECT_TRUE(tobj != 0);
+    EXPECT_EQ(tobj->getName(), objectName);
+
+    //TODO check results
+    tobj->run();
+    free(tobj);
+
+    EXPECT_TRUE(mec.unloadBundle(plugin));
+    free(plugin);
 }
 
 } // namespace

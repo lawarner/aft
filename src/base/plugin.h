@@ -38,7 +38,15 @@ class TObject;
 class PluginContract
 {
 public:
+    /** Return the factory, if loaded */
+    virtual BaseFactory* getFactory() const = 0;
+
+    /** Check if the plug-ins are loaded.. */
+    virtual bool isLoaded() const = 0;
+
+    /** Load the plug-ins. */
     virtual bool loadPlugins() = 0;
+    /** Unload the plug-ins. */
     virtual void unloadPlugins() = 0;
 
     virtual TObject* createInstance(const Blob* blob = 0, const Context* context = 0) = 0;
@@ -60,6 +68,7 @@ public:
 class PluginLoaderContract
 {
 public:
+    /** Destruct a plugin loader */
     virtual ~PluginLoaderContract() { }
 
     virtual BaseFactory* loadBundle(const std::string& bundleName) = 0;
@@ -81,6 +90,7 @@ public:
 
     virtual ~BasePlugin();
 
+    virtual bool isLoaded() const;
     virtual bool loadPlugins();
     virtual void unloadPlugins();
 
