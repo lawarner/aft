@@ -44,10 +44,10 @@ PLUGINSO = sample_plugin.so
 
 SUBDIRS =
 
-OBJS := t_basetests.o t_logger.o t_osdep.o t_plugin.o t_result.o
+OBJS := t_basetests.o t_coretests.o t_logger.o t_osdep.o t_plugin.o t_result.o
 SRCS := $(OBJS:.o=.cpp)
 
-PROGRAMS = t_basetests t_logger t_osdep t_plugin t_result
+PROGRAMS = t_basetests t_coretests t_logger t_osdep t_plugin t_result
 
 DEPCPPFLAGS = -I. $(INCS)
 DEPLIBS = $(LIBAFT) $(LIBGTEST)
@@ -63,6 +63,10 @@ subdirs:
 	done
 
 $(PROGRAMS): $(DEPLIBS)
+
+# On Mac OS X, compile with:
+#     g++ -dynamiclib -flat_namespace myclass.cc -o myclass.so
+#     g++ class_user.cc -o class_user
 
 $(PLUGINSO): $(LIBAFT) $(PLUGINSRC)
 	$(CC) -fPIC -shared $(INCS) $(PLUGINSRC) $(LIBAFT) -o $(PLUGINSO)

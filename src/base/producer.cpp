@@ -16,11 +16,73 @@
 
 #include <algorithm>
 
+#include "blob.h"
+#include "consumer.h"
 #include "producer.h"
+#include "result.h"
+#include "tobject.h"
+#include "typedblob.h"
 
 using namespace aft::base;
 
-bool ProducerContract::registerDataCallback(const ReaderContract* reader)
+BaseProducer::BaseProducer(WriterContract* writerDelegate)
+    : writerDelegate_(writerDelegate)
+{
+}
+
+BaseProducer::~BaseProducer()
+{
+}
+
+
+bool BaseProducer::read(TObject& object)
+{
+    if (writerDelegate_ && writerDelegate_->hasData() == TYPE_TOBJECT)
+    {
+        return writerDelegate_->getData(object);
+    }
+    return false;
+}
+
+bool BaseProducer::read(Result& result)
+{
+    if (writerDelegate_ && writerDelegate_->hasData() == TYPE_RESULT)
+    {
+        return writerDelegate_->getData(result);
+    }
+    return false;
+}
+
+bool BaseProducer::read(Blob& blob)
+{
+    if (writerDelegate_ && writerDelegate_->hasData() == TYPE_BLOB)
+    {
+        return writerDelegate_->getData(blob);
+    }
+    return false;
+}
+
+bool BaseProducer::hasData()
+{
+    if (writerDelegate_)
+    {
+        return writerDelegate_->hasData() != TYPE_NONE;
+    }
+    return false;
+}
+
+bool BaseProducer::hasObject(ProductType productType)
+{
+    if (writerDelegate_)
+    {
+        return writerDelegate_->hasData() == productType;
+    }
+
+    if (productType == TYPE_NONE) return true;
+    return false;
+}
+
+bool BaseProducer::registerDataCallback(const ReaderContract* reader)
 {
     if (!reader) return false;
 
@@ -34,7 +96,7 @@ bool ProducerContract::registerDataCallback(const ReaderContract* reader)
     return true;
 }
 
-bool ProducerContract::unregisterDataCallback(const ReaderContract* reader)
+bool BaseProducer::unregisterDataCallback(const ReaderContract* reader)
 {
     if (!reader) return false;
 
@@ -47,3 +109,92 @@ bool ProducerContract::unregisterDataCallback(const ReaderContract* reader)
     readers_.erase(it);
     return true;
 }
+
+void BaseProducer::flowData()
+{
+    if (!writerDelegate_ || writerDelegate_->hasData() == TYPE_NONE)
+    {
+        return;
+    }
+
+    ProductType productType;
+    do
+    {
+        productType = writerDelegate_->hasData();
+        switch (productType)
+        {
+        case TYPE_TOBJECT:
+        {
+            TObject tobject;
+            if (writerDelegate_->getData(tobject))
+            {
+                // iterate thru readers until one reads the object
+                std::vector<ReaderContract*>::iterator it;
+                for (it = readers_.begin(); it != readers_.end(); ++it)
+                {
+                    if ((*it)->dataAvailable(tobject))
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+            break;
+        case TYPE_RESULT:
+        {
+            Result result;
+            if (writerDelegate_->getData(result))
+            {
+                // iterate thru readers until one reads the object
+                std::vector<ReaderContract*>::iterator it;
+                for (it = readers_.begin(); it != readers_.end(); ++it)
+                {
+                    if ((*it)->dataAvailable(result))
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+            break;
+        case TYPE_BLOB:
+        {
+            Blob blob("");
+            if (writerDelegate_->getData(blob))
+            {
+                // iterate thru readers until one reads the object
+                std::vector<ReaderContract*>::iterator it;
+                for (it = readers_.begin(); it != readers_.end(); ++it)
+                {
+                    if ((*it)->dataAvailable(blob))
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+            break;
+        case TYPE_TYPEDBLOB:
+        {
+            TypedBlob blob("");
+            if (writerDelegate_->getData(blob))
+            {
+                // iterate thru readers until one reads the object
+                std::vector<ReaderContract*>::iterator it;
+                for (it = readers_.begin(); it != readers_.end(); ++it)
+                {
+                    if ((*it)->dataAvailable(blob))
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+            break;
+        case TYPE_NONE:
+            break;
+        }
+    } while (productType != TYPE_NONE);
+
+}
+

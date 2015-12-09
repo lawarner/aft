@@ -33,8 +33,28 @@ TypedBlob::TypedBlob(const std::string& name, TypedBlob::Type type,
     //TODO assert type not UNKNOWN or RAWDATA
 }
 
+TypedBlob::TypedBlob(const TypedBlob& other)
+    : Blob(other)
+    , type_(other.type_)
+    , stringData_(other.stringData_)
+{
+
+}
+
 TypedBlob::~TypedBlob()
 {
+}
+
+TypedBlob& TypedBlob::operator=(const TypedBlob& other)
+{
+    if (&other != this)
+    {
+        Blob::operator=(other);
+        type_ = other.type_;
+        stringData_ = other.stringData_;
+    }
+
+    return *this;
 }
 
 const std::string&

@@ -47,7 +47,11 @@ public:
 public:
     TypedBlob(const std::string& name, void* data = 0);
     TypedBlob(const std::string& name, Type type, const std::string& stringData);
+    TypedBlob(const TypedBlob& other);
     virtual ~TypedBlob();
+
+    /** Assignment operator for TypedBlob */
+    virtual TypedBlob& operator=(const TypedBlob& other);
 
     const std::string& getString() const;
     Type getType() const;

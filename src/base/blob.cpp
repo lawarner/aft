@@ -24,9 +24,29 @@ Blob::Blob(const std::string& name, void* data)
 
 }
 
+Blob::Blob(const Blob& other)
+    : name_(other.name_)
+    , data_(other.data_)
+    , members_(other.members_)
+{
+
+}
+
 Blob::~Blob()
 {
 
+}
+
+Blob& Blob::operator=(const Blob& other)
+{
+    if (&other != this)
+    {
+        name_ = other.name_;
+        data_ = other.data_;
+        members_ = other.members_;
+    }
+
+    return *this;
 }
 
 bool Blob::addData(void* data)

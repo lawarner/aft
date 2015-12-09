@@ -1,5 +1,14 @@
+Next todo:
+----------
+- Base and basic (string, file) prods, cons
+- ui classes and context
+- connect 2 tobjects:  tobject(prod) -> tobject2(cons)
+- robot, sequencer
+
 Random Ideas:
 ------------
+Environmental superclass for contextual side of things, i.e., non-TObjects.
+
 Tests can invoke other tests, either synchronously or threaded.
 Threaded tests can interact with each other.
 
@@ -16,6 +25,7 @@ Switch to CMake
 Producer, Consumer, Processor interfaces  (short lingo: prod, cons, proc)
 
 Processor isa Producer, Consumer
+Proc == ProdCons == Filter == Robot
 
 Prod -> FilterProc -> Cons
 
@@ -25,8 +35,13 @@ Prod2 --/
 Prod -> SplitProc ___/--> Cons1   // either or both paths taken
                      \--> Cons2
 
+
 ProdCommands --\__--> ConveyerBeltProc --> Cons
-ProdObjects  --/
+ProdObjects  --/         Robots
+
+Robots are used to manipulate the "stream" from outside.  For example, throttle,
+  monitor, reject bad items (inspector), duplicate items, modify items, inject
+  other info, halt production, queue/buffer items, etc.
 ---------------------------------------------------------------
 About Tobject's:
 ---------------
@@ -60,7 +75,7 @@ Here are some possible TObject's:
           TestCase, TestBundle, Log, Result
 
 ---------------------------------------------------------------
-TODO PlugIn factory interface, general extensibility.
+PlugIn factory interface, general extensibility.
 
 ? How do final implementation instances get chosen, if multiple exist?
 Maybe default behavior is to do a lazy instantiation when parsing the input.
@@ -75,19 +90,15 @@ dispositions?
 -----------------------------------------------------------------
 Should serialization be related to plugin?
 -----------------------------------------------------------------
-Need a Mega Evil Corp (MEC) class which is a generic factory superclass.
-
-Each set of classes that need a factory can register and use this.
-MEC handles factories for built-ins, serialized and plug-in.
-
------------------------------------------------------------------
 At the base/core level, the UI must be abstracted.  An abstract UI can handle
 the following types:
-- batch: initial testcase loaded, any prompts come from input file, output to file.
+- batch: initial testcase/testsuite is loaded and run. Any prompts come from
+         an input file, output goes to file.
 - tty:   prompts testcase, inputs, outputs.  finally command prompt.  can also
          prompt along as input is needed.
+- term:  tty with addressable cursor, like ncurses
 - html:  webforms, tables, pagers, frames(?)
-- gui:   regular UI with menu, widgets
+- gui:   regular UI with menu, widgets, panels
 
 The different types vary in their interaction.  But for each piece of data, a
 UI would have the following possible interactions:
@@ -97,4 +108,11 @@ UI would have the following possible interactions:
 - pull:    call UI hook to get info
 - get:     the UI calls this to request info from the model
 - put:     the UI calls this to give info to the model
+
+For example, a GUI could send a Cancel or enter new data in a field at any time and
+without an explicit prompt (put).  But a tty cannot enter data in a field or chose
+Cancel without it being prompted (input).
+
+A stylesheet can optionally be used to adjust the look-n-feel of the UI.  Multiple
+styles can exist similar to css.
 -----------------------------------------------------------------

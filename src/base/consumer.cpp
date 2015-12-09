@@ -16,11 +16,57 @@
 
 #include <algorithm>
 
+#include "blob.h"
 #include "consumer.h"
+#include "producer.h"
+#include "result.h"
+#include "tobject.h"
 
 using namespace aft::base;
 
-bool ConsumerContract::registerWriteCallback(const WriterContract* writer)
+
+BaseConsumer::BaseConsumer(ReaderContract* readerDelegate)
+    : readerDelegate_(readerDelegate)
+{
+}
+
+BaseConsumer::~BaseConsumer()
+{
+}
+
+bool BaseConsumer::write(const TObject& object)
+{
+    if (readerDelegate_)
+    {
+        return readerDelegate_->dataAvailable(object);
+    }
+    return false;
+}
+
+bool BaseConsumer::write(const Result& result)
+{
+    if (readerDelegate_)
+    {
+        return readerDelegate_->dataAvailable(result);
+    }
+    return false;
+}
+
+bool BaseConsumer::write(const Blob& blob)
+{
+    if (readerDelegate_)
+    {
+        return readerDelegate_->dataAvailable(blob);
+    }
+    return false;
+}
+
+bool BaseConsumer::needsData()
+{
+    return readerDelegate_ != 0;
+}
+
+bool BaseConsumer::registerWriteCallback(const WriterContract* writer)
 {
     if (!writer) return false;
 
@@ -34,7 +80,7 @@ bool ConsumerContract::registerWriteCallback(const WriterContract* writer)
     return true;
 }
 
-bool ConsumerContract::unregisterWriteCallback(const WriterContract* writer)
+bool BaseConsumer::unregisterWriteCallback(const WriterContract* writer)
 {
     if (!writer) return false;
 
@@ -46,4 +92,63 @@ bool ConsumerContract::unregisterWriteCallback(const WriterContract* writer)
     }
     writers_.erase(it);
     return true;
+}
+
+// writers are serialize: each is completely read before going to the next.
+void BaseConsumer::flowData()
+{
+    if (!readerDelegate_ || writers_.empty()) return;
+
+    ProductType productType;
+    std::vector<WriterContract*>::iterator it;
+    for (it = writers_.begin(); it != writers_.end(); ++it)
+    {
+        do
+        {
+            productType = (*it)->hasData();
+            if (productType == TYPE_NONE) break;
+
+            switch (productType)
+            {
+            case TYPE_TOBJECT:
+            {
+                TObject tobject;
+                if ((*it)->getData(tobject))
+                {
+                    readerDelegate_->dataAvailable(tobject);
+                }
+            }
+            break;
+            case TYPE_RESULT:
+            {
+                Result result;
+                if ((*it)->getData(result))
+                {
+                    readerDelegate_->dataAvailable(result);
+                }
+            }
+            break;
+            case TYPE_BLOB:
+            {
+                Blob blob("");
+                if ((*it)->getData(blob))
+                {
+                    readerDelegate_->dataAvailable(blob);
+                }
+            }
+            break;
+            case TYPE_TYPEDBLOB:
+            {
+                TypedBlob blob("");
+                if ((*it)->getData(blob))
+                {
+                    readerDelegate_->dataAvailable(blob);
+                }
+            }
+            break;
+            case TYPE_NONE:
+                break;
+            }
+        } while (productType != TYPE_NONE);
+    }
 }

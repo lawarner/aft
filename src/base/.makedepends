@@ -1,15 +1,17 @@
 blob.o: blob.cpp blob.h
-consumer.o: consumer.cpp consumer.h
+consumer.o: consumer.cpp blob.h consumer.h producttype.h producer.h \
+ result.h tobject.h serialize.h tobjectiterator.h
 context.o: context.cpp context.h visitor.h result.h tobject.h serialize.h \
  tobjectiterator.h
-factory.o: factory.cpp factory.h tobasictypes.h tobject.h result.h \
- serialize.h tobjectiterator.h
+factory.o: factory.cpp factory.h plugin.h tobasictypes.h tobject.h \
+ result.h serialize.h tobjectiterator.h
 plugin.o: plugin.cpp factory.h plugin.h ../../src/osdep/platform.h \
  ../../src/osdep/posix/posixpluginloader.h \
  ../../src/osdep/posix/posixthread.h ../../src/base/thread.h \
  ../../src/base/result.h ../../src/base/tobject.h \
  ../../src/base/serialize.h ../../src/base/tobjectiterator.h
-producer.o: producer.cpp producer.h
+producer.o: producer.cpp blob.h consumer.h producttype.h producer.h \
+ result.h tobject.h serialize.h tobjectiterator.h
 propertyhandler.o: propertyhandler.cpp context.h visitor.h result.h \
  propertyhandler.h
 result.o: result.cpp result.h

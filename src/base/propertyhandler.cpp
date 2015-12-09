@@ -22,6 +22,8 @@ using namespace aft::base;
 using namespace std;
 
 
+static const std::string emptyString;
+
 class aft::base::PropertyContainer
 {
 public:
@@ -45,7 +47,7 @@ const std::string&
 PropertyHandler::getValue(const std::string& name) const
 {
     map<string,string>::const_iterator it = container_->nameValues.find(name);
-    if (it == container_->nameValues.end()) return "";
+    if (it == container_->nameValues.end()) return emptyString;
 
     return it->second;
 }

@@ -16,6 +16,7 @@
  */
 
 #include <vector>
+#include "producttype.h"
 
 namespace aft
 {
@@ -23,17 +24,24 @@ namespace base
 {
 // Forward reference
 class Blob;
+class Result;
+class ReaderContract;
 class TObject;
 
 /**
- *  Interface used by the consumer to call writers when it needs data
+ *  Interface that the consumer calls when it needs data.
  */
 class WriterContract
 {
 public:
-    /** Return true if data was written */
-    virtual bool writeData(TObject& object) = 0;
-    virtual bool writeData(Blob& blob) = 0;
+    /** Returns the type of product this writer has ready to write. */
+    virtual ProductType hasData() = 0;
+
+    // Note: Using references requires class to have proper copy semantics.
+    /** Return true if data was written. */
+    virtual bool getData(TObject& object) = 0;
+    virtual bool getData(Result& result) = 0;
+    virtual bool getData(Blob& blob) = 0;
 };
 
 /**
@@ -43,16 +51,46 @@ class ConsumerContract
 {
 public:
     virtual bool write(const TObject& object) = 0;
+    virtual bool write(const Result& result) = 0;
     virtual bool write(const Blob& blob) = 0;
-    /** Returns true if can write to this consumer without blocking */
+    /** Returns true if write can be called on this consumer without blocking */
     virtual bool needsData() = 0;
 
     //TODO write multiple objects (array/vector)
 
+    /** Register as a data writer for this consumer. */
+    virtual bool registerWriteCallback(const WriterContract* writer) = 0;
+    /** Unregister as a data writer for this consumer. */
+    virtual bool unregisterWriteCallback(const WriterContract* writer) = 0;
+};
+
+/**
+ *  Base implementation of the ProducerContract interface.
+ */
+class BaseConsumer
+{
+public:
+    BaseConsumer(ReaderContract* readerDelegate = 0);
+    virtual ~BaseConsumer();
+
+    virtual bool write(const TObject& object);
+    virtual bool write(const Result& result);
+    virtual bool write(const Blob& blob);
+    /** Returns true if write can be called on this consumer without blocking */
+    virtual bool needsData();
+
+    //TODO write multiple objects (array/vector)
+
+    /** Register as a data writer for this consumer. */
     virtual bool registerWriteCallback(const WriterContract* writer);
+    /** Unregister as a data writer for this consumer. */
     virtual bool unregisterWriteCallback(const WriterContract* writer);
 
+    /** Start loop reading from writers and writing to the reader delegate. */
+    virtual void flowData();
+
 protected:
+    ReaderContract* readerDelegate_;
     std::vector<WriterContract*> writers_;
 };
 

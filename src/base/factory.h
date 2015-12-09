@@ -97,9 +97,12 @@ protected:
 /**
  *  The MEC factory is a parent of other factories.
  *
+ *  MEC (Mega Evil Corp) is the master registry for factories.
+ *  Any set of classes that needs a factory can register and use MEC.
+ *
  *  The factories are arranged in a list by category so specific sub-types of TObject
- *  can be constructed.  Factories are either added manually or loaded dynmaically
- *  from a bundle.
+ *  can be constructed.  Factories are either added manually, loaded dynmaically
+ *  from a bundle or (TODO) deserialized from blobs.
  *
  *  When a TObject is constructed, each factory in the given category is called and
  *  given a turn to construct the object.  The object is constructed when the first

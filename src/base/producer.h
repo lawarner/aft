@@ -16,6 +16,7 @@
  */
 
 #include <vector>
+#include "producttype.h"
 
 namespace aft
 {
@@ -23,16 +24,28 @@ namespace base
 {
 // Forward reference
 class Blob;
+class Result;
 class TObject;
+class WriterContract;
 
 /**
- *  Interface used by the producer to call when data is available.
+ *  Interface that the producer calls when data is available.
  */
 class ReaderContract
 {
 public:
-    virtual void dataAvailable(TObject& object) = 0;
-    virtual void dataAvailable(Blob& blob) = 0;
+    /** Called by the Producer to deliver a TObject to readers.
+     *  @return true if the reader consumed the data, otherwise false
+     */
+    virtual bool dataAvailable(const TObject& object) = 0;
+    /** Called by the Producer to deliver a Result to readers.
+     *  @return true if the reader consumed the data, otherwise false
+     */
+    virtual bool dataAvailable(const Result& result) = 0;
+    /** Called by the Producer to deliver a Blob to readers.
+     *  @return true if the reader consumed the data, otherwise false
+     */
+    virtual bool dataAvailable(const Blob& blob) = 0;
 };
 
 /**
@@ -42,13 +55,46 @@ class ProducerContract
 {
 public:
     virtual bool read(TObject& object) = 0;
+    virtual bool read(Result& result) = 0;
     virtual bool read(Blob& blob) = 0;
     virtual bool hasData() = 0;
+    virtual bool hasObject(ProductType productType) = 0;
 
+    /** Register to receive a callback when data is available. */
+    virtual bool registerDataCallback(const ReaderContract* reader) = 0;
+    /** Unregister callback from receiving any more data. */
+    virtual bool unregisterDataCallback(const ReaderContract* reader) = 0;
+};
+
+/**
+ *  Base implementation of the ProducerContract interface.
+ */
+class BaseProducer : public ProducerContract
+{
+public:
+    BaseProducer(WriterContract* writerDelegate = 0);
+    virtual ~BaseProducer();
+
+    virtual bool read(TObject& object);
+    virtual bool read(Result& result);
+    virtual bool read(Blob& blob);
+    virtual bool hasData();
+    virtual bool hasObject(ProductType productType);
+
+    /** Register to receive a callback when data is available. */
     virtual bool registerDataCallback(const ReaderContract* reader);
+    /** Unregister callback from receiving any more data. */
     virtual bool unregisterDataCallback(const ReaderContract* reader);
 
+    /** Start loop reading from the writer delegate and writing to the readers.
+     *
+     *  TODO This method may need to either be overloaded or templatize.
+     *  Or possibly collapse TypedBlob into Blob.
+     */
+    virtual void flowData();
+
 protected:
+    WriterContract* writerDelegate_;
     std::vector<ReaderContract*> readers_;
 };
 

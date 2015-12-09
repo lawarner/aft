@@ -36,7 +36,12 @@ class Blob
 {
 public:
     Blob(const std::string& name, void* data = 0);
+    Blob(const Blob& other);
     virtual ~Blob();
+
+    Blob& operator=(const Blob& other);
+
+    //TODO a general read/write interface?
 
     bool addData(void* data);
     bool addMember(Blob* blob);
@@ -45,7 +50,7 @@ public:
     const std::string& getName() const;
 
 protected:
-    const std::string name_;
+    std::string name_;
     void* data_;
     std::vector<Blob*> members_;
 };
