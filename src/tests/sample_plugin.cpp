@@ -15,10 +15,10 @@
  */
 
 #include <iostream>
+#include <base/blob.h>
 #include <base/context.h>
 #include <base/factory.h>
 #include <base/tobject.h>
-#include <base/typedblob.h>
 #include <gtest/gtest.h>
 using namespace aft::base;
 
@@ -49,11 +49,11 @@ public:
         }
 
     // Implement SerializeContract
-    virtual Blob* serialize()
+    virtual bool serialize(Blob& blob)
         {
-            return TObject::serialize();
+            return TObject::serialize(blob);
         }
-    virtual bool deserialize(const Blob* blob)
+    virtual bool deserialize(const Blob& blob)
         {
             return TObject::deserialize(blob);
         }
@@ -88,8 +88,7 @@ SampleFactory::construct(const std::string& name, const Blob* blob,
     std::string value("(no value)");
     if (blob)
     {
-        const TypedBlob* typedBlob = dynamic_cast<const TypedBlob *>(blob);
-        value = typedBlob->getString();
+        value = blob->getString();
     }
 
     TOSample* tobj = new TOSample(value, name);

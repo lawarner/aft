@@ -14,24 +14,79 @@
  *   limitations under the License.
  */
 
+#include <map>
+
+#include "base/consumer.h"
+#include "base/producer.h"
 #include "loghandler.h"
 #include "runcontext.h"
+using namespace aft;
 using namespace aft::core;
 
 
+class aft::core::RunContextImpl
+{
+public:
+    RunContextImpl(LogHandler& logHandler);
+    ~RunContextImpl();
+
+    LogHandler& logHandler_;
+    std::map<std::string, base::Consumer*> consumers_;
+    std::map<std::string, base::Producer*> producers_;
+};
+
+RunContextImpl::RunContextImpl(LogHandler& logHandler)
+    : logHandler_(logHandler)
+{
+}
+
+RunContextImpl::~RunContextImpl()
+{
+    delete &logHandler_;
+}
+
+
 RunContext::RunContext()
-    : logHandler_(*new LogHandler)
+    : impl_(*new RunContextImpl(*new LogHandler))
 {
 }
 
 RunContext::~RunContext()
 {
-    delete &logHandler_;
+    delete &impl_;
+}
+
+void RunContext::addConsumer(const std::string& name, base::Consumer* consumer)
+{
+    impl_.consumers_[name] = consumer;
+}
+
+void RunContext::addProducer(const std::string& name, base::Producer* producer)
+{
+    impl_.producers_[name] = producer;
+}
+
+base::Consumer*
+RunContext::getConsumer(const std::string& name)
+{
+    std::map<std::string,base::Consumer*>::iterator it = impl_.consumers_.find(name);
+    if (it == impl_.consumers_.end()) return 0;
+
+    return it->second;
+}
+
+base::Producer*
+RunContext::getProducer(const std::string& name)
+{
+    std::map<std::string,base::Producer*>::iterator it = impl_.producers_.find(name);
+    if (it == impl_.producers_.end()) return 0;
+
+    return it->second;
 }
 
 void RunContext::setupLogs(const std::string& logConfig)
 {
-    logHandler_.setup(logConfig);
+    impl_.logHandler_.setup(logConfig);
 }
 
 

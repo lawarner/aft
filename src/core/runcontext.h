@@ -20,10 +20,17 @@
 
 namespace aft
 {
+namespace base
+{
+// Forward reference
+class Consumer;
+class Producer;
+}
+
 namespace core
 {
 // Forward reference
-class LogHandler;
+class RunContextImpl;
 
 /**
  *  Context used to run test cases.
@@ -34,13 +41,19 @@ public:
     RunContext();
     virtual ~RunContext();
 
+    void addConsumer(const std::string& name, base::Consumer* consumer);
+    void addProducer(const std::string& name, base::Producer* producer);
+
+    base::Consumer* getConsumer(const std::string& name);
+    base::Producer* getProducer(const std::string& name);
+
     void setupLogs(const std::string& logConfig);
 
     // gui, dispositions, procs/prods/cons
     // Need RunVisitor
 
 private:
-    LogHandler& logHandler_;
+    RunContextImpl& impl_;
 };
 
 } // namespace core

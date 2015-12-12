@@ -38,9 +38,20 @@ public:
     virtual ProductType hasData() = 0;
 
     // Note: Using references requires class to have proper copy semantics.
-    /** Return true if data was written. */
+    /** Get a TOjbect by copying.
+     *  @param object Reference to object that receives the data.
+     *  @return true if data was written.
+     */
     virtual bool getData(TObject& object) = 0;
+    /** Get a Result by copying.
+     *  @param result Reference to result that receives the data.
+     *  @return true if data was written.
+     */
     virtual bool getData(Result& result) = 0;
+    /** Get a Blob by copying.
+     *  @param blob Reference to blob that receives the data.
+     *  @return true if data was written.
+     */
     virtual bool getData(Blob& blob) = 0;
 };
 
@@ -50,13 +61,35 @@ public:
 class ConsumerContract
 {
 public:
-    virtual bool write(const TObject& object) = 0;
-    virtual bool write(const Result& result) = 0;
-    virtual bool write(const Blob& blob) = 0;
-    /** Returns true if write can be called on this consumer without blocking */
+    /** Indicated if this consumer is ready to consume data.
+     *  @return true if write can be called on this consumer without blocking.
+     */
     virtual bool needsData() = 0;
 
-    //TODO write multiple objects (array/vector)
+    /** Write a TObject to this consumer.
+     *  @return true if the object was consumed.
+     */
+    virtual bool write(const TObject& object) = 0;
+    /** Write a Result to this consumer.
+     *  @return true if the result was consumed.
+     */
+    virtual bool write(const Result& result) = 0;
+    /** Write a Blob to this consumer.
+     *  @return true if the blob was consumed.
+     */
+    virtual bool write(const Blob& blob) = 0;
+    /** Write multiple TObject's to this consumer.
+     *  @return The number of objects that were consumed.  Returns -1 if an error occurred.
+     */
+    virtual int write(const std::vector<TObject>& objects) = 0;
+    /** Write multiple Result's to this consumer.
+     *  @return The number of results that were consumed.  Returns -1 if an error occurred.
+     */
+    virtual int write(const std::vector<Result>& results) = 0;
+    /** Write multiple Blob's to this consumer.
+     *  @return The number of blobs that were consumed.  Returns -1 if an error occurred.
+     */
+    virtual int write(const std::vector<Blob>& blobs) = 0;
 
     /** Register as a data writer for this consumer. */
     virtual bool registerWriteCallback(const WriterContract* writer) = 0;
@@ -65,21 +98,23 @@ public:
 };
 
 /**
- *  Base implementation of the ProducerContract interface.
+ *  Base implementation of the ConsumerContract interface.
  */
-class BaseConsumer
+class BaseConsumer : public ConsumerContract
 {
 public:
     BaseConsumer(ReaderContract* readerDelegate = 0);
     virtual ~BaseConsumer();
 
-    virtual bool write(const TObject& object);
-    virtual bool write(const Result& result);
-    virtual bool write(const Blob& blob);
     /** Returns true if write can be called on this consumer without blocking */
     virtual bool needsData();
 
-    //TODO write multiple objects (array/vector)
+    virtual bool write(const TObject& object);
+    virtual bool write(const Result& result);
+    virtual bool write(const Blob& blob);
+    virtual int write(const std::vector<TObject>& objects);
+    virtual int write(const std::vector<Result>& results);
+    virtual int write(const std::vector<Blob>& blobs);
 
     /** Register as a data writer for this consumer. */
     virtual bool registerWriteCallback(const WriterContract* writer);

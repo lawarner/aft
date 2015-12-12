@@ -30,22 +30,21 @@ class TObject;
 namespace core
 {
 // Forward reference
-class FileReaderImpl;
+class StringReaderImpl;
 
 /**
- *  Producer that generates objects from a file.
- *
- *  Ideally, a hint can indicate whether file has TObjects, Results, etc.
- *  Otherwise this class generates string blobs with the contents of the file.
- *  This class uses std::ifstream to read the file.
+ *  Producer that generates objects from a string.
  */
-class FileProducer : public aft::base::BaseProducer
+class StringProducer : public aft::base::BaseProducer
 {
 public:
-    /** Construct a FileProducer */
-    FileProducer(const std::string& fileName,
-                 aft::base::ParcelType parcelType = aft::base::PARCEL_BLOB_FILE);
-    virtual ~FileProducer();
+    /** Construct a StringProducer
+     *  @param contents Initial contents of string.
+     *  @param parcelType How to parse the string for content.
+     */
+    StringProducer(const std::string& contents,
+                   aft::base::ParcelType parcelType = aft::base::PARCEL_BLOB_FILE);
+    virtual ~StringProducer();
 
     /** Not yet implemented. */
     virtual bool read(aft::base::TObject& object);
@@ -54,7 +53,7 @@ public:
     /** Read blobs from the file.
      *
      *  The data in the blob is either a character, word, text line or the whole file,
-     *  depending on this FileProducer's ParcelType.
+     *  depending on this StringProducer's ParcelType.
      *  @param blob Reference of a blob object where the file contents is copied.
      *  @return true if data is copied, otherwise false
      */
@@ -62,9 +61,12 @@ public:
     virtual bool hasData();
     virtual bool hasObject(aft::base::ProductType productType);
 
+    /** Put contents to the string. */
+    void putContents(const std::string& contents, bool overwrite = false);
+
 protected:
     // This is the same as writerDelegate_, but sub-classed
-    FileReaderImpl* reader_;
+    StringReaderImpl* reader_;
 };
 
 } // namespace core

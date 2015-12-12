@@ -15,6 +15,7 @@
  *   limitations under the License.
  */
 
+#include "base/result.h"
 #include "base/tobject.h"
 
 namespace aft
@@ -23,12 +24,17 @@ namespace base
 {
 // Forward reference
 class Context;
-class Result;
 
 class Command : public aft::base::TObjectContainer
 {
 public:
-    virtual Result& execute(Context& context) = 0;
+    Command(const std::string& name)
+    {
+        name_ = name;
+    }
+    virtual ~Command() { }
+
+    virtual const Result process(Context* context = 0) = 0;
 };
 
 } // namespace base

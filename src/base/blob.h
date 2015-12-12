@@ -35,10 +35,22 @@ namespace base
 class Blob
 {
 public:
+    enum Type
+    {
+        UNKNOWN = -1,
+        RAWDATA,
+        STRING,
+        JSON,
+        COMMAND,
+        URL
+    };
+
     Blob(const std::string& name, void* data = 0);
+    Blob(const std::string& name, Type type, const std::string& stringData);
     Blob(const Blob& other);
     virtual ~Blob();
 
+    /** Assign contents of other blob to this blob. */
     Blob& operator=(const Blob& other);
 
     //TODO a general read/write interface?
@@ -49,10 +61,15 @@ public:
     const std::vector<Blob*>& getMembers() const;
     const std::string& getName() const;
 
+    const std::string& getString() const;
+    Type getType() const;
+
 protected:
     std::string name_;
     void* data_;
     std::vector<Blob*> members_;
+    Type type_;
+    std::string stringData_;
 };
 
 } // namespace base

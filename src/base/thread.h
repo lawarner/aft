@@ -52,6 +52,8 @@ public:
     /** Get the current state of the thread. */
     virtual TObject::State getState() = 0;
 
+    virtual TObject* getTObject() const = 0;
+
     /**
      *  Register a callback to receive notifications from the thread.
      *
@@ -100,6 +102,13 @@ class ThreadManager
 public:
     /** Get the single ThreadManager instance. */
     static ThreadManager* instance();
+
+    /**
+     *  Find the thread handler running a given TObject.
+     *  @param tObject find ThreadHandler related to TObject
+     *  @return pointer to the TObject's ThreadHandler or 0 if non found.
+     */
+    ThreadHandler* find(const TObject* tObject) const;
 
     /**
      *  Stop all running threads.

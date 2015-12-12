@@ -116,11 +116,11 @@ public:
     }
 
     // Implement SerializeContract
-    virtual Blob* serialize()
+    virtual bool serialize(Blob& blob)
     {
-        return 0;
+        return false;
     }
-    virtual bool deserialize(const Blob* blob)
+    virtual bool deserialize(const Blob& blob)
     {
         return false;
     }

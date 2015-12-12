@@ -62,7 +62,7 @@ PosixThreadHandler::PosixThreadHandler(TObject* tObject, Context* context)
 
 PosixThreadHandler::~PosixThreadHandler()
 {
-    //TODO kill thread?
+    //TODO stop tobject and kill thread?
     delete &impl_;
 }
 
@@ -76,6 +76,11 @@ TObject::State
 PosixThreadHandler::getState()
 {
     return impl_.tObject_->getState();
+}
+
+TObject* PosixThreadHandler::getTObject() const
+{
+    return impl_.tObject_;
 }
 
 void PosixThreadHandler::notify(Callback* callback)

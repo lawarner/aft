@@ -46,21 +46,24 @@ typedef std::map<std::string, PropertyHandler*> Properties;
  */
 class Context
 {
+protected:
+    /** Construct a context with default visitor */
+    Context(const std::string& name = std::string());
+
+    /** Construct a context with a given visitor */
+    Context(VisitorContract& visitor, const std::string& name = std::string());
+
 public:
+    /** Destruct a context. */
     virtual ~Context();
 
 public:
-    /** Apply this context to test object and return the result. */
-    TObject& apply(const TObject& testObject);
+    /** Apply this context to object and return the result. */
+    virtual TObject& apply(const TObject& tObject);
 
-protected:
-    /** Construct a context with default visitor */
-    Context();
+    /** Get the name of this context. */
+    const std::string& getName() const;
 
-    /** Construct a context with a given visitor */
-    Context(VisitorContract& visitor);
-
-public:
     bool addProperty(const std::string& propertyName, PropertyHandler* handler);
 
     VisitorContract& getVisitor() const;
@@ -68,6 +71,7 @@ public:
     PropertyHandler* handler(const std::string& propertyName) const;
 
 protected:
+    std::string name_;
     Properties properties_;
 
     /** Default visitor */

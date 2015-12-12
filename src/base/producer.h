@@ -89,7 +89,6 @@ public:
     /** Start loop reading from the writer delegate and writing to the readers.
      *
      *  TODO This method may need to either be overloaded or templatize.
-     *  Or possibly collapse TypedBlob into Blob.
      */
     virtual void flowData();
 

@@ -28,8 +28,21 @@ class Blob;
 class SerializeContract
 {
 public:
-    virtual Blob* serialize() = 0;
-    virtual bool deserialize(const Blob* blob) = 0;
+    /** Serialize the object into a blob.
+     *
+     *  The blob type is first examined and if it has a type (i.e., not Blob::UNKNOWN)
+     *  Then the object will be serialized to that type of data, if possible.
+     *  @param blob blob that received the serialized data
+     *  @return true if serialization was successful, otherwise false.
+     */
+    virtual bool serialize(Blob& blob) = 0;
+    /** Deserialize the object from a blob.
+     *
+     *  Constructs this object from blob data.
+     *  @param blob blob that contains a  serialized version of the object.
+     *  @return true if deserization was successful, otherwise false.
+     */
+    virtual bool deserialize(const Blob& blob) = 0;
 };
 
 } // namespace base

@@ -1,0 +1,1 @@
+jsoncpp.o: jsoncpp.cpp ../../src/json/json.h

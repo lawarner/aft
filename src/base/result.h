@@ -60,6 +60,12 @@ public:
     void setValue(Command* command);
     void setValue(TObject* object);
 
+    /** Determine if this result is false.
+     *  TODO maybe incoporate FATAL
+     *  @return true if either the result is not set or it holds a false boolean value.
+     */
+    bool operator!() const;
+
     // Copy constructor and assignment operators
     // (for now the default do shallow copies, as needed)
 

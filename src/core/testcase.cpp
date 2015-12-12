@@ -24,6 +24,7 @@ using namespace aft::core;
 TestCase::TestCase(const std::string& name)
     : TObjectContainer(name)
 {
+    state_ = INITIAL;
 }
 
 TestCase::~TestCase()
@@ -33,6 +34,12 @@ TestCase::~TestCase()
 bool
 TestCase::open()
 {
+    if (state_ == INITIAL)
+    {
+        state_ = PREPARED;
+        return true;
+    }
+
     return false;
 }
 
@@ -45,12 +52,20 @@ TestCase::rewind(base::Context* context)
 const base::Result
 TestCase::run(base::Context* context)
 {
-    base::Result result(true);
-    return result;
+    if (state_ != PREPARED)
+    {
+        return base::Result(false);
+    }
+
+    return base::TObjectContainer::run(context);
 }
 
 void
 TestCase::close()
 {
-
+    //TODO check other states, i.e., if running then stop.
+    if (state_ != INVALID && state_ != UNINITIALIZED)
+    {
+        state_ = INITIAL;
+    }
 }

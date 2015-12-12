@@ -17,8 +17,6 @@
 
 # Simple makefile for the aft package
 
-# Note the base directory holds primary base and abstract classes
-
 TOP = ../..
 INCDIR = $(TOP)/src
 
@@ -27,13 +25,12 @@ CC = g++
 #CCFLAGS = -Wall -g -O2 -I$(TOP) -I$(INCDIR)
 CCFLAGS = -Wall -g -fPIC -I$(TOP) -I$(INCDIR)
 
-OBJS := blob.o consumer.o context.o factory.o plugin.o producer.o propertyhandler.o \
-    result.o structureddata.o thread.o tobasictypes.o tobject.o tobjectiterator.o
+OBJS := jsoncpp.o
 
 SRCS := $(OBJS:.o=.cpp)
-INCS = $(OBJS:.o=.h)
+INCS = json.h
 
-LIBR = libaftbase.a
+LIBR = libaftjson.a
 
 
 .cpp.o: ; $(CC) $(CCFLAGS) -c $<

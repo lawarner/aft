@@ -50,8 +50,8 @@ public:
     virtual bool operator==(const TOBool& other) const;
 
     // Implement SerializeContract
-    virtual Blob* serialize();
-    virtual bool deserialize(const Blob* blob);
+    virtual bool serialize(Blob& blob);
+    virtual bool deserialize(const Blob& blob);
 
     bool getValue() const;
 
@@ -79,8 +79,8 @@ public:
     virtual bool operator==(const TOString& other);
 
     // Implement SerializeContract
-    virtual Blob* serialize();
-    virtual bool deserialize(const Blob* blob);
+    virtual bool serialize(Blob& blob);
+    virtual bool deserialize(const Blob& blob);
 
     const std::string& getValue() const;
 
@@ -112,8 +112,8 @@ public:
     virtual bool operator==(const TOBlob& other);
 
     // Implement SerializeContract
-    virtual Blob* serialize();
-    virtual bool deserialize(const Blob* blob);
+    virtual bool serialize(Blob& blob);
+    virtual bool deserialize(const Blob& blob);
 
     const Blob* getValue() const;
 

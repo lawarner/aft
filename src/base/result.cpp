@@ -121,3 +121,12 @@ void Result::setValue(TObject* object)
     isValueSet_ = true;
 }
 
+bool Result::operator!() const
+{
+    if (!isValueSet_ || (type_ == BOOLEAN && !value_.flag_))
+    {
+        return true;
+    }
+
+    return false;
+}

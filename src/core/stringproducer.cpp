@@ -14,50 +14,60 @@
  *   limitations under the License.
  */
 
-#include <fstream>
 #include <strings.h>
 
 #include "base/blob.h"
 #include "base/consumer.h"
 #include "base/result.h"
 #include "base/tobject.h"
-#include "fileproducer.h"
+#include "stringproducer.h"
 
 using namespace aft::base;
 using namespace aft::core;
 
 
-static const char* WORD_SEPERATORS = " \t\n\r;:()/#*";
+static const char* WORD_SEPARATORS = " \t\n\r;:()/#*";
+static const char* LINE_SEPARATORS = "\n\r";
 
-// Utility function for extracting the next word token from file.
-static bool getWord(std::ifstream& ifile, std::string& strWord)
+// Utility function for extracting the next word token from a string.
+static bool getWord(std::string& istr, std::string& strWord,
+                    const char* separators = WORD_SEPARATORS)
 {
     strWord.clear();
     int ch;
-    while ((ch = ifile.get()) != EOF)
+    size_t len;
+    for (len = 0; len < istr.length(); ++len)
     {
-        if (index(WORD_SEPERATORS, ch)) break;
-
-        strWord.push_back(ch);
+        ch = istr.at(len);
+        if (!index(separators, ch))
+        {
+            strWord.push_back(ch);
+        } else if (!strWord.empty()) { // Skip over delimiters till we find something
+            break;
+        }
     }
 
+    if (len > 0)
+    {
+        istr.erase(0, len);
+    }
     return !strWord.empty();
 }
 
 
-class aft::core::FileReaderImpl : public aft::base::WriterContract
+class aft::core::StringReaderImpl : public aft::base::WriterContract
 {
 public:
-    FileReaderImpl(const std::string& fileName, aft::base::ParcelType parcelType)
-        : fileName_(fileName)
+    StringReaderImpl(const std::string& contents, aft::base::ParcelType parcelType)
+        : contents_(contents)
         , parcelType_(parcelType)
         {   }
-    virtual ~FileReaderImpl() { }
+    virtual ~StringReaderImpl() { }
 
     /** Returns the type of product this writer has ready to write. */
     virtual ProductType hasData()
         {
-            if (infile_.peek() == EOF) return TYPE_NONE;
+            if (contents_.empty()) return TYPE_NONE;
 
             return TYPE_BLOB;
         }
@@ -78,38 +88,26 @@ public:
             switch (parcelType_)
             {
             case PARCEL_BLOB_CHARACTER:
-            {
-                int ch = infile_.get();
-                if (ch != EOF)
+                if (!contents_.empty())
                 {
+                    int ch = contents_.at(0);
                     buffer_ = ch;
+                    contents_.erase(0, 1);
                     retval = true;
                 }
-            }
                 break;
             case PARCEL_BLOB_WORD:
-                retval = getWord(infile_, buffer_);
+                retval = getWord(contents_, buffer_);
                 break;
             case PARCEL_BLOB_LINE:
-            {
-                char lineBuf[1024];
-                infile_.getline(lineBuf, 1024);
-                if (infile_.gcount() > 0)
-                {
-                    buffer_ = lineBuf;
-                    retval = true;
-                }
-            }
+                retval = getWord(contents_, buffer_, LINE_SEPARATORS);
                 break;
             case PARCEL_BLOB_FILE:
-            {
-                if (infile_.peek() != EOF)
+                if (!contents_.empty())
                 {
-                    buffer_ = std::string(std::istreambuf_iterator<char>(infile_),
-                                          std::istreambuf_iterator<char>());
+                    buffer_ = contents_;
                     retval = true;
                 }
-            }
                 break;
             case PARCEL_RESULT:
             case PARCEL_TOBJECT:
@@ -118,70 +116,65 @@ public:
 
             if (retval)
             {
-                Blob retBlob("file", Blob::STRING, buffer_);
+                Blob retBlob("string", Blob::STRING, buffer_);
                 blob = retBlob;
             }
 
             return retval;
         }
-    bool open()
-        {
-            infile_.open(fileName_.c_str());
-            return infile_.is_open();
-        }
-    void close()
-        {
-            if (infile_.is_open())
-            {
-                infile_.close();
-            }
-        }
 
+    //TODO convert to istrstream
+    std::string contents_;
 private:
-    std::string fileName_;
     ParcelType parcelType_;
-    std::ifstream infile_;
     std::string buffer_;
 };
 
 
 
-//TODO : BaseProducer(new FileReaderImpl ...)
-FileProducer::FileProducer(const std::string& fileName, ParcelType parcelType)
+StringProducer::StringProducer(const std::string& contents, ParcelType parcelType)
     : BaseProducer(0)
-    , reader_(new FileReaderImpl(fileName, parcelType))
+    , reader_(new StringReaderImpl(contents, parcelType))
 {
     writerDelegate_ = reader_;
-    reader_->open();
 }
 
-FileProducer::~FileProducer()
+StringProducer::~StringProducer()
 {
-    reader_->close();
     delete reader_;
 }
 
-bool FileProducer::read(TObject& object)
+bool StringProducer::read(TObject& object)
 {
     return false;
 }
 
-bool FileProducer::read(Result& result)
+bool StringProducer::read(Result& result)
 {
     return false;
 }
 
-bool FileProducer::read(Blob& blob)
+bool StringProducer::read(Blob& blob)
 {
     return reader_->getData(blob);
 }
 
-bool FileProducer::hasData()
+bool StringProducer::hasData()
 {
     return reader_->hasData() == TYPE_BLOB;
 }
 
-bool FileProducer::hasObject(aft::base::ProductType productType)
+bool StringProducer::hasObject(aft::base::ProductType productType)
 {
     return reader_->hasData() == productType;
+}
+
+void StringProducer::putContents(const std::string& contents, bool overwrite)
+{
+    if (overwrite)
+    {
+        reader_->contents_ = contents;
+    } else {
+        reader_->contents_.append(contents);
+    }
 }

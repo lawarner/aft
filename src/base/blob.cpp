@@ -20,6 +20,16 @@ using namespace aft::base;
 Blob::Blob(const std::string& name, void* data)
     : name_(name)
     , data_(data)
+    , type_(RAWDATA)
+{
+
+}
+
+Blob::Blob(const std::string& name, Blob::Type type, const std::string& stringData)
+    : name_(name)
+    , data_(0)
+    , type_(type)
+    , stringData_(stringData)
 {
 
 }
@@ -28,6 +38,8 @@ Blob::Blob(const Blob& other)
     : name_(other.name_)
     , data_(other.data_)
     , members_(other.members_)
+    , type_(other.type_)
+    , stringData_(other.stringData_)
 {
 
 }
@@ -44,6 +56,8 @@ Blob& Blob::operator=(const Blob& other)
         name_ = other.name_;
         data_ = other.data_;
         members_ = other.members_;
+        type_ = other.type_;
+        stringData_ = other.stringData_;
     }
 
     return *this;
@@ -79,3 +93,16 @@ Blob::getName() const
     return name_;
 }
 
+
+const std::string&
+Blob::getString() const
+{
+    return stringData_;
+}
+
+
+Blob::Type
+Blob::getType() const
+{
+    return type_;
+}

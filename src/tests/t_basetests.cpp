@@ -15,18 +15,22 @@
  */
 
 #include <iostream>
+#include <base/blob.h>
 #include <base/context.h>
 #include <base/factory.h>
 #include <base/propertyhandler.h>
 #include <base/result.h>
+#include <base/structureddata.h>
 #include <base/tobasictypes.h>
 #include <base/tobject.h>
 #include <base/tobjecttree.h>
-#include <base/typedblob.h>
 #include <core/logger.h>
 #include <gtest/gtest.h>
 using namespace aft::base;
 using namespace aft::core;
+
+const std::string FullName("one.two.three.four");
+const std::string SimpleName("four");
 
 class RunVisitor : public VisitorContract
 {
@@ -42,13 +46,13 @@ public:
 
 };
 
-static bool runVisitor(TObject* obj, void* data)
+static Result runVisitor(TObject* obj, void* data)
 {
     if (!obj || !data) return false;
 
     TOString* message = (TOString *) data;
     std::cout << obj->getName() << ": " << message->getValue() << std::endl;
-    return true;
+    return Result(true);
 }
 
 class SampleContext : public Context
@@ -211,13 +215,13 @@ TEST(BasePackageTest, Blob)
     EXPECT_EQ(1, blob.getMembers().size());
     EXPECT_EQ(&subBlob, blob.getMembers().front());
 
-    TypedBlob rawBlob("rawBlob", (void *)SOMEDATA);
-    EXPECT_EQ(rawBlob.getType(), TypedBlob::RAWDATA);
+    Blob rawBlob("rawBlob", (void *)SOMEDATA);
+    EXPECT_EQ(rawBlob.getType(), Blob::RAWDATA);
     EXPECT_EQ(strncmp(SOMEDATA, (const char *)rawBlob.getData(), 0), 0);
 
     std::string aString("This is another string.");
-    TypedBlob stringBlob("stringBlob", TypedBlob::STRING, aString);
-    EXPECT_EQ(stringBlob.getType(), TypedBlob::STRING);
+    Blob stringBlob("stringBlob", Blob::STRING, aString);
+    EXPECT_EQ(stringBlob.getType(), Blob::STRING);
     EXPECT_EQ(aString, stringBlob.getString());
 }
 
@@ -247,6 +251,80 @@ TEST(BasePackageTest, Factory)
     free(tobj2);
     factory.deinit();    //TODO test setDeinit
 
+}
+
+TEST(BasePackageTest, StructuredDataName)
+{
+    // Construct simple, one-component name from string
+    StructuredDataName simpleName(SimpleName);
+    EXPECT_EQ(SimpleName, simpleName.getName(true));
+    EXPECT_EQ(SimpleName, simpleName.getName());
+    EXPECT_EQ(simpleName.getPath().size(), 0);
+
+    // Construct full name from string
+    StructuredDataName sdName(FullName);
+    EXPECT_EQ(FullName,   sdName.getName(true));
+    EXPECT_EQ(SimpleName, sdName.getName());
+
+    const std::vector<std::string>& path = sdName.getPath();
+    EXPECT_EQ(path.size(), 4);
+    std::vector<std::string>::const_iterator it;
+    for (it = path.begin(); it != path.end(); ++it)
+    {
+        std::cout << "path: " << *it << std::endl;
+    }
+
+    // Construct from vector
+    StructuredDataName otherName(path);
+    EXPECT_EQ(sdName.getName(), otherName.getName());
+    EXPECT_EQ(sdName.getName(true), otherName.getName(true));
+    EXPECT_TRUE(sdName == otherName);
+
+    // Construct empty name from string
+    StructuredDataName emptyName("");
+    EXPECT_EQ(emptyName.getName(), "");
+    EXPECT_EQ(emptyName.getName(true), "");
+    EXPECT_EQ(emptyName.getPath().size(), 0);
+
+    // Construct illegal names that start/end with SEPARATOR
+    StructuredDataName illegalName(".starts.with.dot");
+    std::cout << "Illegal name: " << illegalName.getName() << std::endl;
+    std::cout << "Illegal full name: " << illegalName.getName(true) << std::endl;
+    std::cout << "Illegal path size = " << illegalName.getPath().size() << std::endl;
+    EXPECT_TRUE(illegalName.getPath().front().empty());
+
+    StructuredDataName badName("ends.with.dot.");
+    std::cout << "Illegal name: " << badName.getName() << std::endl;
+    std::cout << "Illegal full name: " << badName.getName(true) << std::endl;
+    std::cout << "Illegal path size = " << badName.getPath().size() << std::endl;
+    EXPECT_TRUE(badName.getPath().back().empty());
+}
+
+TEST(BasePackageTest, StructuredData)
+{
+    const std::string SomeValue("someValue");
+    StructuredDataName member("member");
+    StructuredDataName simpleSdName(SimpleName);
+    StructuredData simpleSd(simpleSdName);
+    EXPECT_TRUE(simpleSd.add(member, SomeValue));
+
+    std::string value;
+    EXPECT_TRUE(simpleSd.get(member, value));
+    EXPECT_EQ(value, SomeValue);
+
+    // Add second member
+    EXPECT_TRUE(simpleSd.add(StructuredDataName("another"), "another Value"));
+    EXPECT_TRUE(simpleSd.get(StructuredDataName("another"), value));
+    EXPECT_EQ(value, "another Value");
+
+    // Compound structure
+    StructuredDataName compoundName("Compound");
+    StructuredData compound(compoundName);
+    EXPECT_TRUE(compound.add(member, simpleSd));
+    StructuredData sd(StructuredDataName(""));
+    EXPECT_TRUE(compound.get(member, sd));
+    EXPECT_TRUE(sd.get(member, value));
+    EXPECT_EQ(value, SomeValue);
 }
 
 } // namespace

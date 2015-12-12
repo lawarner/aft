@@ -17,15 +17,34 @@
 #include "base/context.h"
 #include "base/result.h"
 #include "base/tobjecttree.h"
-#include "testsuite.h"
+#include "core/logger.h"
+#include "core/testcase.h"
+#include "core/testsuite.h"
 using namespace aft;
 using namespace aft::core;
+
+
+TestSuite::TestSuite(const std::string& name)
+    : TObjectContainer(name)
+{
+    state_ = INITIAL;
+}
+
+TestSuite::~TestSuite()
+{
+}
 
 
 bool
 TestSuite::open()
 {
-    return true;
+    if (state_ == INITIAL)
+    {
+        state_ = PREPARED;
+        return true;
+    }
+
+    return false;
 }
 
 bool
@@ -35,21 +54,51 @@ TestSuite::rewind(base::Context* context)
 }
 
 const base::Result
-TestSuite::run(base::Context* context)
+TestSuite::run(base::Context* context, bool stopOnError)
 {
-    base::TObjectContainer::iterator iter;
     base::Result result(false);
-    if (!children_) return result;
-
-    for (iter = children_->begin(); iter != children_->end(); ++iter)
+    if (state_ == PREPARED && children_)
     {
-        result = iter->run(context);
+        aftlog << "Running test suite \"" << getName() << "\"" << std::endl;
+        base::TObjectTree::Children& testcases = children_->getChildren();
+        base::TObjectTree::Children::iterator iter;
+        for (iter = testcases.begin(); iter != testcases.end(); ++iter)
+        {
+            TestCase* testcase = dynamic_cast<TestCase *>((*iter)->getValue());
+            if (!testcase) continue;
+            const std::string testcaseName = "test case \"" + testcase->getName() + "\"";
+
+            aftlog << " - Running test case " << testcaseName << std::endl;
+            if (!testcase->open())
+            {
+                aftlog << " - Error: cannot open " << testcaseName << std::endl;
+                continue;
+            }
+            result = testcase->run(context);
+            testcase->close();
+            if (!result)
+            {
+                aftlog << " - FAILED test case " << testcase->getName() << std::endl;
+                if (stopOnError) break;
+            } else {
+                aftlog << " - SUCCESS test case " << testcase->getName() << std::endl;
+            }
+        }
     }
+    else
+    {
+        aftlog << "Error: test suite \"" << getName() << "\" not opened." << std::endl;
+    }
+
     return result;
 }
 
 void
 TestSuite::close()
 {
-
+    //TODO check other states, i.e., if running then stop.
+    if (state_ != INVALID && state_ != UNINITIALIZED)
+    {
+        state_ = INITIAL;
+    }
 }

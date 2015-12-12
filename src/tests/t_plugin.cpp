@@ -15,10 +15,11 @@
  */
 
 #include <iostream>
+
+#include <base/blob.h>
 #include <base/factory.h>
 #include <base/plugin.h>
 #include <base/tobject.h>
-#include <base/typedblob.h>
 #include <gtest/gtest.h>
 using namespace aft::base;
 
@@ -40,7 +41,7 @@ TEST(PluginTest, BasePlugin)
     EXPECT_TRUE(plugin.getFactory() != 0);
     EXPECT_TRUE(plugin.getPluginLoader() != 0);
 
-    TypedBlob blob("valueBlob", TypedBlob::STRING, "Sample TObject");
+    Blob blob("valueBlob", Blob::STRING, "Sample TObject");
     TObject* tobject = plugin.createInstance(&blob);
     EXPECT_TRUE(tobject != 0);
 
@@ -64,7 +65,7 @@ TEST(PluginTest, MecFactoryFactory)
     mec.addFactory(factory);
 
     const std::string objectName("anObject");
-    TypedBlob blob("valueBlob", TypedBlob::STRING, "Sample TObject");
+    Blob blob("valueBlob", Blob::STRING, "Sample TObject");
     TObject* tobj = mec.construct(factory->category(), objectName, &blob);
     EXPECT_TRUE(tobj != 0);
     EXPECT_EQ(tobj->getName(), objectName);
@@ -86,7 +87,7 @@ TEST(PluginTest, MecFactoryBundle)
     EXPECT_TRUE(factory != 0);
 
     const std::string objectName("anObject");
-    TypedBlob blob("valueBlob", TypedBlob::STRING, "Sample TObject");
+    Blob blob("valueBlob", Blob::STRING, "Sample TObject");
     TObject* tobj = mec.construct(factory->category(), objectName, &blob);
     EXPECT_TRUE(tobj != 0);
     EXPECT_EQ(tobj->getName(), objectName);

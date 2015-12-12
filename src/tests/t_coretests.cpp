@@ -16,9 +16,12 @@
 
 #include <string>
 
-#include <base/typedblob.h>
+#include <base/blob.h>
+#include <core/basiccommands.h>
 #include <core/fileconsumer.h>
 #include <core/fileproducer.h>
+#include <core/stringconsumer.h>
+#include <core/stringproducer.h>
 #include <gtest/gtest.h>
 using namespace aft::base;
 using namespace aft::core;
@@ -39,8 +42,7 @@ public:
         }
     virtual bool dataAvailable(const Blob& blob)
         {
-            const TypedBlob& strBlob = dynamic_cast<const TypedBlob&>(blob);
-            std::cout << "ObjectReader blob:  " << strBlob.getString() << std::endl;
+            std::cout << "ObjectReader blob:  " << blob.getString() << std::endl;
             return true;
         }
 };
@@ -48,9 +50,34 @@ public:
 namespace
 {
 
+TEST(CorePackageTest, StringConsumer)
+{
+    Blob blob("string", Blob::STRING, sampleText);
+    StringConsumer strcons;
+    EXPECT_TRUE(strcons.needsData());
+    strcons.write(blob);
+    EXPECT_TRUE(strcons.getContents() == sampleText);
+}
+
+TEST(CorePackageTest, StringProducer)
+{
+    StringProducer strprod(sampleText);
+    EXPECT_TRUE(strprod.hasData());
+    Blob blob("");
+    EXPECT_TRUE(strprod.read(blob));
+    EXPECT_TRUE((blob.getString() == sampleText));
+    std::cout << "string content: " << blob.getString() << std::endl;
+
+    StringProducer wordprod(sampleText, PARCEL_BLOB_WORD);
+    while (wordprod.read(blob))
+    {
+        std::cout << "word content: " << blob.getString() << std::endl;
+    }
+}
+
 TEST(CorePackageTest, FileConsumer)
 {
-    TypedBlob blob("file", TypedBlob::STRING, sampleText);
+    Blob blob("file", Blob::STRING, sampleText);
     FileConsumer filecons("/tmp/test_file_cons", true);
     EXPECT_TRUE(filecons.needsData());
     filecons.write(blob);
@@ -61,7 +88,7 @@ TEST(CorePackageTest, FileProducer)
 {
     FileProducer fileprod("/tmp/test_file_cons");
     EXPECT_TRUE(fileprod.hasData());
-    TypedBlob blob("");
+    Blob blob("");
     EXPECT_TRUE(fileprod.read(blob));
     EXPECT_TRUE((blob.getString() == sampleText));
     std::cout << "file content: " << blob.getString() << std::endl;
@@ -71,8 +98,7 @@ TEST(CorePackageTest, FileProducerFlow)
 {
     FileProducer fileprod("/tmp/test_file_cons");
     EXPECT_TRUE(fileprod.hasData());
-    EXPECT_TRUE(fileprod.hasObject(TYPE_TYPEDBLOB));
-    EXPECT_FALSE(fileprod.hasObject(TYPE_BLOB));
+    EXPECT_TRUE(fileprod.hasObject(TYPE_BLOB));
     EXPECT_FALSE(fileprod.hasObject(TYPE_NONE));
 
     ObjectReader reader;
@@ -83,14 +109,20 @@ TEST(CorePackageTest, FileProducerFlow)
 
 TEST(CorePackageTest, FileProducerFlowWords)
 {
-    FileProducer fileprod("/tmp/test_file_cons", FileProducer::BLOB_WORD);
+    FileProducer fileprod("/tmp/test_file_cons", PARCEL_BLOB_WORD);
     EXPECT_TRUE(fileprod.hasData());
-    EXPECT_TRUE(fileprod.hasObject(TYPE_TYPEDBLOB));
+    EXPECT_TRUE(fileprod.hasObject(TYPE_BLOB));
 
     ObjectReader reader;
     EXPECT_TRUE(fileprod.registerDataCallback(&reader));
     fileprod.flowData();
     EXPECT_TRUE(fileprod.unregisterDataCallback(&reader));
+}
+
+TEST(CorePackageTest, BasicCommands)
+{
+    LogCommand logCmd("This is a logged message.");
+    logCmd.run();
 }
 
 } // namespace

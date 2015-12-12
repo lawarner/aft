@@ -38,15 +38,28 @@ static bool findVisitor(TObject* obj, void* data)
     return false;
 }
 
-static bool runVisitor(TObject* obj, void* data)
+static Result runVisitor(TObject* obj, void* data)
 {
-    std::cout << "Run visitor " << obj->getName() << std::endl;
-//    Context* context = (Context*) data;
-//    const Result result = obj->run(context);
-
-    return true;
+    Context* context = (Context *) data;
+    obj->process(context);
+    return Result(true);
 }
 
+/*
+static Result traceVisitor(TObject* obj, void* data)
+{
+    if (data)
+    {
+        Context* context = (Context*) data;
+        std::cout << "Trace visit " << obj->getName()
+                  << ", context=" << context->getName() << std::endl;
+    } else {
+        std::cout << "Run visitor " << obj->getName() << std::endl;
+    }
+
+    return Result(true);
+}
+*/
 
 TObject::TObject(const std::string& name)
     : name_(name)
@@ -79,6 +92,19 @@ TObject::getState() const
     return state_;
 }
 
+void TObject::setName(const std::string& name)
+{
+    name_ = name;
+}
+
+TObject::State
+TObject::setState(State state)
+{
+    State oldState = state_;
+    state_ = state;
+    return oldState;
+}
+
 bool TObject::rewind(Context* context)
 {
     result_ = Result(false);
@@ -86,13 +112,24 @@ bool TObject::rewind(Context* context)
 }
 
 const Result
+TObject::process(Context* context)
+{
+    return Result(true);
+}
+
+const Result
 TObject::run(Context* context)
 {
-// check state_ is INITIAL
-    //TODO: return context->runner(testObject);
-//    return const_cast<TObject&>(testObject);
-//    return const_cast<TObject&>(*this);
-    result_ = Result(this);
+// check state_ is PREPARED
+//    result_ = Result(this);
+//    return result_;
+    if (context)
+    {
+        result_ = context->getVisitor().visit(this, context);
+    } else {
+        result_ = runVisitor(this, context);
+    }
+//TODO set state_ as one of finished
     return result_;
 }
 
@@ -105,6 +142,19 @@ TObject::start(Context* context, Callback* callback)
     thread->run();
 
     return thread->getResult();
+}
+
+bool TObject::stop(bool force)
+{
+    ThreadManager* tman = ThreadManager::instance();
+    ThreadHandler* thread = tman->find(this);
+    if (thread)
+    {
+        thread->stop(force);
+        return true;
+    }
+
+    return false;
 }
 
 bool TObject::operator==(const TObject& other) const
@@ -123,14 +173,14 @@ bool TObject::operator!=(const TObject& other) const
     return !operator==(other);
 }
 
-Blob*
-TObject::serialize()
+bool
+TObject::serialize(Blob& blob)
 {
-    return 0;
+    return false;
 }
 
 bool
-TObject::deserialize(const Blob* blob)
+TObject::deserialize(const Blob& blob)
 {
     return false;
 }
@@ -195,41 +245,34 @@ Children* TObjectContainer::getChildren() const
 const Result
 TObjectContainer::run(Context* context)
 {
-    bool retval;
-    if (children_)
+    if (context)
     {
-        retval = children_->visit(runVisitor, context);
+        if (children_)
+        {
+            result_ = children_->visit(context->getVisitor(), context);
+        } else {
+            result_ = context->getVisitor().visit(this, context);
+        }
     } else {
-        retval = runVisitor(this, context);
+        if (children_)
+        {
+            result_ = children_->visit(runVisitor, context);
+        } else {
+            result_ = runVisitor(this, context);
+        }
     }
 
-    result_ = Result(retval);
     return result_;
-}
-
-const Result
-TObjectContainer::start(Context* context, Callback* callback)
-{
-    //TODO theader ...
-    Result result = run(context);
-    if (callback)
-    {
-        callback->callback(&result);
-    }
-
-    result_ = Result(true);
-    return result_;
-}
-
-
-Blob*
-TObjectContainer::serialize()
-{
-    return 0;
 }
 
 bool
-TObjectContainer::deserialize(const Blob* blob)
+TObjectContainer::serialize(Blob& blob)
+{
+    return false;
+}
+
+bool
+TObjectContainer::deserialize(const Blob& blob)
 {
     return false;
 }

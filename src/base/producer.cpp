@@ -21,7 +21,6 @@
 #include "producer.h"
 #include "result.h"
 #include "tobject.h"
-#include "typedblob.h"
 
 using namespace aft::base;
 
@@ -160,23 +159,6 @@ void BaseProducer::flowData()
         case TYPE_BLOB:
         {
             Blob blob("");
-            if (writerDelegate_->getData(blob))
-            {
-                // iterate thru readers until one reads the object
-                std::vector<ReaderContract*>::iterator it;
-                for (it = readers_.begin(); it != readers_.end(); ++it)
-                {
-                    if ((*it)->dataAvailable(blob))
-                    {
-                        break;
-                    }
-                }
-            }
-        }
-            break;
-        case TYPE_TYPEDBLOB:
-        {
-            TypedBlob blob("");
             if (writerDelegate_->getData(blob))
             {
                 // iterate thru readers until one reads the object

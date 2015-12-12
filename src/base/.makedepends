@@ -15,6 +15,8 @@ producer.o: producer.cpp blob.h consumer.h producttype.h producer.h \
 propertyhandler.o: propertyhandler.cpp context.h visitor.h result.h \
  propertyhandler.h
 result.o: result.cpp result.h
+structureddata.o: structureddata.cpp ../../src/json/json.h blob.h \
+ structureddata.h ../../src/base/serialize.h
 thread.o: thread.cpp context.h visitor.h result.h thread.h tobject.h \
  serialize.h tobjectiterator.h ../../src/osdep/platform.h \
  ../../src/osdep/posix/posixpluginloader.h ../../src/base/plugin.h \
@@ -25,4 +27,3 @@ tobject.o: tobject.cpp callback.h context.h visitor.h result.h thread.h \
  tobject.h serialize.h tobjectiterator.h tobasictypes.h tobjecttree.h
 tobjectiterator.o: tobjectiterator.cpp tobjectiterator.h tobjecttree.h \
  tobject.h result.h serialize.h visitor.h
-typedblob.o: typedblob.cpp typedblob.h blob.h

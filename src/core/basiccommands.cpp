@@ -1,4 +1,3 @@
-#pragma once
 /*
  *   Copyright 2015 Andy Warner
  *
@@ -15,34 +14,24 @@
  *   limitations under the License.
  */
 
-namespace aft
-{
-namespace base
-{
+#include "base/context.h"
+#include "basiccommands.h"
+#include "logger.h"
+using namespace aft;
+using namespace aft::core;
 
-/**
- * Used to define type of object when multiple types are applicable.
- */
-enum ProductType
-{
-    TYPE_NONE,
-    TYPE_TOBJECT,
-    TYPE_RESULT,
-    TYPE_BLOB
-};
 
-/**
- *  Used to control how producers parse their sources.
- */
-enum ParcelType
+const base::Result
+LogCommand::process(base::Context* context)
+{
+    if (message_.empty())
     {
-        PARCEL_BLOB_CHARACTER,
-        PARCEL_BLOB_WORD,
-        PARCEL_BLOB_LINE,
-        PARCEL_BLOB_FILE,
-        PARCEL_RESULT,
-        PARCEL_TOBJECT
-    };
+        aftlog << "Command logger: " << (context ? context->getName() : "(no context)")
+               << std::endl;
+    } else {
+        aftlog << "Command logger: " << message_ << std::endl;
+    }
 
-} // namespace base
-} // namespace aft
+    return base::Result(true);
+}
+

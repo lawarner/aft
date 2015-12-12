@@ -126,21 +126,27 @@ public:
      *  @param data Extra opaque data past on each element visited
      *  @return false when the vistor returns false for any child, otherwise true.
      */
-    bool visit(BVisitor visitor, void* data)
+    Result visit(CVisitor visitor, void* data)
     {
-        if (value_ && !visitor(value_, data))
+        Result retval(true);
+        if (value_)
         {
-            return false;
+            retval = visitor(value_, data);
+            if (!retval)
+            {
+                return retval;
+            }
         }
         Children::iterator it;
         for (it = children_.begin(); it != children_.end(); ++it)
         {
-            if (!(*it)->visit(visitor, data))
+            retval = (*it)->visit(visitor, data);
+            if (!retval)
             {
-                return false;
+                break;;
             }
         }
-        return true;
+        return retval;
     }
 
     /**
@@ -213,12 +219,12 @@ public:
     }
 
     // Implement SerializeContract
-    virtual Blob* serialize()
+    virtual bool serialize(Blob& blob)
     {
-        return 0;
+        return false;
     }
 
-    virtual bool deserialize(const Blob* blob)
+    virtual bool deserialize(const Blob& blob)
     {
         return false;
     }

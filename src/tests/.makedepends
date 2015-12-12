@@ -1,23 +1,32 @@
-t_basetests.o: t_basetests.cpp ../../src/base/context.h \
- ../../src/base/visitor.h ../../src/base/result.h \
- ../../src/base/factory.h ../../src/base/propertyhandler.h \
- ../../src/base/tobasictypes.h ../../src/base/tobject.h \
+t_basetests.o: t_basetests.cpp ../../src/base/blob.h \
+ ../../src/base/context.h ../../src/base/visitor.h \
+ ../../src/base/result.h ../../src/base/factory.h \
+ ../../src/base/propertyhandler.h ../../src/base/tobasictypes.h \
+ ../../src/base/tobject.h ../../src/base/serialize.h \
+ ../../src/base/tobjectiterator.h ../../src/base/tobjecttree.h \
+ ../../src/core/logger.h
+t_coretests.o: t_coretests.cpp ../../src/base/blob.h \
+ ../../src/core/basiccommands.h ../../src/base/command.h \
+ ../../src/base/result.h ../../src/base/tobject.h \
  ../../src/base/serialize.h ../../src/base/tobjectiterator.h \
- ../../src/base/tobjecttree.h ../../src/base/typedblob.h \
- ../../src/base/blob.h ../../src/core/logger.h
-t_coretests.o: t_coretests.cpp ../../src/base/typedblob.h \
- ../../src/base/blob.h ../../src/core/fileconsumer.h \
- ../../src/base/consumer.h ../../src/base/producttype.h \
- ../../src/core/fileproducer.h ../../src/base/producer.h
+ ../../src/core/fileconsumer.h ../../src/base/consumer.h \
+ ../../src/base/producttype.h ../../src/core/fileproducer.h \
+ ../../src/base/producer.h ../../src/core/stringconsumer.h \
+ ../../src/core/stringproducer.h
 t_logger.o: t_logger.cpp ../../src/core/logger.h
 t_osdep.o: t_osdep.cpp ../../src/base/callback.h ../../src/base/context.h \
  ../../src/base/visitor.h ../../src/base/result.h ../../src/base/thread.h \
  ../../src/base/tobject.h ../../src/base/serialize.h \
  ../../src/base/tobjectiterator.h ../../src/base/tobasictypes.h
-t_plugin.o: t_plugin.cpp ../../src/base/factory.h ../../src/base/plugin.h \
- ../../src/base/tobject.h ../../src/base/result.h \
- ../../src/base/serialize.h ../../src/base/tobjectiterator.h \
- ../../src/base/typedblob.h ../../src/base/blob.h
+t_plugin.o: t_plugin.cpp ../../src/base/blob.h ../../src/base/factory.h \
+ ../../src/base/plugin.h ../../src/base/tobject.h ../../src/base/result.h \
+ ../../src/base/serialize.h ../../src/base/tobjectiterator.h
 t_result.o: t_result.cpp ../../src/base/result.h ../../src/base/tobject.h \
  ../../src/base/serialize.h ../../src/base/tobjectiterator.h \
  ../../src/core/logger.h
+t_testsuite.o: t_testsuite.cpp ../../src/base/context.h \
+ ../../src/base/visitor.h ../../src/base/result.h \
+ ../../src/core/basiccommands.h ../../src/base/command.h \
+ ../../src/base/tobject.h ../../src/base/serialize.h \
+ ../../src/base/tobjectiterator.h ../../src/core/logger.h \
+ ../../src/core/testcase.h ../../src/core/testsuite.h

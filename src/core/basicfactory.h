@@ -15,34 +15,36 @@
  *   limitations under the License.
  */
 
+#include "base/factory.h"
+
 namespace aft
 {
 namespace base
 {
+// Forward reference
+class Blob;
+class Context;
+class TObject;
+}
+
+namespace core
+{
 
 /**
- * Used to define type of object when multiple types are applicable.
+ *  Factory for basic (built-in) commands.
  */
-enum ProductType
+class BasicCommandFactory : public base::BaseFactory
 {
-    TYPE_NONE,
-    TYPE_TOBJECT,
-    TYPE_RESULT,
-    TYPE_BLOB
+public:
+    /** Create a BasicCommandFactory. */
+    BasicCommandFactory();
+    /** Destruct a BasicCommandFactory. */
+    virtual ~BasicCommandFactory();
+
+    virtual base::TObject* construct(const std::string& name,
+                                     const base::Blob* blob = 0,
+                                     const base::Context* context = 0);
 };
 
-/**
- *  Used to control how producers parse their sources.
- */
-enum ParcelType
-    {
-        PARCEL_BLOB_CHARACTER,
-        PARCEL_BLOB_WORD,
-        PARCEL_BLOB_LINE,
-        PARCEL_BLOB_FILE,
-        PARCEL_RESULT,
-        PARCEL_TOBJECT
-    };
-
-} // namespace base
+} // namespace core
 } // namespace aft

@@ -53,6 +53,20 @@ ThreadManager* ThreadManager::instance()
     return instance_;
 }
 
+ThreadHandler* ThreadManager::find(const TObject* tObject) const
+{
+    vector<ThreadHandler*>::iterator it;
+    for (it = impl_.threads.begin(); it != impl_.threads.end(); ++it)
+    {
+        if ((*it)->getTObject() == tObject)
+        {
+            return *it;
+        }
+    }
+
+    return 0;
+}
+
 void ThreadManager::stopAll(bool force)
 {
     vector<ThreadHandler*>::iterator it;

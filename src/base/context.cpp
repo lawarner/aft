@@ -21,13 +21,15 @@ using namespace aft::base;
 Visitor defaultVisitor;
 
 
-Context::Context()
-    : visitor_(defaultVisitor)
+Context::Context(const std::string& name)
+    : name_(name)
+    , visitor_(defaultVisitor)
 {
 }
 
-Context::Context(VisitorContract& visitor)
-    : visitor_(visitor)
+Context::Context(VisitorContract& visitor, const std::string& name)
+    : name_(name)
+    , visitor_(visitor)
 {
 }
 
@@ -48,11 +50,17 @@ Context::addProperty(const std::string& propertyName, PropertyHandler* handler)
 }
 
 TObject&
-Context::apply(const TObject& testObject)
+Context::apply(const TObject& tObject)
 {
-    return const_cast<TObject&>(testObject);
+    return const_cast<TObject&>(tObject);
 }
 
+
+const std::string&
+Context::getName() const
+{
+    return name_;
+}
 
 VisitorContract&
 Context::getVisitor() const

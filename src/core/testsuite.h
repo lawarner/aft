@@ -26,14 +26,31 @@ namespace base
 
 namespace core
 {
-
+/**
+ *  Test suite is a collection of test cases.
+ *
+ *  Each test case is opened, run and closed in order.
+ */
 class TestSuite : public aft::base::TObjectContainer
 {
 public:
+    /** Construct test suite with an optional name. */
+    TestSuite(const std::string& name = std::string());
+    /** Destruct test suite */
+    ~TestSuite();
+
+    /** Open test suite and prepare to run. */
     bool open();
 
     bool rewind(base::Context* context);
-    const base::Result run(base::Context* context);
+    /**
+     *  Run test suite using context.
+     *
+     *  @param context Context to run test suite.
+     *  @param stopOnError if true then stops when a test case fails.
+     *  @return result of running test cases (summary of run)
+     */
+    const base::Result run(base::Context* context, bool stopOnError = false);
     void close();
 };
 

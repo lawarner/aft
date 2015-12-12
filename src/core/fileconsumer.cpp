@@ -20,7 +20,6 @@
 #include "base/producer.h"
 #include "base/result.h"
 #include "base/tobject.h"
-#include "base/typedblob.h"
 #include "fileconsumer.h"
 
 
@@ -72,8 +71,7 @@ bool FileWriterImpl::dataAvailable(const Result& result)
 
 bool FileWriterImpl::dataAvailable(const Blob& blob)
 {
-    const TypedBlob& typedBlob = dynamic_cast<const TypedBlob&>(blob);
-    const std::string& strBlob = typedBlob.getString();
+    const std::string& strBlob = blob.getString();
     outfile_.write(strBlob.c_str(), strBlob.length());
     return !(outfile_.rdstate() & std::ofstream::failbit);
 }

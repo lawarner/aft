@@ -39,8 +39,13 @@ public:
     virtual ~TestCase();
 
     /** Open the test case */
-    bool open();
+    virtual bool open();
 
+    /** Rewind the test case.
+     *
+     *  It is not always possible to rewind/reset a testcase.
+     *  @return true if testcase was succesfully rewound.
+     */
     virtual bool rewind(base::Context* context);
 
     /**

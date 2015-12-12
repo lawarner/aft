@@ -1,13 +1,17 @@
 Next todo:
 ----------
-- Base and basic (string, file) prods, cons
-- ui classes and context
+- ui classes, message loop and context
+- commands
 - connect 2 tobjects:  tobject(prod) -> tobject2(cons)
 - robot, sequencer
+- more prods, cons (filter, queue, mux, etc.)
+- scenario test: create objects (testcase), deserialize, serialize and run.
 
 Random Ideas:
 ------------
 Environmental superclass for contextual side of things, i.e., non-TObjects.
+
+Context may allow a "_" property for its own base usage.
 
 Tests can invoke other tests, either synchronously or threaded.
 Threaded tests can interact with each other.
@@ -116,3 +120,5 @@ Cancel without it being prompted (input).
 A stylesheet can optionally be used to adjust the look-n-feel of the UI.  Multiple
 styles can exist similar to css.
 -----------------------------------------------------------------
+Blobs could have a serialized/non-serialized form.
+There must be some rule, api, mapping, etc. to get from one form to the other.

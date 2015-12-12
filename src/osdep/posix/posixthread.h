@@ -24,18 +24,28 @@ namespace osdep
 // Forward reference
 class PosixThreadImpl;
 
+/**
+ *  Thread handler implemented using posix threads (pthreads).
+ *  @copydoc aft::base::ThreadHandler
+ */
 class PosixThreadHandler : public aft::base::ThreadHandler
 {
 public:
+    /** Construct a PosixThreadHandler.
+     *  @param tObject object that will be run in the thread
+     *  @param context context used to run the object
+     */
     PosixThreadHandler(aft::base::TObject* tObject, aft::base::Context* context = 0);
+    /** Destruct a PosixThreadHandler */
     virtual ~PosixThreadHandler();
 
-    virtual aft::base::Result getResult();
-    virtual aft::base::TObject::State getState();
-    virtual void notify(aft::base::Callback* callback);
-    virtual bool unnotify(aft::base::Callback* callback);
+    virtual base::Result getResult();
+    virtual base::TObject::State getState();
+    virtual base::TObject* getTObject() const;
+    virtual void notify(base::Callback* callback);
+    virtual bool unnotify(base::Callback* callback);
     virtual void stop(bool force);
-    virtual aft::base::Result wait();
+    virtual base::Result wait();
     virtual void run();
 
 private:

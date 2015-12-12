@@ -44,12 +44,12 @@ bool TOBool::operator==(const TOBool& other) const
     return value_ == other.value_;
 }
 
-Blob* TOBool::serialize()
+bool TOBool::serialize(Blob& blob)
 {
-    return TObject::serialize();
+    return TObject::serialize(blob);
 }
 
-bool TOBool::deserialize(const Blob* blob)
+bool TOBool::deserialize(const Blob& blob)
 {
     return TObject::deserialize(blob);
 }
@@ -80,12 +80,12 @@ bool TOString::operator==(const TOString& other)
     return TObject::operator==(other) && (value_ == other.value_);
 }
 
-Blob* TOString::serialize()
+bool TOString::serialize(Blob& blob)
 {
-    return TObject::serialize();
+    return TObject::serialize(blob);
 }
 
-bool TOString::deserialize(const Blob* blob)
+bool TOString::deserialize(const Blob& blob)
 {
     return TObject::deserialize(blob);
 }
@@ -117,12 +117,12 @@ bool TOBlob::operator==(const TOBlob& other)
     return TObject::operator==(other) && (blob_ == other.blob_);
 }
 
-Blob* TOBlob::serialize()
+bool TOBlob::serialize(Blob& blob)
 {
-    return TObject::serialize();
+    return TObject::serialize(blob);
 }
 
-bool TOBlob::deserialize(const Blob* blob)
+bool TOBlob::deserialize(const Blob& blob)
 {
     return TObject::deserialize(blob);
 }

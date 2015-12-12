@@ -68,6 +68,15 @@ public:
     /** Get the current state of this TObject */
     State getState() const;
 
+    /** Set the name of this TObject */
+    void setName(const std::string& name);
+
+    /** Set the state of this TObject.
+     *  @param state the new state for this TObject
+     *  @return the previous state
+     */
+    State setState(State state);
+
     //TODO change to return a TOBool instead of bool
     /** Rewind to initial state, if possible.
      *  @param context Context of run state.  If 0 then goes to default,
@@ -76,6 +85,11 @@ public:
      *          otherwise returns true.
      */
     virtual bool rewind(Context* context);
+
+    /**
+     *  Processing logic of this TObject, if any.
+     */
+    virtual const Result process(Context* context = 0);
 
     /** Run in the given context.
      *
@@ -86,16 +100,22 @@ public:
 
     /** Start this TObject in the given context asynchronously.
      *
-     *  Subclasses must implement specific behavior.  This base method is a
-     *  pass-thru and does not start a thread, as it returns immediately.
+     *  Subclasses must implement specific behavior.  This base method spawns
+     *  this TObject in a ThreadHandler and returns the result from the thread.
      *  If the context is 0 then starts non-contextually.
-     *  This implementation returns true and passed a Result(this) to the callback
-     *  (if any).
+     *
      *  Typically a sub-class would return the result of starting the thread,
      *  either a TOBool or perhaps a TOThread, etc.  Then when the thread finishes
      *  the final result is delivered to the callback.
      */
     virtual const Result start(Context* context = 0, Callback* callback = 0);
+
+    /** Stop this TObject if it is running in a thread.
+     *
+     *  @param force if true then the thread will be forcibly terminated.
+     *  @return true if stop was attempted on the thread running this object.
+     */
+    virtual bool stop(bool force = false);
 
     /** Test if equal to another TObject */
     virtual bool operator==(const TObject& other) const;
@@ -104,8 +124,8 @@ public:
     virtual bool operator!=(const TObject& other) const;
 
     // Implement SerializeContract
-    virtual Blob* serialize();
-    virtual bool deserialize(const Blob* blob);
+    virtual bool serialize(Blob& blob);
+    virtual bool deserialize(const Blob& blob);
 
     //TODO implement pluggable contract
     //TODO cast operators for frequent autoconversions:
@@ -136,7 +156,10 @@ public:
     typedef TObjectIterator iterator;
 
     /** Add an object to the list of children objects.
-     *  Returns the child's TObjectTree wrapper. */
+     *  @param tObjWrapper the tree wrapper to use.  If not specified then a new
+     *                     wrapper is allocated.
+     *  @return the child's TObjectTree wrapper.
+     */
     TObjectTree* add(TObject* tObject, TObjectTree* tObjWrapper = 0);
 
     /** Find the object with given name among children */
@@ -149,11 +172,10 @@ public:
 
     // Visitors
     virtual const Result run(Context* context = 0);
-    virtual const Result start(Context* context = 0, Callback* callback = 0);
 
     // Override parent SerializeContract
-    virtual Blob* serialize();
-    virtual bool deserialize(const Blob* blob);
+    virtual bool serialize(Blob& blob);
+    virtual bool deserialize(const Blob& blob);
 
 protected:
     /** Construct a TObjectContainer with a given, optional name */

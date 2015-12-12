@@ -15,34 +15,29 @@
  *   limitations under the License.
  */
 
+#include "base/command.h"
+
 namespace aft
 {
 namespace base
 {
+// Forward reference
+class Context;
+}
 
-/**
- * Used to define type of object when multiple types are applicable.
- */
-enum ProductType
+namespace core
 {
-    TYPE_NONE,
-    TYPE_TOBJECT,
-    TYPE_RESULT,
-    TYPE_BLOB
+
+class LogCommand : public aft::base::Command
+{
+public:
+    LogCommand(const std::string& message = std::string())
+        : Command("LogCommand")
+        , message_(message)  { }
+    virtual const base::Result process(base::Context* context);
+private:
+    std::string message_;
 };
 
-/**
- *  Used to control how producers parse their sources.
- */
-enum ParcelType
-    {
-        PARCEL_BLOB_CHARACTER,
-        PARCEL_BLOB_WORD,
-        PARCEL_BLOB_LINE,
-        PARCEL_BLOB_FILE,
-        PARCEL_RESULT,
-        PARCEL_TOBJECT
-    };
-
-} // namespace base
+} // namespace core
 } // namespace aft

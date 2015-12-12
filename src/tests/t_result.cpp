@@ -44,6 +44,25 @@ TEST(ResultTest, TObject)
     EXPECT_EQ(&obj, objPtr);
 }
 
+TEST(ResultTest, Command)
+{
+}
+
+TEST(ResultTest, NotOperator)
+{
+    Result testResult;	// defaults to BOOLEAN
+    bool value;
+    testResult.setValue(true);
+    ASSERT_FALSE(!testResult);
+    testResult.getValue(value);
+    EXPECT_TRUE(value);
+
+    testResult.setValue(false);
+    ASSERT_TRUE(!testResult);
+    testResult.getValue(value);
+    EXPECT_FALSE(value);
+}
+
 } // namespace
 
 int main(int argc, char* argv[])

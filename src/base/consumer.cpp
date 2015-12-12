@@ -34,6 +34,11 @@ BaseConsumer::~BaseConsumer()
 {
 }
 
+bool BaseConsumer::needsData()
+{
+    return readerDelegate_ != 0;
+}
+
 bool BaseConsumer::write(const TObject& object)
 {
     if (readerDelegate_)
@@ -61,9 +66,32 @@ bool BaseConsumer::write(const Blob& blob)
     return false;
 }
 
-bool BaseConsumer::needsData()
+int BaseConsumer::write(const std::vector<TObject>& objects)
 {
-    return readerDelegate_ != 0;
+    int ret = 0;
+    std::vector<TObject>& tobjs = const_cast<std::vector<TObject>&>(objects);
+    std::vector<TObject>::iterator it;
+    for (it = tobjs.begin(); it != tobjs.end(); ++it)
+    {
+        if (write(*it))
+        {
+            ++ret;
+        } else {
+            break;
+        }
+    }
+
+    return ret;
+}
+
+int BaseConsumer::write(const std::vector<Result>& results)
+{
+    return -1;
+}
+
+int BaseConsumer::write(const std::vector<Blob>& blobs)
+{
+    return -1;
 }
 
 bool BaseConsumer::registerWriteCallback(const WriterContract* writer)
@@ -131,15 +159,6 @@ void BaseConsumer::flowData()
             case TYPE_BLOB:
             {
                 Blob blob("");
-                if ((*it)->getData(blob))
-                {
-                    readerDelegate_->dataAvailable(blob);
-                }
-            }
-            break;
-            case TYPE_TYPEDBLOB:
-            {
-                TypedBlob blob("");
                 if ((*it)->getData(blob))
                 {
                     readerDelegate_->dataAvailable(blob);
