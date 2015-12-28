@@ -1,13 +1,19 @@
 basiccommands.o: basiccommands.cpp ../../src/base/context.h \
  ../../src/base/visitor.h ../../src/base/result.h basiccommands.h \
  ../../src/base/command.h ../../src/base/tobject.h \
- ../../src/base/serialize.h ../../src/base/tobjectiterator.h logger.h
+ ../../src/base/serialize.h ../../src/base/tobjectiterator.h \
+ commandcontext.h ../../src/base/propertyhandler.h logger.h
 basicfactory.o: basicfactory.cpp ../../src/base/blob.h \
  ../../src/base/context.h ../../src/base/visitor.h \
  ../../src/base/result.h basiccommands.h ../../src/base/command.h \
  ../../src/base/tobject.h ../../src/base/serialize.h \
  ../../src/base/tobjectiterator.h basicfactory.h ../../src/base/factory.h \
  logger.h
+commandcontext.o: commandcontext.cpp logger.h commandcontext.h \
+ ../../src/base/context.h ../../src/base/visitor.h \
+ ../../src/base/result.h ../../src/base/propertyhandler.h \
+ ../../src/base/tobject.h ../../src/base/serialize.h \
+ ../../src/base/tobjectiterator.h ../../src/base/tobasictypes.h
 fileconsumer.o: fileconsumer.cpp ../../src/base/blob.h \
  ../../src/base/producer.h ../../src/base/producttype.h \
  ../../src/base/result.h ../../src/base/tobject.h \

@@ -115,12 +115,19 @@ public:
     /** Type of per-category factory list. */
     typedef std::vector<FactoryContract*> FactoryList;
 
-public:
+    /** Get the singleton MecFactory instance.
+     *
+     *  Another idea is make this a non-singleton with a global (static) factory map,
+     *  as well as a local (instance) factory map. */
+    static MecFactory* instance();
+
+private:
     /** Construct a MecFactory.  This may change to a singleton. */
     MecFactory();
     /** Destruct a MecFactory. */
     virtual ~MecFactory();
 
+public:
     /** Load a factory from a bundle.
      *
      *  The factory will be added to its category.
@@ -161,6 +168,9 @@ protected:
     /** Dictionary of factories, grouped by category. */
     std::map<std::string, FactoryList > factories_;
     //TODO loader delegate
+
+private:
+    static MecFactory* instance_;
 };
 
 } // namespace base

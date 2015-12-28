@@ -14,8 +14,15 @@
  *   limitations under the License.
  */
 
+#include <vector>
+
+#include "base/blob.h"
 #include "base/context.h"
+#include "base/factory.h"
 #include "base/result.h"
+#include "base/structureddata.h"
+#include "base/tobjecttree.h"
+#include "core/logger.h"
 #include "testcase.h"
 using namespace aft;
 using namespace aft::core;
@@ -68,4 +75,63 @@ TestCase::close()
     {
         state_ = INITIAL;
     }
+}
+
+bool TestCase::serialize(base::Blob& blob)
+{
+    base::StructuredData sd("TestCase");
+
+    sd.add("name", getName());
+    sd.addArray("commands");
+
+    base::TObjectTree::Children& cmds = children_->getChildren();
+    base::TObjectTree::Children::iterator it;
+    for (it = cmds.begin(); it != cmds.end(); ++it)
+    {
+        TObject* tObj = (*it)->getValue();
+        if (tObj)
+        {
+            base::Blob cmdBlob("");
+            tObj->serialize(cmdBlob);
+            base::StructuredData sdcmd("command", cmdBlob.getString());
+//            base::StructuredData sdcmd("command");
+//            sdcmd.add(base::StructuredDataName(tObj->getName()), "args, ...");
+            sd.add("commands.", sdcmd);
+        }
+    }
+
+    return sd.serialize(blob);
+}
+
+bool TestCase::deserialize(const base::Blob& blob)
+{
+    base::StructuredData sd("");
+    if (!sd.deserialize(blob)) return false;
+
+    std::string name;
+    if (sd.get("name", name)) setName(name);
+
+    // commands
+    base::MecFactory* mec = base::MecFactory::instance();
+    std::vector<std::string> cmds;
+    if (!sd.getArray("commands", cmds))
+    {
+        return false;
+    }
+
+    std::string category("Command");
+    std::vector<std::string>::const_iterator it;
+    for (it = cmds.begin(); it != cmds.end(); ++it)
+    {
+        base::Blob params("", base::Blob::STRING, *it);
+        base::TObject* tobj = mec->construct(category, "Log", &params);
+        if (!tobj)
+        {
+            aftlog << loglevel(Error) << "Cannot construct object" << std::endl;
+            return false;
+        }
+        add(tobj);
+    }
+
+    return true;
 }

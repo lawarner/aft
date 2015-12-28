@@ -30,6 +30,7 @@ using namespace aft::base;
 using namespace aft::core;
 
 const std::string FullName("one.two.three.four");
+const std::string FullPath("one.two.three");
 const std::string SimpleName("four");
 
 class RunVisitor : public VisitorContract
@@ -237,14 +238,14 @@ TEST(BasePackageTest, Factory)
     EXPECT_TRUE(tobj != 0);
     EXPECT_EQ(tobj->getName(), objectName);
 
-    MecFactory mec;   // probably will become a singleton interface
-    mec.addFactory(&factory);
-    TObject* tobj2 = mec.construct(categoryName, objectName);
+    MecFactory* mec = MecFactory::instance();
+    mec->addFactory(&factory);
+    TObject* tobj2 = mec->construct(categoryName, objectName);
     EXPECT_TRUE(tobj2 != 0);
     EXPECT_EQ(tobj2->getName(), objectName);
 
-    mec.removeFactory(&factory);
-    TObject* tobj0 = mec.construct(categoryName, "another");
+    mec->removeFactory(&factory);
+    TObject* tobj0 = mec->construct(categoryName, "another");
     EXPECT_TRUE(tobj0 == 0);
 
     free(tobj);
@@ -259,14 +260,16 @@ TEST(BasePackageTest, StructuredDataName)
     StructuredDataName simpleName(SimpleName);
     EXPECT_EQ(SimpleName, simpleName.getName(true));
     EXPECT_EQ(SimpleName, simpleName.getName());
-    EXPECT_EQ(simpleName.getPath().size(), 0);
+    EXPECT_EQ("", simpleName.getPath());
+    EXPECT_EQ(simpleName.getComponents().size(), 1);
 
     // Construct full name from string
     StructuredDataName sdName(FullName);
     EXPECT_EQ(FullName,   sdName.getName(true));
     EXPECT_EQ(SimpleName, sdName.getName());
+    EXPECT_EQ(FullPath,   sdName.getPath());
 
-    const std::vector<std::string>& path = sdName.getPath();
+    const std::vector<std::string>& path = sdName.getComponents();
     EXPECT_EQ(path.size(), 4);
     std::vector<std::string>::const_iterator it;
     for (it = path.begin(); it != path.end(); ++it)
@@ -284,20 +287,20 @@ TEST(BasePackageTest, StructuredDataName)
     StructuredDataName emptyName("");
     EXPECT_EQ(emptyName.getName(), "");
     EXPECT_EQ(emptyName.getName(true), "");
-    EXPECT_EQ(emptyName.getPath().size(), 0);
+    EXPECT_EQ(emptyName.getComponents().size(), 0);
 
-    // Construct illegal names that start/end with SEPARATOR
-    StructuredDataName illegalName(".starts.with.dot");
-    std::cout << "Illegal name: " << illegalName.getName() << std::endl;
-    std::cout << "Illegal full name: " << illegalName.getName(true) << std::endl;
-    std::cout << "Illegal path size = " << illegalName.getPath().size() << std::endl;
-    EXPECT_TRUE(illegalName.getPath().front().empty());
+    // Construct special names that start/end with SEPARATOR
+    StructuredDataName specialName(".starts.with.dot");
+    std::cout << "Special name: " << specialName.getName() << std::endl;
+    std::cout << "Special full name: " << specialName.getName(true) << std::endl;
+    std::cout << "Special path size = " << specialName.getComponents().size() << std::endl;
+    EXPECT_TRUE(specialName.getComponents().front().empty());
 
-    StructuredDataName badName("ends.with.dot.");
-    std::cout << "Illegal name: " << badName.getName() << std::endl;
-    std::cout << "Illegal full name: " << badName.getName(true) << std::endl;
-    std::cout << "Illegal path size = " << badName.getPath().size() << std::endl;
-    EXPECT_TRUE(badName.getPath().back().empty());
+    StructuredDataName arrayName("ends.with.dot.");
+    std::cout << "Array name: " << arrayName.getName() << std::endl;
+    std::cout << "Array full name: " << arrayName.getName(true) << std::endl;
+    std::cout << "Array path size = " << arrayName.getComponents().size() << std::endl;
+    EXPECT_TRUE(arrayName.getComponents().back().empty());
 }
 
 TEST(BasePackageTest, StructuredData)
@@ -325,6 +328,63 @@ TEST(BasePackageTest, StructuredData)
     EXPECT_TRUE(compound.get(member, sd));
     EXPECT_TRUE(sd.get(member, value));
     EXPECT_EQ(value, SomeValue);
+
+    // Array
+    EXPECT_TRUE(simpleSd.addArray(StructuredDataName("myarray")));
+    EXPECT_TRUE(simpleSd.isArray(StructuredDataName("myarray")));
+
+    EXPECT_TRUE(simpleSd.add(StructuredDataName("myarray."), "first"));
+    EXPECT_TRUE(simpleSd.add(StructuredDataName("myarray."), "second"));
+    EXPECT_TRUE(simpleSd.add(StructuredDataName("myarray."), 3));
+    EXPECT_TRUE(simpleSd.add(StructuredDataName("myarray."), compound));
+
+    EXPECT_TRUE(simpleSd.get("myarray.1", value));
+    EXPECT_EQ(value, "second");
+
+    std::vector<std::string> values;
+    EXPECT_TRUE(simpleSd.getArray("myarray", values));
+    std::vector<std::string>::iterator it;
+    std::cout << " CONTENTS OF ARRAY:" << std::endl;
+    for (it = values.begin(); it != values.end(); ++it)
+    {
+        std::cout << "+Value: " << *it << std::endl;
+    }
+
+    Blob blob("");
+    EXPECT_TRUE(simpleSd.serialize(blob));
+    std::cout << "Array object:  " << blob.getString() << std::endl;
+}
+
+TEST(BasePackageTest, StructuredDataParse)
+{
+    const std::string jsonStr("{ \"id\": \"simple name\",\n"
+                              "  \"member\": {\n"
+                              "              \"first\": 54321,\n"
+                              "              \"another\": \"anotherValue\"\n"
+                              "} }\n");
+    StructuredData sd(StructuredDataName(SimpleName), jsonStr);
+    StructuredDataName first("first");
+    StructuredDataName another("another");
+    StructuredDataName member("member");
+
+    std::string value;
+    EXPECT_TRUE(sd.get(StructuredDataName("id"), value));
+    EXPECT_EQ(value, "simple name");
+
+    StructuredData subSd(StructuredDataName(""));
+    EXPECT_TRUE(sd.get(member, subSd));
+    EXPECT_TRUE(subSd.get(another, value));
+    EXPECT_EQ(value, "anotherValue");
+    int ivalue;
+    EXPECT_TRUE(subSd.get(first, ivalue));
+    EXPECT_EQ(ivalue, 54321);
+
+    Blob blob("");
+    EXPECT_TRUE(sd.serialize(blob));
+
+    EXPECT_TRUE(blob.getType() == Blob::STRING);
+    EXPECT_EQ(blob.getName(), "");
+    std::cout << "serialized json: " << blob.getString() << std::endl;
 }
 
 } // namespace
@@ -334,4 +394,3 @@ int main(int argc, char* argv[])
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
-

@@ -15,6 +15,8 @@
  *   limitations under the License.
  */
 
+#include <vector>
+
 #include "base/result.h"
 #include "base/tobject.h"
 
@@ -25,16 +27,31 @@ namespace base
 // Forward reference
 class Context;
 
+/** A TObject to be run in (hierarchical) sequence.
+ *
+ *  TODO need to split into Command interface and BaseCommand implementation.
+ */
 class Command : public aft::base::TObjectContainer
 {
 public:
-    Command(const std::string& name)
-    {
-        name_ = name;
-    }
-    virtual ~Command() { }
+    /** Construct command with given name. */
+    Command(const std::string& name);
 
+    /** Destruct command. */
+    virtual ~Command();
+
+    /** Process the command according to context. */
     virtual const Result process(Context* context = 0) = 0;
+    /** Set up static info from context. */
+    virtual const Result setup(Context* context = 0) = 0;
+
+    // Implement SerializeContract Interface
+    virtual bool serialize(Blob& blob);
+    virtual bool deserialize(const Blob& blob);
+
+protected:
+    // Or maybe use StructuredData
+    std::vector<std::string> parameters_;
 };
 
 } // namespace base

@@ -17,6 +17,13 @@
 
 # Simple makefile for the aft package
 
+TOP = ..
+INCDIR = $(TOP)/src
+INCS := -I$(INCDIR)
+
+CC = g++
+CCFLAGS = -g $(INCS)
+
 ARMPREFIX=arm-linux-gnueabihf
 ARMAR=$(ARMPREFIX)-ar
 ARMCC=$(ARMPREFIX)-g++
@@ -25,26 +32,32 @@ ANDROIDPREFIX=arm-linux-androideabi
 ANDROIDAR=$(ANDROIDPREFIX)-ar
 ANDROIDCC=$(ANDROIDPREFIX)-g++
 
-BACKUPFILE = ~/Downloads/srcrepo/aft-src-`date +%Y%j`.tar.bz2
+LIBAFT = $(TOP)/lib/libaft.a
 
-LIBR = lib/libaft.a
+LDFLAGS = -pthread -Wl,--no-as-needed -ldl
+LDLIBS =
 
-SUBDIRS = src examples
-# doc
+SUBDIRS =
 
-PROGRAMS =
+OBJS := sc_testcase.o
+SRCS := $(OBJS:.o=.cpp)
 
-all: $(PROGRAMS) subdirs
+PROGRAMS = sc_testcase
 
-.PHONY: doc
-doc:
-	make -C doc
+DEPCPPFLAGS = -I. $(INCS)
+DEPLIBS = $(LIBAFT) $(LIBGTEST)
+
+.cpp.o: ; $(CC) $(CCFLAGS) -c $<
+
+all: $(PROGRAMS)
+# subdirs
 
 subdirs:
 	for dir in $(SUBDIRS); do \
 		make -C $$dir; \
 	done
 
+$(PROGRAMS): $(DEPLIBS)
 
 arm:
 	for dir in $(SUBDIRS); do \
@@ -61,10 +74,15 @@ clean:
 	for dir in $(SUBDIRS); do \
 		make -C $$dir clean; \
 	done
-	rm -f $(LIBR)
+	rm -f $(OBJS) $(PROGRAMS) $(PLUGINOBJ) $(PLUGINSO)
 
 .PHONY: depends
-depends:
+depends: $(SRCS)
 	for dir in $(SUBDIRS); do \
 		make -C $$dir depends; \
 	done
+	$(CC) $(DEPCPPFLAGS) -MM $(SRCS) > .makedepends
+	touch .mkdep-timestamp
+
+.makedepends:
+include .makedepends

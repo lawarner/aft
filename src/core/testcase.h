@@ -23,6 +23,7 @@ namespace aft
 // Forward reference
 namespace base
 {
+    class Blob;
     class Context;
 }
 
@@ -65,6 +66,11 @@ public:
     void close();
 
     //TODO Branch(true, false, exception)
+
+    // implement SerializeContract interface
+    virtual bool serialize(base::Blob& blob);
+    virtual bool deserialize(const base::Blob& blob);
+
 private:
 
 };

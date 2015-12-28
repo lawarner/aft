@@ -1,4 +1,7 @@
 blob.o: blob.cpp blob.h
+command.o: command.cpp blob.h command.h ../../src/base/result.h \
+ ../../src/base/tobject.h ../../src/base/serialize.h \
+ ../../src/base/tobjectiterator.h
 consumer.o: consumer.cpp blob.h consumer.h producttype.h producer.h \
  result.h tobject.h serialize.h tobjectiterator.h
 context.o: context.cpp context.h visitor.h result.h tobject.h serialize.h \

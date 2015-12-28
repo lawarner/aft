@@ -16,6 +16,7 @@
  */
 
 #include "base/command.h"
+#include "base/result.h"
 
 namespace aft
 {
@@ -28,13 +29,17 @@ class Context;
 namespace core
 {
 
+/** Simply logs its argument when run.
+ *
+ *  In the future, this could log/trace before/after running any sub-command.
+ *  It could also log only if message changed.
+ */
 class LogCommand : public aft::base::Command
 {
 public:
-    LogCommand(const std::string& message = std::string())
-        : Command("LogCommand")
-        , message_(message)  { }
+    LogCommand(const std::string& message = std::string());
     virtual const base::Result process(base::Context* context);
+    virtual const base::Result setup(base::Context* context = 0);
 private:
     std::string message_;
 };

@@ -15,6 +15,7 @@
  */
 
 #include <cassert>
+#include <iostream>
 #include <sstream>
 
 #include <json/json.h>
@@ -27,12 +28,14 @@ const std::string StructuredDataName::SEPARATOR(".");
 
 ////////////////// Helper functions
 
+// Returns path (all but last component)
+// precondition: elements is not empty
 static std::string
 join_(const std::vector<std::string>& elements,
       std::string delimiter = StructuredDataName::SEPARATOR)
 {
     std::stringstream ss;
-    size_t elems = elements.size();
+    size_t elems = elements.size() - 1;
     for (size_t i = 0; i < elems; ++i)
     {
         ss << elements[i];
@@ -52,7 +55,13 @@ split_(const std::string& full,
     size_t pos = full.find(delimiter);
     while (pos != std::string::npos)
     {
-        ret.push_back(full.substr(oldpos, pos - oldpos));
+        std::string token = full.substr(oldpos, pos - oldpos);
+#if 0
+        if (token.back() == ']')
+        {
+        }
+#endif
+        ret.push_back(token);
         oldpos = pos + 1;
         pos = full.find(delimiter, oldpos);
     }
@@ -64,15 +73,38 @@ split_(const std::string& full,
 //////////////////
 
 StructuredDataName::StructuredDataName(const std::string& name)
-    : fullName_(name)
+    : name_(name)
 {
-    if (fullName_.find(SEPARATOR) != std::string::npos)
+    size_t pos = name_.rfind(SEPARATOR);
+    if (pos != std::string::npos)
     {
-        path_ = split_(fullName_);
+        path_ = split_(name_);
+        fullPath_ = name_.substr(0, pos);
         //Assert !path_.empty()
         name_ = path_.back();
     } else {
-        name_ = fullName_;
+        if (!name.empty())
+        {
+            path_.push_back(name);
+        }
+    }
+}
+
+StructuredDataName::StructuredDataName(const char* name)
+    : name_(name)
+{
+    size_t pos = name_.rfind(SEPARATOR);
+    if (pos != std::string::npos)
+    {
+        path_ = split_(name_);
+        fullPath_ = name_.substr(0, pos);
+        //Assert !path_.empty()
+        name_ = path_.back();
+    } else {
+        if (name && *name)
+        {
+            path_.push_back(name);
+        }
     }
 }
 
@@ -81,7 +113,7 @@ StructuredDataName::StructuredDataName(const std::vector<std::string>& namePath)
 {
     if (!path_.empty())
     {
-        fullName_ = join_(path_, SEPARATOR);
+        fullPath_ = join_(path_, SEPARATOR);
         name_ = path_.back();
     }
 }
@@ -90,24 +122,50 @@ StructuredDataName::~StructuredDataName()
 {
 }
 
-std::string
-StructuredDataName::getName(bool fullName) const
+bool StructuredDataName::empty() const
 {
-    return fullName ? fullName_ : name_;
+    return path_.empty();
 }
 
 const std::vector<std::string>&
-StructuredDataName::getPath() const
+StructuredDataName::getComponents() const
 {
     return path_;
 }
 
-bool StructuredDataName::operator==(const StructuredDataName& other)
+std::string
+StructuredDataName::getName(bool fullName) const
 {
-    return fullName_ == other.fullName_ && path_.size() == other.path_.size();
+    switch (path_.size())
+    {
+    case 0:
+        return std::string();
+        break;
+    case 1:
+        return name_;
+        break;
+    }
+
+    return fullName ? fullPath_ + SEPARATOR + name_ : name_;
 }
 
-////////////////////
+const std::string&
+StructuredDataName::getPath(bool fullPath) const
+{
+    if (fullPath) return fullPath_;
+
+    if (path_.size() >= 2) return path_[path_.size() - 2];
+
+    return path_.back();
+}
+
+bool StructuredDataName::operator==(const StructuredDataName& other)
+{
+    return fullPath_ == other.fullPath_ && name_ == other.name_
+        && path_.size() == other.path_.size();
+}
+
+////////////////////////////
 
 StructuredDataDelegate*
 StructuredDataDelegate::getDelegate(StructuredData& sd) const
@@ -115,26 +173,59 @@ StructuredDataDelegate::getDelegate(StructuredData& sd) const
     return sd.delegate_;  // just because we're friends
 }
 
+void StructuredDataDelegate::setSDName(StructuredData& sd, const StructuredDataName& name) const
+{
+    sd.name_ = name;     // take advantage of our friendship. again.
+}
 
+////////////////////////////
+
+/** Implement the StructuredDataDelegate interface via internal json. */
 class JsonDataDelegate : public StructuredDataDelegate
 {
 public:
     JsonDataDelegate();
     virtual ~JsonDataDelegate();
 
-    virtual bool add(const std::string& name, int intValue);
-    virtual bool add(const std::string& name, const std::string& value);
-    virtual bool add(const std::string& name, const StructuredData& value);
-    virtual bool get(const std::string& name, int& intValue) const;
-    virtual bool get(const std::string& name, std::string& value) const;
-    virtual bool get(const std::string& name, StructuredData& value) const;
+    virtual bool add(const StructuredDataName& name, int intValue);
+    virtual bool add(const StructuredDataName& name, const std::string& value);
+    virtual bool add(const StructuredDataName& name, const StructuredData& value);
+    virtual bool addArray(const StructuredDataName& name);
+    virtual bool get(const StructuredDataName& name, int& intValue) const;
+    virtual bool get(const StructuredDataName& name, std::string& value) const;
+    virtual bool get(const StructuredDataName& name, StructuredData& value) const;
+    virtual bool getArray(const StructuredDataName& name, 
+                          std::vector<std::string>& values) const;
 
-    virtual bool parse(const std::string& name, const std::string& strData);
-    virtual bool unparse(const std::string& name, std::string& strData);
+    virtual bool parse(const StructuredDataName& name, const std::string& strData);
+    virtual bool unparse(const StructuredDataName& name, std::string& strData);
 
-    virtual bool remove(const std::string& name);
+    virtual bool remove(const StructuredDataName& name);
 
-    virtual Type type(const std::string& name);
+    virtual Type type(const StructuredDataName& name);
+
+private:
+    const Json::Value* getJsonPtr(const StructuredDataName& name,
+                                  bool pathOnly = false) const;
+
+    /** Get the JSON value with a given name.
+     *  Deprecated, as getJsonPtr is faster and preferred.
+     *  This is an internal only method (thus private).
+     *
+     *  TODO support arrays:
+     *  An idea is to always init json_ as an array and for non-array SDs just
+     *  use element 0.
+     *  @param name  Name to add.
+     *  @param value The JSON value is returned into this element.  If this 
+     *               method returns false, then this parameter is set to the
+     *               last value (in the hierarchy) that was found.
+     *  @param pathOnly If true, get the value of the "container" that holds name, 
+     *                  which is used when adding a new element with a given name.
+     *                  If false, gets the value of name.
+     *  @return true if the named value was found, otherwise false.
+     */
+    bool getJsonValue(const StructuredDataName& name, Json::Value& value,
+                      bool pathOnly = false) const;
 
 private:
     Json::Value& json_;
@@ -142,8 +233,9 @@ private:
 
 
 JsonDataDelegate::JsonDataDelegate()
-    : json_(*new Json::Value)
+    : json_(*new Json::Value(Json::objectValue))
 {
+    //TODO possibly set json_ name
 }
 
 JsonDataDelegate::~JsonDataDelegate()
@@ -151,115 +243,341 @@ JsonDataDelegate::~JsonDataDelegate()
     delete &json_;
 }
 
-bool JsonDataDelegate::add(const std::string& name, int intValue)
+bool JsonDataDelegate::add(const StructuredDataName& name, int intValue)
 {
-    json_[name] = intValue;
+    if (name.getPath().empty())
+    {
+        json_[name.getName()] = intValue;
+    }
+    else
+    {
+        Json::Value* val = (Json::Value*) getJsonPtr(name, true);
+        if (!val) return false;
+        if (name.getName().empty())
+        {
+            if (val->isArray())
+            {
+                Json::Value retval = val->append(intValue);
+                if (retval.isNull())
+                {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            (*val)[name.getName()] = intValue;
+        }
+    }
+
     return true;
 }
 
-bool JsonDataDelegate::add(const std::string& name, const std::string& value)
+// To add to an array, getPath() cannot be empty, for example "myarr." or "myobj.myarr."
+bool JsonDataDelegate::add(const StructuredDataName& name, const std::string& value)
 {
-    json_[name] = value;
+    if (name.getPath().empty())
+    {
+        json_[name.getName()] = value;
+    }
+    else
+    {
+#if 1
+        Json::Value* val = (Json::Value*) getJsonPtr(name, true);
+        if (!val) return false;
+        if (name.getName().empty())
+        {
+            if (val->isArray())
+            {
+                Json::Value retval = val->append(value);
+                if (retval.isNull())
+                {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            (*val)[name.getName()] = value;
+        }
+#else
+        Json::Value val;
+        if (!getJsonValue(name, val, true)) return false;  // container not found, cannot add
+        if (name.getName().empty())
+        {
+            std::string arrName = name.getPath(false);
+            if (val[arrName].isArray())
+            {
+                Json::Value retval = val[arrName].append(value);
+                if (retval.isNull())
+                {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            val[name.getName()] = value;
+        }
+#endif
+    }
+
     return true;
 }
 
-bool JsonDataDelegate::add(const std::string& name, const StructuredData& value)
+bool JsonDataDelegate::add(const StructuredDataName& name, const StructuredData& value)
 {
     //TODO Check that value also has a JsonDataDelegate.  Cannot mix delegates.
     StructuredDataDelegate* delegate = getDelegate(const_cast<StructuredData&>(value));
     JsonDataDelegate* jsonDelegate = dynamic_cast<JsonDataDelegate *>(delegate);
-    json_[name] = jsonDelegate->json_;
+
+    if (name.getPath().empty())
+    {
+        json_[name.getName()] = jsonDelegate->json_;
+    }
+    else
+    {
+        Json::Value* val = (Json::Value*) getJsonPtr(name, true);
+        if (!val) return false;
+        if (name.getName().empty())
+        {
+            if (val->isArray())
+            {
+                Json::Value retval = val->append(jsonDelegate->json_);
+                if (retval.isNull())
+                {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            (*val)[name.getName()] = jsonDelegate->json_;
+        }
+    }
 
     return true;
 }
 
-bool JsonDataDelegate::get(const std::string& name, int& intValue) const
+bool JsonDataDelegate::addArray(const StructuredDataName& name)
 {
-    if (json_.isMember(name))
+    if (name.getPath().empty())
     {
-        intValue = json_[name].asInt();
-        return true;
+        json_[name.getName()] = Json::Value(Json::arrayValue);
     }
-    return false;
+    else
+    {
+        Json::Value val;
+        if (!getJsonValue(name, val, true)) return false;  // container not found, cannot add
+        val[name.getName()] = Json::Value(Json::arrayValue);
+    }
+
+    return true;
 }
 
-bool JsonDataDelegate::get(const std::string& name, std::string& value) const
+bool JsonDataDelegate::get(const StructuredDataName& name, int& intValue) const
 {
-    if (json_.isMember(name))
+    Json::Value* val = (Json::Value*) getJsonPtr(name, true);
+    if (!val) return false;
+    if (val->isArray())
     {
-        value = json_[name].asString();
-        return true;
+        if (name.getName().empty()) return false;
+        int idx = 0;
+        std::istringstream iss(name.getName());
+        iss >> idx;
+        intValue = (*val)[idx].asInt();
+    } else {
+        intValue = (*val)[name.getName()].asInt();
     }
-    return false;
+
+    return true;
 }
 
-bool JsonDataDelegate::get(const std::string& name, StructuredData& value) const
+bool JsonDataDelegate::get(const StructuredDataName& name, std::string& value) const
 {
-    if (!json_.isMember(name))
+    Json::Value* val = (Json::Value*) getJsonPtr(name, true);
+    if (!val) return false;
+    if (val->isArray())
     {
-        return false;
+        if (name.getName().empty()) return false;
+        int idx = 0;
+        std::istringstream iss(name.getName());
+        iss >> idx;
+        value = (*val)[idx].asString();
+    } else {
+        value = (*val)[name.getName()].asString();
     }
 
+    return true;
+}
+
+bool JsonDataDelegate::get(const StructuredDataName& name, StructuredData& value) const
+{
+    Json::Value* val = (Json::Value*) getJsonPtr(name, true);
+    if (!val) return false;
     //TODO Check that value also has a JsonDataDelegate.  Cannot mix delegates.
     JsonDataDelegate* delegate = dynamic_cast<JsonDataDelegate *>(getDelegate(value));
-    delegate->json_ = json_[name];
+
+    if (val->isArray())
+    {
+        if (name.getName().empty()) return false;
+        int idx = 0;
+        std::istringstream iss(name.getName());
+        iss >> idx;
+        delegate->json_ = (*val)[idx];
+    } else {
+        delegate->json_ = (*val)[name.getName()];
+    }
+    setSDName(value, name);
+
     return true;
 }
 
-bool JsonDataDelegate::parse(const std::string& name, const std::string& strData)
+bool JsonDataDelegate::getArray(const StructuredDataName& name, 
+                                std::vector<std::string>& values) const
+{
+    if (name.getName().empty()) return false;
+
+    Json::Value* val = (Json::Value*) getJsonPtr(name);
+    if (!val || !val->isArray()) return false;
+    for (int idx = 0; idx < (int)val->size(); ++idx)
+    {
+        Json::Value& jval = (*val)[idx];
+        if (jval.isConvertibleTo(Json::stringValue))
+        {
+            values.push_back(jval.asString());
+        } else {
+            Json::FastWriter writer;
+            std::string strData = writer.write(jval);
+            values.push_back(strData);
+        }
+    }
+
+    return true;
+}
+
+const Json::Value*
+JsonDataDelegate::getJsonPtr(const StructuredDataName& name, bool pathOnly) const
+{
+    const Json::Value* retval = 0;
+    const std::vector<std::string>& names = name.getComponents();
+    size_t numElements = names.size();
+    if (numElements == 0) return retval;
+    if (pathOnly) --numElements;
+
+    //TODO should we check json_.isNull()?
+    retval = &json_;
+    for (size_t idx = 0; idx < numElements; ++idx)
+    {
+        retval = retval->find(names[idx].c_str(), names[idx].c_str() + names[idx].size());
+        if (!retval) break;
+    }
+
+    return retval;
+}
+
+bool JsonDataDelegate::getJsonValue(const StructuredDataName& name, Json::Value& value,
+                                    bool pathOnly) const
+{
+    const std::vector<std::string>& names = name.getComponents();
+    size_t numElements = names.size();
+    if (numElements == 0) return false;
+    if (pathOnly)
+    {
+        --numElements;
+        if (names.back().empty())
+        {
+            if (numElements > 0) --numElements;
+        }
+    }
+
+    //TODO should we check json_.isNull()?
+    value = json_;
+    for (size_t idx = 0; idx < numElements; ++idx)
+    {
+        if (!value.isMember(names[idx])) return false;
+        value = value[names[idx]];
+    }
+
+    return true;
+}
+
+bool JsonDataDelegate::parse(const StructuredDataName& name, const std::string& strData)
 {
     if (strData.empty())
     {
         return false;
     }
 
+    Json::Value receiveVal;
+    if (!name.empty())
+    {
+        if (!getJsonValue(name, receiveVal)) return false;
+    }
+
     Json::Value value;
     Json::Reader reader(Json::Features::strictMode());
     if (!reader.parse(strData, value, false))
     {
+        std::cout << "Error parsing JSON:\n" << reader.getFormattedErrorMessages() << std::endl;
         return false;
     }
+
+    if (name.empty())
+    {
+        json_ = value;
+    } else {
+        receiveVal = value;
+    }
+#if 0
     if (name.empty())
     {
         json_ = value;
     } else {
         json_[name] = value;
     }
+#endif
     return true;
 }
 
-bool JsonDataDelegate::unparse(const std::string& name, std::string& strData)
+bool JsonDataDelegate::unparse(const StructuredDataName& name, std::string& strData)
 {
     if (name.empty())
     {
         Json::FastWriter writer;
         strData = writer.write(json_);
     } else {
-        if (type(name) == NOTFOUND) return false;
+        Json::Value value;
+        if (!getJsonValue(name, value)) return false;
 
         Json::FastWriter writer;
-        strData = writer.write(json_[name]);
+        strData = writer.write(value);
     }
     return true;
 }
 
-bool JsonDataDelegate::remove(const std::string& name)
+bool JsonDataDelegate::remove(const StructuredDataName& name)
 {
-    if (json_.removeMember(name) == Json::Value::null)
+    Json::Value value;
+    if (!getJsonValue(name, value, true)) return false;  // container not found
+
+    if (value.removeMember(name.getName()) == Json::Value::null)
     {
         return false;
     }
     return true;
 }
 
-StructuredDataDelegate::Type JsonDataDelegate::type(const std::string& name)
+StructuredDataDelegate::Type
+JsonDataDelegate::type(const StructuredDataName& name)
 {
-    StructuredDataDelegate::Type retType = STRING;
-    Json::Value jsonValue = json_[name];
+    StructuredDataDelegate::Type retType = NOTFOUND;
+    Json::Value jsonValue;
+    if (!getJsonValue(name, jsonValue)) return retType;
+
     switch (jsonValue.type())
     {
     case Json::nullValue:
-        retType = NOTFOUND;
         break;
     case Json::intValue:
     case Json::uintValue:
@@ -272,8 +590,8 @@ StructuredDataDelegate::Type JsonDataDelegate::type(const std::string& name)
     case Json::booleanValue:
         retType = INT;
         break;
-    case Json::arrayValue:   //TODO arrays are not yet supported
-        retType = NOTFOUND;
+    case Json::arrayValue:
+        retType = ARRAY;
         break;
     case Json::objectValue:
         retType = STRUCTUREDDATA;
@@ -283,7 +601,7 @@ StructuredDataDelegate::Type JsonDataDelegate::type(const std::string& name)
     return retType;
 }
 
-////////////////////
+////////////////////////////
 
 StructuredData::StructuredData(const StructuredDataName& name,
                                const std::string& fromString,
@@ -293,7 +611,7 @@ StructuredData::StructuredData(const StructuredDataName& name,
 {
     if (!fromString.empty())
     {
-        Blob blob("serial", Blob::STRING, fromString);
+        Blob blob("", Blob::STRING, fromString);
         deserialize(blob);
     }
 }
@@ -307,11 +625,11 @@ bool StructuredData::add(const StructuredDataName& name, const Blob& blob)
 {
     if (blob.getType() == Blob::STRING)
     {
-        return delegate_->add(name.getName(), blob.getString());
+        return delegate_->add(name, blob.getString());
     }
     else if (blob.getType() == Blob::JSON)
     {
-        return delegate_->parse(name.getName(), blob.getString());
+        return delegate_->parse(name, blob.getString());
     }
 
     return false;
@@ -319,23 +637,39 @@ bool StructuredData::add(const StructuredDataName& name, const Blob& blob)
 
 bool StructuredData::add(const StructuredDataName& name, const StructuredData& data)
 {
-    return delegate_->add(name.getName(), data);
+    return delegate_->add(name, data);
 }
 
 bool StructuredData::add(const StructuredDataName& name, int intValue)
 {
-    return delegate_->add(name.getName(), intValue);
+    return delegate_->add(name, intValue);
 }
 
 bool StructuredData::add(const StructuredDataName& name, const std::string& value)
 {
-    return delegate_->add(name.getName(), value);
+    return delegate_->add(name, value);
+}
+
+bool StructuredData::addArray(const StructuredDataName& name)
+{
+    StructuredDataDelegate::Type sdType = delegate_->type(name);
+
+    if (sdType == StructuredDataDelegate::ARRAY)
+    {
+        return true;	// Name already exists as an array, so good.
+    }
+    else if (sdType != StructuredDataDelegate::NOTFOUND)
+    {
+        return false;	// Name already exists but is not an array. Not so good.
+    }
+
+    return delegate_->addArray(name);
 }
 
 bool StructuredData::get(const StructuredDataName& name, Blob& blob) const
 {
     std::string strData;
-    if (delegate_->get(name.getName(), strData))
+    if (delegate_->get(name, strData))
     {
         blob = Blob(name.getName(true), Blob::STRING, strData);
         return true;
@@ -346,17 +680,17 @@ bool StructuredData::get(const StructuredDataName& name, Blob& blob) const
 
 bool StructuredData::get(const StructuredDataName& name, StructuredData& data) const
 {
-    return delegate_->get(name.getName(), data);
+    return delegate_->get(name, data);
 }
 
 bool StructuredData::get(const StructuredDataName& name, int& intValue) const
 {
-    return delegate_->get(name.getName(), intValue);
+    return delegate_->get(name, intValue);
 }
 
 bool StructuredData::get(const StructuredDataName& name, std::string& value) const
 {
-    return delegate_->get(name.getName(), value);
+    return delegate_->get(name, value);
 }
 
 std::string
@@ -364,7 +698,7 @@ StructuredData::get(const StructuredDataName& name,
                     const std::string& defValue) const
 {
     std::string strval;
-    if (delegate_->get(name.getName(), strval))
+    if (delegate_->get(name, strval))
     {
         return strval;
     }
@@ -372,15 +706,25 @@ StructuredData::get(const StructuredDataName& name,
     return defValue;
 }
 
+bool StructuredData::getArray(const StructuredDataName& name, 
+                              std::vector<std::string>& values) const
+{
+    return delegate_->getArray(name, values);
+}
+
+bool StructuredData::isArray(const StructuredDataName& name) const
+{
+    return delegate_->type(name) == StructuredDataDelegate::ARRAY;
+}
 
 bool StructuredData::remove(const StructuredDataName& name)
 {
-    return delegate_->remove(name.getName());
+    return delegate_->remove(name);
 }
 
 bool StructuredData::set(const StructuredDataName& name, const Blob& blob)
 {
-    if (delegate_->type(name.getName()) != StructuredDataDelegate::NOTFOUND)
+    if (delegate_->type(name) != StructuredDataDelegate::NOTFOUND)
     {
         return add(name, blob);
     }
@@ -389,7 +733,7 @@ bool StructuredData::set(const StructuredDataName& name, const Blob& blob)
 
 bool StructuredData::set(const StructuredDataName& name, const StructuredData& data)
 {
-    if (delegate_->type(name.getName()) != StructuredDataDelegate::NOTFOUND)
+    if (delegate_->type(name) != StructuredDataDelegate::NOTFOUND)
     {
         return add(name, data);
     }
@@ -398,7 +742,7 @@ bool StructuredData::set(const StructuredDataName& name, const StructuredData& d
 
 bool StructuredData::set(const StructuredDataName& name, int intValue)
 {
-    if (delegate_->type(name.getName()) != StructuredDataDelegate::NOTFOUND)
+    if (delegate_->type(name) != StructuredDataDelegate::NOTFOUND)
     {
         return add(name, intValue);
     }
@@ -407,7 +751,7 @@ bool StructuredData::set(const StructuredDataName& name, int intValue)
 
 bool StructuredData::set(const StructuredDataName& name, const std::string& value)
 {
-    if (delegate_->type(name.getName()) != StructuredDataDelegate::NOTFOUND)
+    if (delegate_->type(name) != StructuredDataDelegate::NOTFOUND)
     {
         return add(name, value);
     }
@@ -418,9 +762,9 @@ bool StructuredData::set(const StructuredDataName& name, const std::string& valu
 bool StructuredData::serialize(Blob& blob)
 {
     std::string strData;
-    if (delegate_->unparse("", strData))
+    if (delegate_->unparse(StructuredDataName(""), strData))
     {
-        blob = Blob(name_.getName(), Blob::STRING, strData);
+        blob = Blob(name_.getName(true), Blob::STRING, strData); // or JSON?
         return true;
     }
     return false;
@@ -428,7 +772,11 @@ bool StructuredData::serialize(Blob& blob)
 
 bool StructuredData::deserialize(const Blob& blob)
 {
-    //TODO check blob type is STRING
+    if (blob.getType() != Blob::STRING && blob.getType() != Blob::JSON)
+    {
+        return false;
+    }
+
     name_ = StructuredDataName(blob.getName());
-    return delegate_->parse(name_.getName(), blob.getString());
+    return delegate_->parse(name_, blob.getString());
 }

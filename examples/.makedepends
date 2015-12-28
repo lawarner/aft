@@ -1,0 +1,6 @@
+sc_testcase.o: sc_testcase.cpp ../src/base/blob.h \
+ ../src/core/basiccommands.h ../src/base/command.h ../src/base/result.h \
+ ../src/base/tobject.h ../src/base/serialize.h \
+ ../src/base/tobjectiterator.h ../src/core/fileconsumer.h \
+ ../src/base/consumer.h ../src/base/producttype.h ../src/core/logger.h \
+ ../src/core/testcase.h

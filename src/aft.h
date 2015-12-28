@@ -23,8 +23,9 @@
  *  @brief AFT : Abstract Framework for Testing
  *
  *  AFT is a low-level, portable framework used to automate executing various
- *  system and module tests.  Although the majority of classes are abstract, aft
- *  supports specific functionality via plug-ins.
+ *  system and module tests.  Although the majority of classes are abstract,
+ *  implementations are provided using standard C++ and STL.  For platform specific
+ *  code, AFT supports a plug-in architecture.
  */
 
 /**

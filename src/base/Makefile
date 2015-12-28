@@ -25,9 +25,9 @@ INCDIR = $(TOP)/src
 #AR = ar
 CC = g++
 #CCFLAGS = -Wall -g -O2 -I$(TOP) -I$(INCDIR)
-CCFLAGS = -Wall -g -fPIC -I$(TOP) -I$(INCDIR)
+CCFLAGS = -std=c++11 -Wall -g -fPIC -I$(TOP) -I$(INCDIR)
 
-OBJS := blob.o consumer.o context.o factory.o plugin.o producer.o propertyhandler.o \
+OBJS := blob.o command.o consumer.o context.o factory.o plugin.o producer.o propertyhandler.o \
     result.o structureddata.o thread.o tobasictypes.o tobject.o tobjectiterator.o
 
 SRCS := $(OBJS:.o=.cpp)

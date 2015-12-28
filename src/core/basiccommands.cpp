@@ -16,10 +16,18 @@
 
 #include "base/context.h"
 #include "basiccommands.h"
+#include "commandcontext.h"
 #include "logger.h"
 using namespace aft;
 using namespace aft::core;
 
+
+LogCommand::LogCommand(const std::string& message)
+    : Command("Log")
+    , message_(message)
+{
+    parameters_.push_back(message_);
+}
 
 const base::Result
 LogCommand::process(base::Context* context)
@@ -32,6 +40,14 @@ LogCommand::process(base::Context* context)
         aftlog << "Command logger: " << message_ << std::endl;
     }
 
+    return base::Result(true);
+}
+
+const base::Result
+LogCommand::setup(base::Context* context)
+{
+    CommandContext* cmdcontext = dynamic_cast<CommandContext *>(context);
+    //TODO get and set 
     return base::Result(true);
 }
 

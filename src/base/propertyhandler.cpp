@@ -43,13 +43,24 @@ PropertyHandler::~PropertyHandler()
     delete container_;
 }
 
-const std::string&
-PropertyHandler::getValue(const std::string& name) const
+bool
+PropertyHandler::getValue(const std::string& name, std::string& value) const
 {
     map<string,string>::const_iterator it = container_->nameValues.find(name);
-    if (it == container_->nameValues.end()) return emptyString;
+    if (it == container_->nameValues.end())  return false;
 
-    return it->second;
+    value = it->second;
+    return true;
+}
+
+const std::string&
+PropertyHandler::getValue(const std::string& name,
+                          const std::string& defValue) const
+{
+    map<string,string>::const_iterator it = container_->nameValues.find(name);
+    if (it != container_->nameValues.end())  return it->second;
+
+    return defValue.empty() ? emptyString : defValue;
 }
 
 void
@@ -60,10 +71,15 @@ PropertyHandler::setValue(const std::string& name, const std::string& value)
 
 
 TObject&
-PropertyHandler::handle(Context* context, const TObject& testObject)
+PropertyHandler::handle(Context* context, const TObject& tObject)
 {
-    if (context) return context->apply(testObject);
+    if (context) return context->apply(tObject);
 
-    return const_cast<TObject&>(testObject);
+    return const_cast<TObject&>(tObject);
 }
 
+TObject&
+PropertyHandler::handle(const TObject& tObject)
+{
+    return const_cast<TObject&>(tObject);
+}

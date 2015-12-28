@@ -16,6 +16,7 @@
 
 #include "base/blob.h"
 #include "base/context.h"
+#include "base/structureddata.h"
 #include "basiccommands.h"
 #include "basicfactory.h"
 #include "logger.h"
@@ -23,20 +24,13 @@ using namespace aft;
 using namespace aft::core;
 
 
-static base::TObject* builtinCommand(const std::string& command)
+static base::TObject* builtinCommand(const std::string& command,
+                                     const std::vector<std::string>& parameters)
 {
-    size_t space = command.find(' ');
-    std::string cmd = command.substr(0, space);
-    std::string params;
-    if (space != std::string::npos)
-    {
-        params = command.substr(space + 1);
-    }
-
     base::TObject* tobj = 0;
-    if (cmd == "Log")
+    if (command == "Log")
     {
-        tobj = new LogCommand(params);
+        tobj = new LogCommand(parameters[0]);
     }
 
     return tobj;
@@ -67,7 +61,14 @@ BasicCommandFactory::construct(const std::string& name, const base::Blob* blob,
         //TODO general json parser
         break;
     case base::Blob::STRING:
-        retval = builtinCommand(blob->getString());
+    {
+        base::StructuredData sd("");
+        if (!sd.deserialize(*blob)) break;
+
+        std::vector<std::string> parameters;
+        sd.getArray("parameters", parameters);
+        retval = builtinCommand(sd.get("name"), parameters);
+    }
         break;
     default:
         break;

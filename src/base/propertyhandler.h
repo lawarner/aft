@@ -42,16 +42,24 @@ public:
 
     /** Return the name of the handler */
     const std::string& getName() const { return handlerName_; }
+
+    /** Get the value of a property.
+     *  @return true if value was retrieved, otherwise false.
+     */
+    bool getValue(const std::string& name, std::string& value) const;
+
     /** Get the value of a property.
      *  @return value associated with name, or empty string if no value is
      *          associated.
      */
-    const std::string& getValue(const std::string& name) const;
+    const std::string& getValue(const std::string& name,
+                                const std::string& defValue = std::string()) const;
+
     /** Associate (bind) a named value */
     void setValue(const std::string& name, const std::string& value);
 
-    virtual TObject& handle(const TObject& testObject) = 0;
-    virtual TObject& handle(Context* context, const TObject& testObject);
+    virtual TObject& handle(const TObject& tObject);
+    virtual TObject& handle(Context* context, const TObject& tObject);
 
 private:
     std::string handlerName_;

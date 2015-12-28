@@ -18,6 +18,7 @@
 
 #include <base/blob.h>
 #include <core/basiccommands.h>
+#include <core/commandcontext.h>
 #include <core/fileconsumer.h>
 #include <core/fileproducer.h>
 #include <core/stringconsumer.h>
@@ -117,6 +118,18 @@ TEST(CorePackageTest, FileProducerFlowWords)
     EXPECT_TRUE(fileprod.registerDataCallback(&reader));
     fileprod.flowData();
     EXPECT_TRUE(fileprod.unregisterDataCallback(&reader));
+}
+
+TEST(CorePackageTest, CommandContext)
+{
+    const std::string COMMAND("Open");
+    const std::string ARGNAME("url");
+    const std::string URL("http://localhost:8080");
+    CommandContext ctx;
+    EXPECT_TRUE(ctx.setArgument(COMMAND, ARGNAME, URL));
+
+    std::string url = ctx.getArgument(COMMAND, ARGNAME);
+    EXPECT_EQ(URL, url);
 }
 
 TEST(CorePackageTest, BasicCommands)

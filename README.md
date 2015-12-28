@@ -12,13 +12,13 @@ automated tests is abstracted from any underlying specifics, such as platform,
 database, transport, etc.  AFT includes a plug-in architecture to apply testing to 
 specific environments.  An emulator can be plugged in for most components.
 
-The primary intended usage of AF is for system testing.  It is most convienent when
+The primary intended usage of AFT is for system testing.  It is most convienent when
 inserted into a system of interconnected components (processes) and emulates one or
 more of these components.  It is used for testing running components and sub-systems.
 
 AFT is not intented as a unit test framework (for C++).  There are many good C++ unit 
 test frameworks such as googletest, cppunit and cxxunit.  This project uses googletest
-for the various AFT C++ class libraries.
+for unit testing the various AFT C++ class libraries.
 
 ## Building
 
@@ -26,7 +26,7 @@ The main library and functionality relies on very few dependencies:
 - g++
 - GNU make
 
-The unit tests depend on googletest, but these are optional and not run by the
+The unit tests depend on googletest, but these are optional and can be removed from 
 default targets.
 
 The plugin directory and specific UI tools will have additional dependencies, as needed.

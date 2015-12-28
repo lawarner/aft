@@ -21,6 +21,9 @@
 using namespace aft::base;
 
 
+MecFactory* MecFactory::instance_ = 0;
+
+
 BaseFactory::BaseFactory(const std::string& category, const std::string& name)
     : category_(category)
     , factoryName_(name)
@@ -74,6 +77,7 @@ void BaseFactory::setDeinit(void* deinit)
     deinitPointer_ = deinit;
 }
 
+////////////////////////////////////////
 
 MecFactory::MecFactory()
 {
@@ -81,6 +85,16 @@ MecFactory::MecFactory()
 
 MecFactory::~MecFactory()
 {
+}
+
+MecFactory* MecFactory::instance()
+{
+    if (!instance_)
+    {
+        instance_ = new MecFactory;
+    }
+
+    return instance_;
 }
 
 PluginContract*

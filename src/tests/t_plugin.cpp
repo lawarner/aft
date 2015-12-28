@@ -24,7 +24,6 @@
 using namespace aft::base;
 
 
-
 namespace
 {
 
@@ -61,12 +60,12 @@ TEST(PluginTest, MecFactoryFactory)
     BaseFactory* factory = plugin.getFactory();
     EXPECT_TRUE(factory != 0);
 
-    MecFactory mec;   // probably will become a singleton interface
-    mec.addFactory(factory);
+    MecFactory* mec = MecFactory::instance();
+    mec->addFactory(factory);
 
     const std::string objectName("anObject");
     Blob blob("valueBlob", Blob::STRING, "Sample TObject");
-    TObject* tobj = mec.construct(factory->category(), objectName, &blob);
+    TObject* tobj = mec->construct(factory->category(), objectName, &blob);
     EXPECT_TRUE(tobj != 0);
     EXPECT_EQ(tobj->getName(), objectName);
 
@@ -74,21 +73,21 @@ TEST(PluginTest, MecFactoryFactory)
     tobj->run();
     free(tobj);
 
-    mec.removeFactory(factory);
+    mec->removeFactory(factory);
     plugin.unloadPlugins();
 }
 
 TEST(PluginTest, MecFactoryBundle)
 {
-    MecFactory mec;
-    PluginContract* plugin = mec.loadBundle(BUNDLE_NAME, ".");
+    MecFactory* mec = MecFactory::instance();
+    PluginContract* plugin = mec->loadBundle(BUNDLE_NAME, ".");
     EXPECT_TRUE(plugin != 0);
     FactoryContract* factory = plugin->getFactory();
     EXPECT_TRUE(factory != 0);
 
     const std::string objectName("anObject");
     Blob blob("valueBlob", Blob::STRING, "Sample TObject");
-    TObject* tobj = mec.construct(factory->category(), objectName, &blob);
+    TObject* tobj = mec->construct(factory->category(), objectName, &blob);
     EXPECT_TRUE(tobj != 0);
     EXPECT_EQ(tobj->getName(), objectName);
 
@@ -96,7 +95,7 @@ TEST(PluginTest, MecFactoryBundle)
     tobj->run();
     free(tobj);
 
-    EXPECT_TRUE(mec.unloadBundle(plugin));
+    EXPECT_TRUE(mec->unloadBundle(plugin));
     free(plugin);
 }
 

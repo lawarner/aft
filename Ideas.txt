@@ -7,6 +7,11 @@ Next todo:
 - more prods, cons (filter, queue, mux, etc.)
 - scenario test: create objects (testcase), deserialize, serialize and run.
 
+- test scenario:
+  create a simple test suite, serialize to a filecons
+  deserizalize test suite from fileprod
+  measure run load vs. number of running threads
+
 Random Ideas:
 ------------
 Environmental superclass for contextual side of things, i.e., non-TObjects.
@@ -24,6 +29,9 @@ Import hints for tests from unit tests defined using googletest, or other framew
 Provide a import/export using protobuf as syntax
 
 Switch to CMake
+
+Add Blob type of StructuredData
+- (de)serialize can check if blob is string or SD
 
 -----------------------------------------------------------------
 Producer, Consumer, Processor interfaces  (short lingo: prod, cons, proc)
@@ -122,3 +130,7 @@ styles can exist similar to css.
 -----------------------------------------------------------------
 Blobs could have a serialized/non-serialized form.
 There must be some rule, api, mapping, etc. to get from one form to the other.
+-----------------------------------------------------------------
+Subclassed contexts may become interfaces instead, allowing contexts
+to be a collection of interfaces, i.e., multiple behavior.
+-----------------------------------------------------------------

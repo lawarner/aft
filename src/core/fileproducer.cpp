@@ -118,7 +118,7 @@ public:
 
             if (retval)
             {
-                Blob retBlob("file", Blob::STRING, buffer_);
+                Blob retBlob("", Blob::STRING, buffer_);
                 blob = retBlob;
             }
 
