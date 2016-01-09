@@ -14,6 +14,8 @@
  *   limitations under the License.
  */
 
+#include <unistd.h>
+
 #include <core/logger.h>
 #include <gtest/gtest.h>
 using namespace aft;
@@ -23,7 +25,10 @@ namespace
 
 TEST(LoggerTest, TerminalLog)
 {
-    ASSERT_TRUE(core::aftlog != 0);
+    char* currDir = getcwd(0, 0);
+    std::cout << "Current Directory is " << currDir << std::endl;
+    
+    ASSERT_TRUE(&core::aftlog != 0);
     core::aftlog << "This is a log message." << std::endl;
 }
 

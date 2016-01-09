@@ -22,9 +22,15 @@
 using namespace aft::base;
 using namespace aft::osdep;
 
+#if __APPLE__
+static const char* DEFAULT_PATH = "/opt/local/lib/aft/plugins";
+static const char* PATH_SEPARATOR = "/";
+static const char* SO_EXT = ".dylib";
+#else
 static const char* DEFAULT_PATH = "/usr/local/lib/aft/plugins";
 static const char* PATH_SEPARATOR = "/";
 static const char* SO_EXT = ".so";
+#endif
 
 
 class aft::osdep::PosixPluginImpl

@@ -30,7 +30,7 @@ public:
         : tObject_(tObject)
         , context_(context)
         , callback_(0)
-        , threadId_(-1)
+        , threadId_(PTHREAD_INIT)
         {  }
 
     aft::base::TObject* tObject_;

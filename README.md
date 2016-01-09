@@ -1,11 +1,10 @@
 # aft
 Abstract Framework for Testing
 
-### NOTE THIS IS NOT WORKING YET
+#### Note that this project is in early stages.
+##### Only first simple scenario written.
+##### base and core classes are still in flux
 
-##### Please note that this project is in early stages.
-##### Only base and core classes are being written now.
-##### Try again later.
 
 AFT is a toolkit for automated testing.  The core logic of defining and executing 
 automated tests is abstracted from any underlying specifics, such as platform, 
@@ -22,6 +21,8 @@ for unit testing the various AFT C++ class libraries.
 
 ## Building
 
+### Linux
+
 The main library and functionality relies on very few dependencies:
 - g++
 - GNU make
@@ -32,6 +33,14 @@ default targets.
 The plugin directory and specific UI tools will have additional dependencies, as needed.
 
 Will probably switch the cmake when the project's structure gets more complex.
+
+### MacOSX
+
+An xcode workspace is in the aft/macosx folder, that contains the following xcode projects:
+- **libaft** Builds the static library.
+- **libafttests** Builds unit/module test programs.  The test programs depend on googletest so the project searches for
+  headers in /opt/local/include.  You need to copy libgtest.a to the aft/lib folder.  Or modify the project if you
+  have installed googletest elsewhere.
 
 ## History
 

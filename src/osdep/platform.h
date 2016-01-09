@@ -19,7 +19,13 @@
 #define PLATFORM_NAME "Posix"
 
 #define PosixPluginLoader PlatformPluginLoader
-#define PosixThreadHandler PlatformThreadHandler 
+#define PosixThreadHandler PlatformThreadHandler
+
+#if __APPLE__
+#define PTHREAD_INIT 0
+#else
+#define PTHREAD_INIT -1
+#endif
 
 #include "osdep/posix/posixpluginloader.h"
 #include "osdep/posix/posixthread.h"

@@ -27,6 +27,11 @@
 *.sdf
 *.suo
 
+# Mac
+.DS_Store
+Build/
+xcuserdata/
+
 # qt stuff
 build-*/
 *.pro.user

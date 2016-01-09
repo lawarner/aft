@@ -14,6 +14,8 @@
  *   limitations under the License.
  */
 
+////////////////////////////// TODO this needs a major rework.
+
 #include <algorithm>
 #include <cstdlib>
 #include <cstring>
@@ -34,7 +36,7 @@ const int core::Warning = 3;
 const int core::Error = 4;
 const int core::Fatal = 5;
 static const char* const LevelLetter = "TDIWEF";
-static const char* const LevelName[] = 
+static const char* const LevelName[] =
 {
     "Trace", "Debug", "Info", "Warning", "Error", "Fatal"
 };
@@ -49,7 +51,7 @@ static unsigned int getCurrentTime(char* buf, size_t bufSize)
     struct tm  tstruct;
     tstruct = *localtime(&now);
     strftime(buf, bufSize, "%Y-%m-%d.%X  ", &tstruct);
-    return strlen(buf);
+    return (unsigned int)strlen(buf);
 }
 
 
