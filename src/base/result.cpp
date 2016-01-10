@@ -25,6 +25,12 @@ Result::Result(ResultType type)
 
 }
 
+Result::Result(Blob* blob)
+    : type_(BLOB)
+{
+    setValue(blob);
+}
+
 Result::Result(bool value)
     : type_(BOOLEAN)
 {
@@ -57,6 +63,8 @@ Result::asString() const
         return "(unknown)";
     case FATAL:
         return "(FATAL)";
+    case BLOB:
+        return "(Blob)";
     case BOOLEAN:
         return (value_.flag_ ? "true" : "false");
     case COMMAND:
@@ -78,10 +86,18 @@ Result::getType() const
     return type_;
 }
 
+bool Result::getValue(Blob*& blob) const
+{
+    if (!isValueSet_ || type_ != BLOB) return false;
+
+    blob = value_.blob_;
+    return true;
+}
+
 bool Result::getValue(bool& value) const
 {
     if (!isValueSet_ || type_ != BOOLEAN) return false;
-
+    
     value = value_.flag_;
     return true;
 }
@@ -100,6 +116,13 @@ bool Result::getValue(TObject*& object) const
 
     object = value_.object_;
     return true;
+}
+
+void Result::setValue(Blob* blob)
+{
+    //TODO assert type is BLOB
+    value_.blob_ = blob;
+    isValueSet_ = true;
 }
 
 void Result::setValue(bool value)

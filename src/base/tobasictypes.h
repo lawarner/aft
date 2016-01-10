@@ -46,7 +46,10 @@ public:
     /** Run in the given context */
     virtual const Result run(Context* context);
 
-    /** Test if equal to another TOBool */
+    /** Test if equal to another TOBool.
+     *
+     *   If the boolean value_ is equal then the 2 TOBool's are considered equal.
+     */
     virtual bool operator==(const TOBool& other) const;
 
     // Implement SerializeContract

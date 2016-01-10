@@ -103,13 +103,18 @@ private:
 
 struct _Level { AftLogLevel level; };
 
-_Level loglevel(AftLogLevel level = Debug);
-Logger& operator<<(Logger& logger, _Level level);
-
 extern Logger& aftalert;
 extern Logger& aftaudit;
+
+//TODO remove this when Logger is rewritten
+#if __APPLE__
+#define loglevel(LEVEL) #LEVEL ": "
+extern std::ostream& aftlog;
+#else
+_Level loglevel(AftLogLevel level = Debug);
+Logger& operator<<(Logger& logger, _Level level);
 extern Logger& aftlog;
+#endif
 
 } // namespace core
 } // namespace aft
-

@@ -18,11 +18,14 @@
 
 #include "base/consumer.h"
 #include "base/producer.h"
+#include "base/result.h"
 #include "loghandler.h"
 #include "runcontext.h"
 using namespace aft;
 using namespace aft::core;
 
+
+static RunContext* globalInstance = 0;
 
 class aft::core::RunContextImpl
 {
@@ -31,8 +34,10 @@ public:
     ~RunContextImpl();
 
     LogHandler& logHandler_;
-    std::map<std::string, base::Consumer*> consumers_;
-    std::map<std::string, base::Producer*> producers_;
+    std::map<std::string, base::BaseConsumer*> consumers_;
+    std::map<std::string, base::BaseProducer*> producers_;
+    
+    base::Result lastResult_;
 };
 
 RunContextImpl::RunContextImpl(LogHandler& logHandler)
@@ -45,6 +50,14 @@ RunContextImpl::~RunContextImpl()
     delete &logHandler_;
 }
 
+RunContext* RunContext::global()
+{
+    if (!globalInstance)
+    {
+        globalInstance = new RunContext;
+    }
+    return globalInstance;
+}
 
 RunContext::RunContext()
     : impl_(*new RunContextImpl(*new LogHandler))
@@ -56,37 +69,65 @@ RunContext::~RunContext()
     delete &impl_;
 }
 
-void RunContext::addConsumer(const std::string& name, base::Consumer* consumer)
+void RunContext::addConsumer(const std::string& name, base::BaseConsumer* consumer)
 {
     impl_.consumers_[name] = consumer;
 }
 
-void RunContext::addProducer(const std::string& name, base::Producer* producer)
+void RunContext::addProducer(const std::string& name, base::BaseProducer* producer)
 {
     impl_.producers_[name] = producer;
 }
 
-base::Consumer*
+base::BaseConsumer*
 RunContext::getConsumer(const std::string& name)
 {
-    std::map<std::string,base::Consumer*>::iterator it = impl_.consumers_.find(name);
+    std::map<std::string,base::BaseConsumer*>::iterator it = impl_.consumers_.find(name);
     if (it == impl_.consumers_.end()) return 0;
 
     return it->second;
 }
 
-base::Producer*
+base::BaseProducer*
 RunContext::getProducer(const std::string& name)
 {
-    std::map<std::string,base::Producer*>::iterator it = impl_.producers_.find(name);
+    std::map<std::string,base::BaseProducer*>::iterator it = impl_.producers_.find(name);
     if (it == impl_.producers_.end()) return 0;
 
     return it->second;
+}
+
+base::Result&
+RunContext::getLastResult() const
+{
+    return impl_.lastResult_;
+}
+
+void RunContext::setLastResult(const base::Result& result)
+{
+    impl_.lastResult_ = result;
+}
+
+void RunContext::removeConsumer(const std::string& name)
+{
+    std::map<std::string,base::BaseConsumer*>::iterator it = impl_.consumers_.find(name);
+    if (it != impl_.consumers_.end())
+    {
+        impl_.consumers_.erase(it);
+    }
+}
+
+void RunContext::removeProducer(const std::string& name)
+{
+    std::map<std::string,base::BaseProducer*>::iterator it = impl_.producers_.find(name);
+    if (it != impl_.producers_.end())
+    {
+        impl_.producers_.erase(it);
+    }
 }
 
 void RunContext::setupLogs(const std::string& logConfig)
 {
     impl_.logHandler_.setup(logConfig);
 }
-
 

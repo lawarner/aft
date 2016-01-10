@@ -32,6 +32,7 @@ Switch to CMake
 
 Add Blob type of StructuredData
 - (de)serialize can check if blob is string or SD
+- maybe serialize can create a tree of blobs (using members vector) and then flatten
 
 -----------------------------------------------------------------
 Producer, Consumer, Processor interfaces  (short lingo: prod, cons, proc)
@@ -41,7 +42,7 @@ Proc == ProdCons == Filter == Robot
 
 Prod -> FilterProc -> Cons
 
-Prod1 --\___MergerProc -> Cons
+Prod1 --\__--> MergerProc -> Cons
 Prod2 --/
 
 Prod -> SplitProc ___/--> Cons1   // either or both paths taken
@@ -80,11 +81,12 @@ For now, it is:
 
 Need consts for TObjectTrue, TObjectFalse (TOBool), nil, etc.
 
+Some TObject's: Command, TestCase, TestSuite
 Here are some possible TObject's:
-          Actor, Command, Element, Endpoint, Logic (Process, Fork), Transport
+          Predicate
+          Actor, Element, Endpoint, Logic (Process, Fork), Transport
           Notice (Alert, Exception, Message), Lookup (Database, ...)
-          Location, Bound
-          TestCase, TestBundle, Log, Result
+          Location, Bound, Log, Result
 
 ---------------------------------------------------------------
 PlugIn factory interface, general extensibility.

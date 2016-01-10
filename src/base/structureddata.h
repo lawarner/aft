@@ -189,13 +189,13 @@ public:
     // heterogeneous.  Will probably just have an opaque json container.
     
     /** Add a named blob to the structured data.
-     *  @param name Name of the object.  If adding to an array, then name specifies
-     *              the array name plus a trailing dot (".").
+     *  @param name Name of the object.  If adding an element to an array, then name
+     *              specifies the array name plus a trailing dot (".").
      *  @return true if the blob was added, otherwise false.
      */
     bool add(const StructuredDataName& name, const Blob& blob);
 
-    /** Add a named sub-structured data to the structured data.
+    /** Add a named structured data as a member of this structured data.
      *
      *  Note that data must have the same delegate as 'this' */
     bool add(const StructuredDataName& name, const StructuredData& data);

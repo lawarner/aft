@@ -87,7 +87,7 @@ TestSuite::run(base::Context* context, bool stopOnError)
     }
     else
     {
-        aftlog << "Error: test suite \"" << getName() << "\" not opened." << std::endl;
+        if (children_) aftlog << "Error: test suite \"" << getName() << "\" not opened." << std::endl;
     }
 
     return result;

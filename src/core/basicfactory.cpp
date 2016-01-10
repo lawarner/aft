@@ -27,10 +27,30 @@ using namespace aft::core;
 static base::TObject* builtinCommand(const std::string& command,
                                      const std::vector<std::string>& parameters)
 {
-    base::TObject* tobj = 0;
+    base::Command* tobj = 0;
     if (command == "Log")
     {
         tobj = new LogCommand(parameters[0]);
+    }
+    else if (command == "Cons")
+    {
+        tobj = new ConsCommand(parameters[0],
+                               parameters.size() > 1 ? parameters[1] : "");
+        if (parameters.size() > 2)
+        {
+            base::Blob blobData("", base::Blob::STRING, parameters[2]);
+            tobj->setup(0, &blobData);
+        }
+    }
+    else if (command == "Prod")
+    {
+        tobj = new ProdCommand(parameters[0],
+                               parameters.size() > 1 ? parameters[1] : "");
+        if (parameters.size() > 2)
+        {
+            base::Blob blobData("", base::Blob::STRING, parameters[2]);
+            tobj->setup(0, &blobData);
+        }
     }
 
     return tobj;
@@ -76,5 +96,4 @@ BasicCommandFactory::construct(const std::string& name, const base::Blob* blob,
 
     return retval;
 }
-
 

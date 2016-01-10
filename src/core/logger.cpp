@@ -43,7 +43,11 @@ static const char* const LevelName[] =
 
 Logger& core::aftalert = *new Logger(ALERT);
 Logger& core::aftaudit = *new Logger(AUDIT, "aftaudit.log");
+#if __APPLE__
+std::ostream& core::aftlog = std::cout;
+#else
 Logger& core::aftlog = *new Logger(LOG /*, "aftlog.log"*/);
+#endif
 
 static unsigned int getCurrentTime(char* buf, size_t bufSize)
 {
@@ -174,9 +178,10 @@ void Logger::initStandardLoggers(const std::string& logConfig)
 // aftalert logger remains as tty  *new Logger(ALERT)
     if (aftaudit.is_open()) aftaudit.close();
     aftaudit.openLogFile(logConfig + "audit.log", true);
-
+#if !__APPLE__
     if (aftlog.is_open()) aftlog.close();
     aftlog.openLogFile(logConfig + "log.log", true);
+#endif
 }
 
 void Logger::setLogLevel(core::AftLogLevel level)
@@ -206,7 +211,7 @@ void Logger::writeLog(const std::string& msg)
     *this << msg << endl;
 }
 
-
+#if !__APPLE__
 _Level core::loglevel(AftLogLevel level)
 {
     _Level ret = { level };
@@ -219,3 +224,4 @@ Logger& core::operator<<(Logger& logger, _Level level)
     logger.setLogLevel(level.level);
     return logger;
 }
+#endif

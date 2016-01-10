@@ -50,6 +50,7 @@ void* runTObject(void* implData)
         impl.callback_->callback(&result);
     }
 
+    impl.tObject_->setState(TObject::FINISHED_GOOD);
     return 0;
 }
 
@@ -101,6 +102,7 @@ void PosixThreadHandler::stop(bool force)
     {
         const int killSignal = 9;
         pthread_kill(impl_.threadId_, killSignal);
+        impl_.tObject_->setState(TObject::FINISHED_BAD);
     }
 }
 
@@ -120,6 +122,7 @@ void PosixThreadHandler::run()
     if (status)
     {
         //TODO Log error
+        impl_.tObject_->setState(TObject::FINISHED_BAD);
         return;
     }
     impl_.threadId_ = tid;

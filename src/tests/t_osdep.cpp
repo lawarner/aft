@@ -33,9 +33,9 @@ public:
 class SampleCallback : public Callback
 {
     virtual void callback(Result *result)
-        {
-            std::cout << "Thread notified with result: " << result->getType() << std::endl;
-        }
+    {
+        std::cout << "Thread notified with result: " << result->getType() << std::endl;
+    }
 };
 
 
@@ -60,6 +60,7 @@ TEST(OsdepPackageTest, ThreadHandler)
     aThread->wait();
     toState = aThread->getState();
     std::cout << "Final state of thread: " << toState << std::endl;
+    EXPECT_EQ(TObject::FINISHED_GOOD, toState);
 }
 
 } // namespace

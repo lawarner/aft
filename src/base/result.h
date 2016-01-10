@@ -22,6 +22,7 @@ namespace aft
 namespace base
 {
 // Forward reference
+class Blob;
 class Command;
 class TObject;
 
@@ -37,6 +38,7 @@ public:
     {
         UNKNOWN = -1,
         FATAL,
+        BLOB,
         BOOLEAN,
         COMMAND,
         ITERATOR,
@@ -44,6 +46,7 @@ public:
     };
 
     Result(ResultType type = BOOLEAN);
+    Result(Blob* blob);
     Result(bool value);
     Result(Command* command);
     Result(TObject* object);
@@ -53,9 +56,11 @@ public:
     std::string asString() const;
 
     ResultType getType() const;
+    bool getValue(Blob*& blob) const;
     bool getValue(bool& value) const;
     bool getValue(Command*& command) const;
     bool getValue(TObject*& object) const;
+    void setValue(Blob* blob);
     void setValue(bool value);
     void setValue(Command* command);
     void setValue(TObject* object);
@@ -74,6 +79,7 @@ private:
     bool isValueSet_;
     union Values
     {
+        Blob* blob_;
         bool flag_;
         Command* command_;
         void* iterator_;

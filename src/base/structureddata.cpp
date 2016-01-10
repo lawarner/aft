@@ -777,6 +777,7 @@ bool StructuredData::deserialize(const Blob& blob)
         return false;
     }
 
-    name_ = StructuredDataName(blob.getName());
-    return delegate_->parse(name_, blob.getString());
+//    name_ = StructuredDataName(blob.getName());
+//    return delegate_->parse(name_, blob.getString());
+    return delegate_->parse("", blob.getString());
 }

@@ -119,12 +119,14 @@ bool TestCase::deserialize(const base::Blob& blob)
         return false;
     }
 
-    std::string category("Command");
+    const std::string category("Command");
     std::vector<std::string>::const_iterator it;
     for (it = cmds.begin(); it != cmds.end(); ++it)
     {
-        base::Blob params("", base::Blob::STRING, *it);
-        base::TObject* tobj = mec->construct(category, "Log", &params);
+        base::StructuredData sdParams("", *it);
+        std::string cmdName = sdParams.get("name");
+        base::Blob params(cmdName, base::Blob::STRING, *it);
+        base::TObject* tobj = mec->construct(category, cmdName, &params);
         if (!tobj)
         {
             aftlog << loglevel(Error) << "Cannot construct object" << std::endl;

@@ -42,8 +42,8 @@ public:
 
     /** Process the command according to context. */
     virtual const Result process(Context* context = 0) = 0;
-    /** Set up static info from context. */
-    virtual const Result setup(Context* context = 0) = 0;
+    /** Set up static info from context and optional blob parameters. */
+    virtual const Result setup(Context* context = 0, const Blob* parameters = 0) = 0;
 
     // Implement SerializeContract Interface
     virtual bool serialize(Blob& blob);

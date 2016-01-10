@@ -29,6 +29,8 @@ class CommandContextImpl;
 
 /**
  *  Used for running commands.
+ *  @deprecated Will probably refactor to set of interfaces that various sub-classes
+ *              of Context can implement (see RunContext).
  */
 class CommandContext : public aft::base::Context
 {

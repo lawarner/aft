@@ -23,8 +23,9 @@ namespace aft
 namespace base
 {
 // Forward reference
-class Consumer;
-class Producer;
+class BaseConsumer;
+class BaseProducer;
+class Result;
 }
 
 namespace core
@@ -40,13 +41,27 @@ class RunContext : public aft::base::Context
 public:
     RunContext();
     virtual ~RunContext();
+    
+    /** Get the singleton global RunContext.
+     *
+     *  This is used when no local context is provided.
+     */
+    static RunContext* global();
 
-    void addConsumer(const std::string& name, base::Consumer* consumer);
-    void addProducer(const std::string& name, base::Producer* producer);
+    void addConsumer(const std::string& name, base::BaseConsumer* consumer);
+    void addProducer(const std::string& name, base::BaseProducer* producer);
 
-    base::Consumer* getConsumer(const std::string& name);
-    base::Producer* getProducer(const std::string& name);
+    base::BaseConsumer* getConsumer(const std::string& name);
+    base::BaseProducer* getProducer(const std::string& name);
+    
+    /** Get the result of the last command */
+    base::Result& getLastResult() const;
+    /** Set the last result */
+    void setLastResult(const base::Result& result);
 
+    void removeConsumer(const std::string& name);
+    void removeProducer(const std::string& name);
+    
     void setupLogs(const std::string& logConfig);
 
     // gui, dispositions, procs/prods/cons

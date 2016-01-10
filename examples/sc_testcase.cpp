@@ -48,9 +48,28 @@ int main(int argc, char* argv[])
     }
 
     TestCase testCase("Scenario 1");
+    const std::string consumerName("/tmp/sc1-file.txt");
+    
     testCase.add(new LogCommand("This is the first message."));
+    testCase.add(new ConsCommand("openw", consumerName));
+    ConsCommand* writeCmd = new ConsCommand("write", consumerName);
+    Blob blobData("", Blob::STRING, "Hello World!\n");
+    writeCmd->setup(0, &blobData);
+    testCase.add(writeCmd);
+    testCase.add(new ConsCommand("close", consumerName));
+    testCase.add(new ProdCommand("open", consumerName));
+    testCase.add(new ProdCommand("read", consumerName));
+    testCase.add(new LogCommand("", "result"));
+    testCase.add(new ProdCommand("close", consumerName));
+    
     testCase.add(new LogCommand("This is the last message."));
 
+    // First run
+    aftlog << "Running initial testcase:" << std::endl;
+    testCase.open();
+    testCase.run(0);
+    testCase.close();
+    
     Blob blob("");
     if (testCase.serialize(blob))
     {
@@ -83,7 +102,7 @@ int main(int argc, char* argv[])
             aftlog << loglevel(Error) << "Cannot deserialize testcase" << std::endl;
             return 4;
         }
-        aftlog << "Start of testcase: " << tc2.getName() << std::endl;
+        aftlog << "Running testcase from file: " << tc2.getName() << std::endl;
         tc2.open();
         Result result = tc2.run(0);
         tc2.close();

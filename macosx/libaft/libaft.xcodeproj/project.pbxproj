@@ -215,6 +215,7 @@
 		A1D59B631C3D7DE100BE6298 /* libaft.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libaft.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1F763631C41BB29009A5873 /* examples.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = examples.xcodeproj; path = examples/examples.xcodeproj; sourceTree = "<group>"; };
 		A1F763891C41C05E009A5873 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../README.md; sourceTree = "<group>"; };
+		A1F838091C41F9E200040299 /* Ideas.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Ideas.txt; path = ../../Ideas.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -403,6 +404,7 @@
 		A1F763881C41C049009A5873 /* doc */ = {
 			isa = PBXGroup;
 			children = (
+				A1F838091C41F9E200040299 /* Ideas.txt */,
 				A1F763891C41C05E009A5873 /* README.md */,
 			);
 			name = doc;

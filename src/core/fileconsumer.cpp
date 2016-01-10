@@ -73,6 +73,8 @@ bool FileWriterImpl::dataAvailable(const Blob& blob)
 {
     const std::string& strBlob = blob.getString();
     outfile_.write(strBlob.c_str(), strBlob.length());
+    outfile_.flush();
+
     return !(outfile_.rdstate() & std::ofstream::failbit);
 }
 

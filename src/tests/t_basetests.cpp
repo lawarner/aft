@@ -383,7 +383,7 @@ TEST(BasePackageTest, StructuredDataParse)
     EXPECT_TRUE(sd.serialize(blob));
 
     EXPECT_TRUE(blob.getType() == Blob::STRING);
-    EXPECT_EQ(blob.getName(), "");
+    EXPECT_EQ(blob.getName(), SimpleName);
     std::cout << "serialized json: " << blob.getString() << std::endl;
 }
 
