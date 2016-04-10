@@ -15,40 +15,34 @@
  *   limitations under the License.
  */
 
-#include "base/factory.h"
+#include "base/consumer.h"
+#include "base/producer.h"
+
 
 namespace aft
 {
 namespace base
 {
 // Forward reference
-class Blob;
-class Context;
-class Hasher;
-class TObject;
-}
-
-namespace core
-{
 
 /**
- *  Factory for basic (built-in) commands.
+ *  Interface that prodcons classes must implement.
  */
-class BasicCommandFactory : public base::BaseFactory
+class ProdConsContract : public ProducerContract, public ConsumerContract
 {
-public:
-    /** Create a BasicCommandFactory. */
-    BasicCommandFactory();
-    /** Destruct a BasicCommandFactory. */
-    virtual ~BasicCommandFactory();
 
-    virtual base::TObject* construct(const std::string& name,
-                                     const base::Blob* blob = 0,
-                                     const base::Context* context = 0);
-
-private:
-    base::Hasher& hasher_;
 };
 
-} // namespace core
+/**
+ *  Base implementation of the ProducerContract/ConsumerContract interface.
+ */
+class BaseProdCons : public BaseProducer, public BaseConsumer
+{
+public:
+    BaseProdCons(WriterContract* writerDelegate = 0, ReaderContract* readerDelegate = 0);
+    virtual ~BaseProdCons();
+    
+};
+
+} // namespace base
 } // namespace aft

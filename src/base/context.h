@@ -64,6 +64,13 @@ public:
     /** Get the name of this context. */
     const std::string& getName() const;
 
+    /**
+     *  Add a named property handler if the name is not yet used.
+     *  @param propertyName Name of property
+     *  @param handler Property handler to register
+     *  @return true if handler is registered, false if property name is already taken, or a 
+     *          null handler was given.
+     */
     bool addProperty(const std::string& propertyName, PropertyHandler* handler);
 
     VisitorContract& getVisitor() const;
@@ -73,6 +80,9 @@ public:
 protected:
     std::string name_;
     Properties properties_;
+
+    /** Environment variables */
+    PropertyHandler& env_;
 
     /** Default visitor */
     VisitorContract& visitor_;

@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015, 2016 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@
 #include "tobasictypes.h"
 #include "tobject.h"
 #include "tobjecttree.h"
+#include "tobjecttype.h"
+#include "visitor.h"
 
 using namespace aft::base;
 
@@ -38,12 +40,16 @@ static bool findVisitor(TObject* obj, void* data)
     return false;
 }
 
-static Result runVisitor(TObject* obj, void* data)
+class RunVisitor : public VisitorContract
 {
-    Context* context = (Context *) data;
-    obj->process(context);
-    return Result(true);
-}
+public:
+    Result visit(TObject* obj, void* data)
+    {
+        Context* context = (Context *) data;
+        obj->process(context);
+        return Result(true);
+    }
+};
 
 /*
 static Result traceVisitor(TObject* obj, void* data)
@@ -62,11 +68,21 @@ static Result traceVisitor(TObject* obj, void* data)
 */
 
 TObject::TObject(const std::string& name)
-    : name_(name)
-    , state_(UNINITIALIZED)
-    , result_(Result(false))
+: type_(TObjectType::get(TObjectType::NameBase))
+, name_(name)
+, state_(UNINITIALIZED)
+, result_(Result(false))
 {
 
+}
+
+TObject::TObject(TObjectType& type, const std::string& name)
+: type_(type)
+, name_(name)
+, state_(UNINITIALIZED)
+, result_(Result(false))
+{
+    
 }
 
 TObject::~TObject()
@@ -90,6 +106,12 @@ TObject::State
 TObject::getState() const
 {
     return state_;
+}
+
+TObjectType&
+TObject::getType() const
+{
+    return type_;
 }
 
 void TObject::setName(const std::string& name)
@@ -127,7 +149,8 @@ TObject::run(Context* context)
     {
         result_ = context->getVisitor().visit(this, context);
     } else {
-        result_ = runVisitor(this, context);
+        RunVisitor runVisitor;
+        result_ = runVisitor.visit(this, context);
     }
 //TODO set state_ as one of finished
     return result_;
@@ -160,7 +183,9 @@ bool TObject::stop(bool force)
 bool TObject::operator==(const TObject& other) const
 {
     if (getName() == other.getName() &&
-        getState() == other.getState())
+        getType() == other.getType() &&
+        getState() == other.getState() &&
+        getResult() == other.getResult())
     {
         return true;
     }
@@ -171,6 +196,19 @@ bool TObject::operator==(const TObject& other) const
 bool TObject::operator!=(const TObject& other) const
 {
     return !operator==(other);
+}
+
+TObject& TObject::operator=(const TObject& other)
+{
+    if (this != &other)
+    {
+        type_ = other.type_;
+        name_ = other.name_;
+        state_ = other.state_;
+        result_ = other.result_;
+    }
+
+    return *this;
 }
 
 bool
@@ -230,11 +268,11 @@ TObjectContainer::find(const TObjectKey& key)
     return 0;
 }
 
-bool TObjectContainer::remove(TObject* testObject)
+bool TObjectContainer::remove(TObject* tObject)
 {
     if (!children_) return false;
 
-    return children_->remove(testObject);
+    return children_->remove(tObject);
 }
 
 Children* TObjectContainer::getChildren() const
@@ -245,21 +283,13 @@ Children* TObjectContainer::getChildren() const
 const Result
 TObjectContainer::run(Context* context)
 {
-    if (context)
+    RunVisitor runVisitor;
+    VisitorContract& visitor = context ? context->getVisitor() : runVisitor;
+    if (children_)
     {
-        if (children_)
-        {
-            result_ = children_->visit(context->getVisitor(), context);
-        } else {
-            result_ = context->getVisitor().visit(this, context);
-        }
+        result_ = children_->visit(visitor, context);
     } else {
-        if (children_)
-        {
-            result_ = children_->visit(runVisitor, context);
-        } else {
-            result_ = runVisitor(this, context);
-        }
+        result_ = visitor.visit(this, context);
     }
 
     return result_;

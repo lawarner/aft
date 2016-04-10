@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015, 2016 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -18,12 +18,14 @@
 #include <base/blob.h>
 #include <base/context.h>
 #include <base/factory.h>
+#include <base/hasher.h>
 #include <base/propertyhandler.h>
 #include <base/result.h>
 #include <base/structureddata.h>
 #include <base/tobasictypes.h>
 #include <base/tobject.h>
 #include <base/tobjecttree.h>
+#include <base/tobjecttype.h>
 #include <core/logger.h>
 #include <gtest/gtest.h>
 using namespace aft::base;
@@ -119,6 +121,10 @@ TEST(BasePackageTest, Context)
     context.addProperty("Sample", &handler);
 
     EXPECT_EQ(&handler, context.handler("Sample"));
+    TObject tobj("tobj");
+    TObject& refTobj = handler.handle(tobj);
+    
+    EXPECT_EQ(tobj.getName(), refTobj.getName());
 }
 
 TEST(BasePackageTest, TObjectTree)
@@ -190,6 +196,21 @@ TEST(BasePackageTest, TObjectContainer)
     {
         delete children[i];
     }
+}
+
+TEST(BasePackageTest, TObjectTypes)
+{
+    TObjectType& totBase  = TObjectType::get(TObjectType::NameBase);
+    TObjectType& totBase2 = TObjectType::get(TObjectType::NameBase);
+    TObjectType& totCommand = TObjectType::get(TObjectType::NameCommand);
+    
+    EXPECT_TRUE(TObjectType::exists(TObjectType::NameBase));
+    EXPECT_FALSE(TObjectType::exists("Hello?"));
+    EXPECT_TRUE(totBase.name() == TObjectType::NameBase);
+    EXPECT_TRUE(totCommand.name() == TObjectType::NameCommand);
+    
+    EXPECT_TRUE(totBase == totBase2);
+    EXPECT_TRUE(totBase != totCommand);
 }
 
 TEST(BasePackageTest, BasicTypes)
@@ -385,6 +406,40 @@ TEST(BasePackageTest, StructuredDataParse)
     EXPECT_TRUE(blob.getType() == Blob::STRING);
     EXPECT_EQ(blob.getName(), SimpleName);
     std::cout << "serialized json: " << blob.getString() << std::endl;
+}
+    
+TEST(BasePackageTest, Hasher)
+{
+    enum COMMANDS { First, Second, Third, Fourth };
+    const char* cmdStrings[] = { "First", "Second", "Third", "Fourth" };
+    size_t numCommands = sizeof(cmdStrings) / sizeof(cmdStrings[0]);
+    std::cout << "Load " << numCommands << " commands into Hasher." << std::endl;
+    const std::vector<std::string> commands(cmdStrings, cmdStrings + numCommands);
+    EXPECT_EQ(commands.size(), numCommands);
+    
+    Hasher hasher(commands);
+    for (int idx = 0; idx < numCommands; ++idx)
+    {
+        int hashIdx = hasher.getHashIndex(commands[idx]);
+        switch (hashIdx) {
+            case First:
+                EXPECT_EQ(idx, 0);
+                break;
+            case Second:
+                EXPECT_EQ(idx, 1);
+                break;
+            case Third:
+                EXPECT_EQ(idx, 2);
+                break;
+            case Fourth:
+                EXPECT_EQ(idx, 3);
+                break;
+            default:
+                std::cout << "Unexpected hash index: " << hashIdx << std::endl;
+                EXPECT_TRUE(false);
+                break;
+        }
+    }
 }
 
 } // namespace

@@ -7,73 +7,101 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A1B17F901C4015A700D70931 /* blob.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17F6C1C4015A700D70931 /* blob.cpp */; };
-		A1B17F911C4015A700D70931 /* blob.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17F6D1C4015A700D70931 /* blob.h */; };
-		A1B17F921C4015A700D70931 /* callback.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17F6E1C4015A700D70931 /* callback.h */; };
-		A1B17F931C4015A700D70931 /* command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17F6F1C4015A700D70931 /* command.cpp */; };
-		A1B17F941C4015A700D70931 /* command.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17F701C4015A700D70931 /* command.h */; };
-		A1B17F951C4015A700D70931 /* consumer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17F711C4015A700D70931 /* consumer.cpp */; };
-		A1B17F961C4015A700D70931 /* consumer.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17F721C4015A700D70931 /* consumer.h */; };
-		A1B17F971C4015A700D70931 /* context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17F731C4015A700D70931 /* context.cpp */; };
-		A1B17F981C4015A700D70931 /* context.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17F741C4015A700D70931 /* context.h */; };
-		A1B17F991C4015A700D70931 /* factory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17F751C4015A700D70931 /* factory.cpp */; };
-		A1B17F9A1C4015A700D70931 /* factory.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17F761C4015A700D70931 /* factory.h */; };
-		A1B17F9B1C4015A700D70931 /* iterator.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17F771C4015A700D70931 /* iterator.h */; };
-		A1B17F9C1C4015A700D70931 /* plugin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17F781C4015A700D70931 /* plugin.cpp */; };
-		A1B17F9D1C4015A700D70931 /* plugin.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17F791C4015A700D70931 /* plugin.h */; };
-		A1B17F9E1C4015A700D70931 /* producer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17F7A1C4015A700D70931 /* producer.cpp */; };
-		A1B17F9F1C4015A700D70931 /* producer.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17F7B1C4015A700D70931 /* producer.h */; };
-		A1B17FA01C4015A700D70931 /* producttype.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17F7C1C4015A700D70931 /* producttype.h */; };
-		A1B17FA11C4015A700D70931 /* propertyhandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17F7D1C4015A700D70931 /* propertyhandler.cpp */; };
-		A1B17FA21C4015A700D70931 /* propertyhandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17F7E1C4015A700D70931 /* propertyhandler.h */; };
-		A1B17FA31C4015A700D70931 /* result.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17F7F1C4015A700D70931 /* result.cpp */; };
-		A1B17FA41C4015A700D70931 /* result.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17F801C4015A700D70931 /* result.h */; };
-		A1B17FA51C4015A700D70931 /* serialize.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17F811C4015A700D70931 /* serialize.h */; };
-		A1B17FA61C4015A700D70931 /* structureddata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17F821C4015A700D70931 /* structureddata.cpp */; };
-		A1B17FA71C4015A700D70931 /* structureddata.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17F831C4015A700D70931 /* structureddata.h */; };
-		A1B17FA91C4015A700D70931 /* thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17F851C4015A700D70931 /* thread.cpp */; };
-		A1B17FAA1C4015A700D70931 /* thread.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17F861C4015A700D70931 /* thread.h */; };
-		A1B17FAB1C4015A700D70931 /* tobasictypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17F871C4015A700D70931 /* tobasictypes.cpp */; };
-		A1B17FAC1C4015A700D70931 /* tobasictypes.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17F881C4015A700D70931 /* tobasictypes.h */; };
-		A1B17FAD1C4015A700D70931 /* tobject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17F891C4015A700D70931 /* tobject.cpp */; };
-		A1B17FAE1C4015A700D70931 /* tobject.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17F8A1C4015A700D70931 /* tobject.h */; };
-		A1B17FAF1C4015A700D70931 /* tobjectiterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17F8B1C4015A700D70931 /* tobjectiterator.cpp */; };
-		A1B17FB01C4015A700D70931 /* tobjectiterator.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17F8C1C4015A700D70931 /* tobjectiterator.h */; };
-		A1B17FB11C4015A700D70931 /* tobjecttree.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17F8D1C4015A700D70931 /* tobjecttree.h */; };
-		A1B17FB21C4015A700D70931 /* tree.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17F8E1C4015A700D70931 /* tree.h */; };
-		A1B17FB31C4015A700D70931 /* visitor.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17F8F1C4015A700D70931 /* visitor.h */; };
-		A1B17FCD1C4016F300D70931 /* basiccommands.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17FB51C4016F300D70931 /* basiccommands.cpp */; };
-		A1B17FCE1C4016F300D70931 /* basiccommands.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17FB61C4016F300D70931 /* basiccommands.h */; };
-		A1B17FCF1C4016F300D70931 /* basicfactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17FB71C4016F300D70931 /* basicfactory.cpp */; };
-		A1B17FD01C4016F300D70931 /* basicfactory.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17FB81C4016F300D70931 /* basicfactory.h */; };
-		A1B17FD11C4016F300D70931 /* commandcontext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17FB91C4016F300D70931 /* commandcontext.cpp */; };
-		A1B17FD21C4016F300D70931 /* commandcontext.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17FBA1C4016F300D70931 /* commandcontext.h */; };
-		A1B17FD31C4016F300D70931 /* fileconsumer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17FBB1C4016F300D70931 /* fileconsumer.cpp */; };
-		A1B17FD41C4016F300D70931 /* fileconsumer.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17FBC1C4016F300D70931 /* fileconsumer.h */; };
-		A1B17FD51C4016F300D70931 /* fileproducer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17FBD1C4016F300D70931 /* fileproducer.cpp */; };
-		A1B17FD61C4016F300D70931 /* fileproducer.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17FBE1C4016F300D70931 /* fileproducer.h */; };
-		A1B17FD71C4016F300D70931 /* logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17FBF1C4016F300D70931 /* logger.cpp */; };
-		A1B17FD81C4016F300D70931 /* logger.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17FC01C4016F300D70931 /* logger.h */; };
-		A1B17FD91C4016F300D70931 /* loghandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17FC11C4016F300D70931 /* loghandler.cpp */; };
-		A1B17FDA1C4016F300D70931 /* loghandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17FC21C4016F300D70931 /* loghandler.h */; };
-		A1B17FDB1C4016F300D70931 /* runcontext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17FC31C4016F300D70931 /* runcontext.cpp */; };
-		A1B17FDC1C4016F300D70931 /* runcontext.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17FC41C4016F300D70931 /* runcontext.h */; };
-		A1B17FDD1C4016F300D70931 /* stringconsumer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17FC51C4016F300D70931 /* stringconsumer.cpp */; };
-		A1B17FDE1C4016F300D70931 /* stringconsumer.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17FC61C4016F300D70931 /* stringconsumer.h */; };
-		A1B17FDF1C4016F300D70931 /* stringproducer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17FC71C4016F300D70931 /* stringproducer.cpp */; };
-		A1B17FE01C4016F300D70931 /* stringproducer.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17FC81C4016F300D70931 /* stringproducer.h */; };
-		A1B17FE11C4016F300D70931 /* testcase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17FC91C4016F300D70931 /* testcase.cpp */; };
-		A1B17FE21C4016F300D70931 /* testcase.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17FCA1C4016F300D70931 /* testcase.h */; };
-		A1B17FE31C4016F300D70931 /* testsuite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17FCB1C4016F300D70931 /* testsuite.cpp */; };
-		A1B17FE41C4016F300D70931 /* testsuite.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17FCC1C4016F300D70931 /* testsuite.h */; };
-		A1B17FE91C40178F00D70931 /* json-forwards.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17FE61C40178F00D70931 /* json-forwards.h */; };
-		A1B17FEA1C40178F00D70931 /* json.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17FE71C40178F00D70931 /* json.h */; };
-		A1B17FEB1C40178F00D70931 /* jsoncpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17FE81C40178F00D70931 /* jsoncpp.cpp */; };
-		A1B17FEE1C40206C00D70931 /* platform.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17FED1C40206C00D70931 /* platform.h */; };
-		A1B17FF41C40209700D70931 /* posixpluginloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17FF01C40209700D70931 /* posixpluginloader.cpp */; };
-		A1B17FF51C40209700D70931 /* posixpluginloader.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17FF11C40209700D70931 /* posixpluginloader.h */; };
-		A1B17FF61C40209700D70931 /* posixthread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1B17FF21C40209700D70931 /* posixthread.cpp */; };
-		A1B17FF71C40209700D70931 /* posixthread.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B17FF31C40209700D70931 /* posixthread.h */; };
+		A153D0C91CCC71F500000A15 /* aft.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0611CCC71F500000A15 /* aft.h */; };
+		A153D0CA1CCC71F500000A15 /* blob.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0651CCC71F500000A15 /* blob.cpp */; };
+		A153D0CB1CCC71F500000A15 /* blob.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0661CCC71F500000A15 /* blob.h */; };
+		A153D0CC1CCC71F500000A15 /* callback.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0671CCC71F500000A15 /* callback.h */; };
+		A153D0CD1CCC71F500000A15 /* command.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0681CCC71F500000A15 /* command.cpp */; };
+		A153D0CE1CCC71F500000A15 /* command.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0691CCC71F500000A15 /* command.h */; };
+		A153D0CF1CCC71F500000A15 /* consumer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D06A1CCC71F500000A15 /* consumer.cpp */; };
+		A153D0D01CCC71F500000A15 /* consumer.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D06B1CCC71F500000A15 /* consumer.h */; };
+		A153D0D11CCC71F500000A15 /* context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D06C1CCC71F500000A15 /* context.cpp */; };
+		A153D0D21CCC71F500000A15 /* context.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D06D1CCC71F500000A15 /* context.h */; };
+		A153D0D31CCC71F500000A15 /* factory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D06E1CCC71F500000A15 /* factory.cpp */; };
+		A153D0D41CCC71F500000A15 /* factory.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D06F1CCC71F500000A15 /* factory.h */; };
+		A153D0D51CCC71F500000A15 /* hasher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0701CCC71F500000A15 /* hasher.cpp */; };
+		A153D0D61CCC71F500000A15 /* hasher.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0711CCC71F500000A15 /* hasher.h */; };
+		A153D0D71CCC71F500000A15 /* iterator.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0721CCC71F500000A15 /* iterator.h */; };
+		A153D0D81CCC71F500000A15 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = A153D0731CCC71F500000A15 /* Makefile */; };
+		A153D0D91CCC71F500000A15 /* outlet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0741CCC71F500000A15 /* outlet.cpp */; };
+		A153D0DA1CCC71F500000A15 /* outlet.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0751CCC71F500000A15 /* outlet.h */; };
+		A153D0DB1CCC71F500000A15 /* plugin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0761CCC71F500000A15 /* plugin.cpp */; };
+		A153D0DC1CCC71F500000A15 /* plugin.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0771CCC71F500000A15 /* plugin.h */; };
+		A153D0DD1CCC71F500000A15 /* producer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0781CCC71F500000A15 /* producer.cpp */; };
+		A153D0DE1CCC71F500000A15 /* producer.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0791CCC71F500000A15 /* producer.h */; };
+		A153D0DF1CCC71F500000A15 /* producttype.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D07A1CCC71F500000A15 /* producttype.h */; };
+		A153D0E01CCC71F500000A15 /* propertyhandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D07B1CCC71F500000A15 /* propertyhandler.cpp */; };
+		A153D0E11CCC71F500000A15 /* propertyhandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D07C1CCC71F500000A15 /* propertyhandler.h */; };
+		A153D0E21CCC71F500000A15 /* result.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D07D1CCC71F500000A15 /* result.cpp */; };
+		A153D0E31CCC71F500000A15 /* result.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D07E1CCC71F500000A15 /* result.h */; };
+		A153D0E41CCC71F500000A15 /* serialize.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D07F1CCC71F500000A15 /* serialize.h */; };
+		A153D0E51CCC71F500000A15 /* structureddata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0801CCC71F500000A15 /* structureddata.cpp */; };
+		A153D0E61CCC71F500000A15 /* structureddata.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0811CCC71F500000A15 /* structureddata.h */; };
+		A153D0E71CCC71F500000A15 /* thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0821CCC71F500000A15 /* thread.cpp */; };
+		A153D0E81CCC71F500000A15 /* thread.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0831CCC71F500000A15 /* thread.h */; };
+		A153D0E91CCC71F500000A15 /* tobasictypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0841CCC71F500000A15 /* tobasictypes.cpp */; };
+		A153D0EA1CCC71F500000A15 /* tobasictypes.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0851CCC71F500000A15 /* tobasictypes.h */; };
+		A153D0EB1CCC71F500000A15 /* tobject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0861CCC71F500000A15 /* tobject.cpp */; };
+		A153D0EC1CCC71F500000A15 /* tobject.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0871CCC71F500000A15 /* tobject.h */; };
+		A153D0ED1CCC71F500000A15 /* tobjectiterator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0881CCC71F500000A15 /* tobjectiterator.cpp */; };
+		A153D0EE1CCC71F500000A15 /* tobjectiterator.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0891CCC71F500000A15 /* tobjectiterator.h */; };
+		A153D0EF1CCC71F500000A15 /* tobjecttree.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D08A1CCC71F500000A15 /* tobjecttree.h */; };
+		A153D0F01CCC71F500000A15 /* tree.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D08B1CCC71F500000A15 /* tree.h */; };
+		A153D0F11CCC71F500000A15 /* visitor.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D08C1CCC71F500000A15 /* visitor.h */; };
+		A153D0F21CCC71F500000A15 /* basiccommands.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0901CCC71F500000A15 /* basiccommands.cpp */; };
+		A153D0F31CCC71F500000A15 /* basiccommands.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0911CCC71F500000A15 /* basiccommands.h */; };
+		A153D0F41CCC71F500000A15 /* basicfactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0921CCC71F500000A15 /* basicfactory.cpp */; };
+		A153D0F51CCC71F500000A15 /* basicfactory.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0931CCC71F500000A15 /* basicfactory.h */; };
+		A153D0F61CCC71F500000A15 /* commandcontext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0941CCC71F500000A15 /* commandcontext.cpp */; };
+		A153D0F71CCC71F500000A15 /* commandcontext.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0951CCC71F500000A15 /* commandcontext.h */; };
+		A153D0F81CCC71F500000A15 /* fileconsumer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0961CCC71F500000A15 /* fileconsumer.cpp */; };
+		A153D0F91CCC71F500000A15 /* fileconsumer.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0971CCC71F500000A15 /* fileconsumer.h */; };
+		A153D0FA1CCC71F500000A15 /* fileproducer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0981CCC71F500000A15 /* fileproducer.cpp */; };
+		A153D0FB1CCC71F500000A15 /* fileproducer.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0991CCC71F500000A15 /* fileproducer.h */; };
+		A153D0FC1CCC71F500000A15 /* logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D09A1CCC71F500000A15 /* logger.cpp */; };
+		A153D0FD1CCC71F500000A15 /* logger.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D09B1CCC71F500000A15 /* logger.h */; };
+		A153D0FE1CCC71F500000A15 /* loghandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D09C1CCC71F500000A15 /* loghandler.cpp */; };
+		A153D0FF1CCC71F500000A15 /* loghandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D09D1CCC71F500000A15 /* loghandler.h */; };
+		A153D1001CCC71F500000A15 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = A153D09E1CCC71F500000A15 /* Makefile */; };
+		A153D1011CCC71F500000A15 /* queueprodcons.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D09F1CCC71F500000A15 /* queueprodcons.cpp */; };
+		A153D1021CCC71F500000A15 /* queueprodcons.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0A01CCC71F500000A15 /* queueprodcons.h */; };
+		A153D1031CCC71F500000A15 /* runcontext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0A11CCC71F500000A15 /* runcontext.cpp */; };
+		A153D1041CCC71F500000A15 /* runcontext.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0A21CCC71F500000A15 /* runcontext.h */; };
+		A153D1051CCC71F500000A15 /* stringconsumer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0A31CCC71F500000A15 /* stringconsumer.cpp */; };
+		A153D1061CCC71F500000A15 /* stringconsumer.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0A41CCC71F500000A15 /* stringconsumer.h */; };
+		A153D1071CCC71F500000A15 /* stringproducer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0A51CCC71F500000A15 /* stringproducer.cpp */; };
+		A153D1081CCC71F500000A15 /* stringproducer.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0A61CCC71F500000A15 /* stringproducer.h */; };
+		A153D1091CCC71F500000A15 /* testcase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0A71CCC71F500000A15 /* testcase.cpp */; };
+		A153D10A1CCC71F500000A15 /* testcase.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0A81CCC71F500000A15 /* testcase.h */; };
+		A153D10B1CCC71F500000A15 /* testsuite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0A91CCC71F500000A15 /* testsuite.cpp */; };
+		A153D10C1CCC71F500000A15 /* testsuite.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0AA1CCC71F500000A15 /* testsuite.h */; };
+		A153D10D1CCC71F500000A15 /* json-forwards.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0AD1CCC71F500000A15 /* json-forwards.h */; };
+		A153D10E1CCC71F500000A15 /* json.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0AE1CCC71F500000A15 /* json.h */; };
+		A153D10F1CCC71F500000A15 /* jsoncpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0AF1CCC71F500000A15 /* jsoncpp.cpp */; };
+		A153D1101CCC71F500000A15 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = A153D0B01CCC71F500000A15 /* Makefile */; };
+		A153D1111CCC71F500000A15 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = A153D0B11CCC71F500000A15 /* Makefile */; };
+		A153D1121CCC71F500000A15 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = A153D0B31CCC71F500000A15 /* Makefile */; };
+		A153D1131CCC71F500000A15 /* platform.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0B41CCC71F500000A15 /* platform.h */; };
+		A153D1141CCC71F500000A15 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = A153D0B81CCC71F500000A15 /* Makefile */; };
+		A153D1151CCC71F500000A15 /* posixpluginloader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0B91CCC71F500000A15 /* posixpluginloader.cpp */; };
+		A153D1161CCC71F500000A15 /* posixpluginloader.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0BA1CCC71F500000A15 /* posixpluginloader.h */; };
+		A153D1171CCC71F500000A15 /* posixthread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0BB1CCC71F500000A15 /* posixthread.cpp */; };
+		A153D1181CCC71F500000A15 /* posixthread.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0BC1CCC71F500000A15 /* posixthread.h */; };
+		A153D1191CCC71F500000A15 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = A153D0C01CCC71F500000A15 /* Makefile */; };
+		A153D11A1CCC71F500000A15 /* sample_plugin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0C11CCC71F500000A15 /* sample_plugin.cpp */; };
+		A153D11B1CCC71F500000A15 /* t_basetests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0C21CCC71F500000A15 /* t_basetests.cpp */; };
+		A153D11C1CCC71F500000A15 /* t_coretests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0C31CCC71F500000A15 /* t_coretests.cpp */; };
+		A153D11D1CCC71F500000A15 /* t_logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0C41CCC71F500000A15 /* t_logger.cpp */; };
+		A153D11E1CCC71F500000A15 /* t_osdep.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0C51CCC71F500000A15 /* t_osdep.cpp */; };
+		A153D11F1CCC71F500000A15 /* t_plugin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0C61CCC71F500000A15 /* t_plugin.cpp */; };
+		A153D1201CCC71F500000A15 /* t_result.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0C71CCC71F500000A15 /* t_result.cpp */; };
+		A153D1211CCC71F500000A15 /* t_testsuite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0C81CCC71F500000A15 /* t_testsuite.cpp */; };
+		A153D1241CCD89D200000A15 /* prodcons.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D1221CCD89D200000A15 /* prodcons.cpp */; };
+		A153D1251CCD89D200000A15 /* prodcons.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D1231CCD89D200000A15 /* prodcons.h */; };
+		A153D1281CD05F8400000A15 /* entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D1261CD05F8400000A15 /* entity.cpp */; };
+		A153D1291CD05F8400000A15 /* entity.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D1271CD05F8400000A15 /* entity.h */; };
+		A18F4D541CD442F600C755FA /* tobjecttype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18F4D521CD442F600C755FA /* tobjecttype.cpp */; };
+		A18F4D551CD442F600C755FA /* tobjecttype.h in Headers */ = {isa = PBXBuildFile; fileRef = A18F4D531CD442F600C755FA /* tobjecttype.h */; };
 		A1F7638A1C41C05E009A5873 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = A1F763891C41C05E009A5873 /* README.md */; };
 /* End PBXBuildFile section */
 
@@ -144,74 +172,102 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A153D0611CCC71F500000A15 /* aft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = aft.h; path = ../../src/aft.h; sourceTree = "<group>"; };
+		A153D0651CCC71F500000A15 /* blob.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = blob.cpp; sourceTree = "<group>"; };
+		A153D0661CCC71F500000A15 /* blob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = blob.h; sourceTree = "<group>"; };
+		A153D0671CCC71F500000A15 /* callback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = callback.h; sourceTree = "<group>"; };
+		A153D0681CCC71F500000A15 /* command.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = command.cpp; sourceTree = "<group>"; };
+		A153D0691CCC71F500000A15 /* command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = command.h; sourceTree = "<group>"; };
+		A153D06A1CCC71F500000A15 /* consumer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = consumer.cpp; sourceTree = "<group>"; };
+		A153D06B1CCC71F500000A15 /* consumer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = consumer.h; sourceTree = "<group>"; };
+		A153D06C1CCC71F500000A15 /* context.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = context.cpp; sourceTree = "<group>"; };
+		A153D06D1CCC71F500000A15 /* context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = context.h; sourceTree = "<group>"; };
+		A153D06E1CCC71F500000A15 /* factory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = factory.cpp; sourceTree = "<group>"; };
+		A153D06F1CCC71F500000A15 /* factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = factory.h; sourceTree = "<group>"; };
+		A153D0701CCC71F500000A15 /* hasher.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = hasher.cpp; sourceTree = "<group>"; };
+		A153D0711CCC71F500000A15 /* hasher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hasher.h; sourceTree = "<group>"; };
+		A153D0721CCC71F500000A15 /* iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iterator.h; sourceTree = "<group>"; };
+		A153D0731CCC71F500000A15 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		A153D0741CCC71F500000A15 /* outlet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = outlet.cpp; sourceTree = "<group>"; };
+		A153D0751CCC71F500000A15 /* outlet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = outlet.h; sourceTree = "<group>"; };
+		A153D0761CCC71F500000A15 /* plugin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = plugin.cpp; sourceTree = "<group>"; };
+		A153D0771CCC71F500000A15 /* plugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = plugin.h; sourceTree = "<group>"; };
+		A153D0781CCC71F500000A15 /* producer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = producer.cpp; sourceTree = "<group>"; };
+		A153D0791CCC71F500000A15 /* producer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = producer.h; sourceTree = "<group>"; };
+		A153D07A1CCC71F500000A15 /* producttype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = producttype.h; sourceTree = "<group>"; };
+		A153D07B1CCC71F500000A15 /* propertyhandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = propertyhandler.cpp; sourceTree = "<group>"; };
+		A153D07C1CCC71F500000A15 /* propertyhandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = propertyhandler.h; sourceTree = "<group>"; };
+		A153D07D1CCC71F500000A15 /* result.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = result.cpp; sourceTree = "<group>"; };
+		A153D07E1CCC71F500000A15 /* result.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = result.h; sourceTree = "<group>"; };
+		A153D07F1CCC71F500000A15 /* serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = serialize.h; sourceTree = "<group>"; };
+		A153D0801CCC71F500000A15 /* structureddata.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = structureddata.cpp; sourceTree = "<group>"; };
+		A153D0811CCC71F500000A15 /* structureddata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = structureddata.h; sourceTree = "<group>"; };
+		A153D0821CCC71F500000A15 /* thread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = thread.cpp; sourceTree = "<group>"; };
+		A153D0831CCC71F500000A15 /* thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thread.h; sourceTree = "<group>"; };
+		A153D0841CCC71F500000A15 /* tobasictypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tobasictypes.cpp; sourceTree = "<group>"; };
+		A153D0851CCC71F500000A15 /* tobasictypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tobasictypes.h; sourceTree = "<group>"; };
+		A153D0861CCC71F500000A15 /* tobject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tobject.cpp; sourceTree = "<group>"; };
+		A153D0871CCC71F500000A15 /* tobject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tobject.h; sourceTree = "<group>"; };
+		A153D0881CCC71F500000A15 /* tobjectiterator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tobjectiterator.cpp; sourceTree = "<group>"; };
+		A153D0891CCC71F500000A15 /* tobjectiterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tobjectiterator.h; sourceTree = "<group>"; };
+		A153D08A1CCC71F500000A15 /* tobjecttree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tobjecttree.h; sourceTree = "<group>"; };
+		A153D08B1CCC71F500000A15 /* tree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tree.h; sourceTree = "<group>"; };
+		A153D08C1CCC71F500000A15 /* visitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = visitor.h; sourceTree = "<group>"; };
+		A153D0901CCC71F500000A15 /* basiccommands.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = basiccommands.cpp; sourceTree = "<group>"; };
+		A153D0911CCC71F500000A15 /* basiccommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = basiccommands.h; sourceTree = "<group>"; };
+		A153D0921CCC71F500000A15 /* basicfactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = basicfactory.cpp; sourceTree = "<group>"; };
+		A153D0931CCC71F500000A15 /* basicfactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = basicfactory.h; sourceTree = "<group>"; };
+		A153D0941CCC71F500000A15 /* commandcontext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = commandcontext.cpp; sourceTree = "<group>"; };
+		A153D0951CCC71F500000A15 /* commandcontext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = commandcontext.h; sourceTree = "<group>"; };
+		A153D0961CCC71F500000A15 /* fileconsumer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fileconsumer.cpp; sourceTree = "<group>"; };
+		A153D0971CCC71F500000A15 /* fileconsumer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fileconsumer.h; sourceTree = "<group>"; };
+		A153D0981CCC71F500000A15 /* fileproducer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fileproducer.cpp; sourceTree = "<group>"; };
+		A153D0991CCC71F500000A15 /* fileproducer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fileproducer.h; sourceTree = "<group>"; };
+		A153D09A1CCC71F500000A15 /* logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = logger.cpp; sourceTree = "<group>"; };
+		A153D09B1CCC71F500000A15 /* logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = logger.h; sourceTree = "<group>"; };
+		A153D09C1CCC71F500000A15 /* loghandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = loghandler.cpp; sourceTree = "<group>"; };
+		A153D09D1CCC71F500000A15 /* loghandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = loghandler.h; sourceTree = "<group>"; };
+		A153D09E1CCC71F500000A15 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		A153D09F1CCC71F500000A15 /* queueprodcons.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = queueprodcons.cpp; sourceTree = "<group>"; };
+		A153D0A01CCC71F500000A15 /* queueprodcons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = queueprodcons.h; sourceTree = "<group>"; };
+		A153D0A11CCC71F500000A15 /* runcontext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = runcontext.cpp; sourceTree = "<group>"; };
+		A153D0A21CCC71F500000A15 /* runcontext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = runcontext.h; sourceTree = "<group>"; };
+		A153D0A31CCC71F500000A15 /* stringconsumer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stringconsumer.cpp; sourceTree = "<group>"; };
+		A153D0A41CCC71F500000A15 /* stringconsumer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stringconsumer.h; sourceTree = "<group>"; };
+		A153D0A51CCC71F500000A15 /* stringproducer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stringproducer.cpp; sourceTree = "<group>"; };
+		A153D0A61CCC71F500000A15 /* stringproducer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stringproducer.h; sourceTree = "<group>"; };
+		A153D0A71CCC71F500000A15 /* testcase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testcase.cpp; sourceTree = "<group>"; };
+		A153D0A81CCC71F500000A15 /* testcase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testcase.h; sourceTree = "<group>"; };
+		A153D0A91CCC71F500000A15 /* testsuite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testsuite.cpp; sourceTree = "<group>"; };
+		A153D0AA1CCC71F500000A15 /* testsuite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testsuite.h; sourceTree = "<group>"; };
+		A153D0AD1CCC71F500000A15 /* json-forwards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "json-forwards.h"; sourceTree = "<group>"; };
+		A153D0AE1CCC71F500000A15 /* json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
+		A153D0AF1CCC71F500000A15 /* jsoncpp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jsoncpp.cpp; sourceTree = "<group>"; };
+		A153D0B01CCC71F500000A15 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		A153D0B11CCC71F500000A15 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; name = Makefile; path = ../../src/Makefile; sourceTree = "<group>"; };
+		A153D0B31CCC71F500000A15 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		A153D0B41CCC71F500000A15 /* platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = platform.h; sourceTree = "<group>"; };
+		A153D0B81CCC71F500000A15 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		A153D0B91CCC71F500000A15 /* posixpluginloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = posixpluginloader.cpp; sourceTree = "<group>"; };
+		A153D0BA1CCC71F500000A15 /* posixpluginloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = posixpluginloader.h; sourceTree = "<group>"; };
+		A153D0BB1CCC71F500000A15 /* posixthread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = posixthread.cpp; sourceTree = "<group>"; };
+		A153D0BC1CCC71F500000A15 /* posixthread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = posixthread.h; sourceTree = "<group>"; };
+		A153D0C01CCC71F500000A15 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		A153D0C11CCC71F500000A15 /* sample_plugin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sample_plugin.cpp; sourceTree = "<group>"; };
+		A153D0C21CCC71F500000A15 /* t_basetests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = t_basetests.cpp; sourceTree = "<group>"; };
+		A153D0C31CCC71F500000A15 /* t_coretests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = t_coretests.cpp; sourceTree = "<group>"; };
+		A153D0C41CCC71F500000A15 /* t_logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = t_logger.cpp; sourceTree = "<group>"; };
+		A153D0C51CCC71F500000A15 /* t_osdep.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = t_osdep.cpp; sourceTree = "<group>"; };
+		A153D0C61CCC71F500000A15 /* t_plugin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = t_plugin.cpp; sourceTree = "<group>"; };
+		A153D0C71CCC71F500000A15 /* t_result.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = t_result.cpp; sourceTree = "<group>"; };
+		A153D0C81CCC71F500000A15 /* t_testsuite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = t_testsuite.cpp; sourceTree = "<group>"; };
+		A153D1221CCD89D200000A15 /* prodcons.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = prodcons.cpp; sourceTree = "<group>"; };
+		A153D1231CCD89D200000A15 /* prodcons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = prodcons.h; sourceTree = "<group>"; };
+		A153D1261CD05F8400000A15 /* entity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entity.cpp; sourceTree = "<group>"; };
+		A153D1271CD05F8400000A15 /* entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = entity.h; sourceTree = "<group>"; };
 		A18EA8701C40C15300721577 /* libafttests.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libafttests.xcodeproj; path = libafttests/libafttests.xcodeproj; sourceTree = "<group>"; };
-		A1B17F6C1C4015A700D70931 /* blob.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = blob.cpp; path = ../../../src/base/blob.cpp; sourceTree = "<group>"; };
-		A1B17F6D1C4015A700D70931 /* blob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = blob.h; path = ../../../src/base/blob.h; sourceTree = "<group>"; };
-		A1B17F6E1C4015A700D70931 /* callback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = callback.h; path = ../../../src/base/callback.h; sourceTree = "<group>"; };
-		A1B17F6F1C4015A700D70931 /* command.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = command.cpp; path = ../../../src/base/command.cpp; sourceTree = "<group>"; };
-		A1B17F701C4015A700D70931 /* command.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = command.h; path = ../../../src/base/command.h; sourceTree = "<group>"; };
-		A1B17F711C4015A700D70931 /* consumer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = consumer.cpp; path = ../../../src/base/consumer.cpp; sourceTree = "<group>"; };
-		A1B17F721C4015A700D70931 /* consumer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = consumer.h; path = ../../../src/base/consumer.h; sourceTree = "<group>"; };
-		A1B17F731C4015A700D70931 /* context.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = context.cpp; path = ../../../src/base/context.cpp; sourceTree = "<group>"; };
-		A1B17F741C4015A700D70931 /* context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = context.h; path = ../../../src/base/context.h; sourceTree = "<group>"; };
-		A1B17F751C4015A700D70931 /* factory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = factory.cpp; path = ../../../src/base/factory.cpp; sourceTree = "<group>"; };
-		A1B17F761C4015A700D70931 /* factory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = factory.h; path = ../../../src/base/factory.h; sourceTree = "<group>"; };
-		A1B17F771C4015A700D70931 /* iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = iterator.h; path = ../../../src/base/iterator.h; sourceTree = "<group>"; };
-		A1B17F781C4015A700D70931 /* plugin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = plugin.cpp; path = ../../../src/base/plugin.cpp; sourceTree = "<group>"; };
-		A1B17F791C4015A700D70931 /* plugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = plugin.h; path = ../../../src/base/plugin.h; sourceTree = "<group>"; };
-		A1B17F7A1C4015A700D70931 /* producer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = producer.cpp; path = ../../../src/base/producer.cpp; sourceTree = "<group>"; };
-		A1B17F7B1C4015A700D70931 /* producer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = producer.h; path = ../../../src/base/producer.h; sourceTree = "<group>"; };
-		A1B17F7C1C4015A700D70931 /* producttype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = producttype.h; path = ../../../src/base/producttype.h; sourceTree = "<group>"; };
-		A1B17F7D1C4015A700D70931 /* propertyhandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = propertyhandler.cpp; path = ../../../src/base/propertyhandler.cpp; sourceTree = "<group>"; };
-		A1B17F7E1C4015A700D70931 /* propertyhandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = propertyhandler.h; path = ../../../src/base/propertyhandler.h; sourceTree = "<group>"; };
-		A1B17F7F1C4015A700D70931 /* result.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = result.cpp; path = ../../../src/base/result.cpp; sourceTree = "<group>"; };
-		A1B17F801C4015A700D70931 /* result.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = result.h; path = ../../../src/base/result.h; sourceTree = "<group>"; };
-		A1B17F811C4015A700D70931 /* serialize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = serialize.h; path = ../../../src/base/serialize.h; sourceTree = "<group>"; };
-		A1B17F821C4015A700D70931 /* structureddata.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = structureddata.cpp; path = ../../../src/base/structureddata.cpp; sourceTree = "<group>"; };
-		A1B17F831C4015A700D70931 /* structureddata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = structureddata.h; path = ../../../src/base/structureddata.h; sourceTree = "<group>"; };
-		A1B17F851C4015A700D70931 /* thread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = thread.cpp; path = ../../../src/base/thread.cpp; sourceTree = "<group>"; };
-		A1B17F861C4015A700D70931 /* thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = thread.h; path = ../../../src/base/thread.h; sourceTree = "<group>"; };
-		A1B17F871C4015A700D70931 /* tobasictypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tobasictypes.cpp; path = ../../../src/base/tobasictypes.cpp; sourceTree = "<group>"; };
-		A1B17F881C4015A700D70931 /* tobasictypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tobasictypes.h; path = ../../../src/base/tobasictypes.h; sourceTree = "<group>"; };
-		A1B17F891C4015A700D70931 /* tobject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tobject.cpp; path = ../../../src/base/tobject.cpp; sourceTree = "<group>"; };
-		A1B17F8A1C4015A700D70931 /* tobject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tobject.h; path = ../../../src/base/tobject.h; sourceTree = "<group>"; };
-		A1B17F8B1C4015A700D70931 /* tobjectiterator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tobjectiterator.cpp; path = ../../../src/base/tobjectiterator.cpp; sourceTree = "<group>"; };
-		A1B17F8C1C4015A700D70931 /* tobjectiterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tobjectiterator.h; path = ../../../src/base/tobjectiterator.h; sourceTree = "<group>"; };
-		A1B17F8D1C4015A700D70931 /* tobjecttree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tobjecttree.h; path = ../../../src/base/tobjecttree.h; sourceTree = "<group>"; };
-		A1B17F8E1C4015A700D70931 /* tree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tree.h; path = ../../../src/base/tree.h; sourceTree = "<group>"; };
-		A1B17F8F1C4015A700D70931 /* visitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = visitor.h; path = ../../../src/base/visitor.h; sourceTree = "<group>"; };
-		A1B17FB51C4016F300D70931 /* basiccommands.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = basiccommands.cpp; path = ../../../src/core/basiccommands.cpp; sourceTree = "<group>"; };
-		A1B17FB61C4016F300D70931 /* basiccommands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basiccommands.h; path = ../../../src/core/basiccommands.h; sourceTree = "<group>"; };
-		A1B17FB71C4016F300D70931 /* basicfactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = basicfactory.cpp; path = ../../../src/core/basicfactory.cpp; sourceTree = "<group>"; };
-		A1B17FB81C4016F300D70931 /* basicfactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basicfactory.h; path = ../../../src/core/basicfactory.h; sourceTree = "<group>"; };
-		A1B17FB91C4016F300D70931 /* commandcontext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = commandcontext.cpp; path = ../../../src/core/commandcontext.cpp; sourceTree = "<group>"; };
-		A1B17FBA1C4016F300D70931 /* commandcontext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = commandcontext.h; path = ../../../src/core/commandcontext.h; sourceTree = "<group>"; };
-		A1B17FBB1C4016F300D70931 /* fileconsumer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fileconsumer.cpp; path = ../../../src/core/fileconsumer.cpp; sourceTree = "<group>"; };
-		A1B17FBC1C4016F300D70931 /* fileconsumer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fileconsumer.h; path = ../../../src/core/fileconsumer.h; sourceTree = "<group>"; };
-		A1B17FBD1C4016F300D70931 /* fileproducer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fileproducer.cpp; path = ../../../src/core/fileproducer.cpp; sourceTree = "<group>"; };
-		A1B17FBE1C4016F300D70931 /* fileproducer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fileproducer.h; path = ../../../src/core/fileproducer.h; sourceTree = "<group>"; };
-		A1B17FBF1C4016F300D70931 /* logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = logger.cpp; path = ../../../src/core/logger.cpp; sourceTree = "<group>"; };
-		A1B17FC01C4016F300D70931 /* logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = logger.h; path = ../../../src/core/logger.h; sourceTree = "<group>"; };
-		A1B17FC11C4016F300D70931 /* loghandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = loghandler.cpp; path = ../../../src/core/loghandler.cpp; sourceTree = "<group>"; };
-		A1B17FC21C4016F300D70931 /* loghandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = loghandler.h; path = ../../../src/core/loghandler.h; sourceTree = "<group>"; };
-		A1B17FC31C4016F300D70931 /* runcontext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = runcontext.cpp; path = ../../../src/core/runcontext.cpp; sourceTree = "<group>"; };
-		A1B17FC41C4016F300D70931 /* runcontext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = runcontext.h; path = ../../../src/core/runcontext.h; sourceTree = "<group>"; };
-		A1B17FC51C4016F300D70931 /* stringconsumer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = stringconsumer.cpp; path = ../../../src/core/stringconsumer.cpp; sourceTree = "<group>"; };
-		A1B17FC61C4016F300D70931 /* stringconsumer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stringconsumer.h; path = ../../../src/core/stringconsumer.h; sourceTree = "<group>"; };
-		A1B17FC71C4016F300D70931 /* stringproducer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = stringproducer.cpp; path = ../../../src/core/stringproducer.cpp; sourceTree = "<group>"; };
-		A1B17FC81C4016F300D70931 /* stringproducer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stringproducer.h; path = ../../../src/core/stringproducer.h; sourceTree = "<group>"; };
-		A1B17FC91C4016F300D70931 /* testcase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = testcase.cpp; path = ../../../src/core/testcase.cpp; sourceTree = "<group>"; };
-		A1B17FCA1C4016F300D70931 /* testcase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = testcase.h; path = ../../../src/core/testcase.h; sourceTree = "<group>"; };
-		A1B17FCB1C4016F300D70931 /* testsuite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = testsuite.cpp; path = ../../../src/core/testsuite.cpp; sourceTree = "<group>"; };
-		A1B17FCC1C4016F300D70931 /* testsuite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = testsuite.h; path = ../../../src/core/testsuite.h; sourceTree = "<group>"; };
-		A1B17FE61C40178F00D70931 /* json-forwards.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "json-forwards.h"; path = "../../../src/json/json-forwards.h"; sourceTree = "<group>"; };
-		A1B17FE71C40178F00D70931 /* json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = json.h; path = ../../../src/json/json.h; sourceTree = "<group>"; };
-		A1B17FE81C40178F00D70931 /* jsoncpp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jsoncpp.cpp; path = ../../../src/json/jsoncpp.cpp; sourceTree = "<group>"; };
-		A1B17FED1C40206C00D70931 /* platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = platform.h; path = ../../../src/osdep/platform.h; sourceTree = "<group>"; };
-		A1B17FF01C40209700D70931 /* posixpluginloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = posixpluginloader.cpp; path = ../../../src/osdep/posix/posixpluginloader.cpp; sourceTree = "<group>"; };
-		A1B17FF11C40209700D70931 /* posixpluginloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = posixpluginloader.h; path = ../../../src/osdep/posix/posixpluginloader.h; sourceTree = "<group>"; };
-		A1B17FF21C40209700D70931 /* posixthread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = posixthread.cpp; path = ../../../src/osdep/posix/posixthread.cpp; sourceTree = "<group>"; };
-		A1B17FF31C40209700D70931 /* posixthread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = posixthread.h; path = ../../../src/osdep/posix/posixthread.h; sourceTree = "<group>"; };
+		A18F4D521CD442F600C755FA /* tobjecttype.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tobjecttype.cpp; sourceTree = "<group>"; };
+		A18F4D531CD442F600C755FA /* tobjecttype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tobjecttype.h; sourceTree = "<group>"; };
 		A1D59B631C3D7DE100BE6298 /* libaft.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libaft.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1F763631C41BB29009A5873 /* examples.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = examples.xcodeproj; path = examples/examples.xcodeproj; sourceTree = "<group>"; };
 		A1F763891C41C05E009A5873 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../README.md; sourceTree = "<group>"; };
@@ -229,6 +285,161 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A153D0601CCC714B00000A15 /* libaft */ = {
+			isa = PBXGroup;
+			children = (
+				A153D0611CCC71F500000A15 /* aft.h */,
+				A153D0621CCC71F500000A15 /* base */,
+				A153D08D1CCC71F500000A15 /* core */,
+				A153D0AB1CCC71F500000A15 /* json */,
+				A153D0B11CCC71F500000A15 /* Makefile */,
+				A153D0B21CCC71F500000A15 /* osdep */,
+				A153D0BD1CCC71F500000A15 /* tests */,
+			);
+			name = libaft;
+			sourceTree = "<group>";
+		};
+		A153D0621CCC71F500000A15 /* base */ = {
+			isa = PBXGroup;
+			children = (
+				A153D0651CCC71F500000A15 /* blob.cpp */,
+				A153D0661CCC71F500000A15 /* blob.h */,
+				A153D0671CCC71F500000A15 /* callback.h */,
+				A153D0681CCC71F500000A15 /* command.cpp */,
+				A153D0691CCC71F500000A15 /* command.h */,
+				A153D06A1CCC71F500000A15 /* consumer.cpp */,
+				A153D06B1CCC71F500000A15 /* consumer.h */,
+				A153D06C1CCC71F500000A15 /* context.cpp */,
+				A153D06D1CCC71F500000A15 /* context.h */,
+				A153D1261CD05F8400000A15 /* entity.cpp */,
+				A153D1271CD05F8400000A15 /* entity.h */,
+				A153D06E1CCC71F500000A15 /* factory.cpp */,
+				A153D06F1CCC71F500000A15 /* factory.h */,
+				A153D0701CCC71F500000A15 /* hasher.cpp */,
+				A153D0711CCC71F500000A15 /* hasher.h */,
+				A153D0721CCC71F500000A15 /* iterator.h */,
+				A153D0731CCC71F500000A15 /* Makefile */,
+				A153D0741CCC71F500000A15 /* outlet.cpp */,
+				A153D0751CCC71F500000A15 /* outlet.h */,
+				A153D0761CCC71F500000A15 /* plugin.cpp */,
+				A153D0771CCC71F500000A15 /* plugin.h */,
+				A153D1221CCD89D200000A15 /* prodcons.cpp */,
+				A153D1231CCD89D200000A15 /* prodcons.h */,
+				A153D0781CCC71F500000A15 /* producer.cpp */,
+				A153D0791CCC71F500000A15 /* producer.h */,
+				A153D07A1CCC71F500000A15 /* producttype.h */,
+				A153D07B1CCC71F500000A15 /* propertyhandler.cpp */,
+				A153D07C1CCC71F500000A15 /* propertyhandler.h */,
+				A153D07D1CCC71F500000A15 /* result.cpp */,
+				A153D07E1CCC71F500000A15 /* result.h */,
+				A153D07F1CCC71F500000A15 /* serialize.h */,
+				A153D0801CCC71F500000A15 /* structureddata.cpp */,
+				A153D0811CCC71F500000A15 /* structureddata.h */,
+				A153D0821CCC71F500000A15 /* thread.cpp */,
+				A153D0831CCC71F500000A15 /* thread.h */,
+				A153D0841CCC71F500000A15 /* tobasictypes.cpp */,
+				A153D0851CCC71F500000A15 /* tobasictypes.h */,
+				A153D0861CCC71F500000A15 /* tobject.cpp */,
+				A153D0871CCC71F500000A15 /* tobject.h */,
+				A153D0881CCC71F500000A15 /* tobjectiterator.cpp */,
+				A153D0891CCC71F500000A15 /* tobjectiterator.h */,
+				A153D08A1CCC71F500000A15 /* tobjecttree.h */,
+				A18F4D521CD442F600C755FA /* tobjecttype.cpp */,
+				A18F4D531CD442F600C755FA /* tobjecttype.h */,
+				A153D08B1CCC71F500000A15 /* tree.h */,
+				A153D08C1CCC71F500000A15 /* visitor.h */,
+			);
+			name = base;
+			path = ../../src/base;
+			sourceTree = "<group>";
+		};
+		A153D08D1CCC71F500000A15 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				A153D0901CCC71F500000A15 /* basiccommands.cpp */,
+				A153D0911CCC71F500000A15 /* basiccommands.h */,
+				A153D0921CCC71F500000A15 /* basicfactory.cpp */,
+				A153D0931CCC71F500000A15 /* basicfactory.h */,
+				A153D0941CCC71F500000A15 /* commandcontext.cpp */,
+				A153D0951CCC71F500000A15 /* commandcontext.h */,
+				A153D0961CCC71F500000A15 /* fileconsumer.cpp */,
+				A153D0971CCC71F500000A15 /* fileconsumer.h */,
+				A153D0981CCC71F500000A15 /* fileproducer.cpp */,
+				A153D0991CCC71F500000A15 /* fileproducer.h */,
+				A153D09A1CCC71F500000A15 /* logger.cpp */,
+				A153D09B1CCC71F500000A15 /* logger.h */,
+				A153D09C1CCC71F500000A15 /* loghandler.cpp */,
+				A153D09D1CCC71F500000A15 /* loghandler.h */,
+				A153D09E1CCC71F500000A15 /* Makefile */,
+				A153D09F1CCC71F500000A15 /* queueprodcons.cpp */,
+				A153D0A01CCC71F500000A15 /* queueprodcons.h */,
+				A153D0A11CCC71F500000A15 /* runcontext.cpp */,
+				A153D0A21CCC71F500000A15 /* runcontext.h */,
+				A153D0A31CCC71F500000A15 /* stringconsumer.cpp */,
+				A153D0A41CCC71F500000A15 /* stringconsumer.h */,
+				A153D0A51CCC71F500000A15 /* stringproducer.cpp */,
+				A153D0A61CCC71F500000A15 /* stringproducer.h */,
+				A153D0A71CCC71F500000A15 /* testcase.cpp */,
+				A153D0A81CCC71F500000A15 /* testcase.h */,
+				A153D0A91CCC71F500000A15 /* testsuite.cpp */,
+				A153D0AA1CCC71F500000A15 /* testsuite.h */,
+			);
+			name = core;
+			path = ../../src/core;
+			sourceTree = "<group>";
+		};
+		A153D0AB1CCC71F500000A15 /* json */ = {
+			isa = PBXGroup;
+			children = (
+				A153D0AD1CCC71F500000A15 /* json-forwards.h */,
+				A153D0AE1CCC71F500000A15 /* json.h */,
+				A153D0AF1CCC71F500000A15 /* jsoncpp.cpp */,
+				A153D0B01CCC71F500000A15 /* Makefile */,
+			);
+			name = json;
+			path = ../../src/json;
+			sourceTree = "<group>";
+		};
+		A153D0B21CCC71F500000A15 /* osdep */ = {
+			isa = PBXGroup;
+			children = (
+				A153D0B31CCC71F500000A15 /* Makefile */,
+				A153D0B41CCC71F500000A15 /* platform.h */,
+				A153D0B51CCC71F500000A15 /* posix */,
+			);
+			name = osdep;
+			path = ../../src/osdep;
+			sourceTree = "<group>";
+		};
+		A153D0B51CCC71F500000A15 /* posix */ = {
+			isa = PBXGroup;
+			children = (
+				A153D0B81CCC71F500000A15 /* Makefile */,
+				A153D0B91CCC71F500000A15 /* posixpluginloader.cpp */,
+				A153D0BA1CCC71F500000A15 /* posixpluginloader.h */,
+				A153D0BB1CCC71F500000A15 /* posixthread.cpp */,
+				A153D0BC1CCC71F500000A15 /* posixthread.h */,
+			);
+			path = posix;
+			sourceTree = "<group>";
+		};
+		A153D0BD1CCC71F500000A15 /* tests */ = {
+			isa = PBXGroup;
+			children = (
+				A153D0C01CCC71F500000A15 /* Makefile */,
+				A153D0C11CCC71F500000A15 /* sample_plugin.cpp */,
+				A153D0C21CCC71F500000A15 /* t_basetests.cpp */,
+				A153D0C31CCC71F500000A15 /* t_coretests.cpp */,
+				A153D0C41CCC71F500000A15 /* t_logger.cpp */,
+				A153D0C51CCC71F500000A15 /* t_osdep.cpp */,
+				A153D0C61CCC71F500000A15 /* t_plugin.cpp */,
+				A153D0C71CCC71F500000A15 /* t_result.cpp */,
+				A153D0C81CCC71F500000A15 /* t_testsuite.cpp */,
+			);
+			name = tests;
+			path = ../../src/tests;
+			sourceTree = "<group>";
+		};
 		A18EA85B1C40B8A000721577 /* libafttests */ = {
 			isa = PBXGroup;
 			children = (
@@ -260,116 +471,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A1B17F6B1C4014F300D70931 /* base */ = {
-			isa = PBXGroup;
-			children = (
-				A1B17F6C1C4015A700D70931 /* blob.cpp */,
-				A1B17F6D1C4015A700D70931 /* blob.h */,
-				A1B17F6E1C4015A700D70931 /* callback.h */,
-				A1B17F6F1C4015A700D70931 /* command.cpp */,
-				A1B17F701C4015A700D70931 /* command.h */,
-				A1B17F711C4015A700D70931 /* consumer.cpp */,
-				A1B17F721C4015A700D70931 /* consumer.h */,
-				A1B17F731C4015A700D70931 /* context.cpp */,
-				A1B17F741C4015A700D70931 /* context.h */,
-				A1B17F751C4015A700D70931 /* factory.cpp */,
-				A1B17F761C4015A700D70931 /* factory.h */,
-				A1B17F771C4015A700D70931 /* iterator.h */,
-				A1B17F781C4015A700D70931 /* plugin.cpp */,
-				A1B17F791C4015A700D70931 /* plugin.h */,
-				A1B17F7A1C4015A700D70931 /* producer.cpp */,
-				A1B17F7B1C4015A700D70931 /* producer.h */,
-				A1B17F7C1C4015A700D70931 /* producttype.h */,
-				A1B17F7D1C4015A700D70931 /* propertyhandler.cpp */,
-				A1B17F7E1C4015A700D70931 /* propertyhandler.h */,
-				A1B17F7F1C4015A700D70931 /* result.cpp */,
-				A1B17F801C4015A700D70931 /* result.h */,
-				A1B17F811C4015A700D70931 /* serialize.h */,
-				A1B17F821C4015A700D70931 /* structureddata.cpp */,
-				A1B17F831C4015A700D70931 /* structureddata.h */,
-				A1B17F851C4015A700D70931 /* thread.cpp */,
-				A1B17F861C4015A700D70931 /* thread.h */,
-				A1B17F871C4015A700D70931 /* tobasictypes.cpp */,
-				A1B17F881C4015A700D70931 /* tobasictypes.h */,
-				A1B17F891C4015A700D70931 /* tobject.cpp */,
-				A1B17F8A1C4015A700D70931 /* tobject.h */,
-				A1B17F8B1C4015A700D70931 /* tobjectiterator.cpp */,
-				A1B17F8C1C4015A700D70931 /* tobjectiterator.h */,
-				A1B17F8D1C4015A700D70931 /* tobjecttree.h */,
-				A1B17F8E1C4015A700D70931 /* tree.h */,
-				A1B17F8F1C4015A700D70931 /* visitor.h */,
-			);
-			name = base;
-			sourceTree = "<group>";
-		};
-		A1B17FB41C40160E00D70931 /* core */ = {
-			isa = PBXGroup;
-			children = (
-				A1B17FB51C4016F300D70931 /* basiccommands.cpp */,
-				A1B17FB61C4016F300D70931 /* basiccommands.h */,
-				A1B17FB71C4016F300D70931 /* basicfactory.cpp */,
-				A1B17FB81C4016F300D70931 /* basicfactory.h */,
-				A1B17FB91C4016F300D70931 /* commandcontext.cpp */,
-				A1B17FBA1C4016F300D70931 /* commandcontext.h */,
-				A1B17FBB1C4016F300D70931 /* fileconsumer.cpp */,
-				A1B17FBC1C4016F300D70931 /* fileconsumer.h */,
-				A1B17FBD1C4016F300D70931 /* fileproducer.cpp */,
-				A1B17FBE1C4016F300D70931 /* fileproducer.h */,
-				A1B17FBF1C4016F300D70931 /* logger.cpp */,
-				A1B17FC01C4016F300D70931 /* logger.h */,
-				A1B17FC11C4016F300D70931 /* loghandler.cpp */,
-				A1B17FC21C4016F300D70931 /* loghandler.h */,
-				A1B17FC31C4016F300D70931 /* runcontext.cpp */,
-				A1B17FC41C4016F300D70931 /* runcontext.h */,
-				A1B17FC51C4016F300D70931 /* stringconsumer.cpp */,
-				A1B17FC61C4016F300D70931 /* stringconsumer.h */,
-				A1B17FC71C4016F300D70931 /* stringproducer.cpp */,
-				A1B17FC81C4016F300D70931 /* stringproducer.h */,
-				A1B17FC91C4016F300D70931 /* testcase.cpp */,
-				A1B17FCA1C4016F300D70931 /* testcase.h */,
-				A1B17FCB1C4016F300D70931 /* testsuite.cpp */,
-				A1B17FCC1C4016F300D70931 /* testsuite.h */,
-			);
-			name = core;
-			sourceTree = "<group>";
-		};
-		A1B17FE51C40175200D70931 /* json */ = {
-			isa = PBXGroup;
-			children = (
-				A1B17FE61C40178F00D70931 /* json-forwards.h */,
-				A1B17FE71C40178F00D70931 /* json.h */,
-				A1B17FE81C40178F00D70931 /* jsoncpp.cpp */,
-			);
-			name = json;
-			sourceTree = "<group>";
-		};
-		A1B17FEC1C401FA100D70931 /* osdep */ = {
-			isa = PBXGroup;
-			children = (
-				A1B17FEF1C40207800D70931 /* posix */,
-				A1B17FED1C40206C00D70931 /* platform.h */,
-			);
-			name = osdep;
-			sourceTree = "<group>";
-		};
-		A1B17FEF1C40207800D70931 /* posix */ = {
-			isa = PBXGroup;
-			children = (
-				A1B17FF01C40209700D70931 /* posixpluginloader.cpp */,
-				A1B17FF11C40209700D70931 /* posixpluginloader.h */,
-				A1B17FF21C40209700D70931 /* posixthread.cpp */,
-				A1B17FF31C40209700D70931 /* posixthread.h */,
-			);
-			name = posix;
-			sourceTree = "<group>";
-		};
 		A1D59B5A1C3D7DE100BE6298 = {
 			isa = PBXGroup;
 			children = (
+				A153D0601CCC714B00000A15 /* libaft */,
 				A1F763881C41C049009A5873 /* doc */,
 				A18EA85C1C40B8BC00721577 /* examples */,
 				A18EA85B1C40B8A000721577 /* libafttests */,
-				A1D59B651C3D7DE100BE6298 /* libaft */,
 				A1D59B641C3D7DE100BE6298 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -380,17 +488,6 @@
 				A1D59B631C3D7DE100BE6298 /* libaft.a */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		A1D59B651C3D7DE100BE6298 /* libaft */ = {
-			isa = PBXGroup;
-			children = (
-				A1B17FEC1C401FA100D70931 /* osdep */,
-				A1B17FE51C40175200D70931 /* json */,
-				A1B17FB41C40160E00D70931 /* core */,
-				A1B17F6B1C4014F300D70931 /* base */,
-			);
-			path = libaft;
 			sourceTree = "<group>";
 		};
 		A1F763641C41BB29009A5873 /* Products */ = {
@@ -417,44 +514,51 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1B17FE91C40178F00D70931 /* json-forwards.h in Headers */,
-				A1B17FB31C4015A700D70931 /* visitor.h in Headers */,
-				A1B17FD81C4016F300D70931 /* logger.h in Headers */,
-				A1B17F981C4015A700D70931 /* context.h in Headers */,
-				A1B17FD01C4016F300D70931 /* basicfactory.h in Headers */,
-				A1B17F9F1C4015A700D70931 /* producer.h in Headers */,
-				A1B17FAE1C4015A700D70931 /* tobject.h in Headers */,
-				A1B17FB21C4015A700D70931 /* tree.h in Headers */,
-				A1B17F921C4015A700D70931 /* callback.h in Headers */,
-				A1B17FDE1C4016F300D70931 /* stringconsumer.h in Headers */,
-				A1B17FE21C4016F300D70931 /* testcase.h in Headers */,
-				A1B17FD61C4016F300D70931 /* fileproducer.h in Headers */,
-				A1B17FF71C40209700D70931 /* posixthread.h in Headers */,
-				A1B17F961C4015A700D70931 /* consumer.h in Headers */,
-				A1B17FA71C4015A700D70931 /* structureddata.h in Headers */,
-				A1B17FDA1C4016F300D70931 /* loghandler.h in Headers */,
-				A1B17FCE1C4016F300D70931 /* basiccommands.h in Headers */,
-				A1B17F941C4015A700D70931 /* command.h in Headers */,
-				A1B17FAA1C4015A700D70931 /* thread.h in Headers */,
-				A1B17FA01C4015A700D70931 /* producttype.h in Headers */,
-				A1B17F9D1C4015A700D70931 /* plugin.h in Headers */,
-				A1B17FD41C4016F300D70931 /* fileconsumer.h in Headers */,
-				A1B17FA41C4015A700D70931 /* result.h in Headers */,
-				A1B17F911C4015A700D70931 /* blob.h in Headers */,
-				A1B17FB11C4015A700D70931 /* tobjecttree.h in Headers */,
-				A1B17F9A1C4015A700D70931 /* factory.h in Headers */,
-				A1B17FDC1C4016F300D70931 /* runcontext.h in Headers */,
-				A1B17FD21C4016F300D70931 /* commandcontext.h in Headers */,
-				A1B17FA51C4015A700D70931 /* serialize.h in Headers */,
-				A1B17FB01C4015A700D70931 /* tobjectiterator.h in Headers */,
-				A1B17F9B1C4015A700D70931 /* iterator.h in Headers */,
-				A1B17FEA1C40178F00D70931 /* json.h in Headers */,
-				A1B17FAC1C4015A700D70931 /* tobasictypes.h in Headers */,
-				A1B17FE01C4016F300D70931 /* stringproducer.h in Headers */,
-				A1B17FEE1C40206C00D70931 /* platform.h in Headers */,
-				A1B17FE41C4016F300D70931 /* testsuite.h in Headers */,
-				A1B17FA21C4015A700D70931 /* propertyhandler.h in Headers */,
-				A1B17FF51C40209700D70931 /* posixpluginloader.h in Headers */,
+				A153D10E1CCC71F500000A15 /* json.h in Headers */,
+				A153D0F01CCC71F500000A15 /* tree.h in Headers */,
+				A153D0DC1CCC71F500000A15 /* plugin.h in Headers */,
+				A153D0FB1CCC71F500000A15 /* fileproducer.h in Headers */,
+				A153D0F11CCC71F500000A15 /* visitor.h in Headers */,
+				A153D0D41CCC71F500000A15 /* factory.h in Headers */,
+				A153D0D01CCC71F500000A15 /* consumer.h in Headers */,
+				A153D0C91CCC71F500000A15 /* aft.h in Headers */,
+				A153D10D1CCC71F500000A15 /* json-forwards.h in Headers */,
+				A153D0F31CCC71F500000A15 /* basiccommands.h in Headers */,
+				A153D0EC1CCC71F500000A15 /* tobject.h in Headers */,
+				A153D0EA1CCC71F500000A15 /* tobasictypes.h in Headers */,
+				A153D1041CCC71F500000A15 /* runcontext.h in Headers */,
+				A153D0CE1CCC71F500000A15 /* command.h in Headers */,
+				A153D0FF1CCC71F500000A15 /* loghandler.h in Headers */,
+				A153D0F71CCC71F500000A15 /* commandcontext.h in Headers */,
+				A153D0DE1CCC71F500000A15 /* producer.h in Headers */,
+				A153D0FD1CCC71F500000A15 /* logger.h in Headers */,
+				A153D1181CCC71F500000A15 /* posixthread.h in Headers */,
+				A153D0CC1CCC71F500000A15 /* callback.h in Headers */,
+				A153D0CB1CCC71F500000A15 /* blob.h in Headers */,
+				A153D1131CCC71F500000A15 /* platform.h in Headers */,
+				A153D0D21CCC71F500000A15 /* context.h in Headers */,
+				A153D0D71CCC71F500000A15 /* iterator.h in Headers */,
+				A153D0EE1CCC71F500000A15 /* tobjectiterator.h in Headers */,
+				A153D1021CCC71F500000A15 /* queueprodcons.h in Headers */,
+				A153D0E81CCC71F500000A15 /* thread.h in Headers */,
+				A153D0E11CCC71F500000A15 /* propertyhandler.h in Headers */,
+				A153D0F91CCC71F500000A15 /* fileconsumer.h in Headers */,
+				A153D0E31CCC71F500000A15 /* result.h in Headers */,
+				A153D0F51CCC71F500000A15 /* basicfactory.h in Headers */,
+				A153D0E61CCC71F500000A15 /* structureddata.h in Headers */,
+				A153D0DA1CCC71F500000A15 /* outlet.h in Headers */,
+				A153D1061CCC71F500000A15 /* stringconsumer.h in Headers */,
+				A153D0D61CCC71F500000A15 /* hasher.h in Headers */,
+				A153D1161CCC71F500000A15 /* posixpluginloader.h in Headers */,
+				A18F4D551CD442F600C755FA /* tobjecttype.h in Headers */,
+				A153D10C1CCC71F500000A15 /* testsuite.h in Headers */,
+				A153D1251CCD89D200000A15 /* prodcons.h in Headers */,
+				A153D0DF1CCC71F500000A15 /* producttype.h in Headers */,
+				A153D0EF1CCC71F500000A15 /* tobjecttree.h in Headers */,
+				A153D1081CCC71F500000A15 /* stringproducer.h in Headers */,
+				A153D1291CD05F8400000A15 /* entity.h in Headers */,
+				A153D10A1CCC71F500000A15 /* testcase.h in Headers */,
+				A153D0E41CCC71F500000A15 /* serialize.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -590,36 +694,57 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1B17F901C4015A700D70931 /* blob.cpp in Sources */,
-				A1B17FD11C4016F300D70931 /* commandcontext.cpp in Sources */,
-				A1B17F9E1C4015A700D70931 /* producer.cpp in Sources */,
-				A1B17F9C1C4015A700D70931 /* plugin.cpp in Sources */,
-				A1B17FCF1C4016F300D70931 /* basicfactory.cpp in Sources */,
-				A1B17FD51C4016F300D70931 /* fileproducer.cpp in Sources */,
-				A1B17FA61C4015A700D70931 /* structureddata.cpp in Sources */,
-				A1B17F951C4015A700D70931 /* consumer.cpp in Sources */,
-				A1B17FD31C4016F300D70931 /* fileconsumer.cpp in Sources */,
-				A1B17FA31C4015A700D70931 /* result.cpp in Sources */,
-				A1B17FCD1C4016F300D70931 /* basiccommands.cpp in Sources */,
-				A1B17F971C4015A700D70931 /* context.cpp in Sources */,
+				A153D1121CCC71F500000A15 /* Makefile in Sources */,
+				A153D1051CCC71F500000A15 /* stringconsumer.cpp in Sources */,
+				A153D0F61CCC71F500000A15 /* commandcontext.cpp in Sources */,
+				A153D1011CCC71F500000A15 /* queueprodcons.cpp in Sources */,
+				A153D0FE1CCC71F500000A15 /* loghandler.cpp in Sources */,
+				A153D1241CCD89D200000A15 /* prodcons.cpp in Sources */,
+				A153D11C1CCC71F500000A15 /* t_coretests.cpp in Sources */,
+				A153D11F1CCC71F500000A15 /* t_plugin.cpp in Sources */,
+				A153D0FA1CCC71F500000A15 /* fileproducer.cpp in Sources */,
+				A18F4D541CD442F600C755FA /* tobjecttype.cpp in Sources */,
+				A153D0DD1CCC71F500000A15 /* producer.cpp in Sources */,
+				A153D1101CCC71F500000A15 /* Makefile in Sources */,
+				A153D0D81CCC71F500000A15 /* Makefile in Sources */,
+				A153D0ED1CCC71F500000A15 /* tobjectiterator.cpp in Sources */,
+				A153D0F41CCC71F500000A15 /* basicfactory.cpp in Sources */,
+				A153D1111CCC71F500000A15 /* Makefile in Sources */,
+				A153D1001CCC71F500000A15 /* Makefile in Sources */,
 				A1F7638A1C41C05E009A5873 /* README.md in Sources */,
-				A1B17FDB1C4016F300D70931 /* runcontext.cpp in Sources */,
-				A1B17FAF1C4015A700D70931 /* tobjectiterator.cpp in Sources */,
-				A1B17FDD1C4016F300D70931 /* stringconsumer.cpp in Sources */,
-				A1B17FE11C4016F300D70931 /* testcase.cpp in Sources */,
-				A1B17FDF1C4016F300D70931 /* stringproducer.cpp in Sources */,
-				A1B17FAB1C4015A700D70931 /* tobasictypes.cpp in Sources */,
-				A1B17FEB1C40178F00D70931 /* jsoncpp.cpp in Sources */,
-				A1B17FF41C40209700D70931 /* posixpluginloader.cpp in Sources */,
-				A1B17FA91C4015A700D70931 /* thread.cpp in Sources */,
-				A1B17FE31C4016F300D70931 /* testsuite.cpp in Sources */,
-				A1B17FF61C40209700D70931 /* posixthread.cpp in Sources */,
-				A1B17F931C4015A700D70931 /* command.cpp in Sources */,
-				A1B17F991C4015A700D70931 /* factory.cpp in Sources */,
-				A1B17FA11C4015A700D70931 /* propertyhandler.cpp in Sources */,
-				A1B17FD71C4016F300D70931 /* logger.cpp in Sources */,
-				A1B17FAD1C4015A700D70931 /* tobject.cpp in Sources */,
-				A1B17FD91C4016F300D70931 /* loghandler.cpp in Sources */,
+				A153D0D11CCC71F500000A15 /* context.cpp in Sources */,
+				A153D1091CCC71F500000A15 /* testcase.cpp in Sources */,
+				A153D1201CCC71F500000A15 /* t_result.cpp in Sources */,
+				A153D0E51CCC71F500000A15 /* structureddata.cpp in Sources */,
+				A153D0E71CCC71F500000A15 /* thread.cpp in Sources */,
+				A153D10B1CCC71F500000A15 /* testsuite.cpp in Sources */,
+				A153D0E21CCC71F500000A15 /* result.cpp in Sources */,
+				A153D1191CCC71F500000A15 /* Makefile in Sources */,
+				A153D0E91CCC71F500000A15 /* tobasictypes.cpp in Sources */,
+				A153D0EB1CCC71F500000A15 /* tobject.cpp in Sources */,
+				A153D1141CCC71F500000A15 /* Makefile in Sources */,
+				A153D1031CCC71F500000A15 /* runcontext.cpp in Sources */,
+				A153D0CD1CCC71F500000A15 /* command.cpp in Sources */,
+				A153D1281CD05F8400000A15 /* entity.cpp in Sources */,
+				A153D1171CCC71F500000A15 /* posixthread.cpp in Sources */,
+				A153D11E1CCC71F500000A15 /* t_osdep.cpp in Sources */,
+				A153D11B1CCC71F500000A15 /* t_basetests.cpp in Sources */,
+				A153D0DB1CCC71F500000A15 /* plugin.cpp in Sources */,
+				A153D1071CCC71F500000A15 /* stringproducer.cpp in Sources */,
+				A153D0D51CCC71F500000A15 /* hasher.cpp in Sources */,
+				A153D0D31CCC71F500000A15 /* factory.cpp in Sources */,
+				A153D0CA1CCC71F500000A15 /* blob.cpp in Sources */,
+				A153D1151CCC71F500000A15 /* posixpluginloader.cpp in Sources */,
+				A153D10F1CCC71F500000A15 /* jsoncpp.cpp in Sources */,
+				A153D0E01CCC71F500000A15 /* propertyhandler.cpp in Sources */,
+				A153D0F81CCC71F500000A15 /* fileconsumer.cpp in Sources */,
+				A153D11D1CCC71F500000A15 /* t_logger.cpp in Sources */,
+				A153D1211CCC71F500000A15 /* t_testsuite.cpp in Sources */,
+				A153D0CF1CCC71F500000A15 /* consumer.cpp in Sources */,
+				A153D0FC1CCC71F500000A15 /* logger.cpp in Sources */,
+				A153D0F21CCC71F500000A15 /* basiccommands.cpp in Sources */,
+				A153D11A1CCC71F500000A15 /* sample_plugin.cpp in Sources */,
+				A153D0D91CCC71F500000A15 /* outlet.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -662,6 +787,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /opt/local/include;
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -699,6 +826,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /opt/local/include;
+				LIBRARY_SEARCH_PATHS = /opt/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
@@ -711,7 +840,10 @@
 				EXECUTABLE_PREFIX = "";
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
-				HEADER_SEARCH_PATHS = $PROJECT_DIR/../../src;
+				HEADER_SEARCH_PATHS = (
+					$PROJECT_DIR/../../src,
+					/opt/local/include,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -722,7 +854,10 @@
 				EXECUTABLE_PREFIX = "";
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
-				HEADER_SEARCH_PATHS = $PROJECT_DIR/../../src;
+				HEADER_SEARCH_PATHS = (
+					$PROJECT_DIR/../../src,
+					/opt/local/include,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

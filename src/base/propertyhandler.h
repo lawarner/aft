@@ -58,7 +58,12 @@ public:
     /** Associate (bind) a named value */
     void setValue(const std::string& name, const std::string& value);
 
+    /** Apply the property to a TObject and return the result.
+     *  Sub-classes are expected to implement specific property-specific behavior.
+     *  The base class method is just returns the given TObject (pass-thru).
+     */
     virtual TObject& handle(const TObject& tObject);
+    /** Apply the property to a TObject using context and return the result. */
     virtual TObject& handle(Context* context, const TObject& tObject);
 
 private:

@@ -15,6 +15,7 @@
  */
 
 #include "context.h"
+#include "propertyhandler.h"
 #include "tobject.h"
 using namespace aft::base;
 
@@ -22,20 +23,25 @@ Visitor defaultVisitor;
 
 
 Context::Context(const std::string& name)
-    : name_(name)
-    , visitor_(defaultVisitor)
+: name_(name)
+, env_(*new PropertyHandler("Environment"))
+, visitor_(defaultVisitor)
 {
+
 }
 
 Context::Context(VisitorContract& visitor, const std::string& name)
-    : name_(name)
-    , visitor_(visitor)
+: name_(name)
+, env_(*new PropertyHandler("Environment"))
+, visitor_(visitor)
 {
+
 }
 
 
 Context::~Context()
 {
+    delete &env_;
 }
 
 bool

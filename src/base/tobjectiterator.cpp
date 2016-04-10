@@ -123,7 +123,6 @@ TObjectIterator& TObjectIterator::operator++()
         }
         impl_.parentIter_ = false;
     } else {
-#if 1
         if (impl_.curr_.empty())
         {
             root_ = 0;    // we are done
@@ -150,25 +149,6 @@ TObjectIterator& TObjectIterator::operator++()
                 ++impl_.curr_.back();
             }
         }
-#else
-        if (!impl_.trees_.empty())
-        {
-            if (impl_.curr_.back() != impl_.trees_.back()->getChildren().end())
-            {
-                if (!(*impl_.curr_.back())->getChildren().empty())
-                {
-                    impl_.trees_.push_back(*impl_.curr_.back());
-                    impl_.curr_.push_back((*impl_.curr_.back())->getChildren().begin());
-                } else {
-                    ++impl_.curr_.back();
-                }
-            } else {
-                impl_.trees_.pop_back();
-                impl_.curr_.pop_back();
-                if (!impl_.curr_.empty()) ++impl_.curr_.back();
-            }
-        }
-#endif
     }
 
     return *this;

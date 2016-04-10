@@ -46,6 +46,10 @@ public:
      *  @return true if the reader consumed the data, otherwise false
      */
     virtual bool dataAvailable(const Blob& blob) = 0;
+    
+    /** Indicate if the reader can accept data */
+    virtual bool roomForData() const = 0;
+    virtual bool roomForObject(ProductType productType) const = 0;
 };
 
 /**

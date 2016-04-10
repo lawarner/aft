@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015, 2016 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@
 #include <core/commandcontext.h>
 #include <core/fileconsumer.h>
 #include <core/fileproducer.h>
+#include <core/queueprodcons.h>
 #include <core/stringconsumer.h>
 #include <core/stringproducer.h>
 #include <gtest/gtest.h>
@@ -46,6 +47,18 @@ public:
             std::cout << "ObjectReader blob:  " << blob.getString() << std::endl;
             return true;
         }
+    virtual bool roomForData() const
+    {
+        return true;
+    }
+    virtual bool roomForObject(ProductType productType) const
+    {
+        if (roomForData() && productType == TYPE_BLOB)
+        {
+            return true;
+        }
+        return false;
+    }
 };
 
 namespace
@@ -120,6 +133,25 @@ TEST(CorePackageTest, FileProducerFlowWords)
     EXPECT_TRUE(fileprod.unregisterDataCallback(&reader));
 }
 
+TEST(CorePackageTest, QueueProdCons)
+{
+    QueueProdCons qprodcons;
+    
+    for (int idx = 0; idx < 3; ++idx)
+    {
+        EXPECT_TRUE(qprodcons.needsData());
+        Blob blob("b", Blob::STRING, "This is a string of sorts.");
+        EXPECT_TRUE(qprodcons.write(blob));
+    }
+    
+    while (qprodcons.hasData())
+    {
+        Blob blob("");
+        EXPECT_TRUE(qprodcons.read(blob));
+        std::cout << " Blob from Q: " << blob.getString() << std::endl;
+    }
+}
+    
 TEST(CorePackageTest, CommandContext)
 {
     const std::string COMMAND("Open");

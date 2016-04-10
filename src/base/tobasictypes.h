@@ -29,6 +29,7 @@ namespace base
  *  Defines some primitive TObject types that are primarily (const) data holders.
  *
  *  TODO this is a prime candidate for some templating/specialization refactor.
+ *  TODO add more constants such as TONull
  */
 
 /**

@@ -83,6 +83,20 @@ private:
     base::Blob* buffer_;    // holds temporary results
     base::BaseProducer* producer_;
 };
-    
+
+/** Handle environment variables
+ *
+ *  This command handles get, set, unset, [list]
+ */
+    class EnvCommand : public aft::base::Command
+    {
+    public:
+        EnvCommand(const std::string& type, const std::string& name,
+                   const std::string& value = std::string());
+        virtual ~EnvCommand();
+        
+    };
+
+
 } // namespace core
 } // namespace aft

@@ -69,17 +69,16 @@ PropertyHandler::setValue(const std::string& name, const std::string& value)
     container_->nameValues[name] = value;
 }
 
+TObject&
+PropertyHandler::handle(const TObject& tObject)
+{
+    return const_cast<TObject&>(tObject);
+}
 
 TObject&
 PropertyHandler::handle(Context* context, const TObject& tObject)
 {
     if (context) return context->apply(tObject);
 
-    return const_cast<TObject&>(tObject);
-}
-
-TObject&
-PropertyHandler::handle(const TObject& tObject)
-{
     return const_cast<TObject&>(tObject);
 }

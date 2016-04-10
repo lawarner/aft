@@ -65,8 +65,14 @@ public:
     void setValue(Command* command);
     void setValue(TObject* object);
 
+    /** Test if this result is equal to another */
+    bool operator==(const Result& other) const;
+    
+    /** Test if this result is not equal to another */
+    bool operator!=(const Result& other) const;
+    
     /** Determine if this result is false.
-     *  TODO maybe incoporate FATAL
+     *  TODO maybe incorporate FATAL
      *  @return true if either the result is not set or it holds a false boolean value.
      */
     bool operator!() const;

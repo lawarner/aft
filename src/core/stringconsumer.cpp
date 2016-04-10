@@ -36,6 +36,9 @@ public:
     virtual bool dataAvailable(const Result& result);
     virtual bool dataAvailable(const Blob& blob);
 
+    virtual bool roomForData() const;
+    virtual bool roomForObject(ProductType productType) const;
+
     std::string& buffer_;
 private:
     std::string  strInternal_;
@@ -75,6 +78,20 @@ bool StringWriterImpl::dataAvailable(const Blob& blob)
     const std::string& strBlob = blob.getString();
     buffer_.append(strBlob);
     return true;
+}
+
+bool StringWriterImpl::roomForData() const
+{
+    return true;
+}
+
+bool StringWriterImpl::roomForObject(ProductType productType) const
+{
+    if (roomForData() && productType == TYPE_BLOB)
+    {
+        return true;
+    }
+    return false;
 }
 
 

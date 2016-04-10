@@ -1,6 +1,9 @@
 #pragma once
 /*
- *   Copyright 2015 Andy Warner
+ *  entity.h
+ *  libaft
+ *
+ *  Copyright © 2016 Andy Warner. All rights reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -14,41 +17,41 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
-
-#include "base/factory.h"
+#include <string>
 
 namespace aft
 {
 namespace base
 {
-// Forward reference
-class Blob;
-class Context;
-class Hasher;
+        
+// Forward references
 class TObject;
-}
-
-namespace core
-{
+    
 
 /**
- *  Factory for basic (built-in) commands.
+ *  Entity is a minimalist container class used in Provide and Consume expressions.
  */
-class BasicCommandFactory : public base::BaseFactory
+class Entity
 {
 public:
-    /** Create a BasicCommandFactory. */
-    BasicCommandFactory();
-    /** Destruct a BasicCommandFactory. */
-    virtual ~BasicCommandFactory();
+    enum MatchLevel
+    {
+        LevelNone,
+        LevelTOType,
+        LevelTOValue,
+        LevelTOName
+    };
+public:
+    Entity(const std::string& name, const TObject& tObject, MatchLevel matchLevel = LevelTOName);
+    virtual ~Entity();
 
-    virtual base::TObject* construct(const std::string& name,
-                                     const base::Blob* blob = 0,
-                                     const base::Context* context = 0);
+    bool operator==(const Entity& other) const;
 
 private:
-    base::Hasher& hasher_;
+    std::string name_;
+    const TObject& tObject_;
+    MatchLevel matchLevel_;
 };
 
-} // namespace core
+} // namespace base
 } // namespace aft

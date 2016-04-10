@@ -106,3 +106,39 @@ Blob::getType() const
 {
     return type_;
 }
+
+bool Blob::operator==(const Blob& other)
+{
+    if (this == &other) return true;
+    if (type_ != other.type_ ||
+        name_ != other.name_)
+    {
+        return false;
+    }
+    
+    if (members_.size() != other.members_.size()) return false; //TODO more strict testing of members
+
+    switch (type_)
+    {
+        case UNKNOWN:
+            return true;
+        case RAWDATA:
+            return data_ == other.data_;
+        case STRING:
+            return stringData_ == other.stringData_;
+        case JSON:
+            return stringData_ == other.stringData_;
+        case COMMAND:
+            return false;   //TODO figure out if this is even used
+        case URL:
+            return stringData_ == other.stringData_;
+        default:
+            break;
+    }
+    return false;
+}
+
+bool Blob::operator!=(const Blob& other)
+{
+    return !operator==(other);
+}

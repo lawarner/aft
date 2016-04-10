@@ -29,6 +29,7 @@ namespace base
 class Callback;
 class Context;
 class TObjectTree;
+class TObjectType;
 
 
 typedef std::string TObjectKey;
@@ -56,7 +57,13 @@ public:
 
     /** Construct a TObject with a given, optional name */
     TObject(const std::string& name = std::string());
+protected:
+    /** Construct a TObject with a given type and optional name.
+     *  Used by subclasses
+     */
+    TObject(TObjectType& type, const std::string& name = std::string());
 
+public:
     /** Destruct a TObject */
     virtual ~TObject();
 
@@ -67,6 +74,9 @@ public:
     
     /** Get the current state of this TObject */
     State getState() const;
+
+    /** Get the type of this TObject */
+    TObjectType& getType() const;
 
     /** Set the name of this TObject */
     void setName(const std::string& name);
@@ -122,6 +132,9 @@ public:
 
     /** Test if not equal to another TObject */
     virtual bool operator!=(const TObject& other) const;
+    
+    /** Copy from another TObject. */
+    virtual TObject& operator=(const TObject& other);
 
     // Implement SerializeContract
     virtual bool serialize(Blob& blob);
@@ -133,6 +146,7 @@ public:
     //TODO usage counter
 
 protected:
+    TObjectType& type_;
     std::string name_;
     State state_;
     Result result_;

@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015, 2016 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -14,7 +14,19 @@
  *   limitations under the License.
  */
 
-// scenario: create objects (testcase), serialize, deserialize and run.
+// scenario: create objects (testcase), serialize to file, deserialize and run.
+/* File contents is:
+ "commands":[{"name":"Log","parameters":["This is the first message.",""]},
+             {"name":"Cons","parameters":["openw","/tmp/sc1-file.txt"]},
+             {"name":"Cons","parameters":["write","/tmp/sc1-file.txt","Hello World!\n"]},
+             {"name":"Cons","parameters":["close","/tmp/sc1-file.txt"]},
+             {"name":"Prod","parameters":["open","/tmp/sc1-file.txt"]},
+             {"name":"Prod","parameters":["read","/tmp/sc1-file.txt"]},
+             {"name":"Log","parameters":["","result"]},
+             {"name":"Prod","parameters":["close","/tmp/sc1-file.txt"]},
+             {"name":"Log","parameters":["This is the last message.",""]}],
+  "name":"Scenario 1"}
+ */
 
 #include <string>
 

@@ -1,10 +1,29 @@
+
+Get x from UI
+Do p if [ x ]
+
+Info that UI produces can be one at a time (serial) or presented/collected as a whole.
+There must be a "done" indicator, i.e., a gui button or confirmation for dumb ui.
+Requests for data are pushed on a queue that the ui processes.
+Requests are marked as mandatory, default value, "done" action.
+Command execution can be suspended if input is required from the ui.
+In fact cmdexec should follow a standard pattern of:
+- fetch command and check its requirements
+- resolve dependencies from available outlets (producers)
+- execute command
+
 Next todo:
 ----------
+- TObject type system
+- Need to refactor so that base Producer/Consumer methods (that call delegate impl) do
+  not usually need to be overridden.
+- Serialize variables and outlets (from context?). prods/cons need to use these for operations.
 - ui classes, message loop and context
 - commands
 - connect 2 tobjects:  tobject(prod) -> tobject2(cons)
 - robot, sequencer
 - more prods, cons (filter, queue, mux, etc.)
+  + queueprodcons with subclasses for memory, file, nw, db, etc.
 - scenario test: create objects (testcase), deserialize, serialize and run.
 
 - test scenario:
@@ -50,7 +69,8 @@ Prod -> SplitProc ___/--> Cons1   // either or both paths taken
 
 
 ProdCommands --\__--> ConveyerBeltProc --> Cons
-ProdObjects  --/         Robots
+ProdObjects  --/           |
+                         Robots
 
 Robots are used to manipulate the "stream" from outside.  For example, throttle,
   monitor, reject bad items (inspector), duplicate items, modify items, inject
@@ -78,8 +98,6 @@ For now, it is:
         TObjectTree : SerializeContract, TObjectIteratorContract, has:
             TObject* value_;
             vector<TObject*> children_;
-
-Need consts for TObjectTrue, TObjectFalse (TOBool), nil, etc.
 
 Some TObject's: Command, TestCase, TestSuite
 Here are some possible TObject's:

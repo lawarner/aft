@@ -30,6 +30,9 @@ namespace core
  *  Test suite is a collection of test cases.
  *
  *  Each test case is opened, run and closed in order.
+ *
+ * TODO mode: run, edit, view
+ * TODO outlets, variables
  */
 class TestSuite : public aft::base::TObjectContainer
 {

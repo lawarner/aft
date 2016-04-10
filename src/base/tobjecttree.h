@@ -122,6 +122,8 @@ public:
      *  Child nodes in the tree are visited in a depth-first order, after first
      *  visting the root node.  Visiting stops if the visitor returns false.
      *
+     *  This method will likely be deprecated in the future.
+     *
      *  @param visitor Pointer to C function visitor
      *  @param data Extra opaque data past on each element visited
      *  @return false when the vistor returns false for any child, otherwise true.
@@ -150,7 +152,7 @@ public:
     }
 
     /**
-     *  A more updated visitor.
+     *  Interface-based visitor.
      *  Returns true after visiting all children.  If any child TObject returns a false
      *  Result, then the TObject is returned wrapped in a Result.
      */

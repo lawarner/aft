@@ -63,6 +63,9 @@ public:
 
     const std::string& getString() const;
     Type getType() const;
+    
+    bool operator==(const Blob& other);
+    bool operator!=(const Blob& other);
 
 protected:
     std::string name_;

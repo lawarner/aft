@@ -37,6 +37,9 @@ public:
     virtual bool dataAvailable(const Result& result);
     virtual bool dataAvailable(const Blob& blob);
 
+    bool roomForData() const;
+    bool roomForObject(ProductType productType) const;
+
     bool is_open();
     bool open();
     void close();
@@ -76,6 +79,20 @@ bool FileWriterImpl::dataAvailable(const Blob& blob)
     outfile_.flush();
 
     return !(outfile_.rdstate() & std::ofstream::failbit);
+}
+
+bool FileWriterImpl::roomForData() const
+{
+    return outfile_.good();
+}
+
+bool FileWriterImpl::roomForObject(ProductType productType) const
+{
+    if (roomForData() && productType == TYPE_BLOB)
+    {
+        return true;
+    }
+    return false;
 }
 
 bool FileWriterImpl::is_open()

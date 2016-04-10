@@ -16,6 +16,7 @@
 
 #include "base/blob.h"
 #include "base/context.h"
+#include "base/hasher.h"
 #include "base/structureddata.h"
 #include "basiccommands.h"
 #include "basicfactory.h"
@@ -23,41 +24,57 @@
 using namespace aft;
 using namespace aft::core;
 
+static const char* commandNames[] =
+{
+    "Log", "Env", "Cons", "Prod", 0
+};
+enum CommandVals
+{
+    CmdLog, CmdEnv, CmdCons, CmdProd
+};
 
-static base::TObject* builtinCommand(const std::string& command,
+static base::TObject* builtinCommand(int command,
                                      const std::vector<std::string>& parameters)
 {
     base::Command* tobj = 0;
-    if (command == "Log")
+    switch (command)
     {
-        tobj = new LogCommand(parameters[0]);
-    }
-    else if (command == "Cons")
-    {
-        tobj = new ConsCommand(parameters[0],
-                               parameters.size() > 1 ? parameters[1] : "");
-        if (parameters.size() > 2)
-        {
-            base::Blob blobData("", base::Blob::STRING, parameters[2]);
-            tobj->setup(0, &blobData);
-        }
-    }
-    else if (command == "Prod")
-    {
-        tobj = new ProdCommand(parameters[0],
-                               parameters.size() > 1 ? parameters[1] : "");
-        if (parameters.size() > 2)
-        {
-            base::Blob blobData("", base::Blob::STRING, parameters[2]);
-            tobj->setup(0, &blobData);
-        }
+        case CmdLog:
+            tobj = new LogCommand(parameters[0]);
+            break;
+        case CmdCons:
+            tobj = new ConsCommand(parameters[0],
+                                   parameters.size() > 1 ? parameters[1] : "");
+            if (parameters.size() > 2)
+            {
+                base::Blob blobData("", base::Blob::STRING, parameters[2]);
+                tobj->setup(0, &blobData);
+            }
+            break;
+        case CmdProd:
+            tobj = new ProdCommand(parameters[0],
+                                   parameters.size() > 1 ? parameters[1] : "");
+            if (parameters.size() > 2)
+            {
+                base::Blob blobData("", base::Blob::STRING, parameters[2]);
+                tobj->setup(0, &blobData);
+            }
+            break;
+        case CmdEnv:
+            //tobj = new EnvCommand
+            break;
+        default:
+            aftlog << Error << "Invalid command index: " << command << std::endl;
+            break;
     }
 
     return tobj;
 }
 
+
 BasicCommandFactory::BasicCommandFactory()
-    : BaseFactory("Command", "BasicCommands")
+: BaseFactory("Command", "BasicCommands")
+, hasher_(*new base::Hasher(commandNames))
 {
 }
 
@@ -87,7 +104,8 @@ BasicCommandFactory::construct(const std::string& name, const base::Blob* blob,
 
         std::vector<std::string> parameters;
         sd.getArray("parameters", parameters);
-        retval = builtinCommand(sd.get("name"), parameters);
+        int cmdidx = hasher_.getHashIndex(sd.get("name"));
+        retval = builtinCommand(cmdidx, parameters);
     }
         break;
     default:

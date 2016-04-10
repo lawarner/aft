@@ -399,7 +399,7 @@
 		A18EA85E1C40C15300721577 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = "Andy Warner";
 				TargetAttributes = {
 					A18EA8891C41532400721577 = {
@@ -694,6 +694,7 @@
 		A18EA8DD1C41775700721577 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = "";
@@ -707,6 +708,7 @@
 		A18EA8DE1C41775700721577 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				EXECUTABLE_PREFIX = "";
@@ -822,6 +824,7 @@
 				A1F7631C1C41B541009A5873 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A1F763491C41B6B8009A5873 /* Build configuration list for PBXNativeTarget "t_testsuite" */ = {
 			isa = XCConfigurationList;
@@ -830,6 +833,7 @@
 				A1F7634B1C41B6B8009A5873 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

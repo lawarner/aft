@@ -14,6 +14,7 @@
  *   limitations under the License.
  */
 
+#include "blob.h"
 #include "result.h"
 using namespace aft::base;
 
@@ -120,9 +121,12 @@ bool Result::getValue(TObject*& object) const
 
 void Result::setValue(Blob* blob)
 {
-    //TODO assert type is BLOB
-    value_.blob_ = blob;
-    isValueSet_ = true;
+    if (blob)
+    {
+        //TODO assert type is BLOB
+        value_.blob_ = blob;
+        isValueSet_ = true;
+    }
 }
 
 void Result::setValue(bool value)
@@ -142,6 +146,40 @@ void Result::setValue(TObject* object)
 {
     value_.object_ = object;
     isValueSet_ = true;
+}
+
+bool Result::operator==(const Result& other) const
+{
+    if (type_ != other.type_) return false;
+    if (!isValueSet_ || !other.isValueSet_)
+    {
+        return isValueSet_ == other.isValueSet_;
+    }
+    
+    switch (type_)
+    {
+        case UNKNOWN:
+            return true;
+        case FATAL:
+            return true;
+        case BLOB:
+            return *value_.blob_ == *other.value_.blob_;
+        case BOOLEAN:
+            return value_.flag_ == other.value_.flag_;
+        case COMMAND:
+            return value_.command_ == other.value_.command_;
+        case ITERATOR:
+            return value_.iterator_ == other.value_.iterator_;
+        case TOBJECT:
+            return value_.object_ == other.value_.object_;
+        default:
+            break;
+    }
+}
+
+bool Result::operator!=(const Result& other) const
+{
+    return !operator==(other);
 }
 
 bool Result::operator!() const
