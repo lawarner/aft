@@ -1,6 +1,6 @@
 #pragma once
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015, 2016 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
+
+#include <vector>
 
 #include "base/command.h"
 #include "base/result.h"
@@ -39,7 +41,10 @@ namespace core
 class LogCommand : public aft::base::Command
 {
 public:
-    LogCommand(const std::string& message = std::string(), const std::string& type = std::string());
+    LogCommand(const std::string& message = std::string(),
+               const std::string& type = std::string());
+    LogCommand(const std::vector<std::string>& parameters);
+
     virtual const base::Result process(base::Context* context = 0);
     virtual const base::Result setup(base::Context* context = 0, const base::Blob* parameters = 0);
 private:

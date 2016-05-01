@@ -175,6 +175,8 @@ bool Result::operator==(const Result& other) const
         default:
             break;
     }
+
+    return false;
 }
 
 bool Result::operator!=(const Result& other) const

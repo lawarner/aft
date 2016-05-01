@@ -1,3 +1,5 @@
+- For if type commands, only allow 2 tobject children, 1 for true other for false.
+  These children then contain the set of commands to execute in each case.
 
 Get x from UI
 Do p if [ x ]

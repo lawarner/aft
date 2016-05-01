@@ -30,7 +30,7 @@ using namespace aft::base;
 Hasher::Hasher(const std::vector<std::string>& names)
 : hashes_(new HashType[names.size()])
 {
-    for (int idx = 0; idx < names.size(); ++idx)
+    for (unsigned int idx = 0; idx < names.size(); ++idx)
     {
         putHashValue(names[idx], idx);
     }
@@ -106,7 +106,7 @@ Hasher::getName(int enumCode)
 const std::string&
 Hasher::getNameForHash(HashType hash)
 {
-    for (int idx = 0; idx < enums_.size(); ++idx)
+    for (unsigned int idx = 0; idx < enums_.size(); ++idx)
     {
         if (hash == hashes_[idx])
         {

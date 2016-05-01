@@ -38,6 +38,15 @@ LogCommand::LogCommand(const std::string& message, const std::string& type)
     parameters_.push_back(type_);
 }
 
+LogCommand::LogCommand(const std::vector<std::string>& parameters)
+    : Command("Log")
+    , message_(parameters[0])
+    , type_(parameters[1])
+{
+    aftlog << "DEBUG: create Log " << message_ << ", Type=" << type_ << std::endl;
+    parameters_ = parameters;
+}
+
 const base::Result
 LogCommand::process(base::Context* context)
 {

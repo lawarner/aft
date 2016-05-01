@@ -33,6 +33,8 @@ enum CommandVals
     CmdLog, CmdEnv, CmdCons, CmdProd
 };
 
+//TODO all basic commands should have a constructor that takes a string vector.
+
 static base::TObject* builtinCommand(int command,
                                      const std::vector<std::string>& parameters)
 {
@@ -40,7 +42,7 @@ static base::TObject* builtinCommand(int command,
     switch (command)
     {
         case CmdLog:
-            tobj = new LogCommand(parameters[0]);
+            tobj = new LogCommand(parameters);
             break;
         case CmdCons:
             tobj = new ConsCommand(parameters[0],

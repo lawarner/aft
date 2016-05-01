@@ -17,10 +17,12 @@ using namespace aft::core;
 class aft::core::QueueProdConsImpl : public WriterContract, public ReaderContract
 {
 public:
-    QueueProdConsImpl(int maxSize)
+    QueueProdConsImpl(unsigned int maxSize)
     : maxSize_(maxSize)
     {  }
-    
+    virtual ~QueueProdConsImpl()
+    {  }
+
     /** Returns the type of product this writer has ready to write. */
     virtual ProductType hasData()
     {
@@ -75,7 +77,7 @@ public:
     }
 
 private:
-    int maxSize_;
+    unsigned int maxSize_;
     std::queue<base::Blob> queue_;
 };
 

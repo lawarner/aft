@@ -5,6 +5,7 @@
 //  Copyright © 2016 Andy Warner. All rights reserved.
 //
 
+#include "tobasictypes.h"
 #include "tobjecttype.h"
 using namespace aft::base;
 using namespace std;
@@ -12,10 +13,16 @@ using namespace std;
 
 std::map<std::string, TObjectType*> TObjectType::typeRegistry_;
 
-std::string TObjectType::NameBase("Base");
-std::string TObjectType::NameCommand("Command");
-std::string TObjectType::NameTestCase("TestCase");
-std::string TObjectType::NameTestSuite("TestSuite");
+const std::string TObjectType::NameBase("Base");
+const std::string TObjectType::NameCommand("Command");
+const std::string TObjectType::NameTestCase("TestCase");
+const std::string TObjectType::NameTestSuite("TestSuite");
+
+//TODO rework this static dependency problem
+//     This is a bad workaround, but I put all static TObject initializers here
+//     because they depend on TObjectType's class members being initialized first.
+TOBool& aft::base::TOTrue  = *new TOBool(true, "true");
+TOBool& aft::base::TOFalse = *new TOBool(false, "false");
 
 
 TObjectType::TObjectType(const std::string& typeName)

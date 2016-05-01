@@ -9,6 +9,7 @@
 #include <map>
 #include <string>
 
+#define TOTYPE_BASE "Base"
 
 namespace aft
 {
@@ -41,13 +42,13 @@ public:
 
 public:
     /** Type name for base TObjects */
-    static std::string NameBase;
+    static const std::string NameBase;
     /** Type name for command TObjects */
-    static std::string NameCommand;
+    static const std::string NameCommand;
     /** Type name for TestCase TObjects */
-    static std::string NameTestCase;
+    static const std::string NameTestCase;
     /** Type name for TestSuite TObjects */
-    static std::string NameTestSuite;
+    static const std::string NameTestSuite;
     //TODO more command type names
 
 private:

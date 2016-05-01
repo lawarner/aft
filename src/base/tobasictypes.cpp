@@ -16,10 +16,8 @@
 
 #include "result.h"
 #include "tobasictypes.h"
+#include "tobjecttype.h"
 using namespace aft::base;
-
-TOBool& aft::base::TOTrue  = *new TOBool(true, "true");
-TOBool& aft::base::TOFalse = *new TOBool(false, "false");
 
 
 TOBool::TOBool(bool value, const std::string& name)
