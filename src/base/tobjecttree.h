@@ -230,6 +230,16 @@ public:
     {
         return false;
     }
+    
+    virtual TObjectTree& operator=(const TObjectTree& other)
+    {
+        if (this != &other)
+        {
+            value_ = other.value_;
+            children_ = other.children_;
+        }
+        return *this;
+    }
 
 protected:
     /** The tree root value (optional). */

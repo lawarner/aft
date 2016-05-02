@@ -68,7 +68,7 @@ public:
     virtual ~TObject();
 
     /** Get the name of this TObject */
-    const std::string& getName() const;
+    virtual const std::string& getName() const;
     /** Get the current result of this TObject */
     const Result& getResult() const;
     
@@ -142,7 +142,7 @@ public:
 
     //TODO implement pluggable contract
     //TODO cast operators for frequent autoconversions:
-    //     i.e., if (tobj == false) // false is TObjectBool(true) which is singleton
+    //     i.e., if (tobj == false) // false is TOBool(false) is TOFalse which is singleton
     //TODO usage counter
 
 protected:
@@ -190,6 +190,9 @@ public:
     // Override parent SerializeContract
     virtual bool serialize(Blob& blob);
     virtual bool deserialize(const Blob& blob);
+
+    /** Copy from another TObjectContainer. */
+    virtual TObjectContainer& operator=(const TObjectContainer& other);
 
 protected:
     /** Construct a TObjectContainer with a given, optional name */

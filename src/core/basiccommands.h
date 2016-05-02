@@ -15,6 +15,7 @@
  *   limitations under the License.
  */
 
+#include <map>
 #include <vector>
 
 #include "base/command.h"
@@ -32,6 +33,13 @@ class Context;
 
 namespace core
 {
+/**
+ *  Basic, built-in commands.
+ *  Commands hold no state or values of their own, but use the context.
+ *  If no context is passed to process() then the global context is used instead.
+ *  Most commands have multiple functions (i.e., Env:get,set,unset,...) but this is only
+ *  as a convience. There could just as well be separate classes EnvGet, EnvSet, EnvUnset, ...
+ */
 
 /** Simply logs its argument when run.
  *
@@ -83,6 +91,7 @@ public:
     virtual ~ProdCommand();
     virtual const base::Result process(base::Context* context = 0);
     virtual const base::Result setup(base::Context* context = 0, const base::Blob* parameters = 0);
+
 private:
     std::string type_;      //TODO convert to enum
     base::Blob* buffer_;    // holds temporary results
@@ -91,16 +100,20 @@ private:
 
 /** Handle environment variables
  *
- *  This command handles get, set, unset, [list]
+ *  This command handles get, set (global,local), unset, [list]
  */
-    class EnvCommand : public aft::base::Command
-    {
-    public:
-        EnvCommand(const std::string& type, const std::string& name,
-                   const std::string& value = std::string());
-        virtual ~EnvCommand();
-        
-    };
+class EnvCommand : public aft::base::Command
+{
+public:
+    EnvCommand(const std::string& type, const std::string& name,
+               const std::string& value = std::string());
+    virtual ~EnvCommand();
+    virtual const base::Result process(base::Context* context = 0);
+    virtual const base::Result setup(base::Context* context = 0, const base::Blob* parameters = 0);
+
+private:
+    std::string type_;      //TODO convert to enum
+};
 
 
 } // namespace core

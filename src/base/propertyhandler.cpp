@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015, 2016 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -54,19 +54,31 @@ PropertyHandler::getValue(const std::string& name, std::string& value) const
 }
 
 const std::string&
-PropertyHandler::getValue(const std::string& name,
-                          const std::string& defValue) const
+PropertyHandler::getValue(const std::string& name) const
 {
     map<string,string>::const_iterator it = container_->nameValues.find(name);
-    if (it != container_->nameValues.end())  return it->second;
 
-    return defValue.empty() ? emptyString : defValue;
+    if (it == container_->nameValues.end())  return emptyString;
+    return it->second;
 }
 
 void
 PropertyHandler::setValue(const std::string& name, const std::string& value)
 {
     container_->nameValues[name] = value;
+}
+
+bool
+PropertyHandler::unsetValue(const std::string& name)
+{
+    map<string, string>::iterator it = container_->nameValues.find(name);
+    if (it == container_->nameValues.end())
+    {
+        return false;
+    }
+    
+    container_->nameValues.erase(it);
+    return true;
 }
 
 TObject&

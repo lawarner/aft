@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015, 2016 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 #include "base/blob.h"
 #include "base/consumer.h"
 #include "base/context.h"
+#include "base/propertyhandler.h"
 #include "base/structureddata.h"
 #include "basiccommands.h"
 #include "fileconsumer.h"
@@ -39,12 +40,11 @@ LogCommand::LogCommand(const std::string& message, const std::string& type)
 }
 
 LogCommand::LogCommand(const std::vector<std::string>& parameters)
-    : Command("Log")
+    : Command("Log", parameters)
     , message_(parameters[0])
     , type_(parameters[1])
 {
-    aftlog << "DEBUG: create Log " << message_ << ", Type=" << type_ << std::endl;
-    parameters_ = parameters;
+    //aftlog << "DEBUG: create Log " << message_ << ", Type=" << type_ << std::endl;
 }
 
 const base::Result
@@ -61,48 +61,9 @@ LogCommand::process(base::Context* context)
     {
         RunContext* ctx = context ? dynamic_cast<RunContext *>(context) : RunContext::global();
         base::Result& lastResult = ctx->getLastResult();
-        std::ostringstream oss("Command logger: Result type=");
+        std::ostringstream oss("Command logger: Result Type=");
         oss.seekp(0, std::ostringstream::end);
-        oss << lastResult.asString() << std::endl << " - value: ";
-        switch (lastResult.getType())
-        {
-            case base::Result::FATAL:
-                oss << "FATAL";
-                break;
-            case base::Result::BLOB:
-            {
-                base::Blob* blob = 0;
-                if (lastResult.getValue(blob))
-                {
-                    if (blob->getType() == base::Blob::STRING)
-                    {
-                        oss << "String = " << blob->getString();
-                    }
-                }
-            }
-                break;
-            case base::Result::BOOLEAN:
-            {
-                bool flag = false;
-                lastResult.getValue(flag);
-                oss << (flag ? "True" : "False");
-            }
-                break;
-            case base::Result::COMMAND:
-                oss << "Command";
-                break;
-            case base::Result::ITERATOR:
-                oss << "Iterator";
-                break;
-            case base::Result::TOBJECT:
-                oss << "TObject";
-                break;
-                
-            case base::Result::UNKNOWN:     // fall thru
-            default:
-                oss << "(Unknown)";
-                break;
-        }
+        oss << lastResult.getTypeName() << ",  Value=" << lastResult.asString();
         aftlog << oss.str() << std::endl;
     }
 
@@ -112,7 +73,6 @@ LogCommand::process(base::Context* context)
 const base::Result
 LogCommand::setup(base::Context* context, const base::Blob* parameters)
 {
-//    RunContext* runcontext = dynamic_cast<RunContext *>(context);
     //TODO get and set 
     return base::Result(true);
 }
@@ -302,5 +262,86 @@ ProdCommand::setup(base::Context* context, const base::Blob* parameters)
     parameters_.push_back(parameters->getString());
     
     //TODO get and set
+    return base::Result(true);
+}
+
+///////////////////////////////////////////////////////////////////////////
+
+/*  This command handles get, set (global,local), unset, [list] */
+
+EnvCommand::EnvCommand(const std::string& type, const std::string& name,
+               const std::string& value)
+: Command("Env")
+, type_(type)
+{
+    parameters_.push_back(type);
+    parameters_.push_back(name);
+    if (!value.empty())
+    {
+        parameters_.push_back(value);
+    }
+}
+
+EnvCommand::~EnvCommand()
+{
+
+}
+
+const base::Result
+EnvCommand::process(base::Context* context)
+{
+    bool retval = false;
+    RunContext* ctx = context ? dynamic_cast<RunContext *>(context) : RunContext::global();
+    if (type_ == "set")
+    {
+        if (parameters_.size() < 3 || parameters_[1].empty())
+        {
+            aftlog << loglevel(Error) << "EnvCommand set: missing value" << std::endl;
+        }
+        else
+        {
+            base::PropertyHandler& env = ctx->getEnvironment();
+            env.setValue(parameters_[1], parameters_[2]);
+            retval = true;
+        }
+    }
+    else if (type_ == "get")
+    {
+        if (parameters_.size() < 2 || parameters_[1].empty())
+        {
+            aftlog << loglevel(Error) << "EnvCommand get: missing name" << std::endl;
+        }
+        else
+        {
+            base::PropertyHandler& env = ctx->getEnvironment();
+            std::string value;
+            if (env.getValue(parameters_[1], value))
+            {
+                result_ = base::Result(value);
+                ctx->setLastResult(result_);
+                return result_;
+            }
+        }
+    }
+    else if (type_ == "unset")
+    {
+        if (parameters_.size() < 2 || parameters_[1].empty())
+        {
+            aftlog << loglevel(Error) << "EnvCommand unset: missing name" << std::endl;
+        }
+        else
+        {
+            base::PropertyHandler& env = ctx->getEnvironment();
+            retval = env.unsetValue(parameters_[1]);
+        }
+    }
+
+    return base::Result(retval);
+}
+
+const base::Result
+EnvCommand::setup(base::Context* context, const base::Blob* parameters)
+{
+
     return base::Result(true);
 }

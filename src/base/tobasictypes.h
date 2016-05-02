@@ -25,105 +25,97 @@ namespace base
 // Forward reference
 
 
-/**
- *  Defines some primitive TObject types that are primarily (const) data holders.
- *
- *  TODO this is a prime candidate for some templating/specialization refactor.
- *  TODO add more constants such as TONull
- */
+template<typename T>
+class TOBasicType : public TObject
+{
+public:
+    typedef T value_type;
+
+    /** Construct a TOBasicType with a given value and optional name */
+    TOBasicType<T>(T value, const std::string& name = std::string())
+    : TObject(name)
+    , value_(value)
+    {
+        state_ = INITIAL;
+    }
+    
+    /** Destruct a TOBool */
+    virtual ~TOBasicType()
+    {
+        
+    }
+
+    /** Run in the given context */
+    virtual const Result run(Context* context)
+    {
+        return Result(this);
+    }
+
+    /** Test if equal to another TOBasicType<T>.
+     *
+     *   If the value_ is equal then the 2 TOBasicType's are considered equal.
+     */
+    virtual bool operator==(const TOBasicType<T>& other) const
+    {
+        return value_ == other.value_;
+    }
+
+    /** Copy contents of this TOBasicType from another. */
+    virtual TOBasicType<T> operator=(const TOBasicType<T>& other)
+    {
+        if (this != &other)
+        {
+            TObject::operator=(other);
+            value_ = other.value_;
+        }
+        return *this;
+    }
+    
+    // Implement SerializeContract
+    virtual bool serialize(Blob& blob)
+    {
+        return TObject::serialize(blob);
+    }
+    virtual bool deserialize(const Blob& blob)
+    {
+        return TObject::deserialize(blob);
+    }
+
+    T getValue() const
+    {
+        return value_;
+    }
+    
+private:
+    T value_;
+};
 
 /**
  * Hold a boolean value.
  */
-class TOBool : public TObject
-{
-public:
-    /** Construct a TOBool with a given value and optional name */
-    TOBool(bool value, const std::string& name = std::string());
-
-    /** Destruct a TOBool */
-    virtual ~TOBool();
-
-    /** Run in the given context */
-    virtual const Result run(Context* context);
-
-    /** Test if equal to another TOBool.
-     *
-     *   If the boolean value_ is equal then the 2 TOBool's are considered equal.
-     */
-    virtual bool operator==(const TOBool& other) const;
-
-    // Implement SerializeContract
-    virtual bool serialize(Blob& blob);
-    virtual bool deserialize(const Blob& blob);
-
-    bool getValue() const;
-
-private:
-    bool value_;
-};
-
+typedef TOBasicType<bool> TOBool;
 
 /**
  * Hold a string value.
  */
-class TOString : public TObject
-{
-public:
-    /** Construct a TOString with a given value and optional name */
-    TOString(const std::string& value, const std::string& name = std::string());
-
-    /** Destruct a TOString */
-    virtual ~TOString();
-
-    /** Run in the given context */
-    virtual const Result run(Context* context);
-
-    /** Test if equal to another TOString */
-    virtual bool operator==(const TOString& other);
-
-    // Implement SerializeContract
-    virtual bool serialize(Blob& blob);
-    virtual bool deserialize(const Blob& blob);
-
-    const std::string& getValue() const;
-
-private:
-    std::string value_;
-};
-
-/** Global singleton for 'true' */
-extern TOBool& TOTrue;
-/** Global singleton for 'false' */
-extern TOBool& TOFalse;
+typedef TOBasicType<std::string> TOString;
 
 /**
  * Hold a blob
  */
-class TOBlob : public TObject
-{
-public:
-    /** Construct a TOBlob and pass a blob */
-    TOBlob(const Blob* blob, const std::string& name = std::string());
+typedef TOBasicType<Blob *> TOBlob;
 
-    /** Destruct a TOBlob */
-    virtual ~TOBlob();
 
-    /** Run in the given context */
-    virtual const Result run(Context* context);
-
-    /** Test if equal to another TOBlob */
-    virtual bool operator==(const TOBlob& other);
-
-    // Implement SerializeContract
-    virtual bool serialize(Blob& blob);
-    virtual bool deserialize(const Blob& blob);
-
-    const Blob* getValue() const;
-
-private:
-    const Blob* blob_;
-};
+/**
+ *  Defines some primitive TObject types that are primarily (const) data holders.
+ *
+ *  TODO add more constants such as TONull
+ */
+    
+/** Global singleton for 'true' */
+extern TOBool& TOTrue;
+/** Global singleton for 'false' */
+extern TOBool& TOFalse;
 
 } // namespace base
 } // namespace aft

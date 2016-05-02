@@ -2,6 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:libaft/examples/examples.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:libaft/libaft.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:libaft/libafttests/libafttests.xcodeproj">
    </FileRef>
 </Workspace>

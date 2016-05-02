@@ -24,6 +24,8 @@ using namespace aft::core;
 namespace
 {
 
+const std::string sampleText("The quick brown fox jumps over the lazy dog.");
+
 TEST(ResultTest, Boolean)
 {
     Result testResult;	// defaults to BOOLEAN
@@ -31,6 +33,13 @@ TEST(ResultTest, Boolean)
     testResult.setValue(true);
     ASSERT_TRUE(testResult.getValue(value));
     EXPECT_EQ(value, true);
+}
+
+TEST(ResultTest, String)
+{
+    Result strResult(sampleText);
+    ASSERT_TRUE(strResult.getType() == Result::STRING);
+    ASSERT_EQ(sampleText, strResult.asString());
 }
 
 TEST(ResultTest, TObject)

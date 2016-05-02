@@ -223,6 +223,12 @@ TEST(BasePackageTest, BasicTypes)
 
     TOString hello("Hello");
     EXPECT_EQ(hello.getValue(), "Hello");
+    TOString byebye("Bye bye");
+    EXPECT_EQ(byebye.getValue(), "Bye bye");
+
+    byebye = hello;     // Assignment operator
+    EXPECT_EQ(byebye.getValue(), "Hello");
+    EXPECT_EQ(hello.getValue(), "Hello");
 }
 
 TEST(BasePackageTest, Blob)

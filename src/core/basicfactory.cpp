@@ -82,6 +82,7 @@ BasicCommandFactory::BasicCommandFactory()
 
 BasicCommandFactory::~BasicCommandFactory()
 {
+    delete &hasher_;
 }
 
 base::TObject*

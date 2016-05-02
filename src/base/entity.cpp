@@ -19,6 +19,7 @@
 
 #include "entity.h"
 #include "tobject.h"
+#include "tobjecttype.h"
 using namespace aft::base;
 
 
@@ -39,13 +40,19 @@ bool Entity::operator==(const Entity& other) const
 {
     bool ret = false;
 
+    if (this == &other) return true;
+
     if (matchLevel_ == other.matchLevel_)
     {
         switch (matchLevel_)
         {
-            case LevelNone:
+            case LevelNone:     // Never matches
                 break;
-            case LevelTOType:   //TODO TObject type system
+            case LevelAny:     // Any TObject will do
+                ret = true;
+                break;
+            case LevelTOType:
+                ret = tObject_.getType() == other.tObject_.getType();
                 break;
             case LevelTOValue:
                 ret = tObject_ == other.tObject_;

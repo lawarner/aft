@@ -67,7 +67,7 @@ TEST(PluginTest, MecFactoryFactory)
     Blob blob("valueBlob", Blob::STRING, "Sample TObject");
     TObject* tobj = mec->construct(factory->category(), objectName, &blob);
     EXPECT_TRUE(tobj != 0);
-    EXPECT_EQ(tobj->getName(), objectName);
+    EXPECT_TRUE(tobj->getName() == objectName);
 
     //TODO check results
     tobj->run();

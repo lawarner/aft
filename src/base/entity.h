@@ -29,7 +29,7 @@ class TObject;
     
 
 /**
- *  Entity is a minimalist container class used in Provide and Consume expressions.
+ *  Entity is a minimalist TObject container class used in Consume, Provide and Require expressions.
  */
 class Entity
 {
@@ -37,6 +37,7 @@ public:
     enum MatchLevel
     {
         LevelNone,
+        LevelAny,
         LevelTOType,
         LevelTOValue,
         LevelTOName

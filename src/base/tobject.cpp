@@ -18,6 +18,7 @@
 #include "callback.h"
 #include "context.h"
 #include "result.h"
+#include "structureddata.h"
 #include "thread.h"
 #include "tobasictypes.h"
 #include "tobject.h"
@@ -46,8 +47,7 @@ public:
     Result visit(TObject* obj, void* data)
     {
         Context* context = (Context *) data;
-        obj->process(context);
-        return Result(true);
+        return obj->process(context);
     }
 };
 
@@ -214,7 +214,15 @@ TObject& TObject::operator=(const TObject& other)
 bool
 TObject::serialize(Blob& blob)
 {
-    return false;
+    base::StructuredData sd("TObject");
+
+    //TODO perhaps annotate serialized names of base TObject members (underscore, caps, etc.)
+    sd.add("type", getType().name());
+    sd.add("name", getName());
+    sd.add("state", getState());    // Not always possible to deserialize to this state
+    sd.add("result", getResult().asString());   //TODO replace when result is serializable
+    
+    return sd.serialize(blob);
 }
 
 bool
@@ -305,4 +313,15 @@ bool
 TObjectContainer::deserialize(const Blob& blob)
 {
     return false;
+}
+
+TObjectContainer& TObjectContainer::operator=(const TObjectContainer& other)
+{
+    if (this != &other)
+    {
+        TObject::operator=(other);
+        children_ = other.children_;
+    }
+
+    return *this;
 }

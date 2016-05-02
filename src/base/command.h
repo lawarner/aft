@@ -1,6 +1,6 @@
 #pragma once
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015, 2016 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -34,9 +34,14 @@ class Context;
 class Command : public aft::base::TObjectContainer
 {
 public:
+    typedef std::vector<std::string> ParameterList;
+
     /** Construct command with given name. */
     Command(const std::string& name);
 
+    /** Construct command with given name and (deserialized) parameters. */
+    Command(const std::string& name, const ParameterList& parameters);
+    
     /** Destruct command. */
     virtual ~Command();
 
@@ -48,6 +53,9 @@ public:
     // Implement SerializeContract Interface
     virtual bool serialize(Blob& blob);
     virtual bool deserialize(const Blob& blob);
+    
+    /** Copy contents of this Command from another */
+    virtual Command& operator=(const Command& other);
 
 protected:
     // Or maybe use StructuredData

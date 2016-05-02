@@ -168,6 +168,14 @@ TEST(CorePackageTest, BasicCommands)
 {
     LogCommand logCmd("This is a logged message.");
     logCmd.run();
+
+    EnvCommand setEnvCmd("set", "ABC", sampleText);
+    setEnvCmd.run();
+    EnvCommand getEnvCmd("get", "ABC");
+    Result value = getEnvCmd.run();
+    LogCommand logResult("", "result");
+    logResult.run();
+    EXPECT_EQ(value.asString(), sampleText);
 }
 
 } // namespace

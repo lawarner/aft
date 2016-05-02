@@ -32,6 +32,16 @@
 		A1F7634E1C41B708009A5873 /* libgtest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A18EA8951C41611400721577 /* libgtest.a */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		A1340BA51CD70B1C005D00BF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A18EA85E1C40C15300721577 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A18EA8D31C41775700721577;
+			remoteInfo = sample_plugin;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		A18EA8881C41532400721577 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -336,6 +346,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				A1340BA61CD70B1C005D00BF /* PBXTargetDependency */,
 			);
 			name = t_plugin;
 			productName = t_plugin;
@@ -518,6 +529,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A1340BA61CD70B1C005D00BF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A18EA8D31C41775700721577 /* sample_plugin */;
+			targetProxy = A1340BA51CD70B1C005D00BF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		A18EA86B1C40C15300721577 /* Debug */ = {

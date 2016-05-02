@@ -44,6 +44,8 @@ public:
     const std::string& getName() const { return handlerName_; }
 
     /** Get the value of a property.
+     *  @param name Name of value to retrieve.
+     *  @param value Reference to a string where the value will be copied to.
      *  @return true if value was retrieved, otherwise false.
      */
     bool getValue(const std::string& name, std::string& value) const;
@@ -52,11 +54,13 @@ public:
      *  @return value associated with name, or empty string if no value is
      *          associated.
      */
-    const std::string& getValue(const std::string& name,
-                                const std::string& defValue = std::string()) const;
+    const std::string& getValue(const std::string& name) const;
 
     /** Associate (bind) a named value */
     void setValue(const std::string& name, const std::string& value);
+    
+    /** Unassoicate a named value */
+    bool unsetValue(const std::string& name);
 
     /** Apply the property to a TObject and return the result.
      *  Sub-classes are expected to implement specific property-specific behavior.

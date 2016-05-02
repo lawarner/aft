@@ -61,6 +61,11 @@ Context::apply(const TObject& tObject)
     return const_cast<TObject&>(tObject);
 }
 
+PropertyHandler&
+Context::getEnvironment() const
+{
+    return env_;
+}
 
 const std::string&
 Context::getName() const

@@ -27,8 +27,8 @@ TEST(LoggerTest, TerminalLog)
 {
     char* currDir = getcwd(0, 0);
     std::cout << "Current Directory is " << currDir << std::endl;
-    
-    ASSERT_TRUE(&core::aftlog != 0);
+
+    ASSERT_TRUE(core::aftlog.good());
     core::aftlog << "This is a log message." << std::endl;
 }
 

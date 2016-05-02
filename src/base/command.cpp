@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015, 2016 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -23,6 +23,12 @@
 using namespace aft::base;
 
 Command::Command(const std::string& name)
+{
+    name_ = name;
+}
+
+Command::Command(const std::string& name, const ParameterList& parameters)
+: parameters_(parameters)
 {
     name_ = name;
 }
@@ -72,3 +78,13 @@ bool Command::deserialize(const Blob& blob)
     return true;
 }
 
+Command& Command::operator=(const Command& other)
+{
+    if (this != &other)
+    {
+        TObjectContainer::operator=(other);
+        parameters_ = other.parameters_;
+    }
+
+    return *this;
+}

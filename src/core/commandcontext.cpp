@@ -88,13 +88,23 @@ bool CommandContext::getArgument(const std::string& command, const std::string& 
 std::string CommandContext::getArgument(const std::string& command, int argNumber,
                                         const std::string& defValue)
 {
-    return impl_.handler_.getValue(makeKey(command, argNumber), defValue);
+    const std::string& retval = impl_.handler_.getValue(makeKey(command, argNumber));
+    if (retval.empty())
+    {
+        return defValue;
+    }
+    return retval;
 }
 
 std::string CommandContext::getArgument(const std::string& command, const std::string& argName,
                                         const std::string& defValue)
 {
-    return impl_.handler_.getValue(makeKey(command, argName), defValue);
+    const std::string& retval = impl_.handler_.getValue(makeKey(command, argName));
+    if (retval.empty())
+    {
+        return defValue;
+    }
+    return retval;
 }
 
 bool CommandContext::setArgument(const std::string& command, int argNumber,

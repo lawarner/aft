@@ -15,6 +15,7 @@
  */
 
 #include "blob.h"
+#include "command.h"
 #include "result.h"
 using namespace aft::base;
 
@@ -44,6 +45,12 @@ Result::Result(Command* command)
     setValue(command);
 }
 
+Result::Result(const std::string& strValue)
+: type_(STRING)
+{
+    setValue(strValue);
+}
+
 Result::Result(TObject* object)
     : type_(TOBJECT)
 {
@@ -58,26 +65,30 @@ Result::~Result()
 std::string
 Result::asString() const
 {
+    if (!isValueSet_) return "(unset)";
+
     switch (type_)
     {
-    case UNKNOWN:
-        return "(unknown)";
-    case FATAL:
-        return "(FATAL)";
-    case BLOB:
-        return "(Blob)";
-    case BOOLEAN:
-        return (value_.flag_ ? "true" : "false");
-    case COMMAND:
-        return "(Command)";
-    case ITERATOR:
-        return "(Iterator)";
-    case TOBJECT:
-        return "(TObject)";
-    default:
-        return "(bad result type)";
+        case UNKNOWN:
+            break;
+        case FATAL:
+            return "(FATAL)";
+        case BLOB:
+            return value_.blob_->getString();
+        case BOOLEAN:
+            return (value_.flag_ ? "true" : "false");
+        case COMMAND:
+            return value_.command_->getName();
+        case ITERATOR:
+            return "(Iterator)";
+        case STRING:
+            return *value_.string_;
+        case TOBJECT:
+            return value_.object_->getName();
+        default:
+            break;
     }
-    return "";  // not reached
+    return "";  // fall trhu
 }
 
 
@@ -85,6 +96,32 @@ Result::ResultType
 Result::getType() const
 {
     return type_;
+}
+
+std::string Result::getTypeName() const
+{
+    switch (type_)
+    {
+        case UNKNOWN:
+            return "(unknown)";
+        case FATAL:
+            return "FATAL";
+        case BLOB:
+            return "Blob";
+        case BOOLEAN:
+            return "Boolean";
+        case COMMAND:
+            return "Command";
+        case ITERATOR:
+            return "Iterator";
+        case STRING:
+            return "String";
+        case TOBJECT:
+            return "TObject";
+        default:
+            return "(bad result type)";
+    }
+    return "";  // not reached
 }
 
 bool Result::getValue(Blob*& blob) const
@@ -108,6 +145,14 @@ bool Result::getValue(Command*& command) const
     if (!isValueSet_ || type_ != COMMAND) return false;
 
     command = value_.command_;
+    return true;
+}
+
+bool Result::getValue(std::string& strValue) const
+{
+    if (!isValueSet_ || type_ != STRING) return false;
+
+    strValue = *value_.string_;
     return true;
 }
 
@@ -142,6 +187,12 @@ void Result::setValue(Command* command)
     isValueSet_ = true;
 }
 
+void Result::setValue(const std::string& strValue)
+{
+    value_.string_ = new std::string(strValue);
+    isValueSet_ = true;
+}
+
 void Result::setValue(TObject* object)
 {
     value_.object_ = object;
@@ -170,6 +221,8 @@ bool Result::operator==(const Result& other) const
             return value_.command_ == other.value_.command_;
         case ITERATOR:
             return value_.iterator_ == other.value_.iterator_;
+        case STRING:
+            return value_.string_ == other.value_.string_;
         case TOBJECT:
             return value_.object_ == other.value_.object_;
         default:

@@ -61,6 +61,11 @@ public:
     /** Apply this context to object and return the result. */
     virtual TObject& apply(const TObject& tObject);
 
+    /** Get the environment.
+     *  TODO make better interface
+     */
+    PropertyHandler& getEnvironment() const;
+
     /** Get the name of this context. */
     const std::string& getName() const;
 

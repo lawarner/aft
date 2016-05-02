@@ -54,7 +54,7 @@ TObject* BaseFactory::construct(const std::string& name, const Blob* blob,
     TObject* tObject = 0;
     if (blob)
     {
-        tObject = new TOBlob(blob, name);
+        tObject = new TOBlob(const_cast<Blob *>(blob), name);
     } else {
         tObject = new TObject(name);
     }
