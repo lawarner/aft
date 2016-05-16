@@ -52,7 +52,7 @@ bool Entity::operator==(const Entity& other) const
                 ret = true;
                 break;
             case LevelTOType:
-                ret = tObject_.getType() == other.tObject_.getType();
+                ret = const_cast<TObjectType&>(tObject_.getType()) == other.tObject_.getType();
                 break;
             case LevelTOValue:
                 ret = tObject_ == other.tObject_;

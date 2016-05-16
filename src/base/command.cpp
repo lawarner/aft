@@ -19,18 +19,22 @@
 #include "blob.h"
 #include "command.h"
 #include "structureddata.h"
+#include "tobjecttype.h"
 
 using namespace aft::base;
 
+
 Command::Command(const std::string& name)
+: TObjectContainer(TObjectType::TypeCommand, name)
 {
-    name_ = name;
+
 }
 
 Command::Command(const std::string& name, const ParameterList& parameters)
-: parameters_(parameters)
+: TObjectContainer(TObjectType::TypeCommand, name)
+, parameters_(parameters)
 {
-    name_ = name;
+
 }
 
 Command::~Command()
@@ -56,25 +60,13 @@ bool Command::deserialize(const Blob& blob)
 {
     base::StructuredData sd("Command", blob.getString());
     std::string name;
-    if (sd.get("name", name))
-    {
-        name_ = name;
-    } else {
-        return false;
-    }
-
     std::vector<std::string> parameters;
-    if (sd.getArray("parameters", parameters))
+    if (!sd.get("name", name) || !sd.getArray("parameters", parameters_))
     {
-        std::vector<std::string>::const_iterator it;
-        for (it = parameters.begin(); it != parameters.end(); ++it)
-        {
-            parameters_.push_back(*it);
-        }
-    } else {
         return false;
     }
 
+    name_ = name;
     return true;
 }
 

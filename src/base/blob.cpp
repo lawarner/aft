@@ -17,6 +17,7 @@
 #include "blob.h"
 using namespace aft::base;
 
+
 Blob::Blob(const std::string& name, void* data)
     : name_(name)
     , data_(data)

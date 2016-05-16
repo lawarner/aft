@@ -67,6 +67,16 @@ Context::getEnvironment() const
     return env_;
 }
 
+bool Context::getEnv(const std::string& name, std::string& value) const
+{
+    return env_.getValue(name, value);
+}
+
+void Context::setEnv(const std::string& name, const std::string& value)
+{
+    env_.setValue(name, value);
+}
+
 const std::string&
 Context::getName() const
 {

@@ -65,6 +65,8 @@ public:
      *  TODO make better interface
      */
     PropertyHandler& getEnvironment() const;
+    bool getEnv(const std::string& name, std::string& value) const;
+    void setEnv(const std::string& name, const std::string& value);
 
     /** Get the name of this context. */
     const std::string& getName() const;

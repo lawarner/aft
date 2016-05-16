@@ -168,7 +168,7 @@ bool StructuredDataName::operator==(const StructuredDataName& other)
 ////////////////////////////
 
 StructuredDataDelegate*
-StructuredDataDelegate::getDelegate(StructuredData& sd) const
+StructuredDataDelegate::getDelegate(StructuredData& sd)
 {
     return sd.delegate_;  // just because we're friends
 }
@@ -185,6 +185,7 @@ class JsonDataDelegate : public StructuredDataDelegate
 {
 public:
     JsonDataDelegate();
+    JsonDataDelegate(const JsonDataDelegate& other);
     virtual ~JsonDataDelegate();
 
     virtual bool add(const StructuredDataName& name, int intValue);
@@ -234,6 +235,12 @@ private:
 
 JsonDataDelegate::JsonDataDelegate()
     : json_(*new Json::Value(Json::objectValue))
+{
+    //TODO possibly set json_ name
+}
+
+JsonDataDelegate::JsonDataDelegate(const JsonDataDelegate& other)
+: json_(*new Json::Value(other.json_))
 {
     //TODO possibly set json_ name
 }
@@ -606,13 +613,36 @@ JsonDataDelegate::type(const StructuredDataName& name)
 StructuredData::StructuredData(const StructuredDataName& name,
                                const std::string& fromString,
                                StructuredDataDelegate* delegate)
-    : name_(name)
-    , delegate_(delegate ? delegate : new JsonDataDelegate)
+: name_(name)
+, delegate_(delegate ? delegate : new JsonDataDelegate)
 {
     if (!fromString.empty())
     {
         Blob blob("", Blob::STRING, fromString);
         deserialize(blob);
+    }
+}
+
+StructuredData::StructuredData(const StructuredDataName& name, const Blob& blob,
+                               StructuredDataDelegate* delegate)
+: name_(name)
+, delegate_(delegate ? delegate : new JsonDataDelegate)
+{
+    const void* data = blob.getData();
+    if (data) // This is a special case where an SD pointer is copied here.
+    {
+        if (!delegate) delete delegate_;
+        const JsonDataDelegate* sdDelegate = static_cast<const JsonDataDelegate *>(data);
+        delegate_ = new JsonDataDelegate(*sdDelegate);
+    }
+    else
+    {
+        std::string fromString = blob.getString();
+        if (!fromString.empty())
+        {
+            Blob blob("", Blob::STRING, fromString);
+            deserialize(blob);
+        }
     }
 }
 

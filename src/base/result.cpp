@@ -21,26 +21,26 @@ using namespace aft::base;
 
 
 Result::Result(ResultType type)
-    : type_(type)
-    , isValueSet_(false)
+: type_(type)
+, isValueSet_(type == FATAL)
 {
 
 }
 
 Result::Result(Blob* blob)
-    : type_(BLOB)
+: type_(BLOB)
 {
     setValue(blob);
 }
 
 Result::Result(bool value)
-    : type_(BOOLEAN)
+: type_(BOOLEAN)
 {
     setValue(value);
 }
 
 Result::Result(Command* command)
-    : type_(COMMAND)
+: type_(COMMAND)
 {
     setValue(command);
 }
@@ -52,7 +52,7 @@ Result::Result(const std::string& strValue)
 }
 
 Result::Result(TObject* object)
-    : type_(TOBJECT)
+: type_(TOBJECT)
 {
     setValue(object);
 }
@@ -239,10 +239,15 @@ bool Result::operator!=(const Result& other) const
 
 bool Result::operator!() const
 {
+    return !operator bool();
+}
+
+Result::operator bool() const
+{
     if (!isValueSet_ || (type_ == BOOLEAN && !value_.flag_))
     {
-        return true;
+        return false;
     }
 
-    return false;
+    return true;
 }

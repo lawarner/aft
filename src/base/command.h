@@ -29,11 +29,12 @@ class Context;
 
 /** A TObject to be run in (hierarchical) sequence.
  *
- *  TODO need to split into Command interface and BaseCommand implementation.
+ *  TODO split into Command interface and BaseCommand implementation.
  */
 class Command : public aft::base::TObjectContainer
 {
 public:
+    /** Define data structure used for parameters. */
     typedef std::vector<std::string> ParameterList;
 
     /** Construct command with given name. */
@@ -45,7 +46,10 @@ public:
     /** Destruct command. */
     virtual ~Command();
 
-    /** Process the command according to context. */
+    /** Process the command according to context.
+     *  If context is not specified, then command will be processed using the global context.
+     *  @return Result of processing the command.
+     */
     virtual const Result process(Context* context = 0) = 0;
     /** Set up static info from context and optional blob parameters. */
     virtual const Result setup(Context* context = 0, const Blob* parameters = 0) = 0;
@@ -59,7 +63,7 @@ public:
 
 protected:
     // Or maybe use StructuredData
-    std::vector<std::string> parameters_;
+    ParameterList parameters_;
 };
 
 } // namespace base

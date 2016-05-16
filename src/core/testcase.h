@@ -57,8 +57,8 @@ public:
      *
      *  @param context The context (environment) where objects are run.  The Context
      *         past in will likely be modified as a side effect of running.
-     *  @return A TObject, typically a Result specifying the final outcome of running
-     *          this test case.
+     *  @return A Result specifying the final outcome of running this test case (TOTrue,
+     *          TOFalse or Result::FATAL).
      */
     virtual const base::Result run(base::Context* context);
 

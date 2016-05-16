@@ -15,7 +15,9 @@
  *   limitations under the License.
  */
 
+#include "structureddata.h"
 #include "tobject.h"
+#include "tobjecttype.h"
 
 
 namespace aft
@@ -33,7 +35,7 @@ public:
 
     /** Construct a TOBasicType with a given value and optional name */
     TOBasicType<T>(T value, const std::string& name = std::string())
-    : TObject(name)
+    : TObject(TObjectType::TypeBasicType, name)
     , value_(value)
     {
         state_ = INITIAL;
@@ -71,37 +73,111 @@ public:
         return *this;
     }
     
-    // Implement SerializeContract
-    virtual bool serialize(Blob& blob)
-    {
-        return TObject::serialize(blob);
-    }
-    virtual bool deserialize(const Blob& blob)
-    {
-        return TObject::deserialize(blob);
-    }
-
     T getValue() const
     {
         return value_;
     }
     
-private:
+protected:
     T value_;
 };
 
 /**
  * Hold a boolean value.
  */
-typedef TOBasicType<bool> TOBool;
+class TOBool : public TOBasicType<bool>
+{
+public:
+    TOBool(bool value, const std::string& name = std::string())
+    : TOBasicType<bool>(value, name)
+    {
+        
+    }
+    bool serialize(Blob& blob)
+    {
+        if (!TObject::serialize(blob))
+        {
+            return false;
+        }
+        
+        StructuredData sd(TObjectType::NameBasicType, blob);
+        sd.add("value", value_);
+        
+        return sd.serialize(blob);
+    }
+    bool deserialize(const Blob& blob)
+    {
+        if (!TObject::deserialize(blob))
+        {
+            return false;
+        }
+
+        StructuredData sd("");
+        if (!sd.deserialize(blob))
+        {
+            return false;
+        }
+
+        int intValue;
+        if (!sd.get("value", intValue))
+        {
+            return false;
+        }
+        value_ = intValue != 0;
+
+        return true;
+    }
+};
 
 /**
  * Hold a string value.
  */
-typedef TOBasicType<std::string> TOString;
+class TOString : public TOBasicType<std::string>
+{
+public:
+    TOString(const std::string& value, const std::string& name = std::string())
+    : TOBasicType<std::string>(value, name)
+    {
+        
+    }
+    bool serialize(Blob& blob)
+    {
+        if (!TObject::serialize(blob))
+        {
+            return false;
+        }
+        
+        StructuredData sd(TObjectType::NameBasicType, blob);
+        sd.add("value", value_);
+        
+        return sd.serialize(blob);
+    }
+    bool deserialize(const Blob& blob)
+    {
+        if (!TObject::deserialize(blob))
+        {
+            return false;
+        }
+        
+        StructuredData sd("");
+        if (!sd.deserialize(blob))
+        {
+            return false;
+        }
+        
+        if (!sd.get("value", value_))
+        {
+            return false;
+        }
+        
+        return true;
+    }
+};
+    
 
 /**
- * Hold a blob
+ * Hold a blob.
+ * TODO override (de)serialize
  */
 typedef TOBasicType<Blob *> TOBlob;
 

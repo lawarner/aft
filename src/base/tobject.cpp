@@ -15,6 +15,8 @@
  */
 
 #include <iostream>
+
+#include "blob.h"
 #include "callback.h"
 #include "context.h"
 #include "result.h"
@@ -29,17 +31,21 @@
 using namespace aft::base;
 
 
-static bool findVisitor(TObject* obj, void* data)
+class FindVisitor : public VisitorContract
 {
-    if (!obj || !data) return false;
-
-    const std::string* name = (const std::string *) data;
-    if (obj->getName() == *name)
+public:
+    Result visit(TObject* obj, void* data)
     {
-        return true;
+        if (!obj || !data) return false;
+        
+        const std::string* name = (const std::string *) data;
+        if (obj->getName() == *name)
+        {
+            return true;
+        }
+        return false;
     }
-    return false;
-}
+};
 
 class RunVisitor : public VisitorContract
 {
@@ -76,8 +82,8 @@ TObject::TObject(const std::string& name)
 
 }
 
-TObject::TObject(TObjectType& type, const std::string& name)
-: type_(type)
+TObject::TObject(const TObjectType& type, const std::string& name)
+: type_(const_cast<TObjectType&>(type))
 , name_(name)
 , state_(UNINITIALIZED)
 , result_(Result(false))
@@ -108,8 +114,14 @@ TObject::getState() const
     return state_;
 }
 
-TObjectType&
+const TObjectType&
 TObject::getType() const
+{
+    return type_;
+}
+
+TObjectType&
+TObject::getType()
 {
     return type_;
 }
@@ -142,17 +154,24 @@ TObject::process(Context* context)
 const Result
 TObject::run(Context* context)
 {
-// check state_ is PREPARED
-//    result_ = Result(this);
-//    return result_;
+    if (state_ != PREPARED)
+    {
+        return Result(Result::FATAL);
+    }
+
+    state_ = RUNNING;
     if (context)
     {
         result_ = context->getVisitor().visit(this, context);
-    } else {
+    }
+    else
+    {
         RunVisitor runVisitor;
         result_ = runVisitor.visit(this, context);
     }
-//TODO set state_ as one of finished
+
+    // set state_ as one of finished
+    setState(!result_ ? FINISHED_BAD : FINISHED_GOOD);
     return result_;
 }
 
@@ -183,7 +202,7 @@ bool TObject::stop(bool force)
 bool TObject::operator==(const TObject& other) const
 {
     if (getName() == other.getName() &&
-        getType() == other.getType() &&
+        const_cast<TObjectType&>(getType()) == other.getType() &&
         getState() == other.getState() &&
         getResult() == other.getResult())
     {
@@ -214,6 +233,11 @@ TObject& TObject::operator=(const TObject& other)
 bool
 TObject::serialize(Blob& blob)
 {
+    if (state_ == INVALID)
+    {
+        return false;
+    }
+
     base::StructuredData sd("TObject");
 
     //TODO perhaps annotate serialized names of base TObject members (underscore, caps, etc.)
@@ -221,22 +245,68 @@ TObject::serialize(Blob& blob)
     sd.add("name", getName());
     sd.add("state", getState());    // Not always possible to deserialize to this state
     sd.add("result", getResult().asString());   //TODO replace when result is serializable
+
+    bool retval = sd.serialize(blob);
+
+    //TODO shortcut for subclasses to avoid parse/unparse of StructuredData
+    //blob.addData(StructuredDataDelegate::getDelegate(sd));
     
-    return sd.serialize(blob);
+    return retval;
 }
 
 bool
 TObject::deserialize(const Blob& blob)
 {
-    return false;
+    StructuredData sd("TObject", blob);
+ 
+    std::string name;
+    std::string strType;
+    if (sd.get("name", name) && sd.get("type", strType))
+    {
+        name_ = name;
+        type_ = TObjectType::get(strType);
+        std::string strState;
+        if (sd.get("state", strState))
+        {
+            if (strState == "UNINITIALIZED")
+            {
+                state_ = UNINITIALIZED;
+            }
+            else if (strState == "PREPARED")
+            {
+                // deserializing to this state is like an autorun
+                state_ = PREPARED;
+            }
+            else
+            {
+                // states RUNNING, PAUSED, STOPPED, FINISHED_BAD, FINISHED_GOOD
+                state_ = INITIAL;
+            }
+        }
+        //TODO? result_
+        
+        //TODO if TypeBasicType, recast and set value. The factory had better created the correct type.
+    }
+    else
+    {
+        return false;
+    }
+    
+    return true;
 }
 
 
 // -------------------------------------
 
+TObjectContainer::TObjectContainer(const TObjectType& type, const std::string& name)
+: TObject(type, name)
+, children_(0)
+{
+}
+
 TObjectContainer::TObjectContainer(const std::string& name)
-    : TObject(name)
-    , children_(0)
+: TObject(name)
+, children_(0)
 {
 }
 
@@ -266,6 +336,7 @@ TObject*
 TObjectContainer::find(const TObjectKey& key)
 {
     TObjectTree::Children::iterator it;
+    FindVisitor findVisitor;
     it = children_->visitUntil(findVisitor, (void *)&key);
 
     if (it != children_->getChildren().end())
@@ -293,26 +364,37 @@ TObjectContainer::run(Context* context)
 {
     RunVisitor runVisitor;
     VisitorContract& visitor = context ? context->getVisitor() : runVisitor;
-    if (children_)
+    // Do not recurse below Command level
+    if (children_ && type_ != TObjectType::TypeCommand)
     {
         result_ = children_->visit(visitor, context);
     } else {
         result_ = visitor.visit(this, context);
     }
 
+    //TODO if result is a command, run() it
+
     return result_;
 }
 
-bool
-TObjectContainer::serialize(Blob& blob)
+const TObjectIterator&
+TObjectContainer::visitUntil(Context* context)
 {
-    return false;
-}
-
-bool
-TObjectContainer::deserialize(const Blob& blob)
-{
-    return false;
+    for (iterator_ = children_->begin(); iterator_ != children_->end(); ++iterator_)
+    {
+        TObject* tobj = iterator_.get();
+        if (tobj)
+        {
+            // run and check result
+            Result result = context ? context->getVisitor().visit(tobj, context)
+                                    : process(context);
+            if (result)
+            {
+                break;
+            }
+        }
+    }
+    return iterator_;
 }
 
 TObjectContainer& TObjectContainer::operator=(const TObjectContainer& other)

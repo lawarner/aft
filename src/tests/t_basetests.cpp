@@ -58,10 +58,30 @@ static Result runVisitor(TObject* obj, void* data)
     return Result(true);
 }
 
+class EvalVisitor : public VisitorContract
+{
+public:
+    // This visitor returns true if TObject name ends with "Leaf"
+    Result visit(TObject* obj, void* data)
+    {
+        if (!obj) return Result(false);
+        std::string name = obj->getName();
+        if (name.substr(name.size() - 4, std::string::npos) == "Leaf")
+        {
+            return Result(true);
+        }
+        return Result(false);
+    }
+};
+
 class SampleContext : public Context
 {
 public:
-    SampleContext() { }
+    SampleContext(const std::string& name = std::string())
+    : Context(evalVisitor_, name)
+    { }
+private:
+    EvalVisitor evalVisitor_;
 };
 
 class SamplePropertyHandler : public PropertyHandler
@@ -112,6 +132,7 @@ TEST(BasePackageTest, PropertyHandler)
 
     EXPECT_EQ(handler.getValue("Setting1"), "123456");
     EXPECT_EQ(tobj.getName(), refTobj.getName());
+    EXPECT_TRUE(tobj.getType() == refTobj.getType());
 }
 
 TEST(BasePackageTest, Context)
@@ -192,6 +213,19 @@ TEST(BasePackageTest, TObjectContainer)
         }
     }
 
+    it = root.visitUntil();
+    TObject* tObj = it.get();
+    EXPECT_FALSE(tObj == 0);
+    EXPECT_TRUE(tObj->getName() == "Root");
+    std::cout << "visitUnit stopped at: " << tObj->getName() << std::endl;
+
+    SampleContext context("Sample");
+    it = root.visitUntil(&context);
+    tObj = it.get();
+    EXPECT_FALSE(tObj == 0);
+    EXPECT_TRUE(tObj->getName() == "        Leaf");
+    std::cout << "visitUnit stopped at: " << tObj->getName() << std::endl;
+    
     for (int i = 0; i < SIZE; ++i)
     {
         delete children[i];
@@ -203,7 +237,11 @@ TEST(BasePackageTest, TObjectTypes)
     TObjectType& totBase  = TObjectType::get(TObjectType::NameBase);
     TObjectType& totBase2 = TObjectType::get(TObjectType::NameBase);
     TObjectType& totCommand = TObjectType::get(TObjectType::NameCommand);
-    
+
+    EXPECT_TRUE(totBase == TObjectType::TypeBase);
+    EXPECT_TRUE(totCommand == TObjectType::TypeCommand);
+    EXPECT_FALSE(totCommand == TObjectType::TypeTestCase);
+
     EXPECT_TRUE(TObjectType::exists(TObjectType::NameBase));
     EXPECT_FALSE(TObjectType::exists("Hello?"));
     EXPECT_TRUE(totBase.name() == TObjectType::NameBase);
@@ -217,7 +255,7 @@ TEST(BasePackageTest, BasicTypes)
 {
     EXPECT_EQ(TOTrue, TOTrue);
     EXPECT_NE(TOTrue, TOFalse);
-    TOBool isTrue(true);
+    TOBool isTrue(true, "isTrue");
     EXPECT_EQ(isTrue, TOTrue);
     EXPECT_NE(isTrue, TOFalse);
 
@@ -229,6 +267,15 @@ TEST(BasePackageTest, BasicTypes)
     byebye = hello;     // Assignment operator
     EXPECT_EQ(byebye.getValue(), "Hello");
     EXPECT_EQ(hello.getValue(), "Hello");
+    
+    Blob blob("");
+    EXPECT_TRUE(isTrue.serialize(blob));
+    std::cout << "isTrue serialized: " << blob.getString() << std::endl;
+    EXPECT_TRUE(hello.serialize(blob));
+    std::cout << "hello serialized: " << blob.getString() << std::endl;
+    
+    TOBlob serialHello(&blob, "(hello)");
+    EXPECT_EQ(serialHello.getValue(), &blob);
 }
 
 TEST(BasePackageTest, Blob)
@@ -395,7 +442,7 @@ TEST(BasePackageTest, StructuredDataParse)
     StructuredDataName member("member");
 
     std::string value;
-    EXPECT_TRUE(sd.get(StructuredDataName("id"), value));
+    EXPECT_TRUE(sd.get("id", value));
     EXPECT_EQ(value, "simple name");
 
     StructuredData subSd(StructuredDataName(""));

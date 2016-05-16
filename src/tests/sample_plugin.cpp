@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015, 2016 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 #include <base/blob.h>
 #include <base/context.h>
 #include <base/factory.h>
+#include <base/structureddata.h>
 #include <base/tobject.h>
 #include <gtest/gtest.h>
 using namespace aft::base;
@@ -28,40 +29,64 @@ class TOSample : public TObject
 public:
     /** Construct a TOSample with a given value and optional name */
     TOSample(const std::string& value, const std::string& name = std::string())
-        : TObject(name)
-        , value_(value)
-        {  }
+    : TObject(name)
+    , value_(value)
+    {  }
 
     /** Destruct a TOSample */
     virtual ~TOSample() {  }
 
     /** Run in the given context */
     virtual const Result run(Context* context)
-        {
-            std::cout << "Sample TO: " << value_ << std::endl;
-            return Result(this);
-        }
-
+    {
+        std::cout << "Sample TO: " << value_ << std::endl;
+        return Result(this);
+    }
+    
     /** Test if equal to another TOSample */
     virtual bool operator==(const TOSample& other)
-        {
-            return TObject::operator==(other) && (value_ == other.value_);
-        }
+    {
+        return TObject::operator==(other) && (value_ == other.value_);
+    }
 
     // Implement SerializeContract
     virtual bool serialize(Blob& blob)
+    {
+        if (!TObject::serialize(blob))
         {
-            return TObject::serialize(blob);
+            return false;
         }
+        StructuredData sd("TOSample", blob);
+        sd.add("value", value_);
+        
+        return sd.serialize(blob);
+    }
+    
     virtual bool deserialize(const Blob& blob)
+    {
+        if (!TObject::deserialize(blob))
         {
-            return TObject::deserialize(blob);
+            return false;
         }
 
-    const std::string& getValue() const
+        StructuredData sd("");
+        if (!sd.deserialize(blob))
         {
-            return value_;
+            return false;
         }
+        
+        if (!sd.get("value", value_))
+        {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    const std::string& getValue() const
+    {
+        return value_;
+    }
 
 private:
     std::string value_;

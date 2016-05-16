@@ -60,7 +60,7 @@ RunContext* RunContext::global()
 }
 
 RunContext::RunContext()
-    : impl_(*new RunContextImpl(*new LogHandler))
+: impl_(*new RunContextImpl(*new LogHandler))
 {
 }
 

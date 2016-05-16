@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015, 2016 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -34,7 +34,9 @@ TEST(PluginTest, BasePlugin)
     BasePlugin plugin(BUNDLE_NAME, ".");
     std::cout << "Initial describe: " << plugin.describePlugins() << std::endl;
 
+    EXPECT_FALSE(plugin.isLoaded());
     EXPECT_TRUE(plugin.loadPlugins());
+    EXPECT_TRUE(plugin.isLoaded());
     std::cout << "During describe: " << plugin.describePlugins() << std::endl;
 
     EXPECT_TRUE(plugin.getFactory() != 0);
@@ -44,11 +46,16 @@ TEST(PluginTest, BasePlugin)
     TObject* tobject = plugin.createInstance(&blob);
     EXPECT_TRUE(tobject != 0);
 
-    //TODO check results
-    tobject->run();
+    const Result result = tobject->run();
+    TObject* tobjPtr;
+    EXPECT_TRUE(result.getValue(tobjPtr));
+    EXPECT_TRUE(tobjPtr == tobject);
+
     delete tobject;
 
+    EXPECT_TRUE(plugin.isLoaded());
     plugin.unloadPlugins();
+    EXPECT_FALSE(plugin.isLoaded());
     std::cout << "After describe: " << plugin.describePlugins() << std::endl;
 }
 
@@ -69,8 +76,13 @@ TEST(PluginTest, MecFactoryFactory)
     EXPECT_TRUE(tobj != 0);
     EXPECT_TRUE(tobj->getName() == objectName);
 
-    //TODO check results
-    tobj->run();
+    // check results
+    const Result result = tobj->run();
+    std::cout << "Run result: " << result.asString() << std::endl;
+    TObject* tobjPtr;
+    EXPECT_TRUE(result.getValue(tobjPtr));
+    EXPECT_TRUE(tobjPtr == tobj);
+
     free(tobj);
 
     mec->removeFactory(factory);

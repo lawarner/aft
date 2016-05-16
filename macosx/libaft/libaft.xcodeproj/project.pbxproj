@@ -101,7 +101,9 @@
 		A153D1291CD05F8400000A15 /* entity.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D1271CD05F8400000A15 /* entity.h */; };
 		A18F4D541CD442F600C755FA /* tobjecttype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18F4D521CD442F600C755FA /* tobjecttype.cpp */; };
 		A18F4D551CD442F600C755FA /* tobjecttype.h in Headers */ = {isa = PBXBuildFile; fileRef = A18F4D531CD442F600C755FA /* tobjecttype.h */; };
+		A1ABD5B01CF6ABB000A40655 /* predicate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1ABD5AF1CF6ABB000A40655 /* predicate.cpp */; };
 		A1F7638A1C41C05E009A5873 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = A1F763891C41C05E009A5873 /* README.md */; };
+		A1F9919A1CF1488A00EF3D66 /* tobjecttree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F991991CF1488A00EF3D66 /* tobjecttree.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -199,9 +201,12 @@
 		A153D1271CD05F8400000A15 /* entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = entity.h; sourceTree = "<group>"; };
 		A18F4D521CD442F600C755FA /* tobjecttype.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tobjecttype.cpp; sourceTree = "<group>"; };
 		A18F4D531CD442F600C755FA /* tobjecttype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tobjecttype.h; sourceTree = "<group>"; };
+		A1ABD5AE1CF5533500A40655 /* predicate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = predicate.h; sourceTree = "<group>"; };
+		A1ABD5AF1CF6ABB000A40655 /* predicate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = predicate.cpp; sourceTree = "<group>"; };
 		A1D59B631C3D7DE100BE6298 /* libaft.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libaft.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1F763891C41C05E009A5873 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../README.md; sourceTree = "<group>"; };
 		A1F838091C41F9E200040299 /* Ideas.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Ideas.txt; path = ../../Ideas.txt; sourceTree = "<group>"; };
+		A1F991991CF1488A00EF3D66 /* tobjecttree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tobjecttree.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -253,6 +258,8 @@
 				A153D0751CCC71F500000A15 /* outlet.h */,
 				A153D0761CCC71F500000A15 /* plugin.cpp */,
 				A153D0771CCC71F500000A15 /* plugin.h */,
+				A1ABD5AF1CF6ABB000A40655 /* predicate.cpp */,
+				A1ABD5AE1CF5533500A40655 /* predicate.h */,
 				A153D1221CCD89D200000A15 /* prodcons.cpp */,
 				A153D1231CCD89D200000A15 /* prodcons.h */,
 				A153D0781CCC71F500000A15 /* producer.cpp */,
@@ -272,6 +279,7 @@
 				A153D0871CCC71F500000A15 /* tobject.h */,
 				A153D0881CCC71F500000A15 /* tobjectiterator.cpp */,
 				A153D0891CCC71F500000A15 /* tobjectiterator.h */,
+				A1F991991CF1488A00EF3D66 /* tobjecttree.cpp */,
 				A153D08A1CCC71F500000A15 /* tobjecttree.h */,
 				A18F4D521CD442F600C755FA /* tobjecttype.cpp */,
 				A18F4D531CD442F600C755FA /* tobjecttype.h */,
@@ -542,12 +550,14 @@
 				A153D11B1CCC71F500000A15 /* t_basetests.cpp in Sources */,
 				A153D0DB1CCC71F500000A15 /* plugin.cpp in Sources */,
 				A153D1071CCC71F500000A15 /* stringproducer.cpp in Sources */,
+				A1F9919A1CF1488A00EF3D66 /* tobjecttree.cpp in Sources */,
 				A153D0D51CCC71F500000A15 /* hasher.cpp in Sources */,
 				A153D0D31CCC71F500000A15 /* factory.cpp in Sources */,
 				A153D0CA1CCC71F500000A15 /* blob.cpp in Sources */,
 				A153D1151CCC71F500000A15 /* posixpluginloader.cpp in Sources */,
 				A153D10F1CCC71F500000A15 /* jsoncpp.cpp in Sources */,
 				A153D0E01CCC71F500000A15 /* propertyhandler.cpp in Sources */,
+				A1ABD5B01CF6ABB000A40655 /* predicate.cpp in Sources */,
 				A153D0F81CCC71F500000A15 /* fileconsumer.cpp in Sources */,
 				A153D11D1CCC71F500000A15 /* t_logger.cpp in Sources */,
 				A153D1211CCC71F500000A15 /* t_testsuite.cpp in Sources */,

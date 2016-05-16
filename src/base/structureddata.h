@@ -153,7 +153,7 @@ public:
      *  @param sd reference to StructuredData
      *  @return the StructuredData's delegate
      */
-    StructuredDataDelegate* getDelegate(StructuredData& sd) const;
+    static StructuredDataDelegate* getDelegate(StructuredData& sd);
 
     /** Set the name of a StructuredData
      *  @param sd reference to StructuredData
@@ -180,6 +180,18 @@ public:
      */
     StructuredData(const StructuredDataName& name,
                    const std::string& fromString = std::string(),
+                   StructuredDataDelegate* delegate = 0);
+
+    /** Construct a structured data object.
+     *
+     *  @param name Name of this object
+     *  @param blob If blob contains a string then it is to construct the StructuredData instance.
+     *              If blob contains a data pointer, then it is cast directly as the internal 
+     *              structure (json, etc.).
+     *  @param delegate the object that handles the actual implementation. If the
+     *             delegate is not provided, then the default json delegate is used.
+     */
+    StructuredData(const StructuredDataName& name, const Blob& blob,
                    StructuredDataDelegate* delegate = 0);
 
     /** Destruct a structured data object. */
@@ -229,6 +241,7 @@ public:
     bool getArray(const StructuredDataName& name, 
                   std::vector<std::string>& values) const;
 
+    /** Check if the given element name is an array. */
     bool isArray(const StructuredDataName& name) const;
 
     /** Remove the element and all subelements of name.

@@ -345,3 +345,23 @@ EnvCommand::setup(base::Context* context, const base::Blob* parameters)
 
     return base::Result(true);
 }
+
+
+GroupCommand::GroupCommand(const std::string& name)
+: Command("Group")
+{
+    parameters_.push_back(name);
+}
+
+GroupCommand::~GroupCommand()
+{
+    
+}
+
+aft::base::TObjectTree*
+GroupCommand::add(aft::base::TObject* tObject, aft::base::TObjectTree* tObjWrapper)
+{
+    //TODO check type of tObject.
+    return TObjectContainer::add(tObject, tObjWrapper);
+}
+

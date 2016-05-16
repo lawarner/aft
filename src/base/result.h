@@ -81,6 +81,11 @@ public:
      *  @return true if either the result is not set or it holds a false boolean value.
      */
     bool operator!() const;
+    
+    /** Convert this result to a bool.
+     *  @return false if either the result is not set or it holds a false boolean value.
+     */
+    operator bool() const;
 
     // Copy constructor and assignment operators
     // (for now the default do shallow copies, as needed)

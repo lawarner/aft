@@ -33,8 +33,7 @@ public:
     virtual Result visit(TObject* obj, void* data)
     {
         Context* context = (Context *) data;
-        obj->process(context);
-        return Result(true);
+        return obj->process(context);
     }
 };
 

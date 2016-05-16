@@ -1,6 +1,6 @@
 #pragma once
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015, 2016 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
  */
 
 #include <vector>
-#include "tobject.h"
+
 #include "tobjectiterator.h"
 #include "serialize.h"
 #include "visitor.h"
@@ -27,6 +27,8 @@ namespace aft
 namespace base
 {
 // Forward reference
+class Blob;
+class TObject;
 
 /**
  *  A simple tree based on a recursive std::vector.
@@ -58,63 +60,29 @@ public:
     typedef TObjectIterator iterator;
 
     /** Append a TObject to the list of children. */
-    TObjectTree* add(TObject* obj)
-    {
-        if (!obj) return 0;
-
-        TObjectTree* wrapper = new TObjectTree(obj);
-        children_.push_back(wrapper);
-        return wrapper;
-    }
+    TObjectTree* add(TObject* obj);
 
     /** Get underlying storage of the list of children.
      *  This call should not be necessary (outside of core classes) and
      *  its use is discouraged.
      *  It may be deprecated or removed in the future. */
-    Children& getChildren()
-    {
-        return children_;
-    }
+    Children& getChildren();
 
     /** Get underlying storage of the list of children as a const.
      *  This call should not be necessary (outside of core classes) and
      *  its use is discouraged.
      *  It may be deprecated or removed in the future. */
-    const Children& getChildren() const
-    {
-        return children_;
-    }
+    const Children& getChildren() const;
 
     /** Find the child tree wrapper of the object among children */
-    TObjectTree* find(TObject* obj)
-    {
-        Children::iterator it;
-        for (it = children_.begin(); it != children_.end(); ++it)
-        {
-            if ((*it)->getValue() == obj) return *it;
-        }
-        return 0;
-    }
+    TObjectTree* find(TObject* obj);
 
     /** Return the TObject wrapped by this tree.  It may be null. */
-    TObject* getValue() const { return value_; }
+    TObject* getValue() const;
 
     /** Remove tree wrapper of object from children.
      *  The object itself is not deleted. */
-    bool remove(TObject* obj)
-    {
-        Children::iterator it;
-        for (it = children_.begin(); it != children_.end(); ++it)
-        {
-            if ((*it)->getValue() == obj)
-            {
-                delete *it;
-                children_.erase(it);
-                return true;
-            }
-        }
-        return false;
-    }
+    bool remove(TObject* obj);
 
     /**
      *  Visits this tree's value followed by each childs value, recursively.
@@ -128,56 +96,14 @@ public:
      *  @param data Extra opaque data past on each element visited
      *  @return false when the vistor returns false for any child, otherwise true.
      */
-    Result visit(CVisitor visitor, void* data)
-    {
-        Result retval(true);
-        if (value_)
-        {
-            retval = visitor(value_, data);
-            if (!retval)
-            {
-                return retval;
-            }
-        }
-        Children::iterator it;
-        for (it = children_.begin(); it != children_.end(); ++it)
-        {
-            retval = (*it)->visit(visitor, data);
-            if (!retval)
-            {
-                break;;
-            }
-        }
-        return retval;
-    }
+    Result visit(CVisitor visitor, void* data);
 
     /**
      *  Interface-based visitor.
      *  Returns true after visiting all children.  If any child TObject returns a false
      *  Result, then the TObject is returned wrapped in a Result.
      */
-    Result visit(VisitorContract& visitor, void* data)
-    {
-        bool boolResult;
-        if (value_)
-        {
-            Result result = visitor.visit(value_, data);
-            if (result.getValue(boolResult) && !boolResult)
-            {
-                return Result(value_);
-            }
-        }
-        Children::iterator it;
-        for (it = children_.begin(); it != children_.end(); ++it)
-        {
-            Result result = (*it)->visit(visitor, data);
-            if (result.getValue(boolResult) && !boolResult)
-            {
-                return Result(*it);
-            }
-        }
-        return Result(true);
-    }
+    Result visit(VisitorContract& visitor, void* data);
 
     /**
      *  Visits this tree's children and stops on true.
@@ -189,57 +115,25 @@ public:
      *  @param data Extra opaque data past on each element visited
      *  @return the iterator pointing to the child that returns true
      */
-    Children::iterator visitUntil(BVisitor visitor, void* data)
-    {
-        Children::iterator it;
-        for (it = children_.begin(); it != children_.end(); ++it)
-        {
-            if (visitor((*it)->getValue(), data))
-            {
-                break;
-            }
-        }
-        return it;
-    }
+    Children::iterator visitUntil(VisitorContract& visitor, void* data);
 
     // Implement TObjectIteratorContract
-    TObjectIterator begin()
-    {
-        TObjectIterator iterBegin(this);
-        return iterBegin;
-    }
+    /** Return an iterator to the beginning of tree */
+    TObjectIterator begin();
 
-    TObjectIterator end()
-    {
-        TObjectIterator iterEnd(0, false);
-        return iterEnd;
-    }
+    /** Return an iterator just past the end of tree */
+    TObjectIterator end();
 
-    TObjectIterator& next(TObjectIterator& iter)
-    {
-        return ++iter;
-    }
+    /** Return an iterator after moving the iterator to the next child. */
+    TObjectIterator& next(TObjectIterator& iter);
 
     // Implement SerializeContract
-    virtual bool serialize(Blob& blob)
-    {
-        return false;
-    }
+    virtual bool serialize(Blob& blob);
 
-    virtual bool deserialize(const Blob& blob)
-    {
-        return false;
-    }
-    
-    virtual TObjectTree& operator=(const TObjectTree& other)
-    {
-        if (this != &other)
-        {
-            value_ = other.value_;
-            children_ = other.children_;
-        }
-        return *this;
-    }
+    virtual bool deserialize(const Blob& blob);
+
+    /** Copy contents of another TObjectTree to this one. */
+    virtual TObjectTree& operator=(const TObjectTree& other);
 
 protected:
     /** The tree root value (optional). */

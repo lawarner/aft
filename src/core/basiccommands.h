@@ -115,6 +115,35 @@ private:
     std::string type_;      //TODO convert to enum
 };
 
+/** Container for multiple commands
+ */
+class GroupCommand : public aft::base::Command
+{
+public:
+    GroupCommand(const std::string& name);
+    virtual ~GroupCommand();
+
+    // override add method to check that children are of type Command.
+    aft::base::TObjectTree* add(aft::base::TObject* tObject, aft::base::TObjectTree* tObjWrapper = 0);
+};
+
+/** Handle if/then/else conditional
+ *
+ *  This command handles then, else
+ * TODO this needs Predicate class as member and will have 2 children, 1 for "then" and 1 for "else".
+ *      Depends on the command executor (TObjectContainer::run)
+ */
+class IfCommand : public aft::base::Command
+{
+public:
+    IfCommand();
+    virtual ~IfCommand();
+    
+private:
+    aft::base::TObject* condition;
+    aft::base::Command* trueCommand;
+    aft::base::Command* falseCommand;
+};
 
 } // namespace core
 } // namespace aft

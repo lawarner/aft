@@ -61,7 +61,7 @@ protected:
     /** Construct a TObject with a given type and optional name.
      *  Used by subclasses
      */
-    TObject(TObjectType& type, const std::string& name = std::string());
+    TObject(const TObjectType& type, const std::string& name = std::string());
 
 public:
     /** Destruct a TObject */
@@ -76,7 +76,8 @@ public:
     State getState() const;
 
     /** Get the type of this TObject */
-    TObjectType& getType() const;
+    const TObjectType& getType() const;
+    TObjectType& getType();
 
     /** Set the name of this TObject */
     void setName(const std::string& name);
@@ -162,6 +163,8 @@ typedef TObjectTree Children;
  *  A TObject that contains other TObjects.
  *
  *  It contains a tree of child TObjects and a set of visitors.
+ *  Note that the parent SerializeContract is not overrideen since each TObjectContainer subclass
+ *  handles their children differently.
  */
 class TObjectContainer : public TObject
 {
@@ -174,7 +177,7 @@ public:
      *                     wrapper is allocated.
      *  @return the child's TObjectTree wrapper.
      */
-    TObjectTree* add(TObject* tObject, TObjectTree* tObjWrapper = 0);
+    virtual TObjectTree* add(TObject* tObject, TObjectTree* tObjWrapper = 0);
 
     /** Find the object with given name among children */
     TObject* find(const TObjectKey& key);
@@ -186,23 +189,28 @@ public:
 
     // Visitors
     virtual const Result run(Context* context = 0);
-
-    // Override parent SerializeContract
-    virtual bool serialize(Blob& blob);
-    virtual bool deserialize(const Blob& blob);
+    
+    virtual const TObjectIterator& visitUntil(Context* context = 0);
 
     /** Copy from another TObjectContainer. */
     virtual TObjectContainer& operator=(const TObjectContainer& other);
 
 protected:
-    /** Construct a TObjectContainer with a given, optional name */
+    /** Construct a TObjectContainer with a given optional name */
     TObjectContainer(const std::string& name = std::string());
+
+    /** Construct a TObjectContainer with a given type and optional name */
+    TObjectContainer(const TObjectType& type, const std::string& name = std::string());
 
     /** Destruct a TObjectContainer */
     virtual ~TObjectContainer();
 
+protected:
     /** List of children objects. */
     Children* children_;
+
+    /** Saved iterator for this container */
+    TObjectIterator iterator_;
 };
 
 } // namespace base

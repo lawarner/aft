@@ -21,7 +21,9 @@
 #include "base/factory.h"
 #include "base/result.h"
 #include "base/structureddata.h"
+#include "base/tobasictypes.h"
 #include "base/tobjecttree.h"
+#include "base/tobjecttype.h"
 #include "core/logger.h"
 #include "testcase.h"
 using namespace aft;
@@ -29,7 +31,7 @@ using namespace aft::core;
 
 
 TestCase::TestCase(const std::string& name)
-    : TObjectContainer(name)
+: base::TObjectContainer(base::TObjectType::TypeTestCase, name)
 {
     state_ = INITIAL;
 }
@@ -61,10 +63,17 @@ TestCase::run(base::Context* context)
 {
     if (state_ != PREPARED)
     {
-        return base::Result(false);
+        return base::Result(base::Result::FATAL);
     }
 
-    return base::TObjectContainer::run(context);
+    base::Result retval = base::TObjectContainer::run(context);
+    if (retval.getType() == base::Result::BOOLEAN ||
+        retval.getType() == base::Result::FATAL)
+    {
+        return retval;
+    }
+
+    return base::Result(true);
 }
 
 void
@@ -79,9 +88,13 @@ TestCase::close()
 
 bool TestCase::serialize(base::Blob& blob)
 {
-    base::StructuredData sd("TestCase");
+    if (!base::TObject::serialize(blob))
+    {
+        return false;
+    }
 
-    sd.add("name", getName());
+    base::StructuredData sd("TestCase", blob.getString());
+
     sd.addArray("commands");
 
     base::TObjectTree::Children& cmds = children_->getChildren();
@@ -94,8 +107,6 @@ bool TestCase::serialize(base::Blob& blob)
             base::Blob cmdBlob("");
             tObj->serialize(cmdBlob);
             base::StructuredData sdcmd("command", cmdBlob.getString());
-//            base::StructuredData sdcmd("command");
-//            sdcmd.add(base::StructuredDataName(tObj->getName()), "args, ...");
             sd.add("commands.", sdcmd);
         }
     }
@@ -105,14 +116,15 @@ bool TestCase::serialize(base::Blob& blob)
 
 bool TestCase::deserialize(const base::Blob& blob)
 {
+    if (!base::TObject::deserialize(blob))
+    {
+        return false;
+    }
+
     base::StructuredData sd("");
     if (!sd.deserialize(blob)) return false;
 
-    std::string name;
-    if (sd.get("name", name)) setName(name);
-
     // commands
-    base::MecFactory* mec = base::MecFactory::instance();
     std::vector<std::string> cmds;
     if (!sd.getArray("commands", cmds))
     {
@@ -120,6 +132,7 @@ bool TestCase::deserialize(const base::Blob& blob)
     }
 
     const std::string category("Command");
+    base::MecFactory* mec = base::MecFactory::instance();
     std::vector<std::string>::const_iterator it;
     for (it = cmds.begin(); it != cmds.end(); ++it)
     {
