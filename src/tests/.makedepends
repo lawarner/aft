@@ -4,7 +4,7 @@ t_basetests.o: t_basetests.cpp ../../src/base/blob.h \
  ../../src/base/propertyhandler.h ../../src/base/structureddata.h \
  ../../src/base/serialize.h ../../src/base/tobasictypes.h \
  ../../src/base/tobject.h ../../src/base/tobjectiterator.h \
- ../../src/base/tobjecttree.h ../../src/base/tobjecttype.h \
+ ../../src/base/tobjecttype.h ../../src/base/tobjecttree.h \
  ../../src/core/logger.h
 t_coretests.o: t_coretests.cpp ../../src/base/blob.h \
  ../../src/core/basiccommands.h ../../src/base/command.h \
@@ -21,7 +21,8 @@ t_logger.o: t_logger.cpp ../../src/core/logger.h
 t_osdep.o: t_osdep.cpp ../../src/base/callback.h ../../src/base/context.h \
  ../../src/base/visitor.h ../../src/base/result.h ../../src/base/thread.h \
  ../../src/base/tobject.h ../../src/base/serialize.h \
- ../../src/base/tobjectiterator.h ../../src/base/tobasictypes.h
+ ../../src/base/tobjectiterator.h ../../src/base/tobasictypes.h \
+ ../../src/base/structureddata.h ../../src/base/tobjecttype.h
 t_plugin.o: t_plugin.cpp ../../src/base/blob.h ../../src/base/factory.h \
  ../../src/base/plugin.h ../../src/base/tobject.h ../../src/base/result.h \
  ../../src/base/serialize.h ../../src/base/tobjectiterator.h

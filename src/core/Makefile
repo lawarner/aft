@@ -22,8 +22,7 @@ INCDIR = $(TOP)/src
 
 #AR = ar
 CC = g++
-#CCFLAGS = -Wall -g -O2 -I$(TOP) -I$(INCDIR)
-CCFLAGS = -Wall -g -fPIC -I$(TOP) -I$(INCDIR)
+CCFLAGS = -std=c++11 -Wall -g -fPIC -I$(TOP) -I$(INCDIR)
 
 OBJS := basiccommands.o basicfactory.o commandcontext.o fileconsumer.o fileproducer.o \
         logger.o loghandler.o runcontext.o queueprodcons.o runcontext.o \
