@@ -18,8 +18,12 @@
 
 #include "blob.h"
 #include "command.h"
+#include "context.h"
+#include "result.h"
 #include "structureddata.h"
+#include "tobjecttree.h"
 #include "tobjecttype.h"
+#include "visitor.h"
 
 using namespace aft::base;
 
@@ -39,6 +43,43 @@ Command::Command(const std::string& name, const ParameterList& parameters)
 
 Command::~Command()
 {
+
+}
+
+const Result
+Command::run(Context* context)
+{
+    if (state_ != PREPARED)
+    {
+        return Result(Result::FATAL);
+    }
+    
+    state_ = RUNNING;
+    result_ = process(context);
+
+    ProcessVisitor defaultVisitor;
+    VisitorContract& runVisitor = context ? context->getVisitor() : defaultVisitor;
+    
+    // Do not recurse below Command level
+    if (children_ && type_ != TObjectType::TypeCommand)
+    {
+        result_ = children_->visit(runVisitor, context);
+    }
+
+    // set state_ as one of finished
+    //TODO check for interrupted
+    setState(!result_ ? FINISHED_BAD : FINISHED_GOOD);
+    return result_;
+}
+
+const Result
+Command::setup(Context* context, const Blob* parameters)
+{
+    if (!parameters) return base::Result(false);
+
+    parameters_.push_back(parameters->getString());
+    
+    return base::Result(true);
 }
 
 bool Command::serialize(Blob& blob)

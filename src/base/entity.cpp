@@ -23,6 +23,22 @@
 using namespace aft::base;
 
 
+// Class to hold name, type, etc. used for matching LevelTOType or LevelTOName
+class TObjectMatcher : public TObject
+{
+public:
+    TObjectMatcher(const TObjectType& toType, const std::string& name)
+    : TObject(toType, name)
+    {
+        
+    }
+    virtual ~TObjectMatcher()
+    {
+        
+    }
+};
+
+
 Entity::Entity(const std::string& name, const TObject& tObject, MatchLevel matchLevel)
 : name_(name)
 , tObject_(tObject)
@@ -31,38 +47,74 @@ Entity::Entity(const std::string& name, const TObject& tObject, MatchLevel match
 
 }
 
+Entity::Entity(const std::string& name, const TObjectType& toType, const std::string& toName)
+: name_(name)
+, tObject_(*new TObjectMatcher(toType, toName))
+, matchLevel_(LevelTOType)
+{
+    if (!toName.empty())
+    {
+        matchLevel_ = LevelTOName;
+    }
+}
+
 Entity::~Entity()
 {
 
 }
 
-bool Entity::operator==(const Entity& other) const
+const TObject&
+Entity::getTObject() const
 {
+    return tObject_;
+}
+
+bool Entity::matches(const TObject& other) const
+{
+    if (tObject_ == other) return true;
+
     bool ret = false;
 
+    switch (matchLevel_) {
+        case LevelNone:     // Never matches
+            break;
+        case LevelAny:     // Any TObject will do
+            ret = true;
+            break;
+        case LevelTOType:
+            ret = const_cast<TObjectType&>(tObject_.getType()) == other.getType();
+            break;
+        case LevelTOValue:
+            ret = tObject_ == other;
+            break;
+        case LevelTOName:
+            ret = tObject_.getName() == other.getName();
+            break;
+        default:
+            break;
+    }
+
+    return ret;
+}
+
+bool Entity::matches(const Entity& other) const
+{
+    if (operator==(other)) return true;
+
+    return matches(other.tObject_);
+}
+
+bool Entity::operator==(const Entity& other) const
+{
     if (this == &other) return true;
 
-    if (matchLevel_ == other.matchLevel_)
+    if (matchLevel_ == other.matchLevel_ &&
+        name_ == other.name_ &&
+        const_cast<TObjectType&>(tObject_.getType()) == other.tObject_.getType() &&
+        tObject_ == other.tObject_)
     {
-        switch (matchLevel_)
-        {
-            case LevelNone:     // Never matches
-                break;
-            case LevelAny:     // Any TObject will do
-                ret = true;
-                break;
-            case LevelTOType:
-                ret = const_cast<TObjectType&>(tObject_.getType()) == other.tObject_.getType();
-                break;
-            case LevelTOValue:
-                ret = tObject_ == other.tObject_;
-                break;
-            case LevelTOName:
-                ret = tObject_.getName() == other.tObject_.getName();
-                break;
-            default:
-                break;
-        }
+        return true;
     }
-    return ret;
+
+    return false;
 }

@@ -46,6 +46,7 @@ TestCase::open()
     if (state_ == INITIAL)
     {
         state_ = PREPARED;
+        result_ = base::Result(true);
         return true;
     }
 

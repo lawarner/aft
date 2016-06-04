@@ -16,6 +16,7 @@
  */
 
 #include <string>
+#include "operation.h"
 #include "result.h"
 #include "serialize.h"
 #include "tobjectiterator.h"
@@ -38,8 +39,10 @@ typedef std::string TObjectKey;
 /**
  *  The root of all (evil) testing.
  *  Everything that can appear in a test case is derived from this class.
+ *
+ * TODO needs Operations
  */
-class TObject : public SerializeContract
+class TObject : public OperationClientContract, public SerializeContract
 {
 public:
     enum State
@@ -82,6 +85,9 @@ public:
     /** Set the name of this TObject */
     void setName(const std::string& name);
 
+    //TODO probably get rid of this
+    void setResult(const Result& result);
+
     /** Set the state of this TObject.
      *  @param state the new state for this TObject
      *  @return the previous state
@@ -99,13 +105,16 @@ public:
 
     /**
      *  Processing logic of this TObject, if any.
+     *  This base class implementation just returns current result of this TObject without running anything.
      */
     virtual const Result process(Context* context = 0);
 
-    /** Run in the given context.
+    /** Run TObject in the given context.
      *
-     *  Subclasses must implement specific behavior.  This base method is a
-     *  pass-thru.  The returned result is a wrapper for 'this'.
+     *  This base method sets up context, calls process() and returns the Result.
+     *
+     *  Subclasses can override this method implement to obtain specific behavior.
+     *  For example, see TObjectContainer.
      */
     virtual const Result run(Context* context = 0);
 
@@ -136,6 +145,10 @@ public:
     
     /** Copy from another TObject. */
     virtual TObject& operator=(const TObject& other);
+
+    // Implement OperationClientContract
+    virtual Result applyOperation(const Operation& operation);
+    virtual bool supportsOperation(const Operation& operation);
 
     // Implement SerializeContract
     virtual bool serialize(Blob& blob);
@@ -188,9 +201,19 @@ public:
     Children* getChildren() const;
 
     // Visitors
+    /**
+     *  Override run() to call process() iteratively for all children in the tree.
+     */
     virtual const Result run(Context* context = 0);
     
+    /** Visit all children and stop when an object returns true.
+     *  @return iterator to child that was last visited. Returns TObjectTree::end() if
+     *          none of the children produced a true Result.
+     */
     virtual const TObjectIterator& visitUntil(Context* context = 0);
+
+    /** Visit all children and stop when an object returns a false Result. */
+    virtual const TObjectIterator& visitWhile(Context* context = 0);
 
     /** Copy from another TObjectContainer. */
     virtual TObjectContainer& operator=(const TObjectContainer& other);

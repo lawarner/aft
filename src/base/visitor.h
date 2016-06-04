@@ -16,27 +16,46 @@
  */
 
 #include "result.h"
+#include "tobject.h"
+
 
 namespace aft
 {
 namespace base
 {
 // Forward reference
-class TObject;
+class Context;
 
-/** Define a visitor C function for TObject */
-typedef bool (*BVisitor)(TObject* obj, void* data);
+/** Define a C function type for visitor using TObject */
 typedef Result (*CVisitor)(TObject* obj, void* data);
 
 
 /**
  *  Standard Visitor interface for TObjectTree and other classes to use.
+ *
+ *  TODO this needs an iteration type (parent, children, depth, order)
  */
 class VisitorContract
 {
 public:
     virtual Result visit(TObject* obj, void* data) = 0;
 };
+
+    /**
+     *  Base visitor implementation for visitor that just returns a true Result.
+     *  Uses an iterator
+     */
+    class BaseVisitor : public VisitorContract
+    {
+    public:
+        virtual Result visit(TObject* obj, void* data)
+        {
+            return Result(true);
+        }
+    private:
+        //
+    };
+    
 
 /**
  *  Default implementation for visitor that just returns a true Result.
@@ -47,6 +66,20 @@ public:
     virtual Result visit(TObject* obj, void* data)
     {
         return Result(true);
+    }
+};
+
+/**
+ *  Default visitor that calls each child's process() method.
+ *  @param data must be a pointer to a Context or 0.
+ */
+class ProcessVisitor : public VisitorContract
+{
+public:
+    Result visit(TObject* obj, void* data)
+    {
+        Context* context = (Context *)data;
+        return obj->process(context);
     }
 };
 

@@ -70,13 +70,6 @@ LogCommand::process(base::Context* context)
     return base::Result(true);
 }
 
-const base::Result
-LogCommand::setup(base::Context* context, const base::Blob* parameters)
-{
-    //TODO get and set 
-    return base::Result(true);
-}
-
 ///////////////////////////////////////////////////////////////////////////
 
 ConsCommand::ConsCommand(const std::string& type, const std::string& name)
@@ -151,23 +144,12 @@ ConsCommand::process(base::Context* context)
         if (!parameters_[2].empty() && consumer->needsData())
         {
             base::Blob blobData("", base::Blob::STRING, parameters_[2]);
-            //aftlog << "- write string blob: " << blobData.getString() << std::endl;
+            aftlog << loglevel(Debug) << "- write string blob: " << blobData.getString() << std::endl;
             retval = consumer->write(blobData);
         }
     }
 
     return base::Result(retval);
-}
-
-const base::Result
-ConsCommand::setup(base::Context* context, const base::Blob* parameters)
-{
-    if (!parameters) return base::Result(false);
-    
-    parameters_.push_back(parameters->getString());
-    
-    //TODO get and set
-    return base::Result(true);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -254,17 +236,6 @@ ProdCommand::process(base::Context* context)
     return base::Result(retval);
 }
 
-const base::Result
-ProdCommand::setup(base::Context* context, const base::Blob* parameters)
-{
-    if (!parameters) return base::Result(false);
-    
-    parameters_.push_back(parameters->getString());
-    
-    //TODO get and set
-    return base::Result(true);
-}
-
 ///////////////////////////////////////////////////////////////////////////
 
 /*  This command handles get, set (global,local), unset, [list] */
@@ -339,13 +310,6 @@ EnvCommand::process(base::Context* context)
     return base::Result(retval);
 }
 
-const base::Result
-EnvCommand::setup(base::Context* context, const base::Blob* parameters)
-{
-
-    return base::Result(true);
-}
-
 
 GroupCommand::GroupCommand(const std::string& name)
 : Command("Group")
@@ -363,5 +327,46 @@ GroupCommand::add(aft::base::TObject* tObject, aft::base::TObjectTree* tObjWrapp
 {
     //TODO check type of tObject.
     return TObjectContainer::add(tObject, tObjWrapper);
+}
+
+const base::Result
+GroupCommand::process(base::Context* context)
+{
+    return result_;
+}
+
+
+IfCommand::IfCommand(const std::string& name, const base::Operation& condition,
+          base::Command* trueCommand, base::Command* falseCommand)
+: Command("If")
+, condition_(condition)
+, trueCommand_(trueCommand)
+, falseCommand_(falseCommand)
+{
+    
+}
+
+IfCommand::~IfCommand()
+{
+    
+}
+
+const base::Result IfCommand::process(base::Context* context)
+{
+    //TODO Command needs to override Operations so they apply to children, not the command itself
+    //     Or if Operation contains an extra TObject then use that.
+    if (supportsOperation(condition_))
+    {
+        if (applyOperation(condition_))
+        {
+            if (trueCommand_) return trueCommand_->process(context);
+        }
+        else
+        {
+            if (falseCommand_) return falseCommand_->process(context);
+        }
+    }
+
+    return base::Result(base::Result::FATAL);
 }
 

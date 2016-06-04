@@ -26,6 +26,7 @@ namespace base
         
 // Forward references
 class TObject;
+class TObjectType;
     
 
 /**
@@ -43,9 +44,28 @@ public:
         LevelTOName
     };
 public:
+    /** Construct a named entity wrapping a TObject */
     Entity(const std::string& name, const TObject& tObject, MatchLevel matchLevel = LevelTOName);
+    
+    /** Construct a named entity used for matching other entities.
+     *  A TObject is synthesized to hold the matching values. */
+    Entity(const std::string& name, const TObjectType& toType, const std::string& toName = std::string());
+
     virtual ~Entity();
 
+    const TObject& getTObject() const;
+
+    /**
+     *  Check if a given TObject matches this entity's requirements.
+     */
+    bool matches(const TObject& other) const;
+    
+    /**
+     *  Check if a given entity matches this entity's requirements.
+     */
+    bool matches(const Entity& other) const;
+
+    /** Check if this entity is equal to another */
     bool operator==(const Entity& other) const;
 
 private:

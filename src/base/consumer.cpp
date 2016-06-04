@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015, 2016 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -71,12 +71,10 @@ int BaseConsumer::write(const std::vector<TObject>& objects)
     int ret = 0;
     std::vector<TObject>& tobjs = const_cast<std::vector<TObject>&>(objects);
     std::vector<TObject>::iterator it;
-    for (it = tobjs.begin(); it != tobjs.end(); ++it)
+    for (it = tobjs.begin(); it != tobjs.end(); ++it, ++ret)
     {
-        if (write(*it))
+        if (!write(*it))
         {
-            ++ret;
-        } else {
             break;
         }
     }
@@ -122,7 +120,7 @@ bool BaseConsumer::unregisterWriteCallback(const WriterContract* writer)
     return true;
 }
 
-// writers are serialize: each is completely read before going to the next.
+// writers are serialized: each is completely read before going to the next.
 void BaseConsumer::flowData()
 {
     if (!readerDelegate_ || writers_.empty()) return;

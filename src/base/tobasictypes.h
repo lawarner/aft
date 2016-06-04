@@ -15,6 +15,7 @@
  *   limitations under the License.
  */
 
+#include "result.h"
 #include "structureddata.h"
 #include "tobject.h"
 #include "tobjecttype.h"
@@ -27,24 +28,128 @@ namespace base
 // Forward reference
 
 
+/** Non-templated base class for TOBasicType */
+class TOBasicTypeBase : public TObject
+{
+protected:
+    TOBasicTypeBase(const TObjectType& type, const std::string& name = std::string());
+    virtual ~TOBasicTypeBase();
+
+public:
+    //virtual bool isSameType(const TOBasicTypeBase& other);
+    virtual Result getValueAsResult() const;
+
+protected:
+    Result resultValue_;
+};
+
+
 template<typename T>
-class TOBasicType : public TObject
+class TOBasicType : public TOBasicTypeBase
 {
 public:
     typedef T value_type;
 
     /** Construct a TOBasicType with a given value and optional name */
     TOBasicType<T>(T value, const std::string& name = std::string())
-    : TObject(TObjectType::TypeBasicType, name)
+    : TOBasicTypeBase(TObjectType::TypeBasicType, name)
     , value_(value)
     {
         state_ = INITIAL;
     }
     
-    /** Destruct a TOBool */
+    /** Destruct a TOBasicType */
     virtual ~TOBasicType()
     {
         
+    }
+
+    /** Compare this basic object to another.
+     *  @return If this object is greater than other returns 1.
+     *          If objects are equal returns 0.
+     *          If this object is less than other returns -1.
+     */
+    virtual int compare(const TOBasicType<T>& other) const
+    {
+        if (this == &other) return 0;
+        if (value_ > other.value_) return  1;
+        if (value_ < other.value_) return -1;
+        return 0;
+    }
+
+    virtual Result applyOperation(const Operation& operation)
+    {
+        Result result(Result::FATAL);
+        if (!operation.isValid())
+        {
+            return result;
+        }
+
+        // All of the comparison operations take 1 other object
+        if (!operation.getObjects().empty())
+        {
+            TObject* other = operation.getObjects().front();
+            TOBasicType<T>& otherRef = dynamic_cast<TOBasicType<T> &>(*other);
+            int compareResult = compare(otherRef);
+            
+            switch (operation.getType())
+            {
+                case Operation::OperatorCompare:
+                    result = Result(compareResult);
+                    break;
+                case Operation::OperatorIsLessThan:
+                    result = Result(compareResult == -1);
+                    break;
+                case Operation::OperatorIsLessThanOrEqual:
+                    result = Result(compareResult <= 0);
+                    break;
+                case Operation::OperatorIsEqual:
+                    result = Result(compareResult == 0);
+                    break;
+                case Operation::OperatorIsGreaterThanOrEqual:
+                    result = Result(compareResult >= 0);
+                    break;
+                case Operation::OperatorIsGreaterThan:
+                    result = Result(compareResult == 1);
+                    break;
+                default:
+                    result = TObject::applyOperation(operation);
+                    break;
+            }
+        }
+        else
+        {
+            switch (operation.getType())
+            {
+                case Operation::OperatorIsTrue:
+                    result = Result(operator bool());
+                    break;
+                case Operation::OperatorIsFalse:
+                    result = Result(!operator bool());
+                    break;
+                    
+                default:
+                    break;
+            }
+            result = TObject::applyOperation(operation);
+        }
+
+        return result;
+    }
+    
+    virtual bool supportsOperation(const Operation& operation)
+    {
+        Operation::Type opType = operation.getType();
+        bool retval = opType == Operation::OperatorCompare ||
+        opType == Operation::OperatorIsLessThan ||
+        opType == Operation::OperatorIsLessThanOrEqual ||
+        opType == Operation::OperatorIsEqual ||
+        opType == Operation::OperatorIsGreaterThanOrEqual ||
+        opType == Operation::OperatorIsGreaterThan ||
+        opType == Operation::OperatorIsTrue ||
+        opType == Operation::OperatorIsFalse;
+
+        return retval || TObject::supportsOperation(operation);
     }
 
     /** Run in the given context */
@@ -59,6 +164,7 @@ public:
      */
     virtual bool operator==(const TOBasicType<T>& other) const
     {
+        if (this == &other) return true;
         return value_ == other.value_;
     }
 
@@ -73,6 +179,11 @@ public:
         return *this;
     }
     
+    virtual operator bool() const
+    {
+        return false;
+    }
+
     T getValue() const
     {
         return value_;
@@ -82,51 +193,50 @@ protected:
     T value_;
 };
 
+
+/**
+ * Hold a blob.
+ */
+class TOBlob : public TOBasicType<Blob *>
+{
+public:
+    TOBlob(Blob* value, const std::string& name = std::string());
+    
+    virtual operator bool() const;
+    bool serialize(Blob& blob);
+    bool deserialize(const Blob& blob);
+};
+    
 /**
  * Hold a boolean value.
  */
 class TOBool : public TOBasicType<bool>
 {
 public:
-    TOBool(bool value, const std::string& name = std::string())
-    : TOBasicType<bool>(value, name)
-    {
-        
-    }
-    bool serialize(Blob& blob)
-    {
-        if (!TObject::serialize(blob))
-        {
-            return false;
-        }
-        
-        StructuredData sd(TObjectType::NameBasicType, blob);
-        sd.add("value", value_);
-        
-        return sd.serialize(blob);
-    }
-    bool deserialize(const Blob& blob)
-    {
-        if (!TObject::deserialize(blob))
-        {
-            return false;
-        }
+    TOBool(bool value, const std::string& name = std::string());
 
-        StructuredData sd("");
-        if (!sd.deserialize(blob))
-        {
-            return false;
-        }
+    Result applyOperation(const Operation& operation);
+    bool supportsOperation(const Operation& operation);
+    
+    virtual operator bool() const;
+    bool serialize(Blob& blob);
+    bool deserialize(const Blob& blob);
+};
 
-        int intValue;
-        if (!sd.get("value", intValue))
-        {
-            return false;
-        }
-        value_ = intValue != 0;
+/**
+ * Hold an int value.
+ */
+class TOInteger : public TOBasicType<int>
+{
+public:
+    TOInteger(int value, const std::string& name = std::string());
 
-        return true;
-    }
+    Result applyOperation(const Operation& operation);
+    bool supportsOperation(const Operation& operation);
+
+    virtual operator bool() const;
+    bool serialize(Blob& blob);
+    bool deserialize(const Blob& blob);
 };
 
 /**
@@ -135,51 +245,12 @@ public:
 class TOString : public TOBasicType<std::string>
 {
 public:
-    TOString(const std::string& value, const std::string& name = std::string())
-    : TOBasicType<std::string>(value, name)
-    {
-        
-    }
-    bool serialize(Blob& blob)
-    {
-        if (!TObject::serialize(blob))
-        {
-            return false;
-        }
-        
-        StructuredData sd(TObjectType::NameBasicType, blob);
-        sd.add("value", value_);
-        
-        return sd.serialize(blob);
-    }
-    bool deserialize(const Blob& blob)
-    {
-        if (!TObject::deserialize(blob))
-        {
-            return false;
-        }
-        
-        StructuredData sd("");
-        if (!sd.deserialize(blob))
-        {
-            return false;
-        }
-        
-        if (!sd.get("value", value_))
-        {
-            return false;
-        }
-        
-        return true;
-    }
-};
-    
+    TOString(const std::string& value, const std::string& name = std::string());
 
-/**
- * Hold a blob.
- * TODO override (de)serialize
- */
-typedef TOBasicType<Blob *> TOBlob;
+    virtual operator bool() const;
+    bool serialize(Blob& blob);
+    bool deserialize(const Blob& blob);
+};
 
 
 /**

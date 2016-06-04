@@ -131,6 +131,11 @@ void TObject::setName(const std::string& name)
     name_ = name;
 }
 
+void TObject::setResult(const Result& result)
+{
+    result_ = result;
+}
+
 TObject::State
 TObject::setState(State state)
 {
@@ -141,14 +146,23 @@ TObject::setState(State state)
 
 bool TObject::rewind(Context* context)
 {
-    result_ = Result(false);
-    return false;
+    if (state_ == UNINITIALIZED)
+    {
+        return Result(false);
+    }
+    
+    state_ = PREPARED;
+    return Result(true);
 }
 
 const Result
 TObject::process(Context* context)
 {
-    return Result(true);
+    if (context)
+    {
+        result_ = context->process(this);
+    }
+    return result_;
 }
 
 const Result
@@ -160,17 +174,15 @@ TObject::run(Context* context)
     }
 
     state_ = RUNNING;
-    if (context)
-    {
-        result_ = context->getVisitor().visit(this, context);
-    }
-    else
-    {
-        RunVisitor runVisitor;
-        result_ = runVisitor.visit(this, context);
-    }
-
+    result_ = process(context);
+#if 0
+    RunVisitor defaultVisitor;
+    VisitorContract& runVisitor = context ? context->getVisitor() : defaultVisitor;
+    result_ = runVisitor.visit(this, context);
+#endif
+    
     // set state_ as one of finished
+    //TODO check for interrupted
     setState(!result_ ? FINISHED_BAD : FINISHED_GOOD);
     return result_;
 }
@@ -228,6 +240,27 @@ TObject& TObject::operator=(const TObject& other)
     }
 
     return *this;
+}
+
+Result TObject::applyOperation(const Operation& operation)
+{
+    if (operation.getType() == Operation::OperatorIsNull)
+    {
+        bool isNull = state_ == INVALID || state_ == UNINITIALIZED;
+        return Result(isNull);
+    }
+
+    return Result(Result::FATAL);
+}
+
+bool TObject::supportsOperation(const Operation& operation)
+{
+    if (operation.getType() == Operation::OperatorIsNull)
+    {
+        return true;
+    }
+
+    return false;
 }
 
 bool
@@ -301,12 +334,14 @@ TObject::deserialize(const Blob& blob)
 TObjectContainer::TObjectContainer(const TObjectType& type, const std::string& name)
 : TObject(type, name)
 , children_(0)
+, iterator_(0)
 {
 }
 
 TObjectContainer::TObjectContainer(const std::string& name)
 : TObject(name)
 , children_(0)
+, iterator_(0)
 {
 }
 
@@ -362,18 +397,31 @@ Children* TObjectContainer::getChildren() const
 const Result
 TObjectContainer::run(Context* context)
 {
-    RunVisitor runVisitor;
-    VisitorContract& visitor = context ? context->getVisitor() : runVisitor;
-    // Do not recurse below Command level
-    if (children_ && type_ != TObjectType::TypeCommand)
+    if (state_ != PREPARED)
     {
-        result_ = children_->visit(visitor, context);
-    } else {
-        result_ = visitor.visit(this, context);
+        return Result(Result::FATAL);
+    }
+    
+    state_ = RUNNING;
+    result_ = process(context);
+
+    if (children_)
+    {
+        for (iterator_ = children_->begin();
+             iterator_ != children_->end() && result_.getType() != Result::FATAL;
+             ++iterator_)
+        {
+            TObject* tobj = iterator_.get();
+            if (tobj)
+            {
+                result_ = tobj->process(context);
+            }
+        }
     }
 
-    //TODO if result is a command, run() it
-
+    // set state_ as one of finished
+    //TODO check for interrupted
+    setState(!result_ ? FINISHED_BAD : FINISHED_GOOD);
     return result_;
 }
 
@@ -387,8 +435,28 @@ TObjectContainer::visitUntil(Context* context)
         {
             // run and check result
             Result result = context ? context->getVisitor().visit(tobj, context)
-                                    : process(context);
+                                    : tobj->process();
             if (result)
+            {
+                break;
+            }
+        }
+    }
+    return iterator_;
+}
+
+const TObjectIterator&
+TObjectContainer::visitWhile(Context* context)
+{
+    for (iterator_ = children_->begin(); iterator_ != children_->end(); ++iterator_)
+    {
+        TObject* tobj = iterator_.get();
+        if (tobj)
+        {
+            // run and check result
+            Result result = context ? context->getVisitor().visit(tobj, context)
+                                    : tobj->process();
+            if (!result)
             {
                 break;
             }

@@ -14,9 +14,12 @@
  *   limitations under the License.
  */
 
+#include <cstring>
 #include <iostream>
+
 #include <base/blob.h>
 #include <base/context.h>
+#include <base/entity.h>
 #include <base/factory.h>
 #include <base/hasher.h>
 #include <base/propertyhandler.h>
@@ -61,14 +64,34 @@ static Result runVisitor(TObject* obj, void* data)
 class EvalVisitor : public VisitorContract
 {
 public:
+    enum VisitType { FirstLeaf, FirstObject, FirstTrue };
     // This visitor returns true if TObject name ends with "Leaf"
     Result visit(TObject* obj, void* data)
     {
         if (!obj) return Result(false);
-        std::string name = obj->getName();
-        if (name.substr(name.size() - 4, std::string::npos) == "Leaf")
+        VisitType visitType = FirstLeaf;
+        if (data)
         {
-            return Result(true);
+            visitType = *(VisitType*)data;
+        }
+        switch (visitType)
+        {
+            case FirstLeaf:
+            {
+                std::string name = obj->getName();
+                if (name.substr(name.size() - 4, std::string::npos) == "Leaf")
+                {
+                    return Result(true);
+                }
+                break;
+            }
+            case FirstObject:
+                return Result(true);
+                break;
+            case FirstTrue:
+                return obj->process();
+            default:
+                break;
         }
         return Result(false);
     }
@@ -122,6 +145,16 @@ private:
 
 namespace
 {
+
+TEST(BasePackageTest, TerminalInput)
+{
+    std::cout << "Enter your name or something: " << std::endl;
+    //char cname[80];
+    //std::cin.getline(cname, 80);
+    std::string name("Joe Smoe");
+    
+    std::cout << "So you are " << name << ", are you?" << std::endl;
+}
 
 TEST(BasePackageTest, PropertyHandler)
 {
@@ -182,7 +215,11 @@ TEST(BasePackageTest, TObjectTree)
 
 TEST(BasePackageTest, TObjectContainer)
 {
-    SampleTOContainer root("Root", 0);
+    const std::string RootName("Root");
+    const std::string ChildName("    Child");
+    const std::string LeafName("        Leaf");
+
+    SampleTOContainer root(RootName, 0);
     root.run();
 
     const int SIZE = 6;
@@ -190,9 +227,10 @@ TEST(BasePackageTest, TObjectContainer)
     TObjectTree* childTrees[SIZE];
     for (int i = 0; i < SIZE; ++i)
     {
-        children[i] = new SampleTOContainer("    Child", i + 1);
+        children[i] = new SampleTOContainer(ChildName, i + 1);
         childTrees[i] = root.add(children[i]);
-        SampleTOContainer* leaf = new SampleTOContainer("        Leaf", (i + 1) * 10);
+        SampleTOContainer* leaf = new SampleTOContainer(LeafName, (i + 1) * 10);
+        leaf->setResult(Result(true));
         children[0]->add(leaf, childTrees[0]);
         if (i >= 2) children[2]->add(leaf, childTrees[2]);
     }
@@ -216,16 +254,16 @@ TEST(BasePackageTest, TObjectContainer)
     it = root.visitUntil();
     TObject* tObj = it.get();
     EXPECT_FALSE(tObj == 0);
-    EXPECT_TRUE(tObj->getName() == "Root");
+    EXPECT_TRUE(tObj->getName() == LeafName);
     std::cout << "visitUnit stopped at: " << tObj->getName() << std::endl;
 
     SampleContext context("Sample");
-    it = root.visitUntil(&context);
+    it = root.visitWhile(&context);
     tObj = it.get();
     EXPECT_FALSE(tObj == 0);
-    EXPECT_TRUE(tObj->getName() == "        Leaf");
-    std::cout << "visitUnit stopped at: " << tObj->getName() << std::endl;
-    
+    EXPECT_TRUE(tObj->getName() == RootName);
+    std::cout << "visitWhile stopped at: " << tObj->getName() << std::endl;
+
     for (int i = 0; i < SIZE; ++i)
     {
         delete children[i];
@@ -259,10 +297,40 @@ TEST(BasePackageTest, BasicTypes)
     EXPECT_EQ(isTrue, TOTrue);
     EXPECT_NE(isTrue, TOFalse);
 
+    EXPECT_EQ(TOTrue.compare(TOTrue),   0);
+    EXPECT_EQ(TOTrue.compare(TOFalse),  1);
+    EXPECT_EQ(TOFalse.compare(TOTrue), -1);
+    EXPECT_EQ(TOFalse.compare(TOFalse), 0);
+
+    TOInteger int0(0, "zero");
+    TOInteger int1(1, "one");
+    TOInteger int2(2, "two");
+    TOInteger intNeg(-99999, "(negative)");
+    EXPECT_EQ(int1.getValue(), 1);
+    EXPECT_EQ(int2.getValue(), 2);
+    EXPECT_NE(int1, int2);
+    EXPECT_NE(int2, intNeg);
+
+    EXPECT_EQ(int0.compare(int1),   -1);
+    EXPECT_EQ(int1.compare(int1),    0);
+    EXPECT_EQ(int1.compare(int2),   -1);
+    EXPECT_EQ(int1.compare(intNeg),  1);
+    EXPECT_EQ(int2.compare(int1),    1);
+    EXPECT_EQ(int2.compare(int2),    0);
+    EXPECT_EQ(int2.compare(intNeg),  1);
+    EXPECT_EQ(intNeg.compare(int1), -1);
+    EXPECT_EQ(intNeg.compare(int2), -1);
+    EXPECT_EQ(intNeg.compare(intNeg),0);
+
     TOString hello("Hello");
     EXPECT_EQ(hello.getValue(), "Hello");
     TOString byebye("Bye bye");
     EXPECT_EQ(byebye.getValue(), "Bye bye");
+
+    EXPECT_EQ(hello.compare(hello), 0);
+    EXPECT_EQ(hello.compare(byebye), 1);
+    EXPECT_EQ(byebye.compare(hello), -1);
+    EXPECT_EQ(byebye.compare(byebye), 0);
 
     byebye = hello;     // Assignment operator
     EXPECT_EQ(byebye.getValue(), "Hello");
@@ -276,23 +344,40 @@ TEST(BasePackageTest, BasicTypes)
     
     TOBlob serialHello(&blob, "(hello)");
     EXPECT_EQ(serialHello.getValue(), &blob);
+    
+    Blob blob2("two", Blob::STRING, "Aacme");
+    TOBlob toBlob2(&blob2, "(blob2)");
+    
+    std::cout << "Compare blob 1, 1 = " << serialHello.compare(serialHello) << std::endl;
+    std::cout << "Compare blob 1, 2 = " << serialHello.compare(toBlob2) << std::endl;
+    std::cout << "Compare blob 2, 1 = " << toBlob2.compare(serialHello) << std::endl;
+    std::cout << "Compare blob 2, 2 = " << toBlob2.compare(toBlob2) << std::endl << std::endl;
+    
+    Result result = hello.getValueAsResult();
+    EXPECT_EQ(result.getType(), Result::STRING);
+    std::string strval;
+    EXPECT_TRUE(result.getValue(strval));
+    EXPECT_EQ(strval, "Hello");
 }
 
 TEST(BasePackageTest, Blob)
 {
     const char* SOMEDATA = "Hello, Blob!";
+    const size_t SomeDataLength = strlen(SOMEDATA);
+
     Blob blob("basicBlob", (void *)SOMEDATA);
     EXPECT_EQ("basicBlob", blob.getName());
-    EXPECT_EQ(strncmp(SOMEDATA, (const char *)blob.getData(), 0), 0);
+    EXPECT_EQ(strncmp(SOMEDATA, (const char *)blob.getData(), SomeDataLength), 0);
 
     Blob subBlob("subBlob");
     blob.addMember(&subBlob);
     EXPECT_EQ(1, blob.getMembers().size());
     EXPECT_EQ(&subBlob, blob.getMembers().front());
 
-    Blob rawBlob("rawBlob", (void *)SOMEDATA);
+    Blob rawBlob("rawBlob", (void *)SOMEDATA, SomeDataLength + 1);
     EXPECT_EQ(rawBlob.getType(), Blob::RAWDATA);
-    EXPECT_EQ(strncmp(SOMEDATA, (const char *)rawBlob.getData(), 0), 0);
+    EXPECT_EQ(strncmp(SOMEDATA, (const char *)rawBlob.getData(), SomeDataLength), 0);
+    std::cout << "Blob data string: " << rawBlob.getString() << std::endl;
 
     std::string aString("This is another string.");
     Blob stringBlob("stringBlob", Blob::STRING, aString);
@@ -493,6 +578,93 @@ TEST(BasePackageTest, Hasher)
                 break;
         }
     }
+}
+
+TEST(BasePackageTest, Entity)
+{
+    TOString myObject(FullName, "myObject");
+    TOString otherObject(FullName, "Other Object");
+    Entity byType("basic type", TObjectType::TypeBasicType);
+    Entity byName("basic type", TObjectType::TypeBasicType, "myObject");
+    
+    EXPECT_TRUE(byType.matches(myObject));
+    EXPECT_TRUE(byType.matches(otherObject));
+    EXPECT_TRUE(byName.matches(myObject));
+    EXPECT_FALSE(byName.matches(otherObject));
+}
+/*
+TEST(BasePackageTest, Predicate)
+{
+    BasePredicate isNull;
+    BasePredicate isTrue(&TOTrue);
+
+    EXPECT_TRUE(isNull.evaluate(PredicateContract::PredicateNull));
+    EXPECT_FALSE(isTrue.evaluate(PredicateContract::PredicateNull));
+    EXPECT_TRUE(isTrue.evaluate(PredicateContract::PredicateTrue));
+    EXPECT_FALSE(isTrue.evaluate(PredicateContract::PredicateEqual));
+
+    TOInteger zero(0, "zero");
+    TOInteger one(1, "one");
+    TOInteger two(2, "two");
+    BasePredicate compare(&one, &two);
+    EXPECT_FALSE(compare.evaluate(PredicateContract::PredicateNull));
+    EXPECT_TRUE(compare.evaluate(PredicateContract::PredicateLessThan));
+    EXPECT_TRUE(compare.evaluate(PredicateContract::PredicateLessOrEqual));
+    EXPECT_FALSE(compare.evaluate(PredicateContract::PredicateEqual));
+    EXPECT_FALSE(compare.evaluate(PredicateContract::PredicateGreaterThan));
+    EXPECT_FALSE(compare.evaluate(PredicateContract::PredicateGreaterOrEqual));
+
+    BasePredicate ifThenElse(&TOTrue, &one, &zero);
+    EXPECT_TRUE(ifThenElse.evaluate(PredicateContract::PredicateIfThenElse));
+    BasePredicate ifNotThenElse(&TOFalse, &one, &TOFalse);
+    EXPECT_TRUE(ifNotThenElse.evaluate(PredicateContract::PredicateIfNotThenElse));
+    BasePredicate inte2(&TOTrue, &one, &TOFalse);
+    EXPECT_TRUE(inte2.evaluate(PredicateContract::PredicateIfNotThenElse));
+}
+*/
+
+TEST(BasePackageTest, Operation)
+{
+    TObject empty("empty");
+    Operation isNull(Operation::OperatorIsNull);
+    Operation isTrue(Operation::OperatorIsTrue);
+    EXPECT_TRUE(empty.supportsOperation(isNull));
+    EXPECT_FALSE(empty.supportsOperation(isTrue));
+
+    EXPECT_TRUE(empty.applyOperation(isNull));
+    EXPECT_FALSE(empty.applyOperation(isTrue));
+
+    TOInteger anInt(112, "anInt");
+    TOInteger another(112, "another");
+    TOInteger one(1, "one");
+    Operation isEqual(Operation::OperatorIsEqual);
+    isEqual.addObject(&another);
+    Operation isGreater(Operation::OperatorIsGreaterThan);
+    isGreater.addObject(&another);
+    Operation increment(Operation::OperatorAdd);
+    increment.addObject(&one);
+    Operation setTo123(Operation::OperatorSet);
+    setTo123.addParameter("123");
+
+    EXPECT_FALSE(anInt.applyOperation(isNull));
+    EXPECT_TRUE(anInt.applyOperation(isTrue));
+
+    EXPECT_TRUE(anInt.supportsOperation(isEqual));
+    EXPECT_TRUE(anInt.supportsOperation(isGreater));
+    EXPECT_TRUE(anInt.supportsOperation(increment));
+
+    EXPECT_TRUE(anInt.applyOperation(isEqual));
+    EXPECT_FALSE(anInt.applyOperation(isGreater));
+
+    EXPECT_EQ(anInt.getValue(), 112);
+    EXPECT_TRUE(anInt.applyOperation(increment));
+    EXPECT_EQ(anInt.getValue(), 113);
+    EXPECT_FALSE(anInt.applyOperation(isEqual));
+    EXPECT_TRUE(anInt.applyOperation(isGreater));
+
+    EXPECT_TRUE(anInt.supportsOperation(setTo123));
+    EXPECT_TRUE(anInt.applyOperation(setTo123));
+    EXPECT_EQ(anInt.getValue(), 123);
 }
 
 } // namespace

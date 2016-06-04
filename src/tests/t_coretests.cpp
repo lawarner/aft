@@ -167,13 +167,18 @@ TEST(CorePackageTest, CommandContext)
 TEST(CorePackageTest, BasicCommands)
 {
     LogCommand logCmd("This is a logged message.");
+    logCmd.setState(TObject::PREPARED);
     logCmd.run();
 
     EnvCommand setEnvCmd("set", "ABC", sampleText);
+    setEnvCmd.setState(TObject::PREPARED);
     setEnvCmd.run();
+
     EnvCommand getEnvCmd("get", "ABC");
+    getEnvCmd.setState(TObject::PREPARED);
     Result value = getEnvCmd.run();
     LogCommand logResult("", "result");
+    logResult.setState(TObject::PREPARED);
     logResult.run();
     EXPECT_EQ(value.asString(), sampleText);
 }

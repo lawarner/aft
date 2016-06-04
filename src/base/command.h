@@ -51,8 +51,12 @@ public:
      *  @return Result of processing the command.
      */
     virtual const Result process(Context* context = 0) = 0;
+
+    /** Only iterates down to CommandType level */
+    virtual const Result run(Context* context = 0);
+
     /** Set up static info from context and optional blob parameters. */
-    virtual const Result setup(Context* context = 0, const Blob* parameters = 0) = 0;
+    virtual const Result setup(Context* context = 0, const Blob* parameters = 0);
 
     // Implement SerializeContract Interface
     virtual bool serialize(Blob& blob);

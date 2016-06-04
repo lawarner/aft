@@ -14,6 +14,8 @@
  *   limitations under the License.
  */
 
+#include <sstream>
+
 #include "blob.h"
 #include "command.h"
 #include "result.h"
@@ -43,6 +45,12 @@ Result::Result(Command* command)
 : type_(COMMAND)
 {
     setValue(command);
+}
+
+Result::Result(int value)
+: type_(INTEGER)
+{
+    setValue(value);
 }
 
 Result::Result(const std::string& strValue)
@@ -79,6 +87,12 @@ Result::asString() const
             return (value_.flag_ ? "true" : "false");
         case COMMAND:
             return value_.command_->getName();
+        case INTEGER:
+        {
+            std::ostringstream oss;
+            oss << value_.integer_;
+            return oss.str();
+        }
         case ITERATOR:
             return "(Iterator)";
         case STRING:
@@ -112,6 +126,8 @@ std::string Result::getTypeName() const
             return "Boolean";
         case COMMAND:
             return "Command";
+        case INTEGER:
+            return "Integer";
         case ITERATOR:
             return "Iterator";
         case STRING:
@@ -148,6 +164,14 @@ bool Result::getValue(Command*& command) const
     return true;
 }
 
+bool Result::getValue(int& value) const
+{
+    if (!isValueSet_ || type_ != INTEGER) return false;
+
+    value = value_.integer_;
+    return true;
+}
+
 bool Result::getValue(std::string& strValue) const
 {
     if (!isValueSet_ || type_ != STRING) return false;
@@ -168,7 +192,7 @@ void Result::setValue(Blob* blob)
 {
     if (blob)
     {
-        //TODO assert type is BLOB
+        type_ = BLOB;
         value_.blob_ = blob;
         isValueSet_ = true;
     }
@@ -176,31 +200,78 @@ void Result::setValue(Blob* blob)
 
 void Result::setValue(bool value)
 {
-    //TODO assert type is BOOLEAN
+    type_ = BOOLEAN;
     value_.flag_ = value;
     isValueSet_ = true;
 }
 
 void Result::setValue(Command* command)
 {
+    type_ = COMMAND;
     value_.command_ = command;
+    isValueSet_ = true;
+}
+
+void Result::setValue(int value)
+{
+    type_ = INTEGER;
+    value_.integer_ = value;
     isValueSet_ = true;
 }
 
 void Result::setValue(const std::string& strValue)
 {
+    type_ = STRING;
     value_.string_ = new std::string(strValue);
     isValueSet_ = true;
 }
 
 void Result::setValue(TObject* object)
 {
+    type_ = TOBJECT;
     value_.object_ = object;
     isValueSet_ = true;
 }
 
+int Result::compare(const Result& other) const
+{
+    if (type_ != other.type_) return -2;
+    if (!isValueSet_ || !other.isValueSet_)
+    {
+        return -2;
+    }
+    if (operator==(other)) return 0;
+
+    switch (type_)
+    {
+        case UNKNOWN:
+            return -2;
+        case FATAL:
+            return -2;
+        case BLOB:
+            return -2;
+        case BOOLEAN:
+            if (value_.flag_ < other.value_.flag_) return -1;
+        case COMMAND:
+            return -2;
+        case INTEGER:
+            if (value_.integer_ < other.value_.integer_) return -1;
+        case ITERATOR:
+            return -2;
+        case STRING:
+            if (value_.string_ < other.value_.string_) return -1;
+        case TOBJECT:
+            return -2;
+        default:
+            return -2;
+    }
+    
+    return 1;
+}
+
 bool Result::operator==(const Result& other) const
 {
+    if (this == &other) return true;
     if (type_ != other.type_) return false;
     if (!isValueSet_ || !other.isValueSet_)
     {
@@ -219,6 +290,8 @@ bool Result::operator==(const Result& other) const
             return value_.flag_ == other.value_.flag_;
         case COMMAND:
             return value_.command_ == other.value_.command_;
+        case INTEGER:
+            return value_.integer_ == other.value_.integer_;
         case ITERATOR:
             return value_.iterator_ == other.value_.iterator_;
         case STRING:
@@ -244,7 +317,7 @@ bool Result::operator!() const
 
 Result::operator bool() const
 {
-    if (!isValueSet_ || (type_ == BOOLEAN && !value_.flag_))
+    if (!isValueSet_ || type_ == FATAL || (type_ == BOOLEAN && !value_.flag_))
     {
         return false;
     }

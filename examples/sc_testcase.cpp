@@ -16,17 +16,20 @@
 
 // scenario: create objects (testcase, commands), run, serialize to file, deserialize and run again.
 /* File contents is:
- "commands":[{"name":"Log","parameters":["This is the first message.",""]},
-             {"name":"Cons","parameters":["openw","/tmp/sc1-file.txt"]},
-             {"name":"Cons","parameters":["write","/tmp/sc1-file.txt","Hello World!\n"]},
-             {"name":"Cons","parameters":["close","/tmp/sc1-file.txt"]},
-             {"name":"Prod","parameters":["open","/tmp/sc1-file.txt"]},
-             {"name":"Prod","parameters":["read","/tmp/sc1-file.txt"]},
-             {"name":"Log","parameters":["","result"]},
-             {"name":"Prod","parameters":["close","/tmp/sc1-file.txt"]},
-             {"name":"Log","parameters":["This is the last message.",""]}],
-  "name":"Scenario 1"}
- 
+ { "commands":[{"name":"Log","parameters":["This is the first message.",""]},
+               {"name":"Cons","parameters":["openw","/tmp/sc1-file.txt"]},
+               {"name":"Cons","parameters":["write","/tmp/sc1-file.txt","Hello World!\n"]},
+               {"name":"Cons","parameters":["close","/tmp/sc1-file.txt"]},
+               {"name":"Prod","parameters":["open","/tmp/sc1-file.txt"]},
+               {"name":"Prod","parameters":["read","/tmp/sc1-file.txt"]},
+               {"name":"Log","parameters":["","result"]},
+               {"name":"Prod","parameters":["close","/tmp/sc1-file.txt"]},
+               {"name":"Log","parameters":["This is the last message.",""]}],
+   "name":"Scenario 1",
+   "result":"true",
+   "state":1,
+   "type":"TestCase"}
+
   Scenario 2 will also have for loop, if-then-else and group commands.
   Scenario 3 will start adding entities and dependencies.
   Scenario 4 will be a Test Suite containing the testcases from Scenarios 1-3.
@@ -81,7 +84,7 @@ int main(int argc, char* argv[])
     testCase.add(new LogCommand("This is the last message."));
 
     // First run
-    aftlog << "Running initial testcase:" << std::endl;
+    aftlog << "\n==================== Running initial testcase: "<< testCase.getName() << std::endl;
     testCase.open();
     testCase.run(0);
     testCase.close();
@@ -118,7 +121,7 @@ int main(int argc, char* argv[])
             aftlog << loglevel(Error) << "Cannot deserialize testcase" << std::endl;
             return 4;
         }
-        aftlog << "Running testcase from file: " << tc2.getName() << std::endl;
+        aftlog << "\n==================== Running testcase from file: " << tc2.getName() << std::endl;
         tc2.open();
         Result result = tc2.run(0);
         tc2.close();
@@ -127,7 +130,7 @@ int main(int argc, char* argv[])
         return 5;
     }
 
-    aftlog << "Finished Scenario 1" << std::endl;
+    aftlog << "\n==================== Finished Scenario 1" << std::endl;
 
     return 0;
 }

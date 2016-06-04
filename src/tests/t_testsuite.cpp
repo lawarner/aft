@@ -27,16 +27,6 @@ using namespace aft::base;
 using namespace aft::core;
 
 
-class RunVisitor : public VisitorContract
-{
-public:
-    virtual Result visit(TObject* obj, void* data)
-    {
-        Context* context = (Context *) data;
-        return obj->process(context);
-    }
-};
-
 class SampleContext : public Context
 {
 public:
@@ -54,15 +44,15 @@ class TestSuiteTest : public ::testing::Test
 {
 protected:
     virtual void SetUp()
-        {
-            runVisitor_ = new RunVisitor;
-            context_ = new SampleContext(*runVisitor_, "sample context");
-        }
+    {
+        runVisitor_ = new ProcessVisitor;
+        context_ = new SampleContext(*runVisitor_, "sample context");
+    }
     virtual void TearDown()
-        {
-            if (context_) delete context_;
-            delete runVisitor_;
-        }
+    {
+        if (context_) delete context_;
+        delete runVisitor_;
+    }
 
     void createSimple(const std::string& name, bool withVisitor = false)
         {
@@ -74,15 +64,16 @@ protected:
             } else {
                 context_ = new SampleContext(name + " context");
             }
-            testCase_.add(new LogCommand);
+            testCase_.add(new LogCommand("Message that is first."));
             testCase_.add(new LogCommand("Message number 2."));
 
+            testSuite_.setName(name + " suite");
             testSuite_.add(&testCase_);
         }
 
 protected:
     SampleContext* context_;
-    RunVisitor* runVisitor_;
+    ProcessVisitor* runVisitor_;
     TestSuite testSuite_;
     TestCase  testCase_;
 };
@@ -137,6 +128,16 @@ TEST_F(TestSuiteTest, SimpleTestSuite)
     testSuite_.close();
 }
 
+TEST_F(TestSuiteTest, SimpleTestSuiteVisitor)
+    {
+        createSimple("simple test with visitor", true);
+        EXPECT_TRUE(testSuite_.open());
+        aftlog << "Going to start test suite." << std::endl;
+        Result result = testSuite_.run(context_);
+        EXPECT_FALSE(!result);
+        testSuite_.close();
+    }
+    
 } // namespace
 
 int main(int argc, char* argv[])
@@ -144,4 +145,3 @@ int main(int argc, char* argv[])
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
-

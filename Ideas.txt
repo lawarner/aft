@@ -1,3 +1,17 @@
+
+TObject Refactor Notes:
+-----------------------
+Allow outer and inner process()?
+Need iterator types, better visitor
+- every iterator: this->process(), for each child child->run()
+Need Operation interface, method applyOperation(OperationType, list<>& parameters, list<TObject*>& objects)
+
+AI module: when a test fails, tries to characterize the failure:
+- repeatability
+- compare inputs of failure and success cases
+- try various permutations and refine results
+
+
 - For if type commands, only allow 2 tobject children, 1 for true other for false.
   These children then contain the set of commands to execute in each case.
 
@@ -30,10 +44,13 @@ In fact cmdexec should follow a standard pattern of:
 - resolve dependencies from available outlets (producers)
 - execute command
 
+There needs to be a hierarchy (chain of responsibility) to resolving a dependency.
+To get a value from the user various UI techniques could be attempted, with perhaps
+a default value after timeout.
+
 Next todo:
 ----------
-- TObject type system
-- Need to refactor so that base Producer/Consumer methods (that call delegate impl) do
+- Refactor so that base Producer/Consumer methods (that call delegate impl) do
   not usually need to be overridden.
 - Serialize variables and outlets (from context?). prods/cons need to use these for operations.
 - ui classes, message loop and context
@@ -41,6 +58,7 @@ Next todo:
 - connect 2 tobjects:  tobject(prod) -> tobject2(cons)
 - robot, sequencer
 - more prods, cons (filter, queue, mux, etc.)
+  + muxproc has 1 or 2 inputs (prod), 1 or 2 outputs (cons)
   + queueprodcons with subclasses for memory, file, nw, db, etc.
 - scenario test: create objects (testcase), deserialize, serialize and run.
 
@@ -119,7 +137,6 @@ For now, it is:
 
 Some TObject's: Command, TestCase, TestSuite
 Here are some possible TObject's:
-          Predicate
           Actor, Element, Endpoint, Logic (Process, Fork), Transport
           Notice (Alert, Exception, Message), Lookup (Database, ...)
           Location, Bound, Log, Result

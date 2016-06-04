@@ -53,8 +53,9 @@ public:
                const std::string& type = std::string());
     LogCommand(const std::vector<std::string>& parameters);
 
+    // Implement Command interface
     virtual const base::Result process(base::Context* context = 0);
-    virtual const base::Result setup(base::Context* context = 0, const base::Blob* parameters = 0);
+
 private:
     std::string message_;
     std::string type_;
@@ -72,8 +73,10 @@ class ConsCommand : public aft::base::Command
 public:
     ConsCommand(const std::string& type, const std::string& name = std::string());
     virtual ~ConsCommand();
+    
+    // Implement Command interface
     virtual const base::Result process(base::Context* context = 0);
-    virtual const base::Result setup(base::Context* context = 0, const base::Blob* parameters = 0);
+
 private:
     std::string type_;      //TODO convert to enum
     base::BaseConsumer* consumer_;
@@ -89,8 +92,9 @@ class ProdCommand : public aft::base::Command
 public:
     ProdCommand(const std::string& type, const std::string& name = std::string());
     virtual ~ProdCommand();
+    
+    // Implement Command interface
     virtual const base::Result process(base::Context* context = 0);
-    virtual const base::Result setup(base::Context* context = 0, const base::Blob* parameters = 0);
 
 private:
     std::string type_;      //TODO convert to enum
@@ -108,8 +112,9 @@ public:
     EnvCommand(const std::string& type, const std::string& name,
                const std::string& value = std::string());
     virtual ~EnvCommand();
+    
+    // Implement Command interface
     virtual const base::Result process(base::Context* context = 0);
-    virtual const base::Result setup(base::Context* context = 0, const base::Blob* parameters = 0);
 
 private:
     std::string type_;      //TODO convert to enum
@@ -125,24 +130,33 @@ public:
 
     // override add method to check that children are of type Command.
     aft::base::TObjectTree* add(aft::base::TObject* tObject, aft::base::TObjectTree* tObjWrapper = 0);
+    
+    // Implement Command interface
+    virtual const base::Result process(base::Context* context = 0);
+    //TODO implement run()
 };
 
 /** Handle if/then/else conditional
  *
- *  This command handles then, else
- * TODO this needs Predicate class as member and will have 2 children, 1 for "then" and 1 for "else".
- *      Depends on the command executor (TObjectContainer::run)
+ *  This command handles if, then, else
  */
 class IfCommand : public aft::base::Command
 {
 public:
-    IfCommand();
+    IfCommand(const std::string& name, const base::Operation& condition,
+              base::Command* trueCommand, base::Command* falseCommand = 0);
     virtual ~IfCommand();
     
+    // Implement Command interface
+    virtual const base::Result process(base::Context* context = 0);
+    
 private:
-    aft::base::TObject* condition;
-    aft::base::Command* trueCommand;
-    aft::base::Command* falseCommand;
+    /** Condition to evaluate. */
+    const aft::base::Operation& condition_;
+    /** Command to execute if condition is true. */
+    aft::base::Command* trueCommand_;
+    /** Command to execute if condition is false. */
+    aft::base::Command* falseCommand_;
 };
 
 } // namespace core

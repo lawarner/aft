@@ -42,6 +42,12 @@ An xcode workspace is in the aft/macosx folder, that contains the following xcod
   headers in /opt/local/include.  You need to copy libgtest.a to the aft/lib folder.  Or modify the project if you
   have installed googletest elsewhere.
 
+### Other Platforms
+
+Any platform that supports POSIX, g++ and the c++11 standard should compile and run without problems. But any
+errors that may arise should be isolated to classes within osdep. Currently the osdep section is only involved
+in theads and dynamic librarires, but more could be added in the future.
+
 ## History
 
 ### Short
@@ -57,6 +63,9 @@ Maybe another day . . .
 OK a little:  I have written several automated testing tools for various projects.  Each of 
 these ran only on specific plaforms, fixed transport, data formats, etc.  But in each case 
 the actual logic of defining, recording and executing test cases was generally the same.
+
+A UI can be constructed to allow easy input of steps that are added, edited, executed, saved, restored,
+debugged, etc. These are expressed as test suites and test cases.
 
 # Copyright Information
 

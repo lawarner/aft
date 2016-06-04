@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015, 2016 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -41,12 +41,6 @@ public:
     std::vector<TreeIterator> curr_;
 };
 
-
-TObjectIterator::TObjectIterator(bool atBegin)
-    : root_(0)
-    , impl_(*new TObjectIteratorImpl(0, atBegin))
-{
-}
 
 TObjectIterator::TObjectIterator(TObjectTree* root, bool atBegin)
     : root_(root)

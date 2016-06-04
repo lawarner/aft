@@ -97,3 +97,10 @@ Context::handler(const std::string& propertyName) const
 
     return it->second;
 }
+
+Result
+Context::process(const TObject* tObject)
+{
+    // visit? tObject->getResult()?
+    return Result(true);
+}

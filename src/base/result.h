@@ -41,6 +41,7 @@ public:
         BLOB,
         BOOLEAN,
         COMMAND,
+        INTEGER,
         ITERATOR,
         STRING,
         TOBJECT
@@ -50,6 +51,7 @@ public:
     Result(Blob* blob);
     Result(bool value);
     Result(Command* command);
+    Result(int value);
     Result(const std::string& strValue);
     Result(TObject* object);
 
@@ -57,16 +59,24 @@ public:
 
     std::string asString() const;
 
+    /** Compare this results value to another.
+     *  Returns -1 if less than other result, 0 if equal or 1 if greater than other result.
+     */
+    int compare(const Result& other) const;
+
     ResultType getType() const;
     std::string getTypeName() const;
+
     bool getValue(Blob*& blob) const;
     bool getValue(bool& value) const;
     bool getValue(Command*& command) const;
+    bool getValue(int& value) const;
     bool getValue(std::string& strValue) const;
     bool getValue(TObject*& object) const;
     void setValue(Blob* blob);
     void setValue(bool value);
     void setValue(Command* command);
+    void setValue(int value);
     void setValue(const std::string& strValue);
     void setValue(TObject* object);
 
@@ -99,6 +109,7 @@ private:
         bool flag_;
         Command* command_;
         void* iterator_;
+        int integer_;
         std::string* string_;
         TObject* object_;
     } value_;

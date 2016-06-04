@@ -112,6 +112,7 @@ public:
     virtual bool write(const TObject& object);
     virtual bool write(const Result& result);
     virtual bool write(const Blob& blob);
+    /** Returns the number of objects written. */
     virtual int write(const std::vector<TObject>& objects);
     virtual int write(const std::vector<Result>& results);
     virtual int write(const std::vector<Blob>& blobs);

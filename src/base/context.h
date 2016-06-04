@@ -17,6 +17,7 @@
 
 #include <map>
 #include <string>
+#include "result.h"
 #include "visitor.h"
 
 
@@ -83,6 +84,9 @@ public:
     VisitorContract& getVisitor() const;
 
     PropertyHandler* handler(const std::string& propertyName) const;
+
+    /** Default process handling for this context (i.e., logging) */
+    virtual Result process(const TObject* tObject);
 
 protected:
     std::string name_;

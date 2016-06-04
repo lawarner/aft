@@ -51,20 +51,11 @@ public:
     /**
      *  Construct TObject iterator.
      *
-     *  @param atBegin If true then iterator starts pointing to first child,
-     *                 otherwise points to end().
-     */
-    TObjectIterator(bool atBegin = true);
-    /**
-     *  Construct TObject iterator.
-     *
-     *  TODO This will later become a private constructor, only called from TObjectContainer
-     *
      *  @param root Starts iterator pointing to root of tree.
      *  @param atBegin If true then iterator starts pointing to first child,
      *                 otherwise points to end().
      */
-    TObjectIterator(TObjectTree* root, bool atBegin = true);
+    TObjectIterator(TObjectTree* root = 0, bool atBegin = true);
     /** Destruct a TObject iterator. */
     ~TObjectIterator();
 
