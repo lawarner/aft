@@ -1,5 +1,5 @@
 //
-//  queueprodcons.cpp
+//  queueproc.cpp
 //  libaft
 //
 //  Copyright © 2016 Andy Warner. All rights reserved.
@@ -8,19 +8,19 @@
 #include <queue>
 
 #include "base/blob.h"
-#include "queueprodcons.h"
+#include "queueproc.h"
 
 using namespace aft::base;
 using namespace aft::core;
 
 // Internal implementation class
-class aft::core::QueueProdConsImpl : public WriterContract, public ReaderContract
+class aft::core::QueueProcImpl : public WriterContract, public ReaderContract
 {
 public:
-    QueueProdConsImpl(unsigned int maxSize)
+    QueueProcImpl(unsigned int maxSize)
     : maxSize_(maxSize)
     {  }
-    virtual ~QueueProdConsImpl()
+    virtual ~QueueProcImpl()
     {  }
 
     /** Returns the type of product this writer has ready to write. */
@@ -82,61 +82,61 @@ private:
 };
 
 
-QueueProdCons::QueueProdCons(int maxSize)
-: base::BaseProdCons(0, 0)
-, impl_(*new QueueProdConsImpl(maxSize))
+QueueProc::QueueProc(int maxSize)
+: base::BaseProc(0, 0)
+, impl_(*new QueueProcImpl(maxSize))
 {
     
 }
 
-QueueProdCons::~QueueProdCons()
+QueueProc::~QueueProc()
 {
     delete &impl_;
 }
 
 // Producer contract
-bool QueueProdCons::read(base::TObject& object)
+bool QueueProc::read(base::TObject& object)
 {
     return false;
 }
 
-bool QueueProdCons::read(base::Result& result)
+bool QueueProc::read(base::Result& result)
 {
     return false;
 }
 
-bool QueueProdCons::read(base::Blob& blob)
+bool QueueProc::read(base::Blob& blob)
 {
     return impl_.getData(blob);
 }
 
-bool QueueProdCons::hasData()
+bool QueueProc::hasData()
 {
     return impl_.hasData() == TYPE_BLOB;
 }
 
-bool QueueProdCons::hasObject(base::ProductType productType)
+bool QueueProc::hasObject(base::ProductType productType)
 {
     return impl_.hasData() == productType;
 }
 
 // Consumer contract
-bool QueueProdCons::needsData()
+bool QueueProc::needsData()
 {
     return impl_.roomForData();
 }
 
-bool QueueProdCons::write(const base::TObject& object)
+bool QueueProc::write(const base::TObject& object)
 {
     return false;
 }
 
-bool QueueProdCons::write(const base::Result& result)
+bool QueueProc::write(const base::Result& result)
 {
     return false;
 }
 
-bool QueueProdCons::write(const base::Blob& blob)
+bool QueueProc::write(const base::Blob& blob)
 {
     return impl_.dataAvailable(blob);
 }

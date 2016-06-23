@@ -21,7 +21,7 @@
 #include <core/commandcontext.h>
 #include <core/fileconsumer.h>
 #include <core/fileproducer.h>
-#include <core/queueprodcons.h>
+#include <core/queueproc.h>
 #include <core/stringconsumer.h>
 #include <core/stringproducer.h>
 #include <gtest/gtest.h>
@@ -133,21 +133,21 @@ TEST(CorePackageTest, FileProducerFlowWords)
     EXPECT_TRUE(fileprod.unregisterDataCallback(&reader));
 }
 
-TEST(CorePackageTest, QueueProdCons)
+TEST(CorePackageTest, QueueProc)
 {
-    QueueProdCons qprodcons;
-    
+    QueueProc qproc;
+
     for (int idx = 0; idx < 3; ++idx)
     {
-        EXPECT_TRUE(qprodcons.needsData());
+        EXPECT_TRUE(qproc.needsData());
         Blob blob("b", Blob::STRING, "This is a string of sorts.");
-        EXPECT_TRUE(qprodcons.write(blob));
+        EXPECT_TRUE(qproc.write(blob));
     }
     
-    while (qprodcons.hasData())
+    while (qproc.hasData())
     {
         Blob blob("");
-        EXPECT_TRUE(qprodcons.read(blob));
+        EXPECT_TRUE(qproc.read(blob));
         std::cout << " Blob from Q: " << blob.getString() << std::endl;
     }
 }

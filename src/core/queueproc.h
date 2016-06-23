@@ -1,6 +1,6 @@
 #pragma once
 /*
- *  queueprodcons.h
+ *  queueproc.h
  *  libaft
  *  Copyright © 2016 Andy Warner. All rights reserved.
  *
@@ -17,24 +17,24 @@
  *   limitations under the License.
  */
 
-#include "base/prodcons.h"
+#include "base/proc.h"
 
 namespace aft
 {
 namespace core
 {
 // Forward reference
-class QueueProdConsImpl;
+class QueueProcImpl;
 
 
 /**
  *  A Queue Producer/Consumer.
  */
-class QueueProdCons : public aft::base::BaseProdCons
+class QueueProc : public aft::base::BaseProc
 {
 public:
-    QueueProdCons(int maxSize = -1);
-    virtual ~QueueProdCons();
+    QueueProc(int maxSize = -1);
+    virtual ~QueueProc();
 
     // Producer contract
     virtual bool read(base::TObject& object);
@@ -51,9 +51,8 @@ public:
     virtual bool write(const base::Blob& blob);
 
 private:
-    QueueProdConsImpl& impl_;
+    QueueProcImpl& impl_;
 };
 
 } // namespace core
 } // namespace aft
-

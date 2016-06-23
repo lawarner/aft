@@ -14,18 +14,18 @@
  *   limitations under the License.
  */
 
-#include "prodcons.h"
+#include "proc.h"
 using namespace aft::base;
 
 
-BaseProdCons::BaseProdCons(WriterContract* writerDelegate, ReaderContract* readerDelegate)
+BaseProc::BaseProc(WriterContract* writerDelegate, ReaderContract* readerDelegate)
 : aft::base::BaseProducer(writerDelegate)
 , aft::base::BaseConsumer(readerDelegate)
 {
 
 }
 
-BaseProdCons::~BaseProdCons()
+BaseProc::~BaseProc()
 {
 
 }

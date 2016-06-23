@@ -18,21 +18,21 @@
  *   limitations under the License.
  */
 
-#include "base/prodcons.h"
+#include "base/proc.h"
 
 namespace aft
 {
 namespace ui
 {
 // Forward reference
-class UIProdConsImpl;
-        
+class UIProcImpl;
+
         
         /**
          *  A UI is basically a Producer/Consumer.
          *  The consumer receives commands and entities and the producer yields result values.
          */
-        class UI : public aft::base::BaseProdCons
+        class UI : public aft::base::BaseProc
         {
         public:
             UI(int maxSize = -1);
@@ -53,7 +53,7 @@ class UIProdConsImpl;
             virtual bool write(const base::Blob& blob);
             
         private:
-            UIProdConsImpl& impl_;
+            UIProcImpl& impl_;
         };
         
     } // namespace core

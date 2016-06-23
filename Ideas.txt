@@ -59,7 +59,7 @@ Next todo:
 - robot, sequencer
 - more prods, cons (filter, queue, mux, etc.)
   + muxproc has 1 or 2 inputs (prod), 1 or 2 outputs (cons)
-  + queueprodcons with subclasses for memory, file, nw, db, etc.
+  + queueproc with subclasses for memory, file, nw, db, etc.
 - scenario test: create objects (testcase), deserialize, serialize and run.
 
 - test scenario:
@@ -93,7 +93,7 @@ Add Blob type of StructuredData
 Producer, Consumer, Processor interfaces  (short lingo: prod, cons, proc)
 
 Processor isa Producer, Consumer
-Proc == ProdCons == Filter == Robot
+Proc (ProdCons):  Filter, Robot
 
 Prod -> FilterProc -> Cons
 

@@ -25,10 +25,15 @@ namespace base
 {
 // Forward reference
 
+class ReaderWriterContract : public ReaderContract, public WriterContract
+{
+
+};
+
 /**
- *  Interface that prodcons classes must implement.
+ *  Interface that proc classes must implement.
  */
-class ProdConsContract : public ProducerContract, public ConsumerContract
+class ProcContract : public ProducerContract, public ConsumerContract
 {
 
 };
@@ -36,11 +41,11 @@ class ProdConsContract : public ProducerContract, public ConsumerContract
 /**
  *  Base implementation of the ProducerContract/ConsumerContract interface.
  */
-class BaseProdCons : public BaseProducer, public BaseConsumer
+class BaseProc : public BaseProducer, public BaseConsumer
 {
 public:
-    BaseProdCons(WriterContract* writerDelegate = 0, ReaderContract* readerDelegate = 0);
-    virtual ~BaseProdCons();
+    BaseProc(WriterContract* writerDelegate = 0, ReaderContract* readerDelegate = 0);
+    virtual ~BaseProc();
     
 };
 

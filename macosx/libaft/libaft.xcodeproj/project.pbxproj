@@ -64,8 +64,8 @@
 		A153D0FE1CCC71F500000A15 /* loghandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D09C1CCC71F500000A15 /* loghandler.cpp */; };
 		A153D0FF1CCC71F500000A15 /* loghandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D09D1CCC71F500000A15 /* loghandler.h */; };
 		A153D1001CCC71F500000A15 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = A153D09E1CCC71F500000A15 /* Makefile */; };
-		A153D1011CCC71F500000A15 /* queueprodcons.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D09F1CCC71F500000A15 /* queueprodcons.cpp */; };
-		A153D1021CCC71F500000A15 /* queueprodcons.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0A01CCC71F500000A15 /* queueprodcons.h */; };
+		A153D1011CCC71F500000A15 /* queueproc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D09F1CCC71F500000A15 /* queueproc.cpp */; };
+		A153D1021CCC71F500000A15 /* queueproc.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0A01CCC71F500000A15 /* queueproc.h */; };
 		A153D1031CCC71F500000A15 /* runcontext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0A11CCC71F500000A15 /* runcontext.cpp */; };
 		A153D1041CCC71F500000A15 /* runcontext.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0A21CCC71F500000A15 /* runcontext.h */; };
 		A153D1051CCC71F500000A15 /* stringconsumer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0A31CCC71F500000A15 /* stringconsumer.cpp */; };
@@ -97,8 +97,8 @@
 		A153D11F1CCC71F500000A15 /* t_plugin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0C61CCC71F500000A15 /* t_plugin.cpp */; };
 		A153D1201CCC71F500000A15 /* t_result.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0C71CCC71F500000A15 /* t_result.cpp */; };
 		A153D1211CCC71F500000A15 /* t_testsuite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0C81CCC71F500000A15 /* t_testsuite.cpp */; };
-		A153D1241CCD89D200000A15 /* prodcons.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D1221CCD89D200000A15 /* prodcons.cpp */; };
-		A153D1251CCD89D200000A15 /* prodcons.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D1231CCD89D200000A15 /* prodcons.h */; };
+		A153D1241CCD89D200000A15 /* proc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D1221CCD89D200000A15 /* proc.cpp */; };
+		A153D1251CCD89D200000A15 /* proc.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D1231CCD89D200000A15 /* proc.h */; };
 		A153D1281CD05F8400000A15 /* entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D1261CD05F8400000A15 /* entity.cpp */; };
 		A153D1291CD05F8400000A15 /* entity.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D1271CD05F8400000A15 /* entity.h */; };
 		A16390811D038A2A00036620 /* tobasictypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A16390801D038A2A00036620 /* tobasictypes.cpp */; };
@@ -170,8 +170,8 @@
 		A153D09C1CCC71F500000A15 /* loghandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = loghandler.cpp; sourceTree = "<group>"; };
 		A153D09D1CCC71F500000A15 /* loghandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = loghandler.h; sourceTree = "<group>"; };
 		A153D09E1CCC71F500000A15 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		A153D09F1CCC71F500000A15 /* queueprodcons.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = queueprodcons.cpp; sourceTree = "<group>"; };
-		A153D0A01CCC71F500000A15 /* queueprodcons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = queueprodcons.h; sourceTree = "<group>"; };
+		A153D09F1CCC71F500000A15 /* queueproc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = queueproc.cpp; sourceTree = "<group>"; };
+		A153D0A01CCC71F500000A15 /* queueproc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = queueproc.h; sourceTree = "<group>"; };
 		A153D0A11CCC71F500000A15 /* runcontext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = runcontext.cpp; sourceTree = "<group>"; };
 		A153D0A21CCC71F500000A15 /* runcontext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = runcontext.h; sourceTree = "<group>"; };
 		A153D0A31CCC71F500000A15 /* stringconsumer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stringconsumer.cpp; sourceTree = "<group>"; };
@@ -203,8 +203,8 @@
 		A153D0C61CCC71F500000A15 /* t_plugin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = t_plugin.cpp; sourceTree = "<group>"; };
 		A153D0C71CCC71F500000A15 /* t_result.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = t_result.cpp; sourceTree = "<group>"; };
 		A153D0C81CCC71F500000A15 /* t_testsuite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = t_testsuite.cpp; sourceTree = "<group>"; };
-		A153D1221CCD89D200000A15 /* prodcons.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = prodcons.cpp; sourceTree = "<group>"; };
-		A153D1231CCD89D200000A15 /* prodcons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = prodcons.h; sourceTree = "<group>"; };
+		A153D1221CCD89D200000A15 /* proc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = proc.cpp; sourceTree = "<group>"; };
+		A153D1231CCD89D200000A15 /* proc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = proc.h; sourceTree = "<group>"; };
 		A153D1261CD05F8400000A15 /* entity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entity.cpp; sourceTree = "<group>"; };
 		A153D1271CD05F8400000A15 /* entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = entity.h; sourceTree = "<group>"; };
 		A16390801D038A2A00036620 /* tobasictypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tobasictypes.cpp; sourceTree = "<group>"; };
@@ -272,8 +272,8 @@
 				A153D0751CCC71F500000A15 /* outlet.h */,
 				A153D0761CCC71F500000A15 /* plugin.cpp */,
 				A153D0771CCC71F500000A15 /* plugin.h */,
-				A153D1221CCD89D200000A15 /* prodcons.cpp */,
-				A153D1231CCD89D200000A15 /* prodcons.h */,
+				A153D1221CCD89D200000A15 /* proc.cpp */,
+				A153D1231CCD89D200000A15 /* proc.h */,
 				A153D0781CCC71F500000A15 /* producer.cpp */,
 				A153D0791CCC71F500000A15 /* producer.h */,
 				A153D07A1CCC71F500000A15 /* producttype.h */,
@@ -323,8 +323,8 @@
 				A153D09C1CCC71F500000A15 /* loghandler.cpp */,
 				A153D09D1CCC71F500000A15 /* loghandler.h */,
 				A153D09E1CCC71F500000A15 /* Makefile */,
-				A153D09F1CCC71F500000A15 /* queueprodcons.cpp */,
-				A153D0A01CCC71F500000A15 /* queueprodcons.h */,
+				A153D09F1CCC71F500000A15 /* queueproc.cpp */,
+				A153D0A01CCC71F500000A15 /* queueproc.h */,
 				A153D0A11CCC71F500000A15 /* runcontext.cpp */,
 				A153D0A21CCC71F500000A15 /* runcontext.h */,
 				A153D0A31CCC71F500000A15 /* stringconsumer.cpp */,
@@ -461,7 +461,7 @@
 				A153D0D21CCC71F500000A15 /* context.h in Headers */,
 				A153D0D71CCC71F500000A15 /* iterator.h in Headers */,
 				A153D0EE1CCC71F500000A15 /* tobjectiterator.h in Headers */,
-				A153D1021CCC71F500000A15 /* queueprodcons.h in Headers */,
+				A153D1021CCC71F500000A15 /* queueproc.h in Headers */,
 				A16390851D03D75800036620 /* structureddataname.h in Headers */,
 				A153D0E81CCC71F500000A15 /* thread.h in Headers */,
 				A153D0E11CCC71F500000A15 /* propertyhandler.h in Headers */,
@@ -475,7 +475,7 @@
 				A153D1161CCC71F500000A15 /* posixpluginloader.h in Headers */,
 				A18F4D551CD442F600C755FA /* tobjecttype.h in Headers */,
 				A153D10C1CCC71F500000A15 /* testsuite.h in Headers */,
-				A153D1251CCD89D200000A15 /* prodcons.h in Headers */,
+				A153D1251CCD89D200000A15 /* proc.h in Headers */,
 				A153D0DF1CCC71F500000A15 /* producttype.h in Headers */,
 				A153D0EF1CCC71F500000A15 /* tobjecttree.h in Headers */,
 				A153D1081CCC71F500000A15 /* stringproducer.h in Headers */,
@@ -544,9 +544,9 @@
 				A153D1121CCC71F500000A15 /* Makefile in Sources */,
 				A153D1051CCC71F500000A15 /* stringconsumer.cpp in Sources */,
 				A153D0F61CCC71F500000A15 /* commandcontext.cpp in Sources */,
-				A153D1011CCC71F500000A15 /* queueprodcons.cpp in Sources */,
+				A153D1011CCC71F500000A15 /* queueproc.cpp in Sources */,
 				A153D0FE1CCC71F500000A15 /* loghandler.cpp in Sources */,
-				A153D1241CCD89D200000A15 /* prodcons.cpp in Sources */,
+				A153D1241CCD89D200000A15 /* proc.cpp in Sources */,
 				A153D11C1CCC71F500000A15 /* t_coretests.cpp in Sources */,
 				A153D11F1CCC71F500000A15 /* t_plugin.cpp in Sources */,
 				A153D0FA1CCC71F500000A15 /* fileproducer.cpp in Sources */,

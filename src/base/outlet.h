@@ -28,7 +28,7 @@ namespace base
 class ConsumerContract;
 class Entity;
 class ProducerContract;
-class ProdConsContract;
+class ProcContract;
 class OutletImpl;
 
 
@@ -47,7 +47,7 @@ public:
     virtual ~Outlet();
 
     bool openIn(ProducerContract& producer);
-    bool openInOut(ProdConsContract& prodcons);
+    bool openInOut(ProcContract& proc);
     bool openOut(ConsumerContract& consumer);
 
     // An Entity can be at TObject type level, or an actual named TObject.

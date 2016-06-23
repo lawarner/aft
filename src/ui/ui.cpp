@@ -21,13 +21,13 @@ using namespace aft::base;
 using namespace aft::ui;
 
 // Internal implementation class
-class aft::ui::UIProdConsImpl : public WriterContract, public ReaderContract
+class aft::ui::UIProcImpl : public ReaderWriterContract
 {
 public:
-    UIProdConsImpl(unsigned int maxSize)
+    UIProcImpl(unsigned int maxSize)
     : maxSize_(maxSize)
     {  }
-    virtual ~UIProdConsImpl()
+    virtual ~UIProcImpl()
     {  }
     
     /** Returns the type of product this writer has ready to write. */
@@ -89,8 +89,8 @@ private:
 
 
 UI::UI(int maxSize)
-: base::BaseProdCons(0, 0)
-, impl_(*new UIProdConsImpl(maxSize))
+: base::BaseProc(0, 0)
+, impl_(*new UIProcImpl(maxSize))
 {
     
 }

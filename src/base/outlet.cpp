@@ -17,7 +17,7 @@
  *   limitations under the License.
  */
 #include "outlet.h"
-#include "prodcons.h"
+#include "proc.h"
 
 
 using namespace aft::base;
@@ -29,12 +29,12 @@ public:
     OutletImpl()
     : consumer(0)
     , producer(0)
-    , prodcons(0)
+    , proc(0)
     {  }
 
     ConsumerContract* consumer;
     ProducerContract* producer;
-    ProdConsContract* prodcons;
+    ProcContract* proc;
 };
         
 ///////////////////////////////////////////////////////////
@@ -62,11 +62,11 @@ bool Outlet::openIn(ProducerContract& producer)
     return true;
 }
 
-bool Outlet::openInOut(ProdConsContract& prodcons)
+bool Outlet::openInOut(ProcContract& proc)
 {
     if (direction_ != DirectionNone) return false;
     
-    impl_.prodcons = &prodcons;
+    impl_.proc = &proc;
     direction_ = DirectionInOut;
     return true;
 }
