@@ -14,83 +14,206 @@
  *   limitations under the License.
  */
 
+#include <algorithm>
+#include <cassert>
+#include <vector>
+
 #include "base/blob.h"
+#include "element.h"
 #include "ui.h"
+#include "uidelegate.h"
 
 using namespace aft::base;
 using namespace aft::ui;
+using namespace std;
 
+
+namespace aft
+{
+namespace ui
+{
+        
 // Internal implementation class
-class aft::ui::UIProcImpl : public ReaderWriterContract
+class UIProcImpl : public ReaderWriterContract
 {
 public:
-    UIProcImpl(unsigned int maxSize)
-    : maxSize_(maxSize)
-    {  }
-    virtual ~UIProcImpl()
-    {  }
-    
+    typedef std::vector<Element *> ElementList;
+
+    UIProcImpl(Element* element, unsigned int maxSize, UIDelegate* uiDelegate = 0);
+    virtual ~UIProcImpl();
+
+    bool addElement(Element* element);
+    ElementList::iterator findElement(Element* element);
+    unsigned int nextElement();
+    bool removeElement(Element* element);
+
     /** Returns the type of product this writer has ready to write. */
-    virtual ProductType hasData()
-    {
-        //if (queue_.empty()) return TYPE_NONE;
-        
-        return TYPE_BLOB;
-    }
+    virtual ProductType hasData();
     
     /** Return true if data was written. */
-    virtual bool getData(TObject& object)
-    {
-        return false;
-    }
-    virtual bool getData(Result& result)
-    {
-        return false;
-    }
-    virtual bool getData(Blob& blob)
-    {
-        //if (queue_.empty()) return false;
-        
-        //blob = queue_.front();
-        //queue_.pop();
-        return true;
-    }
+    virtual bool getData(TObject& object);
+    virtual bool getData(Result& result);
+    virtual bool getData(Blob& blob);
     
     // Reader contract
-    virtual bool dataAvailable(const TObject& object)
-    {
-        return false;
-    }
-    virtual bool dataAvailable(const Result& result)
-    {
-        return false;
-    }
-    virtual bool dataAvailable(const Blob& blob)
-    {
-        //if (queue_.size() < maxSize_)
-        //{
-        //    queue_.push(blob);
-        //    return true;
-        //}
-        return false;
-    }
-    bool roomForData() const
-    {
-        return false;  // queue_.size() < maxSize_;
-    }
-    bool roomForObject(ProductType productType) const
-    {
-        return productType == TYPE_BLOB && roomForData();
-    }
+    // For a UI these are basically the commands to construct and control the UI
+    //TODO use entities
+    virtual bool dataAvailable(const TObject& object);
+    virtual bool dataAvailable(const Result& result);
+    virtual bool dataAvailable(const Blob& blob);
+
+    bool roomForData() const;
+    bool roomForObject(ProductType productType) const;
     
 private:
     unsigned int maxSize_;
+    unsigned int currentElement_;
+    ElementList uiElements_;
+    UIDelegate* uiDelegate_;
 };
 
+} // namespace ui
+} // namespace aft
 
-UI::UI(int maxSize)
+
+UIProcImpl::UIProcImpl(Element* element, unsigned int maxSize, UIDelegate* uiDelegate)
+: maxSize_(maxSize)
+, currentElement_(0)
+, uiDelegate_(uiDelegate)
+{
+    if (element)
+    {
+        assert(maxSize > 0);
+        uiElements_.push_back(element);
+    }
+}
+
+UIProcImpl::~UIProcImpl()
+{
+}
+
+bool UIProcImpl::addElement(Element* element)
+{
+    if (maxSize_ == 0 || uiElements_.size() < maxSize_)
+    {
+        ElementList::iterator it = findElement(element);
+        if (it == uiElements_.end())
+        {
+            uiElements_.push_back(element);
+            return true;
+        }
+    }
+    return false;
+}
+
+UIProcImpl::ElementList::iterator
+UIProcImpl::findElement(Element* element)
+{
+    UIProcImpl::ElementList::iterator it = std::find(uiElements_.begin(), uiElements_.end(), element);
+    return it;
+}
+
+unsigned int UIProcImpl::nextElement()
+{
+    currentElement_ = (currentElement_ + 1) % uiElements_.size();
+    return currentElement_;
+}
+
+bool UIProcImpl::removeElement(Element* element)
+{
+    ElementList::iterator it = findElement(element);
+    if (it == uiElements_.end())
+    {
+        uiElements_.erase(it);
+        return true;
+    }
+    return false;
+}
+    
+ProductType UIProcImpl::hasData()
+{
+    if (uiElements_.empty()) return TYPE_NONE;
+
+    // ask current element for data
+    if (uiElements_[currentElement_]->hasValue())
+    {
+        return TYPE_BLOB;
+    }
+    
+    return TYPE_NONE;
+}
+
+bool UIProcImpl::getData(TObject& object)
+{
+    return false;
+}
+
+bool UIProcImpl::getData(Result& result)
+{
+    return false;
+}
+
+bool UIProcImpl::getData(Blob& blob)
+{
+    if (uiElements_.empty()) return false;
+
+    // ask current element for data
+    if (uiElements_[currentElement_]->hasValue())
+    {
+        Element* element = uiElements_[currentElement_];
+        blob = Blob(element->getName(), Blob::STRING, element->getValue());
+        return true;
+    }
+    
+    return false;
+}
+    
+// Reader contract
+// For a UI these are basically the commands to construct and control the UI
+//TODO use entities
+bool UIProcImpl::dataAvailable(const TObject& object)
+{
+    return false;
+}
+bool UIProcImpl::dataAvailable(const Result& result)
+{
+    return false;
+}
+bool UIProcImpl::dataAvailable(const Blob& blob)
+{
+    if (!roomForData()) return false;
+
+    if (blob.getType() == Blob::COMMAND)
+    {
+        
+    }
+    else if (blob.getType() == Blob::STRING)
+    {
+        
+    }
+    //if (queue_.size() < maxSize_)
+    //{
+    //    queue_.push(blob);
+    //    return true;
+    //}
+    return false;
+}
+bool UIProcImpl::roomForData() const
+{
+    return !uiElements_.empty();
+}
+
+bool UIProcImpl::roomForObject(ProductType productType) const
+{
+    return productType == TYPE_BLOB && roomForData();
+}
+
+
+#pragma mark - UI Base class
+
+UI::UI(Element* element, unsigned int maxSize)
 : base::BaseProc(0, 0)
-, impl_(*new UIProcImpl(maxSize))
+, impl_(*new UIProcImpl(element, maxSize))
 {
     
 }
@@ -99,6 +222,32 @@ UI::~UI()
 {
     delete &impl_;
 }
+
+bool UI::addElement(Element* element)
+{
+    return impl_.addElement(element);
+}
+
+unsigned int UI::nextElement()
+{
+    return impl_.nextElement();
+}
+
+bool UI::removeElement(Element* element)
+{
+    return impl_.removeElement(element);
+}
+
+Result UI::init(base::Context* context)
+{
+    return Result(true);
+}
+
+Result UI::deinit(base::Context* context)
+{
+    return Result(true);
+}
+
 
 // Producer contract
 bool UI::read(base::TObject& object)
@@ -127,7 +276,7 @@ bool UI::hasObject(base::ProductType productType)
 }
 
 // Consumer contract
-bool UI::needsData()
+bool UI::canAcceptData(bool isRequired)
 {
     return impl_.roomForData();
 }

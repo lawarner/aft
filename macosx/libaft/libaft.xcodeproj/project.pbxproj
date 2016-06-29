@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A1122F201D23784E000FA862 /* element.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1122F1E1D23784E000FA862 /* element.cpp */; };
+		A1122F211D23784E000FA862 /* element.h in Headers */ = {isa = PBXBuildFile; fileRef = A1122F1F1D23784E000FA862 /* element.h */; };
 		A13CF6E91D1705590038665F /* operation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A13CF6E71D1705590038665F /* operation.cpp */; };
 		A13CF6EA1D1705590038665F /* operation.h in Headers */ = {isa = PBXBuildFile; fileRef = A13CF6E81D1705590038665F /* operation.h */; };
 		A153D0C91CCC71F500000A15 /* aft.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0611CCC71F500000A15 /* aft.h */; };
@@ -106,6 +108,11 @@
 		A16390851D03D75800036620 /* structureddataname.h in Headers */ = {isa = PBXBuildFile; fileRef = A16390831D03D75800036620 /* structureddataname.h */; };
 		A18F4D541CD442F600C755FA /* tobjecttype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18F4D521CD442F600C755FA /* tobjecttype.cpp */; };
 		A18F4D551CD442F600C755FA /* tobjecttype.h in Headers */ = {isa = PBXBuildFile; fileRef = A18F4D531CD442F600C755FA /* tobjecttype.h */; };
+		A1BCB6301D27053A0082BB87 /* uidelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A1BCB62E1D27053A0082BB87 /* uidelegate.h */; };
+		A1BCB6461D2B586E0082BB87 /* uicommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1BCB6441D2B586E0082BB87 /* uicommand.cpp */; };
+		A1BCB6471D2B586E0082BB87 /* uicommand.h in Headers */ = {isa = PBXBuildFile; fileRef = A1BCB6451D2B586E0082BB87 /* uicommand.h */; };
+		A1BCB64A1D2B5ADC0082BB87 /* basicelements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1BCB6481D2B5ADC0082BB87 /* basicelements.cpp */; };
+		A1BCB64B1D2B5ADC0082BB87 /* basicelements.h in Headers */ = {isa = PBXBuildFile; fileRef = A1BCB6491D2B5ADC0082BB87 /* basicelements.h */; };
 		A1F2AFBC1D036BD5009FE595 /* ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F2AFBA1D036BD5009FE595 /* ui.cpp */; };
 		A1F2AFBD1D036BD5009FE595 /* ui.h in Headers */ = {isa = PBXBuildFile; fileRef = A1F2AFBB1D036BD5009FE595 /* ui.h */; };
 		A1F7638A1C41C05E009A5873 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = A1F763891C41C05E009A5873 /* README.md */; };
@@ -113,6 +120,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A1122F1E1D23784E000FA862 /* element.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = element.cpp; path = ../../src/ui/element.cpp; sourceTree = "<group>"; };
+		A1122F1F1D23784E000FA862 /* element.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = element.h; path = ../../src/ui/element.h; sourceTree = "<group>"; };
 		A13CF6E71D1705590038665F /* operation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = operation.cpp; sourceTree = "<group>"; };
 		A13CF6E81D1705590038665F /* operation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = operation.h; sourceTree = "<group>"; };
 		A153D0611CCC71F500000A15 /* aft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = aft.h; path = ../../src/aft.h; sourceTree = "<group>"; };
@@ -212,6 +221,11 @@
 		A16390831D03D75800036620 /* structureddataname.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = structureddataname.h; sourceTree = "<group>"; };
 		A18F4D521CD442F600C755FA /* tobjecttype.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tobjecttype.cpp; sourceTree = "<group>"; };
 		A18F4D531CD442F600C755FA /* tobjecttype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tobjecttype.h; sourceTree = "<group>"; };
+		A1BCB62E1D27053A0082BB87 /* uidelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = uidelegate.h; path = ../../src/ui/uidelegate.h; sourceTree = "<group>"; };
+		A1BCB6441D2B586E0082BB87 /* uicommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = uicommand.cpp; path = ../../src/ui/uicommand.cpp; sourceTree = "<group>"; };
+		A1BCB6451D2B586E0082BB87 /* uicommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = uicommand.h; path = ../../src/ui/uicommand.h; sourceTree = "<group>"; };
+		A1BCB6481D2B5ADC0082BB87 /* basicelements.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = basicelements.cpp; path = ../../src/ui/basicelements.cpp; sourceTree = "<group>"; };
+		A1BCB6491D2B5ADC0082BB87 /* basicelements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basicelements.h; path = ../../src/ui/basicelements.h; sourceTree = "<group>"; };
 		A1D59B631C3D7DE100BE6298 /* libaft.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libaft.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1F2AFBA1D036BD5009FE595 /* ui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ui.cpp; path = ../../src/ui/ui.cpp; sourceTree = "<group>"; };
 		A1F2AFBB1D036BD5009FE595 /* ui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ui.h; path = ../../src/ui/ui.h; sourceTree = "<group>"; };
@@ -414,6 +428,13 @@
 			children = (
 				A1F2AFBA1D036BD5009FE595 /* ui.cpp */,
 				A1F2AFBB1D036BD5009FE595 /* ui.h */,
+				A1122F1E1D23784E000FA862 /* element.cpp */,
+				A1122F1F1D23784E000FA862 /* element.h */,
+				A1BCB62E1D27053A0082BB87 /* uidelegate.h */,
+				A1BCB6441D2B586E0082BB87 /* uicommand.cpp */,
+				A1BCB6451D2B586E0082BB87 /* uicommand.h */,
+				A1BCB6481D2B5ADC0082BB87 /* basicelements.cpp */,
+				A1BCB6491D2B5ADC0082BB87 /* basicelements.h */,
 			);
 			name = ui;
 			sourceTree = "<group>";
@@ -441,6 +462,7 @@
 				A153D0F11CCC71F500000A15 /* visitor.h in Headers */,
 				A153D0D41CCC71F500000A15 /* factory.h in Headers */,
 				A153D0D01CCC71F500000A15 /* consumer.h in Headers */,
+				A1BCB6471D2B586E0082BB87 /* uicommand.h in Headers */,
 				A153D0C91CCC71F500000A15 /* aft.h in Headers */,
 				A1F2AFBD1D036BD5009FE595 /* ui.h in Headers */,
 				A153D10D1CCC71F500000A15 /* json-forwards.h in Headers */,
@@ -453,6 +475,7 @@
 				A153D0F71CCC71F500000A15 /* commandcontext.h in Headers */,
 				A153D0DE1CCC71F500000A15 /* producer.h in Headers */,
 				A153D0FD1CCC71F500000A15 /* logger.h in Headers */,
+				A1BCB6301D27053A0082BB87 /* uidelegate.h in Headers */,
 				A153D1181CCC71F500000A15 /* posixthread.h in Headers */,
 				A153D0CC1CCC71F500000A15 /* callback.h in Headers */,
 				A153D0CB1CCC71F500000A15 /* blob.h in Headers */,
@@ -474,11 +497,13 @@
 				A153D0D61CCC71F500000A15 /* hasher.h in Headers */,
 				A153D1161CCC71F500000A15 /* posixpluginloader.h in Headers */,
 				A18F4D551CD442F600C755FA /* tobjecttype.h in Headers */,
+				A1BCB64B1D2B5ADC0082BB87 /* basicelements.h in Headers */,
 				A153D10C1CCC71F500000A15 /* testsuite.h in Headers */,
 				A153D1251CCD89D200000A15 /* proc.h in Headers */,
 				A153D0DF1CCC71F500000A15 /* producttype.h in Headers */,
 				A153D0EF1CCC71F500000A15 /* tobjecttree.h in Headers */,
 				A153D1081CCC71F500000A15 /* stringproducer.h in Headers */,
+				A1122F211D23784E000FA862 /* element.h in Headers */,
 				A153D1291CD05F8400000A15 /* entity.h in Headers */,
 				A153D10A1CCC71F500000A15 /* testcase.h in Headers */,
 				A153D0E41CCC71F500000A15 /* serialize.h in Headers */,
@@ -563,6 +588,9 @@
 				A153D0D11CCC71F500000A15 /* context.cpp in Sources */,
 				A153D1091CCC71F500000A15 /* testcase.cpp in Sources */,
 				A153D1201CCC71F500000A15 /* t_result.cpp in Sources */,
+				A1BCB6461D2B586E0082BB87 /* uicommand.cpp in Sources */,
+				A1BCB64A1D2B5ADC0082BB87 /* basicelements.cpp in Sources */,
+				A1122F201D23784E000FA862 /* element.cpp in Sources */,
 				A153D0E51CCC71F500000A15 /* structureddata.cpp in Sources */,
 				A153D0E71CCC71F500000A15 /* thread.cpp in Sources */,
 				A153D10B1CCC71F500000A15 /* testsuite.cpp in Sources */,
@@ -606,8 +634,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -651,8 +679,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;

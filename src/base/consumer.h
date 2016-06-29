@@ -62,9 +62,10 @@ class ConsumerContract
 {
 public:
     /** Indicated if this consumer is ready to consume data.
+     *  @param isRequired if true then 
      *  @return true if write can be called on this consumer without blocking.
      */
-    virtual bool needsData() = 0;
+    virtual bool canAcceptData(bool isRequired = false) = 0;
 
     /** Write a TObject to this consumer.
      *  @return true if the object was consumed.
@@ -107,7 +108,7 @@ public:
     virtual ~BaseConsumer();
 
     /** Returns true if write can be called on this consumer without blocking */
-    virtual bool needsData();
+    virtual bool canAcceptData(bool isRequired = false);
 
     virtual bool write(const TObject& object);
     virtual bool write(const Result& result);

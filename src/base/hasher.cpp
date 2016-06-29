@@ -88,7 +88,7 @@ int Hasher::getHashIndex(const std::string& name)
 }
 
 const std::string&
-Hasher::getName(int enumCode)
+Hasher::getName(int enumCode) const
 {
     std::map<std::string, int>::const_iterator it;
     for (it = enums_.cbegin(); it != enums_.cend(); ++it)
@@ -102,9 +102,8 @@ Hasher::getName(int enumCode)
     return emptyString;
 }
 
-// Slow function, hopefully will not be used except for debugging
 const std::string&
-Hasher::getNameForHash(HashType hash)
+Hasher::getNameForHash(HashType hash) const
 {
     for (unsigned int idx = 0; idx < enums_.size(); ++idx)
     {

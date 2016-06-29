@@ -24,7 +24,7 @@ namespace base
 {
 
 /**
- *  A string to hash converter class so factories can use a switch statement.
+ *  A string to hash converter class so factories can use a switch statement on an enum.
  *
  *  Basically matches up:
  *     "cmd name" CMD_NAME 0xhashcode
@@ -47,19 +47,36 @@ public:
      *
      *  The corresponding enum values must start with value 0 and follow the
      *  same order as names.
-     *  TODO allow for different starting number
+     *  TODO allow for different starting number and sparse enum values
+     *  @param vector list of strings to associate with enum values 0, 1, ...
      */
     Hasher(const std::vector<std::string>& names);
-    /** Construct a Hasher. */
+    /** Construct a Hasher.
+     *
+     *  The corresponding enum values must start with value 0 and follow the
+     *  same order as names.
+     *  @param names array of strings to associate with enums. If nameCount is 0 then the 
+     *               last entry of this array must be 0.
+     *  @param nameCount The number of elements in the names array. If 0 then names must have
+     *               an additional 0 (null) entry.
+     */
     Hasher(const char* names[], int nameCount = 0);
+    /** Destruct a Hasher. */
     ~Hasher();
 
     typedef unsigned long HashType;
     
     HashType getHash(const std::string& name);
+    /** Get the sequence number of a name within the names of this Hasher.
+     *
+     *  @param name Name to lookup with the array of names
+     *  @return The index of name into the array of names. Returns -1 if name is not found in names.
+     */
     int getHashIndex(const std::string& name);
-    const std::string& getName(int enumCode);
-    const std::string& getNameForHash(HashType hash);
+    /** Used for debugging, make be removed later. */
+    const std::string& getName(int enumCode) const;
+    /** Used for debugging, make be removed later. */
+    const std::string& getNameForHash(HashType hash) const;
     
 private:
     bool putHashValue(const std::string& name, int idx);

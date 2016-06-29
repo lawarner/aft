@@ -63,7 +63,7 @@ private:
 
 /** Handle consumers.
  *
- *  Thru parameters, this command handles open, openw, needsData, write and close.
+ *  Thru parameters, this command handles open, openw, canAcceptData, write and close.
  *  openw will overwrite existing files.
  *  TODO open+ for append mode.
  *  Currently only fileconsumers are supported.

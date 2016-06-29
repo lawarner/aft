@@ -116,16 +116,16 @@ ConsCommand::process(base::Context* context)
     {
         ctx->removeConsumer(consName);
     }
-    else if (type_ == "needsData")
+    else if (type_ == "canAcceptData")
     {
-        aftlog << "ConsCommand needsData" << std::endl;
+        aftlog << "ConsCommand canAcceptData" << std::endl;
         base::BaseConsumer* consumer = ctx->getConsumer(consName);
         if (!consumer)
         {
             aftlog << loglevel(Error) << "ConsCommand: " << consName << " not yet open" << std::endl;
             return base::Result(retval);
         }
-        return base::Result(consumer->needsData());
+        return base::Result(consumer->canAcceptData());
     }
     else if (type_ == "write")
     {
@@ -141,7 +141,7 @@ ConsCommand::process(base::Context* context)
             aftlog << loglevel(Error) << "ConsCommand: No data to write" << std::endl;
             return base::Result(retval);
         }
-        if (!parameters_[2].empty() && consumer->needsData())
+        if (!parameters_[2].empty() && consumer->canAcceptData())
         {
             base::Blob blobData("", base::Blob::STRING, parameters_[2]);
             aftlog << loglevel(Debug) << "- write string blob: " << blobData.getString() << std::endl;

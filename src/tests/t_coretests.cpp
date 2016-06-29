@@ -68,7 +68,7 @@ TEST(CorePackageTest, StringConsumer)
 {
     Blob blob("string", Blob::STRING, sampleText);
     StringConsumer strcons;
-    EXPECT_TRUE(strcons.needsData());
+    EXPECT_TRUE(strcons.canAcceptData());
     strcons.write(blob);
     EXPECT_TRUE(strcons.getContents() == sampleText);
 }
@@ -93,7 +93,7 @@ TEST(CorePackageTest, FileConsumer)
 {
     Blob blob("file", Blob::STRING, sampleText);
     FileConsumer filecons("/tmp/test_file_cons", true);
-    EXPECT_TRUE(filecons.needsData());
+    EXPECT_TRUE(filecons.canAcceptData());
     filecons.write(blob);
 }
 
@@ -139,7 +139,7 @@ TEST(CorePackageTest, QueueProc)
 
     for (int idx = 0; idx < 3; ++idx)
     {
-        EXPECT_TRUE(qproc.needsData());
+        EXPECT_TRUE(qproc.canAcceptData());
         Blob blob("b", Blob::STRING, "This is a string of sorts.");
         EXPECT_TRUE(qproc.write(blob));
     }

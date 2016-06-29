@@ -110,7 +110,7 @@ StringConsumer::~StringConsumer()
     delete writer_;
 }
 
-bool StringConsumer::needsData()
+bool StringConsumer::canAcceptData(bool isRequired)
 {
     return true;
 }

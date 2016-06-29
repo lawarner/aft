@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
     if (testCase.serialize(blob))
     {
         FileConsumer filecons("/tmp/scenario1.aft", true);
-        if (!filecons.needsData())
+        if (!filecons.canAcceptData())
         {
             aftlog << loglevel(Error) << "Cannot write to testcase file" << std::endl;
             return 1;

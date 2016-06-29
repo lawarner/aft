@@ -43,3 +43,8 @@
  *  @brief Platform dependent implementations of base classes
  */
 
+/**
+ *  @namespace aft::ui
+ *  @brief Contains AFT UI classes
+ */
+

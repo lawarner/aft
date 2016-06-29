@@ -374,7 +374,7 @@ TEST(BasePackageTest, Blob)
     EXPECT_EQ(1, blob.getMembers().size());
     EXPECT_EQ(&subBlob, blob.getMembers().front());
 
-    Blob rawBlob("rawBlob", (void *)SOMEDATA, SomeDataLength + 1);
+    Blob rawBlob("rawBlob", (void *)SOMEDATA, (int)SomeDataLength + 1);
     EXPECT_EQ(rawBlob.getType(), Blob::RAWDATA);
     EXPECT_EQ(strncmp(SOMEDATA, (const char *)rawBlob.getData(), SomeDataLength), 0);
     std::cout << "Blob data string: " << rawBlob.getString() << std::endl;
@@ -555,10 +555,39 @@ TEST(BasePackageTest, Hasher)
     const std::vector<std::string> commands(cmdStrings, cmdStrings + numCommands);
     EXPECT_EQ(commands.size(), numCommands);
     
-    Hasher hasher(commands);
+    Hasher hasher1(commands);
     for (int idx = 0; idx < numCommands; ++idx)
     {
-        int hashIdx = hasher.getHashIndex(commands[idx]);
+        int hashIdx = hasher1.getHashIndex(commands[idx]);
+        switch (hashIdx) {
+            case First:
+            {
+                EXPECT_EQ(idx, 0);
+                std::string strCmd = hasher1.getName(hashIdx);
+                EXPECT_EQ(strCmd, commands[hashIdx]);
+            }
+                break;
+            case Second:
+                EXPECT_EQ(idx, 1);
+                break;
+            case Third:
+                EXPECT_EQ(idx, 2);
+                break;
+            case Fourth:
+                EXPECT_EQ(idx, 3);
+                break;
+            default:
+                std::cout << "Unexpected hash index: " << hashIdx << std::endl;
+                EXPECT_TRUE(false);
+                break;
+        }
+    }
+
+    // Test char array constructor
+    Hasher hasher2(cmdStrings, numCommands);
+    for (int idx = 0; idx < numCommands; ++idx)
+    {
+        int hashIdx = hasher2.getHashIndex(commands[idx]);
         switch (hashIdx) {
             case First:
                 EXPECT_EQ(idx, 0);

@@ -58,7 +58,7 @@ public:
     virtual bool write(const aft::base::Result& result);
     virtual bool write(const aft::base::Blob& blob);
     /** Returns true if write can be called on this consumer without blocking */
-    virtual bool needsData();
+    virtual bool canAcceptData(bool isRequired = false);
 
 protected:
     FileWriterImpl* writer_;
