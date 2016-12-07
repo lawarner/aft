@@ -45,7 +45,7 @@ SRCS := $(OBJS:.o=.cpp)
 PROGRAMS = sc_testcase
 
 DEPCPPFLAGS = -I. $(INCS)
-DEPLIBS = $(LIBAFT) $(LIBGTEST)
+DEPLIBS = $(LIBAFT)
 
 .cpp.o: ; $(CC) $(CCFLAGS) -c $<
 

@@ -44,7 +44,7 @@ An xcode workspace is in the aft/macosx folder, that contains the following xcod
 
 ### Other Platforms
 
-Any platform that supports POSIX, g++ and the c++11 standard should compile and run without problems. But any
+Any platform that supports POSIX, g++ and the c++14 standard should compile and run without problems. But any
 errors that may arise should be isolated to classes within osdep. Currently the osdep section is only involved
 in theads and dynamic librarires, but more could be added in the future.
 

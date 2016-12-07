@@ -27,6 +27,7 @@ namespace aft
 {
 namespace ui
 {
+
 class UIDefaultDelegate : public UIDelegate
 {
 public:
@@ -80,8 +81,8 @@ using namespace aft::ui;
 Element::Element(const std::string& name, UIDelegate* delegate)
 : name_(name)
 , delegate_(delegate ? delegate : new UIDefaultDelegate)
-, isVisible_(false)
 , isEnabled_(false)
+, isVisible_(false)
 {
     
 }

@@ -70,6 +70,7 @@ public:
     /** Get user input from element */
     bool input(const Element& element, std::string& value)
     {
+        bool retval = false;
         if (elements_.empty())
         {
             value = element.getDefault();
@@ -79,8 +80,9 @@ public:
             const Element* elValue = elements_.back();
             elements_.pop_back();
             value = elValue->getValue().empty() ? elValue->getDefault() : elValue->getValue();
+            retval = true;
         }
-        return true;
+        return retval;
     }
     /** Output the element to the user interface */
     bool output(const Element& element)
@@ -191,10 +193,24 @@ TEST_F(UiPackageTest, BaseElementWithDelegate)
     Element elFour("Four", &stackDelegate);
     elFour.setValue("My value came from 4");
     elFour.show();
+    Element elFive("Five", &stackDelegate);
+    elFive.setValue("I am five");
+    elFive.show();
+
     aftlog << "=== elThree before: " << elThree.getValue() << std::endl;
     EXPECT_TRUE(elThree.input());
     aftlog << "=== elThree after:  " << elThree.getValue() << std::endl;
+    EXPECT_TRUE(elThree.getValue() == "I am five");
+    aftlog << "=== elThree pop 5:   " << elThree.getValue() << std::endl;
+
+    EXPECT_TRUE(elThree.input());
+    aftlog << "=== elThree pop 4:   " << elThree.getValue() << std::endl;
     EXPECT_TRUE(elThree.getValue() == "My value came from 4");
+
+    // Delegate's stack is empty so we are back to elThree's default value
+    EXPECT_FALSE(elThree.input());
+    aftlog << "=== elThree default:   " << elThree.getValue() << std::endl;
+    EXPECT_TRUE(elThree.getValue() == "default value of 3");
 }
 
 } // namespace

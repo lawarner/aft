@@ -32,7 +32,7 @@ namespace aft
 {
 namespace ui
 {
-        
+
 // Internal implementation class
 class UIProcImpl : public ReaderWriterContract
 {
@@ -49,12 +49,12 @@ public:
 
     /** Returns the type of product this writer has ready to write. */
     virtual ProductType hasData();
-    
+
     /** Return true if data was written. */
     virtual bool getData(TObject& object);
     virtual bool getData(Result& result);
     virtual bool getData(Blob& blob);
-    
+
     // Reader contract
     // For a UI these are basically the commands to construct and control the UI
     //TODO use entities
@@ -64,7 +64,7 @@ public:
 
     bool roomForData() const;
     bool roomForObject(ProductType productType) const;
-    
+
 private:
     unsigned int maxSize_;
     unsigned int currentElement_;
@@ -129,7 +129,7 @@ bool UIProcImpl::removeElement(Element* element)
     }
     return false;
 }
-    
+
 ProductType UIProcImpl::hasData()
 {
     if (uiElements_.empty()) return TYPE_NONE;
@@ -139,7 +139,7 @@ ProductType UIProcImpl::hasData()
     {
         return TYPE_BLOB;
     }
-    
+
     return TYPE_NONE;
 }
 
@@ -164,10 +164,10 @@ bool UIProcImpl::getData(Blob& blob)
         blob = Blob(element->getName(), Blob::STRING, element->getValue());
         return true;
     }
-    
+
     return false;
 }
-    
+
 // Reader contract
 // For a UI these are basically the commands to construct and control the UI
 //TODO use entities
@@ -185,11 +185,11 @@ bool UIProcImpl::dataAvailable(const Blob& blob)
 
     if (blob.getType() == Blob::COMMAND)
     {
-        
+
     }
     else if (blob.getType() == Blob::STRING)
     {
-        
+
     }
     //if (queue_.size() < maxSize_)
     //{
@@ -209,13 +209,11 @@ bool UIProcImpl::roomForObject(ProductType productType) const
 }
 
 
-#pragma mark - UI Base class
-
 UI::UI(Element* element, unsigned int maxSize)
 : base::BaseProc(0, 0)
 , impl_(*new UIProcImpl(element, maxSize))
 {
-    
+
 }
 
 UI::~UI()

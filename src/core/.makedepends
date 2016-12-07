@@ -1,72 +1,80 @@
 basiccommands.o: basiccommands.cpp ../../src/base/blob.h \
  ../../src/base/consumer.h ../../src/base/producttype.h \
- ../../src/base/context.h ../../src/base/visitor.h \
- ../../src/base/result.h ../../src/base/propertyhandler.h \
- ../../src/base/structureddata.h ../../src/base/serialize.h \
- basiccommands.h ../../src/base/command.h ../../src/base/tobject.h \
- ../../src/base/tobjectiterator.h fileconsumer.h fileproducer.h \
+ ../../src/base/context.h ../../src/base/result.h \
+ ../../src/base/visitor.h ../../src/base/tobject.h \
+ ../../src/base/operation.h ../../src/base/serialize.h \
+ ../../src/base/tobjectiterator.h ../../src/base/propertyhandler.h \
+ ../../src/base/structureddata.h ../../src/base/structureddataname.h \
+ basiccommands.h ../../src/base/command.h fileconsumer.h fileproducer.h \
  ../../src/base/producer.h logger.h runcontext.h
 basicfactory.o: basicfactory.cpp ../../src/base/blob.h \
- ../../src/base/context.h ../../src/base/visitor.h \
- ../../src/base/result.h ../../src/base/hasher.h \
- ../../src/base/structureddata.h ../../src/base/serialize.h \
- basiccommands.h ../../src/base/command.h ../../src/base/tobject.h \
- ../../src/base/tobjectiterator.h basicfactory.h ../../src/base/factory.h \
- logger.h
+ ../../src/base/context.h ../../src/base/result.h \
+ ../../src/base/visitor.h ../../src/base/tobject.h \
+ ../../src/base/operation.h ../../src/base/serialize.h \
+ ../../src/base/tobjectiterator.h ../../src/base/hasher.h \
+ ../../src/base/structureddata.h ../../src/base/structureddataname.h \
+ basiccommands.h ../../src/base/command.h basicfactory.h \
+ ../../src/base/factory.h logger.h
 commandcontext.o: commandcontext.cpp logger.h commandcontext.h \
- ../../src/base/context.h ../../src/base/visitor.h \
- ../../src/base/result.h ../../src/base/propertyhandler.h \
- ../../src/base/tobject.h ../../src/base/serialize.h \
- ../../src/base/tobjectiterator.h ../../src/base/tobasictypes.h \
- ../../src/base/structureddata.h ../../src/base/tobjecttype.h
+ ../../src/base/context.h ../../src/base/result.h \
+ ../../src/base/visitor.h ../../src/base/tobject.h \
+ ../../src/base/operation.h ../../src/base/serialize.h \
+ ../../src/base/tobjectiterator.h ../../src/base/propertyhandler.h \
+ ../../src/base/tobasictypes.h ../../src/base/structureddata.h \
+ ../../src/base/structureddataname.h ../../src/base/tobjecttype.h
 fileconsumer.o: fileconsumer.cpp ../../src/base/blob.h \
  ../../src/base/producer.h ../../src/base/producttype.h \
  ../../src/base/result.h ../../src/base/tobject.h \
- ../../src/base/serialize.h ../../src/base/tobjectiterator.h \
- fileconsumer.h ../../src/base/consumer.h
+ ../../src/base/operation.h ../../src/base/serialize.h \
+ ../../src/base/tobjectiterator.h fileconsumer.h \
+ ../../src/base/consumer.h
 fileproducer.o: fileproducer.cpp ../../src/base/blob.h \
  ../../src/base/consumer.h ../../src/base/producttype.h \
  ../../src/base/result.h ../../src/base/tobject.h \
- ../../src/base/serialize.h ../../src/base/tobjectiterator.h \
- fileproducer.h ../../src/base/producer.h
+ ../../src/base/operation.h ../../src/base/serialize.h \
+ ../../src/base/tobjectiterator.h fileproducer.h \
+ ../../src/base/producer.h
 logger.o: logger.cpp logger.h
 loghandler.o: loghandler.cpp logger.h loghandler.h \
  ../../src/base/propertyhandler.h ../../src/base/tobasictypes.h \
- ../../src/base/structureddata.h ../../src/base/serialize.h \
- ../../src/base/tobject.h ../../src/base/result.h \
+ ../../src/base/result.h ../../src/base/structureddata.h \
+ ../../src/base/serialize.h ../../src/base/structureddataname.h \
+ ../../src/base/tobject.h ../../src/base/operation.h \
  ../../src/base/tobjectiterator.h ../../src/base/tobjecttype.h
-runcontext.o: runcontext.cpp ../../src/base/consumer.h \
- ../../src/base/producttype.h ../../src/base/producer.h \
- ../../src/base/result.h loghandler.h ../../src/base/propertyhandler.h \
- runcontext.h ../../src/base/context.h ../../src/base/visitor.h
-queueprodcons.o: queueprodcons.cpp ../../src/base/blob.h queueprodcons.h \
- ../../src/base/prodcons.h ../../src/base/consumer.h \
+queueproc.o: queueproc.cpp ../../src/base/blob.h queueproc.h \
+ ../../src/base/proc.h ../../src/base/consumer.h \
  ../../src/base/producttype.h ../../src/base/producer.h
 runcontext.o: runcontext.cpp ../../src/base/consumer.h \
  ../../src/base/producttype.h ../../src/base/producer.h \
  ../../src/base/result.h loghandler.h ../../src/base/propertyhandler.h \
- runcontext.h ../../src/base/context.h ../../src/base/visitor.h
+ runcontext.h ../../src/base/context.h ../../src/base/visitor.h \
+ ../../src/base/tobject.h ../../src/base/operation.h \
+ ../../src/base/serialize.h ../../src/base/tobjectiterator.h
 stringconsumer.o: stringconsumer.cpp ../../src/base/blob.h \
  ../../src/base/producer.h ../../src/base/producttype.h \
  ../../src/base/result.h ../../src/base/tobject.h \
- ../../src/base/serialize.h ../../src/base/tobjectiterator.h \
- stringconsumer.h ../../src/base/consumer.h
+ ../../src/base/operation.h ../../src/base/serialize.h \
+ ../../src/base/tobjectiterator.h stringconsumer.h \
+ ../../src/base/consumer.h
 stringproducer.o: stringproducer.cpp ../../src/base/blob.h \
  ../../src/base/consumer.h ../../src/base/producttype.h \
  ../../src/base/result.h ../../src/base/tobject.h \
- ../../src/base/serialize.h ../../src/base/tobjectiterator.h \
- stringproducer.h ../../src/base/producer.h
+ ../../src/base/operation.h ../../src/base/serialize.h \
+ ../../src/base/tobjectiterator.h stringproducer.h \
+ ../../src/base/producer.h
 testcase.o: testcase.cpp ../../src/base/blob.h ../../src/base/context.h \
- ../../src/base/visitor.h ../../src/base/result.h \
+ ../../src/base/result.h ../../src/base/visitor.h \
+ ../../src/base/tobject.h ../../src/base/operation.h \
+ ../../src/base/serialize.h ../../src/base/tobjectiterator.h \
  ../../src/base/factory.h ../../src/base/structureddata.h \
- ../../src/base/serialize.h ../../src/base/tobasictypes.h \
- ../../src/base/tobject.h ../../src/base/tobjectiterator.h \
+ ../../src/base/structureddataname.h ../../src/base/tobasictypes.h \
  ../../src/base/tobjecttype.h ../../src/base/tobjecttree.h \
  ../../src/core/logger.h testcase.h
 testsuite.o: testsuite.cpp ../../src/base/blob.h ../../src/base/context.h \
- ../../src/base/visitor.h ../../src/base/result.h \
- ../../src/base/structureddata.h ../../src/base/serialize.h \
- ../../src/base/tobjecttree.h ../../src/base/tobjectiterator.h \
- ../../src/base/tobjecttype.h ../../src/core/logger.h \
- ../../src/core/runcontext.h ../../src/core/testcase.h \
- ../../src/base/tobject.h ../../src/core/testsuite.h
+ ../../src/base/result.h ../../src/base/visitor.h \
+ ../../src/base/tobject.h ../../src/base/operation.h \
+ ../../src/base/serialize.h ../../src/base/tobjectiterator.h \
+ ../../src/base/structureddata.h ../../src/base/structureddataname.h \
+ ../../src/base/tobjecttree.h ../../src/base/tobjecttype.h \
+ ../../src/core/logger.h ../../src/core/runcontext.h \
+ ../../src/core/testcase.h ../../src/core/testsuite.h

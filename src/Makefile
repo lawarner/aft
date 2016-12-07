@@ -30,8 +30,8 @@ ANDROIDCC=$(ANDROIDPREFIX)-g++
 LIBSDIR = $(TOP)/lib
 LIBAFT = $(LIBSDIR)/libaft.a
 
-SUBDIRS = base core json osdep
-# storage transport plugin ui
+SUBDIRS = base core json osdep ui
+# storage transport plugin
 
 PROGRAMS = tests
 

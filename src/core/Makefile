@@ -22,10 +22,10 @@ INCDIR = $(TOP)/src
 
 #AR = ar
 CC = g++
-CCFLAGS = -std=c++11 -Wall -g -fPIC -I$(TOP) -I$(INCDIR)
+CCFLAGS = -std=c++14 -Wall -g -fPIC -I$(TOP) -I$(INCDIR)
 
 OBJS := basiccommands.o basicfactory.o commandcontext.o fileconsumer.o fileproducer.o \
-        logger.o loghandler.o runcontext.o queueproc.o runcontext.o \
+        logger.o loghandler.o queueproc.o runcontext.o \
         stringconsumer.o stringproducer.o testcase.o testsuite.o
 
 SRCS := $(OBJS:.o=.cpp)

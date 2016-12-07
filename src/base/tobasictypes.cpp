@@ -139,8 +139,8 @@ Result TOBool::applyOperation(const Operation& operation)
 bool TOBool::supportsOperation(const Operation& operation)
 {
     Operation::Type operationType = operation.getType();
-    bool retval = operationType == operationType == Operation::OperatorZero ||
-                                   operationType == Operation::OperatorSet;
+    bool retval = operationType == Operation::OperatorZero ||
+                  operationType == Operation::OperatorSet;
     
     return retval || TOBasicType<bool>::supportsOperation(operation);
 }

@@ -1,5 +1,5 @@
 #
-#   Copyright (C) 2015
+#   Copyright (C) 2016
 #   Andy Warner
 #   This file is part of the aft package.
 #
@@ -17,8 +17,6 @@
 
 # Simple makefile for the aft package
 
-# Note the base directory holds primary base and abstract classes
-
 TOP = ../..
 INCDIR = $(TOP)/src
 
@@ -26,15 +24,12 @@ INCDIR = $(TOP)/src
 CC = g++
 CCFLAGS = -std=c++14 -Wall -g -fPIC -I$(TOP) -I$(INCDIR)
 
-OBJS := blob.o command.o consumer.o context.o entity.o factory.o hasher.o operation.o \
-    outlet.o plugin.o proc.o producer.o propertyhandler.o result.o structureddata.o \
-    structureddataname.o thread.o tobasictypes.o tobject.o tobjectiterator.o \
-    tobjecttree.o tobjecttype.o
+OBJS := basicelements.o element.o uicommand.o ui.o
 
 SRCS := $(OBJS:.o=.cpp)
 INCS = $(OBJS:.o=.h)
 
-LIBR = libaftbase.a
+LIBR = libaftui.a
 
 
 .cpp.o: ; $(CC) $(CCFLAGS) -c $<

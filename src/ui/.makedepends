@@ -1,0 +1,6 @@
+basicelements.o: basicelements.cpp basicelements.h element.h
+element.o: element.cpp element.h uidelegate.h ../../src/core/logger.h
+uicommand.o: uicommand.cpp uicommand.h
+ui.o: ui.cpp ../../src/base/blob.h element.h ui.h ../../src/base/proc.h \
+ ../../src/base/consumer.h ../../src/base/producttype.h \
+ ../../src/base/producer.h ../../src/base/result.h uidelegate.h

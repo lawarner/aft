@@ -22,7 +22,7 @@ INCDIR = $(TOP)/src
 INCS := -I$(INCDIR)
 
 CC = g++
-CCFLAGS = -g $(INCS)
+CCFLAGS = -std=c++14 -g $(INCS)
 
 ARMPREFIX=arm-linux-gnueabihf
 ARMAR=$(ARMPREFIX)-ar
@@ -33,7 +33,7 @@ ANDROIDAR=$(ANDROIDPREFIX)-ar
 ANDROIDCC=$(ANDROIDPREFIX)-g++
 
 LIBAFT = $(TOP)/lib/libaft.a
-LIBGTEST = /usr/local/lib/libgtest.a
+LIBGTEST = -lgtest
 
 LDFLAGS = -pthread -Wl,--no-as-needed -ldl
 LDLIBS =
@@ -45,11 +45,11 @@ PLUGINSO = sample_plugin.so
 SUBDIRS =
 
 OBJS := t_basetests.o t_coretests.o t_logger.o t_osdep.o t_plugin.o t_result.o \
-        t_testsuite.o
+        t_testsuite.o t_ui.o
 SRCS := $(OBJS:.o=.cpp)
 
 PROGRAMS = t_basetests t_coretests t_logger t_osdep t_plugin t_result \
-           t_testsuite
+           t_testsuite t_ui
 
 DEPCPPFLAGS = -I. $(INCS)
 DEPLIBS = $(LIBAFT) $(LIBGTEST)
