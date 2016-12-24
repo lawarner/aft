@@ -18,8 +18,10 @@
  *   limitations under the License.
  */
 
+#include <cstddef>
 #include "base/proc.h"
 #include "base/result.h"
+#include "ui/uidelegate.h"
 
 
 namespace aft
@@ -58,8 +60,9 @@ public:
     /** Construct a UI with an optional top level element and optional maximum size.
      *  @param element Optional top level Element
      *  @param maxSize Maximum top level Elements allowed. If not specified then size is unlimited.
+     *  @param uiDelegate UI delegate to use. If not specified (or 0) then the default UI delegate is used.
      */
-    UI(Element* element = 0, unsigned int maxSize = 0);
+    UI(Element* element = nullptr, unsigned int maxSize = 0, UIDelegate* uiDelegate = nullptr);
     /** Destruct a UI. */
     virtual ~UI();
     
@@ -75,8 +78,8 @@ public:
     virtual bool removeElement(Element* element);
 
     // many UI's need to have an init and deinit
-    virtual base::Result init(base::Context* context = 0);
-    virtual base::Result deinit(base::Context* context = 0);
+    virtual base::Result init(base::Context* context = nullptr);
+    virtual base::Result deinit(base::Context* context = nullptr);
     
     // Producer contract
     virtual bool read(base::TObject& object);

@@ -44,7 +44,7 @@ class ProcContract : public ProducerContract, public ConsumerContract
 class BaseProc : public BaseProducer, public BaseConsumer
 {
 public:
-    BaseProc(WriterContract* writerDelegate = 0, ReaderContract* readerDelegate = 0);
+    BaseProc(WriterContract* writerDelegate = nullptr, ReaderContract* readerDelegate = nullptr);
     virtual ~BaseProc();
     
 };

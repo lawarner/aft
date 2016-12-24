@@ -22,8 +22,12 @@
 using namespace aft::base;
 using namespace aft::osdep;
 
+namespace aft
+{
+namespace osdep
+{
 
-class aft::osdep::PosixThreadImpl
+class PosixThreadImpl
 {
 public:
     PosixThreadImpl(TObject* tObject, Context* context)
@@ -128,3 +132,5 @@ void PosixThreadHandler::run()
     impl_.threadId_ = tid;
 }
 
+}
+}

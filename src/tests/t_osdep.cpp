@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015, 2016 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@
 #include <base/tobject.h>
 #include <gtest/gtest.h>
 using namespace aft::base;
+using namespace std;
 
 
 class SampleContext : public Context
@@ -45,11 +46,11 @@ namespace
 TEST(OsdepPackageTest, ThreadHandler)
 {
     ThreadManager* tman = ThreadManager::instance();
-    EXPECT_TRUE(tman != 0);
+    EXPECT_TRUE(tman != nullptr);
 
     SampleContext context;
     ThreadHandler* aThread = tman->thread(&TOTrue, &context);
-    EXPECT_TRUE(aThread != 0);
+    EXPECT_TRUE(aThread != nullptr);
 
     TObject::State toState = aThread->getState();
     EXPECT_EQ(toState, TObject::INITIAL);
@@ -61,6 +62,35 @@ TEST(OsdepPackageTest, ThreadHandler)
     toState = aThread->getState();
     std::cout << "Final state of thread: " << toState << std::endl;
     EXPECT_EQ(TObject::FINISHED_GOOD, toState);
+}
+
+TEST(OsdepPackageTest, MultiThreads)
+{
+    ThreadManager* tman = ThreadManager::instance();
+    EXPECT_TRUE(tman != nullptr);
+
+    SampleContext context;
+    SampleCallback callback;
+    const int numThreads = 10;
+    ThreadHandler* threads[numThreads];
+    for (ThreadHandler*& thread : threads) {
+        thread = tman->thread(&TOTrue, &context);
+        EXPECT_TRUE(thread != nullptr);
+        cout << "Created thread " << thread << endl;
+        thread->notify(&callback);
+
+    }
+
+    for (ThreadHandler*& thread : threads) {
+        cout << "Start thread " << thread << endl;
+        thread->run();
+    }
+    
+    for (ThreadHandler*& thread : threads) {
+        thread->wait();
+        cout << "Remove thread " << thread << endl;
+        delete thread;
+    }
 }
 
 } // namespace

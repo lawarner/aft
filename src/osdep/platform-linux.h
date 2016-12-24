@@ -15,19 +15,13 @@
  *   limitations under the License.
  */
 
-// Pull in platform specific definitions. Fallback to posix if nothing else applicable
-#if __APPLE__
-# include "osdep/platform-apple.h"
-# include "osdep/posix/posixpluginloader.h"
-# include "osdep/native/nativethread.h"
+#define PLATFORM Posix
+#define PLATFORM_NAME "Posix"
 
-#elif __linux__
-# include "osdep/platform-linux.h"
-# include "osdep/posix/posixpluginloader.h"
-# include "osdep/posix/posixthread.h"
+#define PosixPluginLoader PlatformPluginLoader
+#define PosixThreadHandler PlatformThreadHandler
 
-#else
-# include "osdep/platform-posix.h"
-# include "osdep/posix/posixpluginloader.h"
-# include "osdep/posix/posixthread.h"
-#endif
+#define PTHREAD_INIT -1
+
+#include "osdep/posix/posixpluginloader.h"
+#include "osdep/posix/posixthread.h"

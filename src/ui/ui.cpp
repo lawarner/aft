@@ -24,7 +24,6 @@
 #include "uidelegate.h"
 
 using namespace aft::base;
-using namespace aft::ui;
 using namespace std;
 
 
@@ -50,7 +49,8 @@ public:
     /** Returns the type of product this writer has ready to write. */
     virtual ProductType hasData();
 
-    /** Return true if data was written. */
+    /** Get data as TObject, if available.
+     *  @return true if data was written. */
     virtual bool getData(TObject& object);
     virtual bool getData(Result& result);
     virtual bool getData(Blob& blob);
@@ -71,10 +71,6 @@ private:
     ElementList uiElements_;
     UIDelegate* uiDelegate_;
 };
-
-} // namespace ui
-} // namespace aft
-
 
 UIProcImpl::UIProcImpl(Element* element, unsigned int maxSize, UIDelegate* uiDelegate)
 : maxSize_(maxSize)
@@ -209,9 +205,9 @@ bool UIProcImpl::roomForObject(ProductType productType) const
 }
 
 
-UI::UI(Element* element, unsigned int maxSize)
-: base::BaseProc(0, 0)
-, impl_(*new UIProcImpl(element, maxSize))
+UI::UI(Element* element, unsigned int maxSize, UIDelegate* uiDelegate)
+: base::BaseProc(nullptr, nullptr)
+, impl_(*new UIProcImpl(element, maxSize, uiDelegate))
 {
 
 }
@@ -293,3 +289,6 @@ bool UI::write(const base::Blob& blob)
 {
     return impl_.dataAvailable(blob);
 }
+
+} // namespace ui
+} // namespace aft

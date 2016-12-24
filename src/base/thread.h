@@ -37,7 +37,7 @@ class ThreadManagerImpl;
 class ThreadHandler
 {
 public:
-    virtual ~ThreadHandler() { }
+    virtual ~ThreadHandler();
 
     /**
      *  Get the result of the tobject running in this thread.  If the thread has
@@ -135,6 +135,7 @@ private:
 private:
     ThreadManagerImpl& impl_;
     static ThreadManager* instance_;
+    friend ThreadHandler;
 };
 
 } // namespace base

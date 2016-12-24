@@ -173,6 +173,17 @@ protected:
     }
 };
 
+///////////// Tests here :
+    
+TEST(BasePackageTest, TerminalInput)
+{
+    std::cout << "Enter your name or something: " << std::endl;
+    char cname[80];
+    std::cin.getline(cname, 80);
+    std::string name("Joe Smoe");
+    
+    aftlog << "So you are " << name << ", are you?" << std::endl;
+}
     
 TEST_F(UiPackageTest, BaseElement)
 {

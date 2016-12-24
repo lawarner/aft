@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015, 2016 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  *   limitations under the License.
  */
 
+#include <algorithm>
+#include <mutex>
 #include <vector>
 #include "context.h"
 #include "thread.h"
@@ -29,12 +31,56 @@ ThreadManager* ThreadManager::instance_ = 0;
 class aft::base::ThreadManagerImpl
 {
 public:
-    vector<ThreadHandler*> threads;
+    void addThread(ThreadHandler* thread)
+    {
+        unique_lock<mutex> lck(mutex_);
+        threads_.push_back(thread);
+    }
+
+    ThreadHandler* findThread(const TObject* tObject)
+    {
+        unique_lock<mutex> lck(mutex_);
+        for (auto* thread : threads_) {
+            if (thread->getTObject() == tObject) {
+                return thread;
+            }
+        }
+        
+        return nullptr;
+    }
+
+    void removeThread(ThreadHandler* thread)
+    {
+        unique_lock<mutex> lck(mutex_);
+        auto it = find(threads_.begin(), threads_.end(), thread);
+        if (it != threads_.end())
+        {
+            threads_.erase(it);
+        }
+    }
+
+    void stopAll(bool force)
+    {
+        unique_lock<mutex> lck(mutex_);
+        for (auto* thread : threads_) {
+            thread->stop(force);
+        }
+    }
+
+private:
+    vector<ThreadHandler*> threads_;
+    mutex mutex_;
 };
 
 
+ThreadHandler::~ThreadHandler()
+{
+    ThreadManager* threadMan = ThreadManager::instance();
+    threadMan->impl_.removeThread(this);
+}
+
 ThreadManager::ThreadManager(Context* context)
-    : impl_(*new ThreadManagerImpl)
+: impl_(*new ThreadManagerImpl)
 {
 }
 
@@ -55,31 +101,19 @@ ThreadManager* ThreadManager::instance()
 
 ThreadHandler* ThreadManager::find(const TObject* tObject) const
 {
-    vector<ThreadHandler*>::iterator it;
-    for (it = impl_.threads.begin(); it != impl_.threads.end(); ++it)
-    {
-        if ((*it)->getTObject() == tObject)
-        {
-            return *it;
-        }
-    }
-
-    return 0;
+    return impl_.findThread(tObject);
 }
 
 void ThreadManager::stopAll(bool force)
 {
-    vector<ThreadHandler*>::iterator it;
-    for (it = impl_.threads.begin(); it != impl_.threads.end(); ++it)
-    {
-        (*it)->stop(force);
-    }
+    impl_.stopAll(force);
 }
 
 ThreadHandler* ThreadManager::thread(TObject* tObject, Context* context)
 {
     ThreadHandler* threadHandler = new PlatformThreadHandler(tObject, context);
-    impl_.threads.push_back(threadHandler);
+    impl_.addThread(threadHandler);
+
     return threadHandler;
 }
 

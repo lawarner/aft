@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2016 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
 #include "osdep/platform.h"
 
 using namespace aft::base;
-//using namespace aft::osdep;
+using namespace aft::osdep;
 
 #if __APPLE__
 static const char* DEFAULT_PATH = "/opt/local/lib/aft/plugins";
@@ -32,19 +32,15 @@ static const char* PATH_SEPARATOR = "/";
 static const char* SO_EXT = ".so";
 #endif
 
-namespace aft
-{
-namespace osdep
-{
 
-class PosixPluginImpl
+class aft::osdep::NativePluginImpl
 {
 public:
-    PosixPluginImpl(const std::string& path = DEFAULT_PATH)
-    : handle_(0)
-    , factory_(0)
-    , path_(path)
-    {  }
+    NativePluginImpl(const std::string& path = DEFAULT_PATH)
+        : handle_(0)
+        , factory_(0)
+        , path_(path)
+        {  }
     void* handle_;
     aft::base::BaseFactory* factory_;
     //TODO keep array of directories in path instead of just one
@@ -54,25 +50,25 @@ public:
 
 
 static std::string
-makeSoName(const PosixPluginImpl& impl)
+makeSoName(const NativePluginImpl& impl)
 {
     std::string soName = impl.path_ + PATH_SEPARATOR + impl.bundleName_ + SO_EXT;
     return soName;
 }
 
 
-PosixPluginLoader::PosixPluginLoader()
-    : impl_(*new PosixPluginImpl)
+NativePluginLoader::NativePluginLoader()
+    : impl_(*new NativePluginImpl)
 {
 }
 
-PosixPluginLoader::~PosixPluginLoader()
+NativePluginLoader::~NativePluginLoader()
 {
     delete &impl_;
 }
 
 BaseFactory*
-PosixPluginLoader::loadBundle(const std::string& bundleName)
+NativePluginLoader::loadBundle(const std::string& bundleName)
 {
     impl_.bundleName_ = bundleName;
     std::string soName = makeSoName(impl_);
@@ -109,13 +105,13 @@ PosixPluginLoader::loadBundle(const std::string& bundleName)
     return factory;
 }
 
-void PosixPluginLoader::setPath(const std::string& path)
+void NativePluginLoader::setPath(const std::string& path)
 {
     //TODO expand env variables and tildes
     impl_.path_ = path;
 }
 
-void PosixPluginLoader::unloadBundle()
+void NativePluginLoader::unloadBundle()
 {
     if (impl_.factory_)
     {
@@ -130,6 +126,3 @@ void PosixPluginLoader::unloadBundle()
         impl_.handle_ = 0;
     }
 }
-    
-} // namespace osdep
-} // namespace aft
