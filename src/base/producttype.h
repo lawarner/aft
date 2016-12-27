@@ -23,26 +23,27 @@ namespace base
 /**
  * Used to define type of object when multiple types are applicable.
  */
-enum ProductType
+enum class ProductType
 {
-    TYPE_NONE,
-    TYPE_TOBJECT,
-    TYPE_RESULT,
-    TYPE_BLOB
+    NONE,
+    TOBJECT,
+    RESULT,
+    BLOB
 };
 
 /**
  *  Used to control how producers parse their sources.
  */
-enum ParcelType
-    {
-        PARCEL_BLOB_CHARACTER,
-        PARCEL_BLOB_WORD,
-        PARCEL_BLOB_LINE,
-        PARCEL_BLOB_FILE,
-        PARCEL_RESULT,
-        PARCEL_TOBJECT
-    };
+enum class ParcelType
+{
+    BLOB_CHARACTER,
+    BLOB_WORD,
+    BLOB_LINE,
+    BLOB_PARAGRAPH,
+    BLOB_FILE,
+    RESULT,
+    TOBJECT
+};
 
 } // namespace base
 } // namespace aft

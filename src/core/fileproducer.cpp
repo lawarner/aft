@@ -57,9 +57,9 @@ public:
     /** Returns the type of product this writer has ready to write. */
     virtual ProductType hasData()
         {
-            if (infile_.peek() == EOF) return TYPE_NONE;
+            if (infile_.peek() == EOF) return ProductType::NONE;
 
-            return TYPE_BLOB;
+            return ProductType::BLOB;
         }
 
     /** Return true if data was written. */
@@ -77,7 +77,7 @@ public:
 
             switch (parcelType_)
             {
-            case PARCEL_BLOB_CHARACTER:
+                case ParcelType::BLOB_CHARACTER:
             {
                 int ch = infile_.get();
                 if (ch != EOF)
@@ -87,10 +87,10 @@ public:
                 }
             }
                 break;
-            case PARCEL_BLOB_WORD:
+            case ParcelType::BLOB_WORD:
                 retval = getWord(infile_, buffer_);
                 break;
-            case PARCEL_BLOB_LINE:
+            case ParcelType::BLOB_LINE:
             {
                 char lineBuf[1024];
                 infile_.getline(lineBuf, 1024);
@@ -101,7 +101,7 @@ public:
                 }
             }
                 break;
-            case PARCEL_BLOB_FILE:
+            case ParcelType::BLOB_FILE:
             {
                 if (infile_.peek() != EOF)
                 {
@@ -111,8 +111,8 @@ public:
                 }
             }
                 break;
-            case PARCEL_RESULT:
-            case PARCEL_TOBJECT:
+            case ParcelType::RESULT:
+            case ParcelType::TOBJECT:
                 break;
             }
 
@@ -178,7 +178,7 @@ bool FileProducer::read(Blob& blob)
 
 bool FileProducer::hasData()
 {
-    return reader_->hasData() == TYPE_BLOB;
+    return reader_->hasData() == ProductType::BLOB;
 }
 
 bool FileProducer::hasObject(aft::base::ProductType productType)

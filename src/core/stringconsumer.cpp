@@ -87,7 +87,7 @@ bool StringWriterImpl::roomForData() const
 
 bool StringWriterImpl::roomForObject(ProductType productType) const
 {
-    if (roomForData() && productType == TYPE_BLOB)
+    if (roomForData() && productType == ProductType::BLOB)
     {
         return true;
     }

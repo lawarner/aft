@@ -44,7 +44,7 @@ class FileProducer : public aft::base::BaseProducer
 public:
     /** Construct a FileProducer */
     FileProducer(const std::string& fileName,
-                 aft::base::ParcelType parcelType = aft::base::PARCEL_BLOB_FILE);
+                 base::ParcelType parcelType = base::ParcelType::BLOB_FILE);
     virtual ~FileProducer();
 
     /** Not yet implemented. */

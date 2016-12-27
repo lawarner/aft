@@ -26,9 +26,9 @@ public:
     /** Returns the type of product this writer has ready to write. */
     virtual ProductType hasData()
     {
-        if (queue_.empty()) return TYPE_NONE;
+        if (queue_.empty()) return ProductType::NONE;
 
-        return TYPE_BLOB;
+        return ProductType::BLOB;
     }
     
     /** Return true if data was written. */
@@ -73,7 +73,7 @@ public:
     }
     bool roomForObject(ProductType productType) const
     {
-        return productType == TYPE_BLOB && roomForData();
+        return productType == ProductType::BLOB && roomForData();
     }
 
 private:
@@ -112,7 +112,7 @@ bool QueueProc::read(base::Blob& blob)
 
 bool QueueProc::hasData()
 {
-    return impl_.hasData() == TYPE_BLOB;
+    return impl_.hasData() == ProductType::BLOB;
 }
 
 bool QueueProc::hasObject(base::ProductType productType)

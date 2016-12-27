@@ -40,8 +40,7 @@ TestSuite::~TestSuite()
 
 void TestSuite::copyEnv(RunContext* runContext) const
 {
-    std::map<std::string,std::string>::const_iterator it;
-    for (it = environment_.begin(); it != environment_.end(); ++it)
+    for (auto it = environment_.begin(); it != environment_.end(); ++it)
     {
         runContext->setEnv(it->first, it->second);
     }
@@ -49,8 +48,8 @@ void TestSuite::copyEnv(RunContext* runContext) const
 
 bool TestSuite::getEnv(const std::string& name, std::string& value) const
 {
-    std::map<std::string,std::string>::const_iterator it = environment_.find(name);
-    if (it == environment_.end())  return false;
+    auto it = environment_.find(name);
+    if (it == environment_.cend())  return false;
 
     value = it->second;
     return true;
@@ -83,14 +82,13 @@ TestSuite::rewind(base::Context* context)
 const base::Result
 TestSuite::run(base::Context* context, bool stopOnError)
 {
-    RunContext* runContext = context ? dynamic_cast<RunContext *>(context) : RunContext::global();
-    copyEnv(runContext);
-    
-
-    base::Result result(false);
+    base::Result result(true);
     if (state_ == PREPARED && children_)
     {
         aftlog << "Running test suite \"" << getName() << "\"" << std::endl;
+        RunContext* runContext = context ? dynamic_cast<RunContext *>(context) : RunContext::global();
+        copyEnv(runContext);
+        
         int ranGood = 0;
         int ranBad  = 0;
         state_ = RUNNING;
@@ -114,11 +112,11 @@ TestSuite::run(base::Context* context, bool stopOnError)
             {
                 aftlog << " - FAILED " << testcaseName << std::endl;
                 ++ranBad;
-                if (stopOnError || result.getType() == base::Result::FATAL)
-                {
+                if (stopOnError || result.getType() == base::Result::FATAL) {
                     break;
                 }
-            } else {
+            }
+            else {
                 aftlog << " - SUCCESS " << testcaseName << std::endl;
                 ++ranGood;
             }
@@ -126,11 +124,20 @@ TestSuite::run(base::Context* context, bool stopOnError)
         
         aftlog << "Finished test suite: " << ranGood << " test cases succeeded, "
                << ranBad << " test cases failed." << std::endl;
-        state_ = FINISHED_GOOD;
+        
+        if (ranBad > 0) {
+            result = base::Result(false);
+            state_ = FINISHED_BAD;
+        }
+        else {
+            state_ = FINISHED_GOOD;
+        }
     }
-    else
-    {
-        if (children_) aftlog << "Error: test suite \"" << getName() << "\" not opened." << std::endl;
+    else {
+        if (children_) {
+            aftlog << "Error: test suite \"" << getName() << "\" not opened." << std::endl;
+            result = base::Result(false);
+        }
     }
 
     return result;

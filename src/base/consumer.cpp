@@ -132,11 +132,11 @@ void BaseConsumer::flowData()
         do
         {
             productType = (*it)->hasData();
-            if (productType == TYPE_NONE) break;
+            if (productType == ProductType::NONE) break;
 
             switch (productType)
             {
-            case TYPE_TOBJECT:
+            case ProductType::TOBJECT:
             {
                 TObject tobject;
                 if ((*it)->getData(tobject))
@@ -145,7 +145,7 @@ void BaseConsumer::flowData()
                 }
             }
             break;
-            case TYPE_RESULT:
+            case ProductType::RESULT:
             {
                 Result result;
                 if ((*it)->getData(result))
@@ -154,7 +154,7 @@ void BaseConsumer::flowData()
                 }
             }
             break;
-            case TYPE_BLOB:
+            case ProductType::BLOB:
             {
                 Blob blob("");
                 if ((*it)->getData(blob))
@@ -163,9 +163,9 @@ void BaseConsumer::flowData()
                 }
             }
             break;
-            case TYPE_NONE:
+            case ProductType::NONE:
                 break;
             }
-        } while (productType != TYPE_NONE);
+        } while (productType != ProductType::NONE);
     }
 }

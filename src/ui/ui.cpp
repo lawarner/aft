@@ -128,15 +128,15 @@ bool UIProcImpl::removeElement(Element* element)
 
 ProductType UIProcImpl::hasData()
 {
-    if (uiElements_.empty()) return TYPE_NONE;
+    if (uiElements_.empty()) return ProductType::NONE;
 
     // ask current element for data
     if (uiElements_[currentElement_]->hasValue())
     {
-        return TYPE_BLOB;
+        return ProductType::BLOB;
     }
 
-    return TYPE_NONE;
+    return ProductType::NONE;
 }
 
 bool UIProcImpl::getData(TObject& object)
@@ -201,7 +201,7 @@ bool UIProcImpl::roomForData() const
 
 bool UIProcImpl::roomForObject(ProductType productType) const
 {
-    return productType == TYPE_BLOB && roomForData();
+    return productType == ProductType::BLOB && roomForData();
 }
 
 
@@ -261,7 +261,7 @@ bool UI::read(base::Blob& blob)
 
 bool UI::hasData()
 {
-    return impl_.hasData() == TYPE_BLOB;
+    return impl_.hasData() == ProductType::BLOB;
 }
 
 bool UI::hasObject(base::ProductType productType)

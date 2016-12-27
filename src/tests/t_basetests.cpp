@@ -574,7 +574,7 @@ TEST(BasePackageTest, Hasher)
     }
 
     // Test char array constructor
-    Hasher hasher2(cmdStrings, numCommands);
+    Hasher hasher2(cmdStrings, (unsigned int) numCommands);
     for (int idx = 0; idx < numCommands; ++idx)
     {
         int hashIdx = hasher2.getHashIndex(commands[idx]);

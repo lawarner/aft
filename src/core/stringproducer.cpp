@@ -67,9 +67,9 @@ public:
     /** Returns the type of product this writer has ready to write. */
     virtual ProductType hasData()
         {
-            if (contents_.empty()) return TYPE_NONE;
+            if (contents_.empty()) return ProductType::NONE;
 
-            return TYPE_BLOB;
+            return ProductType::BLOB;
         }
 
     /** Return true if data was written. */
@@ -87,7 +87,7 @@ public:
 
             switch (parcelType_)
             {
-            case PARCEL_BLOB_CHARACTER:
+            case ParcelType::BLOB_CHARACTER:
                 if (!contents_.empty())
                 {
                     int ch = contents_.at(0);
@@ -96,21 +96,21 @@ public:
                     retval = true;
                 }
                 break;
-            case PARCEL_BLOB_WORD:
+            case ParcelType::BLOB_WORD:
                 retval = getWord(contents_, buffer_);
                 break;
-            case PARCEL_BLOB_LINE:
+            case ParcelType::BLOB_LINE:
                 retval = getWord(contents_, buffer_, LINE_SEPARATORS);
                 break;
-            case PARCEL_BLOB_FILE:
+            case ParcelType::BLOB_FILE:
                 if (!contents_.empty())
                 {
                     buffer_ = contents_;
                     retval = true;
                 }
                 break;
-            case PARCEL_RESULT:
-            case PARCEL_TOBJECT:
+            case ParcelType::RESULT:
+            case ParcelType::TOBJECT:
                 break;
             }
 
@@ -161,7 +161,7 @@ bool StringProducer::read(Blob& blob)
 
 bool StringProducer::hasData()
 {
-    return reader_->hasData() == TYPE_BLOB;
+    return reader_->hasData() == ProductType::BLOB;
 }
 
 bool StringProducer::hasObject(aft::base::ProductType productType)

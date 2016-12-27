@@ -35,25 +35,25 @@ class ObjectReader : public ReaderContract
 {
 public:
     virtual bool dataAvailable(const TObject& object)
-        {
-            return false;
-        }
+    {
+        return false;
+    }
     virtual bool dataAvailable(const Result& result)
-        {
-            return false;
-        }
+    {
+        return false;
+    }
     virtual bool dataAvailable(const Blob& blob)
-        {
-            std::cout << "ObjectReader blob:  " << blob.getString() << std::endl;
-            return true;
-        }
+    {
+        std::cout << "ObjectReader blob:  " << blob.getString() << std::endl;
+        return true;
+    }
     virtual bool roomForData() const
     {
         return true;
     }
     virtual bool roomForObject(ProductType productType) const
     {
-        if (roomForData() && productType == TYPE_BLOB)
+        if (roomForData() && productType == ProductType::BLOB)
         {
             return true;
         }
@@ -82,11 +82,14 @@ TEST(CorePackageTest, StringProducer)
     EXPECT_TRUE((blob.getString() == sampleText));
     std::cout << "string content: " << blob.getString() << std::endl;
 
-    StringProducer wordprod(sampleText, PARCEL_BLOB_WORD);
+    StringProducer wordprod(sampleText, ParcelType::BLOB_WORD);
+    size_t words = 0;
     while (wordprod.read(blob))
     {
+        ++words;
         std::cout << "word content: " << blob.getString() << std::endl;
     }
+    EXPECT_EQ(words, 10);
 }
 
 TEST(CorePackageTest, FileConsumer)
@@ -112,8 +115,8 @@ TEST(CorePackageTest, FileProducerFlow)
 {
     FileProducer fileprod("/tmp/test_file_cons");
     EXPECT_TRUE(fileprod.hasData());
-    EXPECT_TRUE(fileprod.hasObject(TYPE_BLOB));
-    EXPECT_FALSE(fileprod.hasObject(TYPE_NONE));
+    EXPECT_TRUE(fileprod.hasObject(ProductType::BLOB));
+    EXPECT_FALSE(fileprod.hasObject(ProductType::NONE));
 
     ObjectReader reader;
     EXPECT_TRUE(fileprod.registerDataCallback(&reader));
@@ -123,9 +126,9 @@ TEST(CorePackageTest, FileProducerFlow)
 
 TEST(CorePackageTest, FileProducerFlowWords)
 {
-    FileProducer fileprod("/tmp/test_file_cons", PARCEL_BLOB_WORD);
+    FileProducer fileprod("/tmp/test_file_cons", ParcelType::BLOB_WORD);
     EXPECT_TRUE(fileprod.hasData());
-    EXPECT_TRUE(fileprod.hasObject(TYPE_BLOB));
+    EXPECT_TRUE(fileprod.hasObject(ProductType::BLOB));
 
     ObjectReader reader;
     EXPECT_TRUE(fileprod.registerDataCallback(&reader));

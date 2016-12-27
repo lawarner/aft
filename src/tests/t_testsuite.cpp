@@ -94,7 +94,7 @@ TEST_F(TestSuiteTest, EmptyTestSuite)
     EXPECT_TRUE(testSuite_.open());
 
     Result result = testSuite_.run(0);
-
+    EXPECT_FALSE(!result);
     testSuite_.close();
 }
 

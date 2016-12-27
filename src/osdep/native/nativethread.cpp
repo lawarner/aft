@@ -38,10 +38,14 @@ public:
     : tObject_(tObject)
     , context_(context)
     , callback_(nullptr)
-    , future_(async(launch::async, runTObject, this))
     , stopped_(false)
     {
         lock_.lock();
+        future_ = async(launch::async, runTObject, this);
+    }
+
+    ~NativeThreadImpl()
+    {
     }
 
     TObject* tObject_;
@@ -75,7 +79,7 @@ Result runTObject(void* implData)
     
     impl.tObject_->setState(TObject::FINISHED_GOOD);
     impl.lock_.unlock();
-    return 0;
+    return result;
 }
     
 

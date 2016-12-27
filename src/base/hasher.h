@@ -60,7 +60,7 @@ public:
      *  @param nameCount The number of elements in the names array. If 0 then names must have
      *               an additional 0 (null) entry.
      */
-    Hasher(const char* names[], int nameCount = 0);
+    Hasher(const char* names[], std::size_t nameCount = 0);
     /** Destruct a Hasher. */
     ~Hasher();
 

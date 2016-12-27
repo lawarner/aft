@@ -43,7 +43,7 @@ public:
      *  @param parcelType How to parse the string for content.
      */
     StringProducer(const std::string& contents,
-                   aft::base::ParcelType parcelType = aft::base::PARCEL_BLOB_FILE);
+                   aft::base::ParcelType parcelType = base::ParcelType::BLOB_FILE);
     virtual ~StringProducer();
 
     /** Not yet implemented. */

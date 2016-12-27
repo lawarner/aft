@@ -87,7 +87,11 @@ TEST(OsdepPackageTest, MultiThreads)
     }
     
     for (ThreadHandler*& thread : threads) {
+        cout << "Wait for thread " << thread << endl;
         thread->wait();
+    }
+    
+    for (ThreadHandler*& thread : threads) {
         cout << "Remove thread " << thread << endl;
         delete thread;
     }

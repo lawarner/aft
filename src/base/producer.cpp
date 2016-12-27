@@ -36,7 +36,7 @@ BaseProducer::~BaseProducer()
 
 bool BaseProducer::read(TObject& object)
 {
-    if (writerDelegate_ && writerDelegate_->hasData() == TYPE_TOBJECT)
+    if (writerDelegate_ && writerDelegate_->hasData() == ProductType::TOBJECT)
     {
         return writerDelegate_->getData(object);
     }
@@ -45,7 +45,7 @@ bool BaseProducer::read(TObject& object)
 
 bool BaseProducer::read(Result& result)
 {
-    if (writerDelegate_ && writerDelegate_->hasData() == TYPE_RESULT)
+    if (writerDelegate_ && writerDelegate_->hasData() == ProductType::RESULT)
     {
         return writerDelegate_->getData(result);
     }
@@ -54,7 +54,7 @@ bool BaseProducer::read(Result& result)
 
 bool BaseProducer::read(Blob& blob)
 {
-    if (writerDelegate_ && writerDelegate_->hasData() == TYPE_BLOB)
+    if (writerDelegate_ && writerDelegate_->hasData() == ProductType::BLOB)
     {
         return writerDelegate_->getData(blob);
     }
@@ -65,7 +65,7 @@ bool BaseProducer::hasData()
 {
     if (writerDelegate_)
     {
-        return writerDelegate_->hasData() != TYPE_NONE;
+        return writerDelegate_->hasData() != ProductType::NONE;
     }
     return false;
 }
@@ -77,7 +77,7 @@ bool BaseProducer::hasObject(ProductType productType)
         return writerDelegate_->hasData() == productType;
     }
 
-    if (productType == TYPE_NONE) return true;
+    if (productType == ProductType::NONE) return true;
     return false;
 }
 
@@ -111,7 +111,7 @@ bool BaseProducer::unregisterDataCallback(const ReaderContract* reader)
 
 void BaseProducer::flowData()
 {
-    if (!writerDelegate_ || writerDelegate_->hasData() == TYPE_NONE)
+    if (!writerDelegate_ || writerDelegate_->hasData() == ProductType::NONE)
     {
         return;
     }
@@ -122,7 +122,7 @@ void BaseProducer::flowData()
         productType = writerDelegate_->hasData();
         switch (productType)
         {
-        case TYPE_TOBJECT:
+        case ProductType::TOBJECT:
         {
             TObject tobject;
             if (writerDelegate_->getData(tobject))
@@ -139,7 +139,7 @@ void BaseProducer::flowData()
             }
         }
             break;
-        case TYPE_RESULT:
+        case ProductType::RESULT:
         {
             Result result;
             if (writerDelegate_->getData(result))
@@ -156,7 +156,7 @@ void BaseProducer::flowData()
             }
         }
             break;
-        case TYPE_BLOB:
+        case ProductType::BLOB:
         {
             Blob blob("");
             if (writerDelegate_->getData(blob))
@@ -173,10 +173,10 @@ void BaseProducer::flowData()
             }
         }
             break;
-        case TYPE_NONE:
+        case ProductType::NONE:
             break;
         }
-    } while (productType != TYPE_NONE);
+    } while (productType != ProductType::NONE);
 
 }
 
