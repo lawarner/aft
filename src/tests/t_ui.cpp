@@ -180,7 +180,7 @@ TEST(BasePackageTest, TerminalInput)
     std::cout << "Enter your name or something: " << std::endl;
     char cname[80];
     std::cin.getline(cname, 80);
-    std::string name("Joe Smoe");
+    std::string name(cname, strlen(cname));
     
     aftlog << "So you are " << name << ", are you?" << std::endl;
 }

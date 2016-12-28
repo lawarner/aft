@@ -25,6 +25,7 @@ INCDIR = $(TOP)/src
 #AR = ar
 CC = g++
 CCFLAGS = -std=c++14 -Wall -g -fPIC -I$(TOP) -I$(INCDIR)
+DEPCPPFLAGS = -std=c++14 -I$(TOP) -I$(INCDIR)
 
 OBJS := blob.o command.o consumer.o context.o entity.o factory.o hasher.o operation.o \
     outlet.o plugin.o proc.o producer.o propertyhandler.o result.o structureddata.o \
@@ -52,7 +53,7 @@ clean:
 
 .PHONY: depends
 depends: $(SRCS) $(INCS)
-	$(CC) -I$(TOP) -I$(INCDIR) -MM $(SRCS) > .makedepends
+	$(CC) $(DEPCPPFLAGS) -MM $(SRCS) > .makedepends
 	touch .mkdep-timestamp
 
 .makedepends:

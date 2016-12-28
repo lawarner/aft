@@ -24,6 +24,7 @@ INCDIR = $(TOP)/src
 CC = g++
 #CCFLAGS = -Wall -g -O2 -I$(TOP) -I$(INCDIR)
 CCFLAGS = -std=c++14 -Wall -g -fPIC -I$(TOP) -I$(INCDIR)
+DEPCPPFLAGS = -std=c++14 -I$(TOP) -I$(INCDIR)
 
 OBJS := jsoncpp.o
 
@@ -48,7 +49,7 @@ clean:
 
 .PHONY: depends
 depends: $(SRCS) $(INCS)
-	$(CC) -I$(TOP) -I$(INCDIR) -MM $(SRCS) > .makedepends
+	$(CC) $(DEPCPPFLAGS) -MM $(SRCS) > .makedepends
 	touch .mkdep-timestamp
 
 .makedepends:

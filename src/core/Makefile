@@ -23,6 +23,7 @@ INCDIR = $(TOP)/src
 #AR = ar
 CC = g++
 CCFLAGS = -std=c++14 -Wall -g -fPIC -I$(TOP) -I$(INCDIR)
+DEPCPPFLAGS = -std=c++14 -I$(TOP) -I$(INCDIR)
 
 OBJS := basiccommands.o basicfactory.o commandcontext.o fileconsumer.o fileproducer.o \
         logger.o loghandler.o queueproc.o runcontext.o \
@@ -49,7 +50,7 @@ clean:
 
 .PHONY: depends
 depends: $(SRCS) $(INCS)
-	$(CC) -I$(TOP) -I$(INCDIR) -MM $(SRCS) > .makedepends
+	$(CC) $(DEPCPPFLAGS) -MM $(SRCS) > .makedepends
 	touch .mkdep-timestamp
 
 .makedepends:

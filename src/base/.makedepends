@@ -19,11 +19,12 @@ operation.o: operation.cpp operation.h result.h
 outlet.o: outlet.cpp outlet.h proc.h ../../src/base/consumer.h \
  ../../src/base/producttype.h ../../src/base/producer.h
 plugin.o: plugin.cpp factory.h plugin.h ../../src/osdep/platform.h \
+ ../../src/osdep/platform-linux.h \
  ../../src/osdep/posix/posixpluginloader.h \
- ../../src/osdep/posix/posixthread.h ../../src/base/thread.h \
+ ../../src/osdep/native/nativethread.h ../../src/base/thread.h \
  ../../src/base/result.h ../../src/base/tobject.h \
  ../../src/base/operation.h ../../src/base/serialize.h \
- ../../src/base/tobjectiterator.h
+ ../../src/base/tobjectiterator.h ../../src/osdep/posix/posixthread.h
 proc.o: proc.cpp proc.h ../../src/base/consumer.h \
  ../../src/base/producttype.h ../../src/base/producer.h
 producer.o: producer.cpp blob.h consumer.h producttype.h producer.h \
@@ -40,7 +41,9 @@ structureddataname.o: structureddataname.cpp ../../src/json/json.h \
  structureddataname.h ../../src/base/serialize.h
 thread.o: thread.cpp context.h result.h visitor.h tobject.h operation.h \
  serialize.h tobjectiterator.h thread.h ../../src/osdep/platform.h \
+ ../../src/osdep/platform-linux.h \
  ../../src/osdep/posix/posixpluginloader.h ../../src/base/plugin.h \
+ ../../src/osdep/native/nativethread.h \
  ../../src/osdep/posix/posixthread.h
 tobasictypes.o: tobasictypes.cpp blob.h operation.h result.h \
  tobasictypes.h structureddata.h ../../src/base/serialize.h \

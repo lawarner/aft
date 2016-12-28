@@ -51,7 +51,7 @@ SRCS := $(OBJS:.o=.cpp)
 PROGRAMS = t_basetests t_coretests t_logger t_osdep t_plugin t_result \
            t_testsuite t_ui
 
-DEPCPPFLAGS = -I. $(INCS)
+DEPCPPFLAGS = -std=c++14 -I. $(INCS)
 DEPLIBS = $(LIBAFT) $(LIBGTEST)
 
 .cpp.o: ; $(CC) $(CCFLAGS) -c $<

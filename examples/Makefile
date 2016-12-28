@@ -22,7 +22,7 @@ INCDIR = $(TOP)/src
 INCS := -I$(INCDIR)
 
 CC = g++
-CCFLAGS = -g $(INCS)
+CCFLAGS = -std=c++14 -g $(INCS)
 
 ARMPREFIX=arm-linux-gnueabihf
 ARMAR=$(ARMPREFIX)-ar
@@ -44,7 +44,7 @@ SRCS := $(OBJS:.o=.cpp)
 
 PROGRAMS = sc_testcase
 
-DEPCPPFLAGS = -I. $(INCS)
+DEPCPPFLAGS = -std=c++14 -I. $(INCS)
 DEPLIBS = $(LIBAFT)
 
 .cpp.o: ; $(CC) $(CCFLAGS) -c $<

@@ -15,13 +15,13 @@
  *   limitations under the License.
  */
 
-#define PLATFORM Posix
-#define PLATFORM_NAME "Posix"
+#define PLATFORM Linux
+#define PLATFORM_NAME "Linux"
 
 #define PosixPluginLoader PlatformPluginLoader
-#define PosixThreadHandler PlatformThreadHandler
+#define NativeThreadHandler PlatformThreadHandler
 
 #define PTHREAD_INIT -1
 
 #include "osdep/posix/posixpluginloader.h"
-#include "osdep/posix/posixthread.h"
+#include "osdep/native/nativethread.h"

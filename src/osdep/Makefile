@@ -30,7 +30,7 @@ ANDROIDCC=$(ANDROIDPREFIX)-g++
 LIBSDIR = $(TOP)/lib
 LIBAFT = $(LIBSDIR)/libaft.a
 
-SUBDIRS = posix
+SUBDIRS = native posix
 
 PROGRAMS =
 
