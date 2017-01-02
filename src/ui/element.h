@@ -1,8 +1,8 @@
 #pragma once
-//
-//  element.h
-//  libaft
 /*
+ *  element.h
+ *  libaft
+ *
  *   Copyright © 2016 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");

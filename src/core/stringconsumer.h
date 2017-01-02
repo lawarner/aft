@@ -1,6 +1,6 @@
 #pragma once
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright © 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -67,7 +67,7 @@ public:
     std::string getContents() const;
 
 protected:
-    StringWriterImpl* writer_;
+    std::unique_ptr<StringWriterImpl> writer_;
 };
 
 } // namespace base

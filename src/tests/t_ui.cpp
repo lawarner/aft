@@ -22,6 +22,7 @@
 #include <ui/element.h>
 #include <ui/ui.h>
 #include <ui/uidelegate.h>
+#include <ui/uifacet.h>
 #include <gtest/gtest.h>
 using namespace aft::core;
 using namespace aft::ui;
@@ -222,6 +223,10 @@ TEST_F(UiPackageTest, BaseElementWithDelegate)
     EXPECT_FALSE(elThree.input());
     aftlog << "=== elThree default:   " << elThree.getValue() << std::endl;
     EXPECT_TRUE(elThree.getValue() == "default value of 3");
+}
+    
+TEST_F(UiPackageTest, UIFacet) {
+    UIFacet facet("facet", "other");
 }
 
 } // namespace

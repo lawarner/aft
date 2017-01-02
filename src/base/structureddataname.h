@@ -1,6 +1,6 @@
 #pragma once
 /*
- *   Copyright 2015, 2016 Andy Warner
+ *   Copyright © 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -66,7 +66,16 @@ public:
      *                  by SEPARATOR.  The simple name is set to the last component.
      */
     StructuredDataName(const std::vector<std::string>& namePath);
-    
+
+    /** Construct StructureDataName by combining path and name strings
+     *
+     *  @param path string representing path
+     *  @param name the object's name
+     */
+    StructuredDataName(const std::string& path, const std::string& name);
+
+    //TODO StructuredDataName(const StructuredDataName&, const std::string& name)
+
     /** Destruct a StructuredDataName */
     virtual ~StructuredDataName();
     
@@ -85,7 +94,11 @@ public:
      */
     std::string getName(bool fullName = false) const;
     
-    /** Get the path name as a string */
+    /** Get the path name as a string
+     *
+     *  @param fullName if true then the whole path will be returned, otherwise the
+     *                  last component of the path is returned.
+     */
     const std::string& getPath(bool fullPath = true) const;
     
     /** Compare this SD name to another */
@@ -94,7 +107,10 @@ public:
 public:
     /** Path separator character */
     static const std::string SEPARATOR;
-    
+
+private:
+    void pathFromName();
+
 private:
     std::string fullPath_;
     std::string name_;

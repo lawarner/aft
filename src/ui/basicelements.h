@@ -1,9 +1,9 @@
 #pragma once
-//
-//  basicelements.h
-//  libaft
 /*
- *   Copyright © 2016 Andy Warner
+ *   basicelements.h
+ *   libaft
+ *
+ *   Copyright © 2016-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -25,7 +25,18 @@ namespace aft
 namespace ui
 {
 
-//
+class BinaryElement : public Element
+{
+public:
+    virtual bool validate();
+};
+    
+class TrinaryElement : public Element
+{
+public:
+    virtual bool validate();
+};
+
 class IntegerElement : public Element
 {
 public:
@@ -48,5 +59,5 @@ public:
     virtual bool next(Element& element) const;
 };
 
-}
-}
+} // namespace ui
+} // namespace aft

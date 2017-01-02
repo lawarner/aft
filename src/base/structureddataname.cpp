@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015, 2016 Andy Warner
+ *   Copyright © 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -72,39 +72,14 @@ split_(const std::string& full,
 //////////////////
 
 StructuredDataName::StructuredDataName(const std::string& name)
-: name_(name)
-{
-    size_t pos = name_.rfind(SEPARATOR);
-    if (pos != std::string::npos)
-    {
-        path_ = split_(name_);
-        fullPath_ = name_.substr(0, pos);
-        //Assert !path_.empty()
-        name_ = path_.back();
-    } else {
-        if (!name.empty())
-        {
-            path_.push_back(name);
-        }
-    }
+: name_(name) {
+    pathFromName();
 }
 
 StructuredDataName::StructuredDataName(const char* name)
 : name_(name)
 {
-    size_t pos = name_.rfind(SEPARATOR);
-    if (pos != std::string::npos)
-    {
-        path_ = split_(name_);
-        fullPath_ = name_.substr(0, pos);
-        //Assert !path_.empty()
-        name_ = path_.back();
-    } else {
-        if (name && *name)
-        {
-            path_.push_back(name);
-        }
-    }
+    pathFromName();
 }
 
 StructuredDataName::StructuredDataName(const std::vector<std::string>& namePath)
@@ -117,8 +92,28 @@ StructuredDataName::StructuredDataName(const std::vector<std::string>& namePath)
     }
 }
 
+StructuredDataName::StructuredDataName(const std::string& path, const std::string& name)
+: name_(path + SEPARATOR + name) {
+    pathFromName();
+}
+
 StructuredDataName::~StructuredDataName()
 {
+}
+
+void StructuredDataName::pathFromName() {
+    size_t pos = name_.rfind(SEPARATOR);
+    if (pos != std::string::npos)
+    {
+        path_ = split_(name_);
+        fullPath_ = name_.substr(0, pos);
+        //Assert !path_.empty()
+        name_ = path_.back();
+    } else {
+        if (!name_.empty()) {
+            path_.push_back(name_);
+        }
+    }
 }
 
 bool StructuredDataName::empty() const

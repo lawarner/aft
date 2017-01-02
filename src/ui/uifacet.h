@@ -1,0 +1,93 @@
+#pragma once
+/*
+ *  uifacet.h
+ *  libaft
+ *
+ *   Copyright © 2017 Andy Warner
+ *
+ *   Licensed under the Apache License, Version 2.0 (the "License");
+ *   you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
+ */
+
+#include <string>
+
+
+namespace aft
+{
+namespace base
+{
+// Forward reference
+class StructuredData;
+}
+    
+namespace ui
+{
+
+/**
+ *  Category of UIFacet. Note that facets are organized by category and name/value.
+ */
+enum class UIFacetCategory {
+    START,
+    Unknown = START,
+    Border,
+    Color,
+    Decoration,
+    Dimension,
+    Input,
+    Output,
+    Other,
+    Theme,
+    // add new categories above this line
+    LAST,
+    SIZE = LAST - START
+};
+
+
+/**
+ *  UIFacet's modify the look and feel, behavior, size, position or other attributes of UI elements.
+ *  Most facets are optional but can be made mandatory.
+ */
+class UIFacet {
+public:
+    UIFacet(const std::string& name, const std::string& value, UIFacetCategory category = UIFacetCategory::Other);
+    virtual ~UIFacet();
+
+    UIFacetCategory getCategory() const;
+    const std::string& getCategoryName() const;
+    bool getMandatory() const;
+    void setMandatory(bool isMandatory);
+
+    virtual bool get(const std::string& name, std::string& value) const;
+    virtual bool get(const std::string& name, int& value) const;
+    virtual bool get(const std::string& name, float& value) const;
+    virtual bool set(const std::string& name, const std::string& value);
+    virtual bool set(const std::string& name, int value);
+    virtual bool set(const std::string& name, float value);
+
+public:
+    static const std::string& getCategoryName(UIFacetCategory category);
+
+protected:
+    /** Used by subclasses of UIFacet to get named values. */
+    bool getFacetValue(const std::string& name, std::string& value);
+    /** Used by subclasses of UIFacet to set named values. */
+    void setFacetValue(const std::string& name, const std::string& value);
+
+private:
+    base::StructuredData& data_;
+    base::StructuredData& categoryData_;
+    UIFacetCategory category_;
+    bool isMandatory_;
+};
+    
+} // namespace ui
+} // namespace aft

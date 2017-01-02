@@ -432,6 +432,10 @@ TEST(BasePackageTest, StructuredDataName)
     EXPECT_EQ(sdName.getName(true), otherName.getName(true));
     EXPECT_TRUE(sdName == otherName);
 
+    // Construct from path and name
+    StructuredDataName pathAndName(FullPath, SimpleName);
+    EXPECT_EQ(pathAndName.getName(true), FullName);
+
     // Construct empty name from string
     StructuredDataName emptyName("");
     EXPECT_EQ(emptyName.getName(), "");

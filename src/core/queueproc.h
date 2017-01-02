@@ -17,6 +17,7 @@
  *   limitations under the License.
  */
 
+#include "base/callback.h"
 #include "base/proc.h"
 
 namespace aft
@@ -49,6 +50,10 @@ public:
     virtual bool write(const base::TObject& object);
     virtual bool write(const base::Result& result);
     virtual bool write(const base::Blob& blob);
+
+    //TODO values and callbacks for low water/highwater
+    bool setLowWater(int lowValue, base::Callback* lowWaterAction);
+    bool setHighWater(int highValue, base::Callback* highWaterAction);
 
 private:
     QueueProcImpl& impl_;

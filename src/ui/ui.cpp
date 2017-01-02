@@ -32,67 +32,24 @@ namespace aft
 namespace ui
 {
 
-// Internal implementation class
-class UIProcImpl : public ReaderWriterContract
-{
-public:
-    typedef std::vector<Element *> ElementList;
-
-    UIProcImpl(Element* element, unsigned int maxSize, UIDelegate* uiDelegate = 0);
-    virtual ~UIProcImpl();
-
-    bool addElement(Element* element);
-    ElementList::iterator findElement(Element* element);
-    unsigned int nextElement();
-    bool removeElement(Element* element);
-
-    /** Returns the type of product this writer has ready to write. */
-    virtual ProductType hasData();
-
-    /** Get data as TObject, if available.
-     *  @return true if data was written. */
-    virtual bool getData(TObject& object);
-    virtual bool getData(Result& result);
-    virtual bool getData(Blob& blob);
-
-    // Reader contract
-    // For a UI these are basically the commands to construct and control the UI
-    //TODO use entities
-    virtual bool dataAvailable(const TObject& object);
-    virtual bool dataAvailable(const Result& result);
-    virtual bool dataAvailable(const Blob& blob);
-
-    bool roomForData() const;
-    bool roomForObject(ProductType productType) const;
-
-private:
-    unsigned int maxSize_;
-    unsigned int currentElement_;
-    ElementList uiElements_;
-    UIDelegate* uiDelegate_;
-};
-
-UIProcImpl::UIProcImpl(Element* element, unsigned int maxSize, UIDelegate* uiDelegate)
-: maxSize_(maxSize)
+UI::UI(Element* element, unsigned int maxSize, UIDelegate* uiDelegate)
+: base::BaseProc(nullptr, nullptr)
+, maxSize_(maxSize)
 , currentElement_(0)
 , uiDelegate_(uiDelegate)
 {
-    if (element)
-    {
-        assert(maxSize > 0);
-        uiElements_.push_back(element);
-    }
+
 }
 
-UIProcImpl::~UIProcImpl()
+UI::~UI()
 {
 }
 
-bool UIProcImpl::addElement(Element* element)
+bool UI::addElement(Element* element)
 {
     if (maxSize_ == 0 || uiElements_.size() < maxSize_)
     {
-        ElementList::iterator it = findElement(element);
+        auto it = findElement(element);
         if (it == uiElements_.end())
         {
             uiElements_.push_back(element);
@@ -102,134 +59,41 @@ bool UIProcImpl::addElement(Element* element)
     return false;
 }
 
-UIProcImpl::ElementList::iterator
-UIProcImpl::findElement(Element* element)
-{
-    UIProcImpl::ElementList::iterator it = std::find(uiElements_.begin(), uiElements_.end(), element);
+Element* UI::currentElement() const {
+    if (currentElement_ < uiElements_.size()) {
+        return uiElements_[currentElement_];
+    }
+    return nullptr;
+}
+
+UI::ElementList::iterator
+UI::findElement(Element* element) {
+    ElementList::iterator it = std::find(uiElements_.begin(), uiElements_.end(), element);
     return it;
 }
 
-unsigned int UIProcImpl::nextElement()
+bool UI::firstElement() {
+    if (uiElements_.empty()) return false;
+    
+    currentElement_ = 0;
+    return true;
+}
+
+unsigned int UI::nextElement()
 {
     currentElement_ = (currentElement_ + 1) % uiElements_.size();
     return currentElement_;
 }
 
-bool UIProcImpl::removeElement(Element* element)
+bool UI::removeElement(Element* element)
 {
-    ElementList::iterator it = findElement(element);
-    if (it == uiElements_.end())
+    auto it = findElement(element);
+    if (it != uiElements_.end())
     {
         uiElements_.erase(it);
         return true;
     }
     return false;
-}
-
-ProductType UIProcImpl::hasData()
-{
-    if (uiElements_.empty()) return ProductType::NONE;
-
-    // ask current element for data
-    if (uiElements_[currentElement_]->hasValue())
-    {
-        return ProductType::BLOB;
-    }
-
-    return ProductType::NONE;
-}
-
-bool UIProcImpl::getData(TObject& object)
-{
-    return false;
-}
-
-bool UIProcImpl::getData(Result& result)
-{
-    return false;
-}
-
-bool UIProcImpl::getData(Blob& blob)
-{
-    if (uiElements_.empty()) return false;
-
-    // ask current element for data
-    if (uiElements_[currentElement_]->hasValue())
-    {
-        Element* element = uiElements_[currentElement_];
-        blob = Blob(element->getName(), Blob::STRING, element->getValue());
-        return true;
-    }
-
-    return false;
-}
-
-// Reader contract
-// For a UI these are basically the commands to construct and control the UI
-//TODO use entities
-bool UIProcImpl::dataAvailable(const TObject& object)
-{
-    return false;
-}
-bool UIProcImpl::dataAvailable(const Result& result)
-{
-    return false;
-}
-bool UIProcImpl::dataAvailable(const Blob& blob)
-{
-    if (!roomForData()) return false;
-
-    if (blob.getType() == Blob::COMMAND)
-    {
-
-    }
-    else if (blob.getType() == Blob::STRING)
-    {
-
-    }
-    //if (queue_.size() < maxSize_)
-    //{
-    //    queue_.push(blob);
-    //    return true;
-    //}
-    return false;
-}
-bool UIProcImpl::roomForData() const
-{
-    return !uiElements_.empty();
-}
-
-bool UIProcImpl::roomForObject(ProductType productType) const
-{
-    return productType == ProductType::BLOB && roomForData();
-}
-
-
-UI::UI(Element* element, unsigned int maxSize, UIDelegate* uiDelegate)
-: base::BaseProc(nullptr, nullptr)
-, impl_(*new UIProcImpl(element, maxSize, uiDelegate))
-{
-
-}
-
-UI::~UI()
-{
-    delete &impl_;
-}
-
-bool UI::addElement(Element* element)
-{
-    return impl_.addElement(element);
-}
-
-unsigned int UI::nextElement()
-{
-    return impl_.nextElement();
-}
-
-bool UI::removeElement(Element* element)
-{
-    return impl_.removeElement(element);
 }
 
 Result UI::init(base::Context* context)
@@ -256,23 +120,49 @@ bool UI::read(base::Result& result)
 
 bool UI::read(base::Blob& blob)
 {
-    return impl_.getData(blob);
+    if (uiElements_.empty()) return false;
+    
+    // ask current element for data
+    if (uiElements_[currentElement_]->hasValue())
+    {
+        Element* element = uiElements_[currentElement_];
+        blob = Blob(element->getName(), Blob::STRING, element->getValue());
+        return true;
+    }
+    
+    return false;
 }
 
 bool UI::hasData()
 {
-    return impl_.hasData() == ProductType::BLOB;
+    if (uiElements_.empty()) return false;
+    
+    // ask current element for data
+    if (uiElements_[currentElement_]->hasValue())
+    {
+        return true;
+    }
+    
+    return false;
 }
 
 bool UI::hasObject(base::ProductType productType)
 {
-    return impl_.hasData() == productType;
+    if (uiElements_.empty()) return false;
+    
+    // ask current element for data
+    if (uiElements_[currentElement_]->hasValue())
+    {
+        return true;
+    }
+
+    return false;
 }
 
 // Consumer contract
 bool UI::canAcceptData(bool isRequired)
 {
-    return impl_.roomForData();
+    return !uiElements_.empty();
 }
 
 bool UI::write(const base::TObject& object)
@@ -285,9 +175,26 @@ bool UI::write(const base::Result& result)
     return false;
 }
 
+// For a UI these are basically the commands to construct and control the UI
+//TODO use entities
 bool UI::write(const base::Blob& blob)
 {
-    return impl_.dataAvailable(blob);
+    if (!canAcceptData()) return false;
+    
+    if (blob.getType() == Blob::COMMAND)
+    {
+        
+    }
+    else if (blob.getType() == Blob::STRING)
+    {
+        
+    }
+    //if (queue_.size() < maxSize_)
+    //{
+    //    queue_.push(blob);
+    //    return true;
+    //}
+    return false;
 }
 
 } // namespace ui

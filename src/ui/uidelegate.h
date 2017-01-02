@@ -3,9 +3,7 @@
  *  uidelegate.h
  *  libaft
  *
- *  Created by Lynn Warner on 7/1/16.
  *  Copyright © 2016 Andy Warner. All rights reserved.
- *
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

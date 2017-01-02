@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright © 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -96,18 +96,17 @@ bool StringWriterImpl::roomForObject(ProductType productType) const
 
 
 StringConsumer::StringConsumer()
-    : writer_(new StringWriterImpl)
+: writer_(std::make_unique<StringWriterImpl>())
 {
 }
 
 StringConsumer::StringConsumer(std::string& contents, bool overwrite)
-    : writer_(new StringWriterImpl(contents, overwrite))
+: writer_(std::make_unique<StringWriterImpl>(contents, overwrite))
 {
 }
 
-StringConsumer::~StringConsumer()
-{
-    delete writer_;
+StringConsumer::~StringConsumer() {
+
 }
 
 bool StringConsumer::canAcceptData(bool isRequired)

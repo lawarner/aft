@@ -101,11 +101,14 @@
 		A153D1251CCD89D200000A15 /* proc.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D1231CCD89D200000A15 /* proc.h */; };
 		A153D1281CD05F8400000A15 /* entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D1261CD05F8400000A15 /* entity.cpp */; };
 		A153D1291CD05F8400000A15 /* entity.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D1271CD05F8400000A15 /* entity.h */; };
+		A15745771E1AF6FF00265D4D /* t_ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A15745761E1AF6FF00265D4D /* t_ui.cpp */; };
 		A16390811D038A2A00036620 /* tobasictypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A16390801D038A2A00036620 /* tobasictypes.cpp */; };
 		A16390841D03D75800036620 /* structureddataname.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A16390821D03D75800036620 /* structureddataname.cpp */; };
 		A16390851D03D75800036620 /* structureddataname.h in Headers */ = {isa = PBXBuildFile; fileRef = A16390831D03D75800036620 /* structureddataname.h */; };
 		A18F4D541CD442F600C755FA /* tobjecttype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18F4D521CD442F600C755FA /* tobjecttype.cpp */; };
 		A18F4D551CD442F600C755FA /* tobjecttype.h in Headers */ = {isa = PBXBuildFile; fileRef = A18F4D531CD442F600C755FA /* tobjecttype.h */; };
+		A19725321E2B313C006389B0 /* uifacet.h in Headers */ = {isa = PBXBuildFile; fileRef = A19725311E2B313C006389B0 /* uifacet.h */; };
+		A19725341E2B3188006389B0 /* uifacet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A19725331E2B3188006389B0 /* uifacet.cpp */; };
 		A1BCB6301D27053A0082BB87 /* uidelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A1BCB62E1D27053A0082BB87 /* uidelegate.h */; };
 		A1BCB6461D2B586E0082BB87 /* uicommand.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1BCB6441D2B586E0082BB87 /* uicommand.cpp */; };
 		A1BCB6471D2B586E0082BB87 /* uicommand.h in Headers */ = {isa = PBXBuildFile; fileRef = A1BCB6451D2B586E0082BB87 /* uicommand.h */; };
@@ -220,11 +223,15 @@
 		A153D1231CCD89D200000A15 /* proc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = proc.h; sourceTree = "<group>"; };
 		A153D1261CD05F8400000A15 /* entity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = entity.cpp; sourceTree = "<group>"; };
 		A153D1271CD05F8400000A15 /* entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = entity.h; sourceTree = "<group>"; };
+		A15745751E1A057800265D4D /* elementdelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = elementdelegate.h; path = ../../src/ui/elementdelegate.h; sourceTree = "<group>"; };
+		A15745761E1AF6FF00265D4D /* t_ui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = t_ui.cpp; sourceTree = "<group>"; };
 		A16390801D038A2A00036620 /* tobasictypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tobasictypes.cpp; sourceTree = "<group>"; };
 		A16390821D03D75800036620 /* structureddataname.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = structureddataname.cpp; sourceTree = "<group>"; };
 		A16390831D03D75800036620 /* structureddataname.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = structureddataname.h; sourceTree = "<group>"; };
 		A18F4D521CD442F600C755FA /* tobjecttype.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tobjecttype.cpp; sourceTree = "<group>"; };
 		A18F4D531CD442F600C755FA /* tobjecttype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tobjecttype.h; sourceTree = "<group>"; };
+		A19725311E2B313C006389B0 /* uifacet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = uifacet.h; path = ../../src/ui/uifacet.h; sourceTree = "<group>"; };
+		A19725331E2B3188006389B0 /* uifacet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = uifacet.cpp; path = ../../src/ui/uifacet.cpp; sourceTree = "<group>"; };
 		A1BCB62E1D27053A0082BB87 /* uidelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = uidelegate.h; path = ../../src/ui/uidelegate.h; sourceTree = "<group>"; };
 		A1BCB6441D2B586E0082BB87 /* uicommand.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = uicommand.cpp; path = ../../src/ui/uicommand.cpp; sourceTree = "<group>"; };
 		A1BCB6451D2B586E0082BB87 /* uicommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = uicommand.h; path = ../../src/ui/uicommand.h; sourceTree = "<group>"; };
@@ -420,6 +427,7 @@
 				A153D0C61CCC71F500000A15 /* t_plugin.cpp */,
 				A153D0C71CCC71F500000A15 /* t_result.cpp */,
 				A153D0C81CCC71F500000A15 /* t_testsuite.cpp */,
+				A15745761E1AF6FF00265D4D /* t_ui.cpp */,
 			);
 			name = tests;
 			path = ../../src/tests;
@@ -445,15 +453,18 @@
 		A1F2AFB11D0279D2009FE595 /* ui */ = {
 			isa = PBXGroup;
 			children = (
-				A1F2AFBA1D036BD5009FE595 /* ui.cpp */,
-				A1F2AFBB1D036BD5009FE595 /* ui.h */,
+				A1BCB6481D2B5ADC0082BB87 /* basicelements.cpp */,
+				A1BCB6491D2B5ADC0082BB87 /* basicelements.h */,
 				A1122F1E1D23784E000FA862 /* element.cpp */,
 				A1122F1F1D23784E000FA862 /* element.h */,
+				A15745751E1A057800265D4D /* elementdelegate.h */,
+				A1F2AFBA1D036BD5009FE595 /* ui.cpp */,
+				A1F2AFBB1D036BD5009FE595 /* ui.h */,
 				A1BCB62E1D27053A0082BB87 /* uidelegate.h */,
 				A1BCB6441D2B586E0082BB87 /* uicommand.cpp */,
 				A1BCB6451D2B586E0082BB87 /* uicommand.h */,
-				A1BCB6481D2B5ADC0082BB87 /* basicelements.cpp */,
-				A1BCB6491D2B5ADC0082BB87 /* basicelements.h */,
+				A19725331E2B3188006389B0 /* uifacet.cpp */,
+				A19725311E2B313C006389B0 /* uifacet.h */,
 			);
 			name = ui;
 			sourceTree = "<group>";
@@ -496,6 +507,7 @@
 				A153D0F71CCC71F500000A15 /* commandcontext.h in Headers */,
 				A153D0DE1CCC71F500000A15 /* producer.h in Headers */,
 				A153D0FD1CCC71F500000A15 /* logger.h in Headers */,
+				A19725321E2B313C006389B0 /* uifacet.h in Headers */,
 				A1BCB6301D27053A0082BB87 /* uidelegate.h in Headers */,
 				A153D1181CCC71F500000A15 /* posixthread.h in Headers */,
 				A153D0CC1CCC71F500000A15 /* callback.h in Headers */,
@@ -616,8 +628,10 @@
 				A153D0E21CCC71F500000A15 /* result.cpp in Sources */,
 				A153D0EB1CCC71F500000A15 /* tobject.cpp in Sources */,
 				A153D1031CCC71F500000A15 /* runcontext.cpp in Sources */,
+				A15745771E1AF6FF00265D4D /* t_ui.cpp in Sources */,
 				A153D0CD1CCC71F500000A15 /* command.cpp in Sources */,
 				A16390841D03D75800036620 /* structureddataname.cpp in Sources */,
+				A19725341E2B3188006389B0 /* uifacet.cpp in Sources */,
 				A153D1281CD05F8400000A15 /* entity.cpp in Sources */,
 				A153D11E1CCC71F500000A15 /* t_osdep.cpp in Sources */,
 				A153D11B1CCC71F500000A15 /* t_basetests.cpp in Sources */,

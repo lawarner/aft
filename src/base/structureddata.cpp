@@ -322,7 +322,7 @@ bool JsonDataDelegate::getArray(const StructuredDataName& name,
 const Json::Value*
 JsonDataDelegate::getJsonPtr(const StructuredDataName& name, bool pathOnly) const
 {
-    const Json::Value* retval = 0;
+    const Json::Value* retval = nullptr;
     const std::vector<std::string>& names = name.getComponents();
     size_t numElements = names.size();
     if (numElements == 0) return retval;

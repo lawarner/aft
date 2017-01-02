@@ -41,7 +41,7 @@ public:
         return true;
     }
 
-    /** Get user input from element */
+    /** Get user input from the element */
     virtual bool input(const Element& element, std::string& value)
     {
         value = element.getDefault();
@@ -65,17 +65,13 @@ public:
 
         return true;
     }
+    /** Remove the element from the user interface. */
     virtual bool remove(const Element& element)
     {
         aftlog << "Element " << element.getName() << " removed for UI" << std::endl;
         return true;
     }
 };
-
-}
-}
-
-using namespace aft::ui;
 
 
 Element::Element(const std::string& name, UIDelegate* delegate)
@@ -193,3 +189,6 @@ void Element::setVisible(bool isVisible)
 {
     isVisible_ = isVisible;
 }
+
+} // namespace ui
+} // namespace aft

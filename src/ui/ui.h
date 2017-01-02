@@ -3,7 +3,7 @@
  *  ui.h
  *  libaft
  *
- *  Copyright © 2016 Andy Warner. All rights reserved.
+ *  Copyright © 2016-2017 Andy Warner. All rights reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -36,29 +36,34 @@ namespace ui
 {
 // Forward reference
 class Element;
-class UIProcImpl;
 
         
 /**
  *  A UI is basically a Producer/Consumer.
- *  The consumer receives commands and entities and the producer yields result values.
+ *  The consumer receives commands and entities and the producer yields named result values.
  *  An initial UI element can be specified but this can be dynamically expanded by consumer write methods.
+ *  The UI has a UIDelegate to perform the operations in a specific way.
  *
- *  Elements within a UI can use different UIDelegates, but when they use a single instance then the delegate
+ *  Elements within a UI can use different ElementDelegates, but when they use a single instance then the delegate
  *  can implement various interactions between elements. StackUIDelegate in t_ui shows a simple example of this.
  *  LayoutElements will enforce that all child elements use its UI delegate (probably permanently hide or
- *  eject child element that use a different delegate?).
+ *  eject childen element that use a different delegate?).
  *
- * TODO: needs chain of command with order from most recently added.
- 
- Agree on the most generic of UI hierarchies such as element, field, group (frame/uicluster/dialog/form/menu)
- For some (dumb) UI's groups would fail down. For example, a dumb terminal only has hierarchical menus and fields.
+ *  TODO: need chain of command with order from most recently added. This is to select the proper element.
+ *  TODO: need a way to specify callbacks for user actions, for example tracking mouse movements.
+ *
+ *  Agree on the most generic of UI hierarchies such as element, field, group (frame/uicluster/dialog/form/menu)
+ *  For some (dumb) UI's groups would fail down.
+ *  For example, a dumb terminal only has hierarchical menus and fields.
  */
 class UI : public aft::base::BaseProc
 {
 public:
-    /** Construct a UI with an optional top level element and optional maximum size.
-     *  @param element Optional top level Element
+    using ElementList = std::vector<Element *>;
+
+    /** Construct a UI with an optional top level element, optional maximum size and optional UI delegate.
+     *  @param element Optional top level Element. More top level elements can be added later by
+     *                 using #addElement.
      *  @param maxSize Maximum top level Elements allowed. If not specified then size is unlimited.
      *  @param uiDelegate UI delegate to use. If not specified (or 0) then the default UI delegate is used.
      */
@@ -68,9 +73,19 @@ public:
     
     /** Add an element to top level of UI hierarchy */
     virtual bool addElement(Element* element);
+    
+    /** Get a pointer to the current top level element, if any. */
+    virtual Element* currentElement() const;
+
+    ElementList::iterator findElement(Element* element);
+
+    /** Switch to the first top level element.
+     *  @return true if the switch to the first element was successful.
+     */
+    virtual bool firstElement();
 
     /** Switch to the next top level element if any.
-     *  @return the index of the UI element selected.
+     *  @return the index of the UI element after the current. Returns -1 if there is no next element.
      */
     virtual unsigned int nextElement();
 
@@ -93,10 +108,12 @@ public:
     virtual bool write(const base::TObject& object);
     virtual bool write(const base::Result& result);
     virtual bool write(const base::Blob& blob);
-    
+
 private:
-    UIProcImpl& impl_;
-    // static impl?
+    unsigned int maxSize_;
+    unsigned int currentElement_;
+    ElementList uiElements_;
+    UIDelegate* uiDelegate_;
 };
 
 } // namespace ui
