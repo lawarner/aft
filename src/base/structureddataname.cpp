@@ -143,6 +143,11 @@ StructuredDataName::getName(bool fullName) const
     return fullName ? fullPath_ + SEPARATOR + name_ : name_;
 }
 
+StructuredDataName
+StructuredDataName::getParent() const {
+    return StructuredDataName(getPath());
+}
+
 const std::string&
 StructuredDataName::getPath(bool fullPath) const
 {

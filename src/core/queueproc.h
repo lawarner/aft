@@ -45,7 +45,7 @@ public:
     virtual bool hasObject(base::ProductType productType);
 
     // Consumer contract
-    virtual bool canAcceptData(bool isRequired = false);
+    virtual bool canAcceptData();
     
     virtual bool write(const base::TObject& object);
     virtual bool write(const base::Result& result);

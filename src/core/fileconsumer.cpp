@@ -147,7 +147,7 @@ bool FileConsumer::write(const Blob& blob)
     return writer_->dataAvailable(blob);
 }
 
-bool FileConsumer::canAcceptData(bool isRequired)
+bool FileConsumer::canAcceptData()
 {
     return writer_->is_open();
 }

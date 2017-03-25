@@ -109,7 +109,7 @@ StringConsumer::~StringConsumer() {
 
 }
 
-bool StringConsumer::canAcceptData(bool isRequired)
+bool StringConsumer::canAcceptData()
 {
     return true;
 }

@@ -3,7 +3,7 @@
  *  uidelegate.h
  *  libaft
  *
- *  Copyright © 2016 Andy Warner. All rights reserved.
+ *  Copyright © 2016-2017 Andy Warner. All rights reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ namespace ui
 {
 // Forward reference
 class Element;
+class UIFacet;
 
 /**
  *  Interface of basic Element interactions
@@ -36,12 +37,32 @@ class UIDelegate
 public:
     /** Add the element to the user interface, if possible. */
     virtual bool add(const Element& element) = 0;
+    /** Set focus to element, if possible. */
+    virtual bool focus(const Element& element) = 0;
+    /** Hide user element from display */
+    virtual bool hide(const Element& element) = 0;
     /** Get user input from element */
     virtual bool input(const Element& element, std::string& value) = 0;
     /** Output the element to the user interface */
     virtual bool output(const Element& element) = 0;
     /** Remove or hide element from the user interface, if possible. */
     virtual bool remove(const Element& element) = 0;
+    /** Show user element */
+    virtual bool show(const Element& element) = 0;
+};
+
+class BaseUIDelegate : public UIDelegate {
+public:
+    virtual bool add(const Element& element) override;
+    virtual bool focus(const Element& element) override;
+    virtual bool hide(const Element& element) override;
+    virtual bool input(const Element& element, std::string& value) override;
+    virtual bool output(const Element& element) override;
+    virtual bool remove(const Element& element) override;
+    virtual bool show(const Element& element) override;
+
+protected:
+    
 };
 
 } // namespace ui

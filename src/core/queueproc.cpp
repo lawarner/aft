@@ -121,7 +121,7 @@ bool QueueProc::hasObject(base::ProductType productType)
 }
 
 // Consumer contract
-bool QueueProc::canAcceptData(bool isRequired)
+bool QueueProc::canAcceptData()
 {
     return impl_.roomForData();
 }

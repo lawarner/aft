@@ -417,6 +417,8 @@ TEST(BasePackageTest, StructuredDataName)
     EXPECT_EQ(FullName,   sdName.getName(true));
     EXPECT_EQ(SimpleName, sdName.getName());
     EXPECT_EQ(FullPath,   sdName.getPath());
+    StructuredDataName sdParent = sdName.getParent();
+    EXPECT_EQ(FullPath, sdParent.getName(true));
 
     const std::vector<std::string>& path = sdName.getComponents();
     EXPECT_EQ(path.size(), 4);
@@ -472,6 +474,10 @@ TEST(BasePackageTest, StructuredData)
     EXPECT_TRUE(simpleSd.add(StructuredDataName("another"), "another Value"));
     EXPECT_TRUE(simpleSd.get(StructuredDataName("another"), value));
     EXPECT_EQ(value, "another Value");
+    
+    EXPECT_TRUE(simpleSd.add("a.b.c", 123));
+    int ival;
+    EXPECT_TRUE(simpleSd.get("a.b.c", ival));
 
     // Compound structure
     StructuredDataName compoundName("Compound");

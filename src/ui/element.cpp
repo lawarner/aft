@@ -1,8 +1,9 @@
-//
-//  element.cpp
-//  libaft
 /*
- *   Copyright © 2016 Andy Warner
+ *
+ *   element.cpp
+ *   libaft
+ *
+ *   Copyright © 2016-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -18,6 +19,7 @@
  */
 
 #include "element.h"
+#include "elementdelegate.h"
 #include "uidelegate.h"
 #include "core/logger.h"
 using namespace aft::core;
@@ -74,9 +76,9 @@ public:
 };
 
 
-Element::Element(const std::string& name, UIDelegate* delegate)
+Element::Element(const std::string& name, ElementDelegate* delegate)
 : name_(name)
-, delegate_(delegate ? delegate : new UIDefaultDelegate)
+, delegate_(delegate ? delegate : new BaseElementDelegate)
 , isEnabled_(false)
 , isVisible_(false)
 {
@@ -88,6 +90,10 @@ Element::~Element()
 
 }
 
+void Element::apply(const UIFacet& facet) {
+    
+}
+
 bool Element::hasValue() const
 {
     return isEnabled_ && !value_.empty();
@@ -96,12 +102,14 @@ bool Element::hasValue() const
 void Element::hide()
 {
     setVisible(false);
-    delegate_->remove(*this);
 }
 
 bool Element::input()
 {
-    return delegate_->input(*this, value_);
+    if (!isEnabled_) {
+        return false;
+    }
+    return delegate_->input(this, value_);
 }
 
 void Element::refresh()
@@ -114,7 +122,7 @@ void Element::show(bool forceShow)
 {
     if (!isVisible_ || forceShow)
     {
-        setVisible(delegate_->output(*this));
+        setVisible(delegate_->output(this));
     }
 }
 
@@ -130,7 +138,8 @@ Element::getName() const
     return name_;
 }
 
-std::string Element::getValue() const
+const std::string&
+Element::getValue() const
 {
     return value_;
 }
@@ -139,7 +148,7 @@ std::string Element::getValue(bool refreshValue)
 {
     if (refreshValue)
     {
-        delegate_->input(*this, value_);
+        delegate_->input(this, value_);
     }
 
     return value_;
@@ -188,6 +197,9 @@ bool Element::getVisible() const
 void Element::setVisible(bool isVisible)
 {
     isVisible_ = isVisible;
+    if (!isVisible_) {
+        isEnabled_ = false;
+    }
 }
 
 } // namespace ui

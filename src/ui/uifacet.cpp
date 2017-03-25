@@ -47,7 +47,8 @@ static const std::string toplevel("UIFacet");
 UIFacet::UIFacet(const std::string& name, const std::string& value, UIFacetCategory category)
 : data_(*new base::StructuredData(toplevel))
 , categoryData_(*new base::StructuredData(getCategoryName(category)))
-, category_(category) {
+, category_(category)
+, isMandatory_(false) {
 
     if (!name.empty()) {
         categoryData_.add(name, value);
@@ -102,17 +103,17 @@ bool UIFacet::get(const std::string& name, float& value) const {
 }
 
 bool UIFacet::set(const std::string& name, const std::string& value) {
-    return categoryData_.set(name, value);
+    return categoryData_.add(name, value);
 }
     
 bool UIFacet::set(const std::string& name, int value) {
-    return categoryData_.set(name, value);
+    return categoryData_.add(name, value);
 }
     
 bool UIFacet::set(const std::string& name, float value) {
     std::ostringstream oss;
     oss << value;
-    return categoryData_.set(name, oss.str());
+    return categoryData_.add(name, oss.str());
 }
 
 /** Used by subclasses of UIFacet to get named values. */

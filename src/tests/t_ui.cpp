@@ -20,6 +20,7 @@
 
 #include <core/logger.h>
 #include <ui/element.h>
+#include <ui/elementdelegate.h>
 #include <ui/ui.h>
 #include <ui/uidelegate.h>
 #include <ui/uifacet.h>
@@ -27,17 +28,72 @@
 using namespace aft::core;
 using namespace aft::ui;
 
-
-class EmptyUiDelegate : public UIDelegate
-{
+/*
+ */
+class EmptyElementDelegate : public ElementDelegate {
 public:
-    bool add(const Element& element)
-    {
+    EmptyElementDelegate() : focused_(nullptr) { }
+    virtual ~EmptyElementDelegate() = default;
+    
+    virtual bool getFocus(Element* element) const override {
+        return element == focused_;
+    }
+    virtual bool setFocus(Element* element, bool hasFocus = true) override {
+        if (hasFocus) {
+            focused_ = element;
+        }
+        else if (focused_ == element) {
+            focused_ = nullptr;
+        }
+        return true;
+    }
+    virtual bool getFacet(Element* element, const std::string& name, UIFacetCategory category,
+                          UIFacet& facet) const override {
+        return false;
+    }
+    virtual bool setFacet(Element* element, const UIFacet& facet) override {
+        return false;
+    }
+    
+    virtual bool input(Element* element, std::string& value) override {
+        value = value_;
+        return true;
+    }
+    virtual bool output(Element* element) override {
+        if (element->hasValue()) {
+            value_ = element->getValue();
+        }
+        else {
+            value_ = element->getDefault();
+        }
+        return true;
+    }
+private:
+    std::string value_;
+    Element* focused_;
+};
+/*
+virtual bool add(const Element& element) override;
+virtual bool focus(const Element& element) override;
+virtual bool hide(const Element& element) override;
+virtual bool input(const Element& element, std::string& value) override;
+virtual bool output(const Element& element) override;
+virtual bool remove(const Element& element) override;
+virtual bool show(const Element& element) override;
+*/
+class EmptyUiDelegate : public UIDelegate {
+public:
+    bool add(const Element& element) {
+        return false;
+    }
+    bool focus(const Element& element) {
+        return false;
+    }
+    bool hide(const Element& element) {
         return false;
     }
     /** Get user input from element */
-    bool input(const Element& element, std::string& value)
-    {
+    bool input(const Element& element, std::string& value) {
         value = element.getDefault();
         return true;
     }
@@ -47,8 +103,10 @@ public:
         aftlog << "(Custom) Element " << element.getName() << std::endl;
         return true;
     }
-    bool remove(const Element& element)
-    {
+    bool remove(const Element& element) {
+        return false;
+    }
+    bool show(const Element& element) {
         return false;
     }
 };
@@ -56,16 +114,22 @@ public:
 class StackUiDelegate : public UIDelegate
 {
 public:
-    typedef std::vector<const Element*> ElementList;
+    using ElementList = std::vector<Element*>;
 public:
     bool add(const Element& element)
     {
         ElementList::iterator it = findElement(element);
         if (it == elements_.end())
         {
-            elements_.push_back(&element);
+            elements_.push_back(new Element(element));
             return true;
         }
+        return false;
+    }
+    bool focus(const Element& element) {
+        return false;
+    }
+    bool hide(const Element& element) {
         return false;
     }
     /** Get user input from element */
@@ -94,18 +158,29 @@ public:
     }
     bool remove(const Element& element)
     {
-        ElementList::iterator it = findElement(element);
-        if (it == elements_.end())
-        {
+        auto it = findElement(element);
+        if (it != elements_.end()) {
             elements_.erase(it);
             return true;
         }
         return false;
     }
+    bool setFacet(const Element& element, const UIFacet& facet) {
+        auto it = findElement(element);
+        if (it != elements_.end()) {
+            (*it)->apply(facet);
+            return true;
+        }
+        return false;
+    }
 private:
-    ElementList::iterator findElement(const Element& element)
-    {
-        ElementList::iterator it = std::find(elements_.begin(), elements_.end(), &element);
+    ElementList::iterator findElement(const Element& element) {
+        auto it = elements_.begin();
+        for ( ; it != elements_.end(); ++it) {
+            if ((*it)->getName() == element.getName()) {
+                break;
+            }
+        }
         return it;
     }
 private:
@@ -126,8 +201,7 @@ protected:
     {
     }
 
-    bool runElementTests(Element& element, const std::string& defaultValue, const std::string& prompt)
-    {
+    bool runElementTests(Element& element, const std::string& defaultValue, const std::string& prompt) {
         aftlog << std::endl << "++++ Start tests for element " << element.getName() << " ++++" << std::endl;
         aftlog << "++ Show element:" << std::endl;
         EXPECT_FALSE(element.getVisible());
@@ -152,6 +226,7 @@ protected:
         aftlog << "++ Refresh:" << std::endl;
         element.refresh();
 
+        element.setEnabled(true);
         EXPECT_TRUE(element.getDefault() == defaultValue);
         EXPECT_TRUE(element.getValue().empty());
         EXPECT_TRUE(element.input());
@@ -172,63 +247,124 @@ protected:
                << " returns " << std::boolalpha << retval << " ++++" << std::endl;
         return retval;
     }
+    
+    bool runUiTests() {
+        return true;
+    }
 };
 
 ///////////// Tests here :
-    
-TEST(BasePackageTest, TerminalInput)
-{
-    std::cout << "Enter your name or something: " << std::endl;
-    char cname[80];
-    std::cin.getline(cname, 80);
-    std::string name(cname, strlen(cname));
-    
-    aftlog << "So you are " << name << ", are you?" << std::endl;
-}
-    
-TEST_F(UiPackageTest, BaseElement)
-{
-    Element elOne("One");
-    EXPECT_TRUE(runElementTests(elOne, "the first", "Enter first item"));
-}
 
 TEST_F(UiPackageTest, BaseElementWithDelegate)
 {
+    EmptyElementDelegate eelDelegate;
+    Element elTwo("Two", &eelDelegate);
+    EXPECT_TRUE(runElementTests(elTwo, "now with empty element delegate", "Enter second value"));
+}
+
+TEST_F(UiPackageTest, UIFacet) {
+    UIFacet facet("facet", "other");
+    EXPECT_EQ(UIFacetCategory::Other, facet.getCategory());
+    std::string strValue;
+    EXPECT_TRUE(facet.get("facet", strValue));
+    EXPECT_TRUE(strValue == "other");
+    EXPECT_FALSE(facet.getMandatory());
+    facet.setMandatory(true);
+    EXPECT_TRUE(facet.getMandatory());
+
+    UIFacet colorFacet("Colors", "Facets for Widget Colors", UIFacetCategory::Color);
+    EXPECT_EQ(UIFacetCategory::Color, colorFacet.getCategory());
+    EXPECT_TRUE(colorFacet.set("foreground", 0xfefefe));
+    EXPECT_TRUE(colorFacet.set("background", 0x000000));
+    EXPECT_TRUE(colorFacet.set("dialog.text", 0xee0000));
+    int result;
+    EXPECT_TRUE(colorFacet.get("foreground", result));
+    EXPECT_EQ(0xfefefe, result);
+    EXPECT_TRUE(colorFacet.get("background", result));
+    EXPECT_EQ(0, result);
+    EXPECT_TRUE(colorFacet.get("dialog.text", result));
+    EXPECT_EQ(0xee0000, result);
+}
+
+TEST_F(UiPackageTest, UIWithEmptyDelegate) {
     EmptyUiDelegate uiDelegate;
-    Element elTwo("Two", &uiDelegate);
-    EXPECT_TRUE(runElementTests(elTwo, "now with delegates", "Enter second value"));
+    UI emptyUi(nullptr, 0, &uiDelegate);
+    EmptyElementDelegate eelDelegate;
+    Element element("element", &eelDelegate);
+    EXPECT_FALSE(emptyUi.addElement(&element));
+    EXPECT_EQ(nullptr, emptyUi.currentElement());
+}
+    
+TEST_F(UiPackageTest, UIWithBaseDelegate) {
+    UI baseUi(nullptr, 0);
+    Element element("element");
+    EXPECT_TRUE(baseUi.addElement(&element));
+    Element* el1 = baseUi.currentElement();
+    EXPECT_NE(nullptr, el1);
+    EXPECT_TRUE(el1->getName() == "element");
+    auto it = baseUi.findElement(&element);
+    EXPECT_NE(
+}
+#if 0
+    ElementList::iterator findElement(Element* element);
+    
+    /** Switch to the first top level element.
+     *  @return true if the switch to the first element was successful.
+     */
+    virtual bool firstElement();
+    
+    /** Switch to the next top level element if any.
+     *  @return the index of the UI element after the current. Returns -1 if there is no next element.
+     */
+    virtual unsigned int nextElement();
+    
+    /** Remove element from top level of UI hierarchy */
+    virtual bool removeElement(Element* element);
+    
+    // many UI's need to have an init and deinit
+    virtual base::Result init(base::Context* context = nullptr);
+    virtual base::Result deinit(base::Context* context = nullptr);
+    
+    // Producer contract
+    virtual bool read(base::TObject& object) override;
+    virtual bool read(base::Result& result) override;
+    virtual bool read(base::Blob& blob) override;
+    virtual bool hasData() override;
+    virtual bool hasObject(base::ProductType productType) override;
+    
+    // Consumer contract
+    virtual bool canAcceptData() override;
+    virtual bool write(const base::TObject& object) override;
+    virtual bool write(const base::Result& result) override;
+    virtual bool write(const base::Blob& blob) override;
 
     StackUiDelegate stackDelegate;
     Element elThree("Three", &stackDelegate);
     EXPECT_TRUE(runElementTests(elThree, "default value of 3", "Prompt for 3"));
-
+    
     Element elFour("Four", &stackDelegate);
     elFour.setValue("My value came from 4");
     elFour.show();
     Element elFive("Five", &stackDelegate);
     elFive.setValue("I am five");
     elFive.show();
-
+    
     aftlog << "=== elThree before: " << elThree.getValue() << std::endl;
     EXPECT_TRUE(elThree.input());
     aftlog << "=== elThree after:  " << elThree.getValue() << std::endl;
     EXPECT_TRUE(elThree.getValue() == "I am five");
     aftlog << "=== elThree pop 5:   " << elThree.getValue() << std::endl;
-
+    
     EXPECT_TRUE(elThree.input());
     aftlog << "=== elThree pop 4:   " << elThree.getValue() << std::endl;
     EXPECT_TRUE(elThree.getValue() == "My value came from 4");
-
+    
     // Delegate's stack is empty so we are back to elThree's default value
     EXPECT_FALSE(elThree.input());
     aftlog << "=== elThree default:   " << elThree.getValue() << std::endl;
     EXPECT_TRUE(elThree.getValue() == "default value of 3");
-}
+#endif
     
-TEST_F(UiPackageTest, UIFacet) {
-    UIFacet facet("facet", "other");
-}
-
 } // namespace
 
 int main(int argc, char* argv[])

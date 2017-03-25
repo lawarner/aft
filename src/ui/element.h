@@ -3,7 +3,7 @@
  *  element.h
  *  libaft
  *
- *   Copyright © 2016 Andy Warner
+ *   Copyright © 2016-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -25,7 +25,8 @@ namespace aft
 namespace ui
 {
 // Forward reference
-class UIDelegate;
+class ElementDelegate;
+class UIFacet;
 
 /**
  * Represent an element or group of elements in a UI
@@ -35,10 +36,11 @@ class UIDelegate;
 class Element
 {
 public:
-    Element(const std::string& name, UIDelegate* delegate = 0);
+    Element(const std::string& name, ElementDelegate* delegate = 0);
     virtual ~Element();
 
     // work methods
+    virtual void apply(const UIFacet& facet);
     /** True if value has already been read/updated. */
     virtual bool hasValue() const;
     /** Remove element from the UI */
@@ -56,17 +58,18 @@ public:
 
     // getters and setters
     const std::string& getName() const;
-
+    const std::string& getValue() const;
+    
     /** Get the value for this element.
      *  @param refreshValue if true then prompt the UI for a value, otherwise use the current value.
      *  @return The value of this element.
      */
     virtual std::string getValue(bool refreshValue);
-    /** Get the current value for this element. */
-    virtual std::string getValue() const;
     /** Set the value for this element. */
     virtual void setValue(const std::string& value);
+    /** Get the default value for this element */
     virtual std::string getDefault() const;
+    /** Set the default value for this element */
     virtual void setDefault(const std::string& value);
     virtual std::string getPrompt() const;
     virtual void setPrompt(const std::string& prompt);
@@ -79,7 +82,7 @@ private:
     const std::string name_;
 
 protected:
-    UIDelegate* delegate_;
+    ElementDelegate* delegate_;
 
     // current value for display
     std::string value_;

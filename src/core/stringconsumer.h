@@ -54,7 +54,7 @@ public:
     virtual ~StringConsumer();
 
     /** Returns true if write can be called on this consumer without blocking */
-    virtual bool canAcceptData(bool isRequired = false);
+    virtual bool canAcceptData();
 
     virtual bool write(const aft::base::TObject& object);
     virtual bool write(const aft::base::Result& result);

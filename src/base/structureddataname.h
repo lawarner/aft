@@ -93,7 +93,10 @@ public:
      *                  simple name is returned.
      */
     std::string getName(bool fullName = false) const;
-    
+
+    /** Return the parent path as a StructureDataName */
+    StructuredDataName getParent() const;
+
     /** Get the path name as a string
      *
      *  @param fullName if true then the whole path will be returned, otherwise the

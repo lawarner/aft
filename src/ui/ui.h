@@ -55,6 +55,11 @@ class Element;
  *  Agree on the most generic of UI hierarchies such as element, field, group (frame/uicluster/dialog/form/menu)
  *  For some (dumb) UI's groups would fail down.
  *  For example, a dumb terminal only has hierarchical menus and fields.
+ *
+ *  The UI uses a UIDelegate to perform operations in a platform specific way. An Element uses a ElementDelegate
+ *  to perform its operations, also in a platform specific way.
+ *  UI operations include refresh, getBounds, draw, hide, focus, describe, etc.
+ *  Element operations include setups, getValue, setValue, getUserInput, setUserOutput, etc.
  */
 class UI : public aft::base::BaseProc
 {
@@ -77,17 +82,20 @@ public:
     /** Get a pointer to the current top level element, if any. */
     virtual Element* currentElement() const;
 
-    ElementList::iterator findElement(Element* element);
+    virtual ElementList::iterator findElement(Element* element);
+    virtual int findElementIndex(Element* element);
 
     /** Switch to the first top level element.
      *  @return true if the switch to the first element was successful.
      */
     virtual bool firstElement();
 
+    Element* getElement(unsigned int idx);
+
     /** Switch to the next top level element if any.
      *  @return the index of the UI element after the current. Returns -1 if there is no next element.
      */
-    virtual unsigned int nextElement();
+    virtual int nextElement();
 
     /** Remove element from top level of UI hierarchy */
     virtual bool removeElement(Element* element);
@@ -97,17 +105,17 @@ public:
     virtual base::Result deinit(base::Context* context = nullptr);
     
     // Producer contract
-    virtual bool read(base::TObject& object);
-    virtual bool read(base::Result& result);
-    virtual bool read(base::Blob& blob);
-    virtual bool hasData();
-    virtual bool hasObject(base::ProductType productType);
+    virtual bool read(base::TObject& object) override;
+    virtual bool read(base::Result& result) override;
+    virtual bool read(base::Blob& blob) override;
+    virtual bool hasData() override;
+    virtual bool hasObject(base::ProductType productType) override;
     
     // Consumer contract
-    virtual bool canAcceptData(bool isRequired = false);
-    virtual bool write(const base::TObject& object);
-    virtual bool write(const base::Result& result);
-    virtual bool write(const base::Blob& blob);
+    virtual bool canAcceptData() override;
+    virtual bool write(const base::TObject& object) override;
+    virtual bool write(const base::Result& result) override;
+    virtual bool write(const base::Blob& blob) override;
 
 private:
     unsigned int maxSize_;

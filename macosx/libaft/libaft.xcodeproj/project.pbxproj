@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A1122F201D23784E000FA862 /* element.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1122F1E1D23784E000FA862 /* element.cpp */; };
 		A1122F211D23784E000FA862 /* element.h in Headers */ = {isa = PBXBuildFile; fileRef = A1122F1F1D23784E000FA862 /* element.h */; };
+		A11A6B581E4FF15C000D7A4B /* elementdelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A11A6B571E4FF15C000D7A4B /* elementdelegate.cpp */; };
 		A1256C8D1DFE1CC500AE4700 /* platform-linux.h in Headers */ = {isa = PBXBuildFile; fileRef = A1256C8A1DFE1CC500AE4700 /* platform-linux.h */; };
 		A1256C8E1DFE1CC500AE4700 /* platform-posix.h in Headers */ = {isa = PBXBuildFile; fileRef = A1256C8B1DFE1CC500AE4700 /* platform-posix.h */; };
 		A1256C8F1DFE1CC500AE4700 /* platform-apple.h in Headers */ = {isa = PBXBuildFile; fileRef = A1256C8C1DFE1CC500AE4700 /* platform-apple.h */; };
@@ -114,6 +115,8 @@
 		A1BCB6471D2B586E0082BB87 /* uicommand.h in Headers */ = {isa = PBXBuildFile; fileRef = A1BCB6451D2B586E0082BB87 /* uicommand.h */; };
 		A1BCB64A1D2B5ADC0082BB87 /* basicelements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1BCB6481D2B5ADC0082BB87 /* basicelements.cpp */; };
 		A1BCB64B1D2B5ADC0082BB87 /* basicelements.h in Headers */ = {isa = PBXBuildFile; fileRef = A1BCB6491D2B5ADC0082BB87 /* basicelements.h */; };
+		A1CC710C1E86E29500BD0946 /* t_uiblocking.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1CC710B1E86E29500BD0946 /* t_uiblocking.cpp */; };
+		A1CC710E1E86EEB000BD0946 /* uidelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1CC710D1E86EEB000BD0946 /* uidelegate.cpp */; };
 		A1F2AFBC1D036BD5009FE595 /* ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F2AFBA1D036BD5009FE595 /* ui.cpp */; };
 		A1F2AFBD1D036BD5009FE595 /* ui.h in Headers */ = {isa = PBXBuildFile; fileRef = A1F2AFBB1D036BD5009FE595 /* ui.h */; };
 		A1F9919A1CF1488A00EF3D66 /* tobjecttree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F991991CF1488A00EF3D66 /* tobjecttree.cpp */; };
@@ -122,6 +125,7 @@
 /* Begin PBXFileReference section */
 		A1122F1E1D23784E000FA862 /* element.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = element.cpp; path = ../../src/ui/element.cpp; sourceTree = "<group>"; };
 		A1122F1F1D23784E000FA862 /* element.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = element.h; path = ../../src/ui/element.h; sourceTree = "<group>"; };
+		A11A6B571E4FF15C000D7A4B /* elementdelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = elementdelegate.cpp; path = ../../src/ui/elementdelegate.cpp; sourceTree = "<group>"; };
 		A1256C8A1DFE1CC500AE4700 /* platform-linux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "platform-linux.h"; sourceTree = "<group>"; };
 		A1256C8B1DFE1CC500AE4700 /* platform-posix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "platform-posix.h"; sourceTree = "<group>"; };
 		A1256C8C1DFE1CC500AE4700 /* platform-apple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "platform-apple.h"; sourceTree = "<group>"; };
@@ -237,6 +241,8 @@
 		A1BCB6451D2B586E0082BB87 /* uicommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = uicommand.h; path = ../../src/ui/uicommand.h; sourceTree = "<group>"; };
 		A1BCB6481D2B5ADC0082BB87 /* basicelements.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = basicelements.cpp; path = ../../src/ui/basicelements.cpp; sourceTree = "<group>"; };
 		A1BCB6491D2B5ADC0082BB87 /* basicelements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basicelements.h; path = ../../src/ui/basicelements.h; sourceTree = "<group>"; };
+		A1CC710B1E86E29500BD0946 /* t_uiblocking.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = t_uiblocking.cpp; sourceTree = "<group>"; };
+		A1CC710D1E86EEB000BD0946 /* uidelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = uidelegate.cpp; path = ../../src/ui/uidelegate.cpp; sourceTree = "<group>"; };
 		A1D59B631C3D7DE100BE6298 /* libaft.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libaft.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1F2AFBA1D036BD5009FE595 /* ui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ui.cpp; path = ../../src/ui/ui.cpp; sourceTree = "<group>"; };
 		A1F2AFBB1D036BD5009FE595 /* ui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ui.h; path = ../../src/ui/ui.h; sourceTree = "<group>"; };
@@ -428,6 +434,7 @@
 				A153D0C71CCC71F500000A15 /* t_result.cpp */,
 				A153D0C81CCC71F500000A15 /* t_testsuite.cpp */,
 				A15745761E1AF6FF00265D4D /* t_ui.cpp */,
+				A1CC710B1E86E29500BD0946 /* t_uiblocking.cpp */,
 			);
 			name = tests;
 			path = ../../src/tests;
@@ -457,9 +464,11 @@
 				A1BCB6491D2B5ADC0082BB87 /* basicelements.h */,
 				A1122F1E1D23784E000FA862 /* element.cpp */,
 				A1122F1F1D23784E000FA862 /* element.h */,
+				A11A6B571E4FF15C000D7A4B /* elementdelegate.cpp */,
 				A15745751E1A057800265D4D /* elementdelegate.h */,
 				A1F2AFBA1D036BD5009FE595 /* ui.cpp */,
 				A1F2AFBB1D036BD5009FE595 /* ui.h */,
+				A1CC710D1E86EEB000BD0946 /* uidelegate.cpp */,
 				A1BCB62E1D27053A0082BB87 /* uidelegate.h */,
 				A1BCB6441D2B586E0082BB87 /* uicommand.cpp */,
 				A1BCB6451D2B586E0082BB87 /* uicommand.h */,
@@ -615,6 +624,7 @@
 				A153D0DD1CCC71F500000A15 /* producer.cpp in Sources */,
 				A153D0ED1CCC71F500000A15 /* tobjectiterator.cpp in Sources */,
 				A153D0F41CCC71F500000A15 /* basicfactory.cpp in Sources */,
+				A1CC710C1E86E29500BD0946 /* t_uiblocking.cpp in Sources */,
 				A153D0D11CCC71F500000A15 /* context.cpp in Sources */,
 				A153D1091CCC71F500000A15 /* testcase.cpp in Sources */,
 				A1256C961DFE349300AE4700 /* nativethread.cpp in Sources */,
@@ -638,7 +648,9 @@
 				A153D0DB1CCC71F500000A15 /* plugin.cpp in Sources */,
 				A153D1071CCC71F500000A15 /* stringproducer.cpp in Sources */,
 				A16390811D038A2A00036620 /* tobasictypes.cpp in Sources */,
+				A11A6B581E4FF15C000D7A4B /* elementdelegate.cpp in Sources */,
 				A1F9919A1CF1488A00EF3D66 /* tobjecttree.cpp in Sources */,
+				A1CC710E1E86EEB000BD0946 /* uidelegate.cpp in Sources */,
 				A153D0D51CCC71F500000A15 /* hasher.cpp in Sources */,
 				A153D0D31CCC71F500000A15 /* factory.cpp in Sources */,
 				A153D0CA1CCC71F500000A15 /* blob.cpp in Sources */,

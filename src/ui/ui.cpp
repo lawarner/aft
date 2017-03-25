@@ -33,27 +33,25 @@ namespace ui
 {
 
 UI::UI(Element* element, unsigned int maxSize, UIDelegate* uiDelegate)
-: base::BaseProc(nullptr, nullptr)
-, maxSize_(maxSize)
-, currentElement_(0)
-, uiDelegate_(uiDelegate)
-{
+    : base::BaseProc(nullptr, nullptr)
+    , maxSize_(maxSize)
+    , currentElement_(0)
+    , uiDelegate_(uiDelegate == nullptr ? new BaseUIDelegate : uiDelegate) {
 
 }
 
-UI::~UI()
-{
+UI::~UI() {
+
 }
 
-bool UI::addElement(Element* element)
-{
-    if (maxSize_ == 0 || uiElements_.size() < maxSize_)
-    {
+bool UI::addElement(Element* element) {
+    if (maxSize_ == 0 || uiElements_.size() < maxSize_) {
         auto it = findElement(element);
-        if (it == uiElements_.end())
-        {
-            uiElements_.push_back(element);
-            return true;
+        if (it == uiElements_.end()) {
+            if (uiDelegate_->add(*element)) {
+                uiElements_.push_back(element);
+                return true;
+            }
         }
     }
     return false;
@@ -72,6 +70,12 @@ UI::findElement(Element* element) {
     return it;
 }
 
+int
+UI::findElementIndex(Element* element) {
+    ElementList::iterator it = std::find(uiElements_.begin(), uiElements_.end(), element);
+    return std::distance(uiElements_.begin(), it);
+}
+    
 bool UI::firstElement() {
     if (uiElements_.empty()) return false;
     
@@ -79,8 +83,15 @@ bool UI::firstElement() {
     return true;
 }
 
-unsigned int UI::nextElement()
+Element* UI::getElement(unsigned int idx) {
+    return uiElements_[idx];
+}
+
+int
+UI::nextElement()
 {
+    if (uiElements_.size() == 0) return -1;
+    
     currentElement_ = (currentElement_ + 1) % uiElements_.size();
     return currentElement_;
 }
@@ -88,8 +99,7 @@ unsigned int UI::nextElement()
 bool UI::removeElement(Element* element)
 {
     auto it = findElement(element);
-    if (it != uiElements_.end())
-    {
+    if (it != uiElements_.end()) {
         uiElements_.erase(it);
         return true;
     }
@@ -160,7 +170,7 @@ bool UI::hasObject(base::ProductType productType)
 }
 
 // Consumer contract
-bool UI::canAcceptData(bool isRequired)
+bool UI::canAcceptData()
 {
     return !uiElements_.empty();
 }

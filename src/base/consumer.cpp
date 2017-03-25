@@ -34,7 +34,7 @@ BaseConsumer::~BaseConsumer()
 {
 }
 
-bool BaseConsumer::canAcceptData(bool isRequired)
+bool BaseConsumer::canAcceptData()
 {
     return readerDelegate_ != 0;
 }

@@ -58,6 +58,11 @@ enum class UIFacetCategory {
  */
 class UIFacet {
 public:
+    /** Construct a UIFace with name, value and category.
+     *  @param name Name of this facet, which should be unique within each category.
+     *  @param value Initial string value of facet. This may be parsed and converted by subclasses.
+     *  @param category Category of facet. Set to UIFacetCategory::Other if not specified.
+     */
     UIFacet(const std::string& name, const std::string& value, UIFacetCategory category = UIFacetCategory::Other);
     virtual ~UIFacet();
 
@@ -87,6 +92,7 @@ private:
     base::StructuredData& categoryData_;
     UIFacetCategory category_;
     bool isMandatory_;
+    std::string categoryPrefix_;
 };
     
 } // namespace ui
