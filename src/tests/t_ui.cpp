@@ -18,6 +18,7 @@
 #include <string>
 #include <vector>
 
+#include <base/result.h>
 #include <core/logger.h>
 #include <ui/element.h>
 #include <ui/elementdelegate.h>
@@ -25,6 +26,7 @@
 #include <ui/uidelegate.h>
 #include <ui/uifacet.h>
 #include <gtest/gtest.h>
+using aft::base::Result;
 using namespace aft::core;
 using namespace aft::ui;
 
@@ -59,7 +61,7 @@ public:
         value = value_;
         return true;
     }
-    virtual bool output(Element* element) override {
+    virtual bool output(const Element* element) override {
         if (element->hasValue()) {
             value_ = element->getValue();
         }
@@ -83,30 +85,32 @@ virtual bool show(const Element& element) override;
 */
 class EmptyUiDelegate : public UIDelegate {
 public:
-    bool add(const Element& element) {
+    bool add(const Element& element) override {
         return false;
     }
-    bool focus(const Element& element) {
+    bool focus(const Element& element) override {
         return false;
     }
-    bool hide(const Element& element) {
+    const Element* get(const std::string& name) override {
+        return nullptr;
+    }
+    bool hide(const Element& element) override {
         return false;
     }
     /** Get user input from element */
-    bool input(const Element& element, std::string& value) {
+    bool input(const Element& element, std::string& value) override {
         value = element.getDefault();
         return true;
     }
     /** Output the element to the user interface */
-    bool output(const Element& element)
-    {
+    bool output(const Element& element) const override {
         aftlog << "(Custom) Element " << element.getName() << std::endl;
         return true;
     }
-    bool remove(const Element& element) {
+    bool remove(const Element& element) override {
         return false;
     }
-    bool show(const Element& element) {
+    bool show(const Element& element, bool showValue) override {
         return false;
     }
 };
@@ -287,43 +291,62 @@ TEST_F(UiPackageTest, UIFacet) {
 }
 
 TEST_F(UiPackageTest, UIWithEmptyDelegate) {
-    EmptyUiDelegate uiDelegate;
-    UI emptyUi(nullptr, 0, &uiDelegate);
+    EmptyUiDelegate* uiDelegate = new EmptyUiDelegate;
+    UI emptyUi(nullptr, 0, uiDelegate);
     EmptyElementDelegate eelDelegate;
     Element element("element", &eelDelegate);
     EXPECT_FALSE(emptyUi.addElement(&element));
     EXPECT_EQ(nullptr, emptyUi.currentElement());
 }
-    
+
 TEST_F(UiPackageTest, UIWithBaseDelegate) {
     UI baseUi(nullptr, 0);
+    EXPECT_EQ(Result(true), baseUi.init());
+
     Element element("element");
     EXPECT_TRUE(baseUi.addElement(&element));
     Element* el1 = baseUi.currentElement();
     EXPECT_NE(nullptr, el1);
     EXPECT_TRUE(el1->getName() == "element");
-    auto it = baseUi.findElement(&element);
-    EXPECT_NE(
+    ssize_t idx = baseUi.findElement(&element);
+    EXPECT_EQ(0, idx);
+
+    element.setPrompt("Enter your name");
+    element.setDefault("(unknown)");
+    baseUi.erase();
+    baseUi.draw();
+    baseUi.output();
+    baseUi.input();
+
+    Element element2("element2");
+    idx = baseUi.findElement(&element2);
+    EXPECT_EQ(-1, idx);
+    EXPECT_FALSE(baseUi.addElement(&element2));
+    idx = baseUi.findElement(&element2);
+    EXPECT_EQ(-1, idx);
+    
+    EXPECT_EQ(&element, baseUi.currentElement());
+    EXPECT_EQ(&element, baseUi.getElement(0));
+    EXPECT_EQ(0, baseUi.nextElement());
+    
+    EXPECT_TRUE(baseUi.removeElement(&element));
+    EXPECT_FALSE(baseUi.firstElement());
+    EXPECT_TRUE(baseUi.addElement(&element2));
+    idx = baseUi.findElement(&element2);
+    EXPECT_EQ(0, idx);
+    EXPECT_TRUE(baseUi.firstElement());
+
+    EXPECT_EQ(Result(true), baseUi.deinit());
 }
+
 #if 0
-    ElementList::iterator findElement(Element* element);
-    
-    /** Switch to the first top level element.
-     *  @return true if the switch to the first element was successful.
-     */
-    virtual bool firstElement();
-    
-    /** Switch to the next top level element if any.
-     *  @return the index of the UI element after the current. Returns -1 if there is no next element.
-     */
-    virtual unsigned int nextElement();
-    
-    /** Remove element from top level of UI hierarchy */
-    virtual bool removeElement(Element* element);
-    
-    // many UI's need to have an init and deinit
-    virtual base::Result init(base::Context* context = nullptr);
-    virtual base::Result deinit(base::Context* context = nullptr);
+    // High level methods
+    virtual void draw();
+    virtual void erase();
+    virtual void input();
+    virtual void output();
+    void registerListener(CallbackFunction* listener);
+    void unregisterListener(CallbackFunction* listener);
     
     // Producer contract
     virtual bool read(base::TObject& object) override;

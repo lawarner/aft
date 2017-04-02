@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015, 2016 Andy Warner
+ *   Copyright 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -22,16 +22,24 @@ using namespace aft::base;
 class aft::base::TObjectIteratorImpl
 {
 public:
-    TObjectIteratorImpl(TObjectTree* tree = 0, bool parentIter = true)
-        : parentIter_(parentIter)
-        {
-            if (tree) trees_.push_back(tree);
-        }
-
     /** Convenience type */
-    typedef std::vector<TObjectTree*>::iterator TreeIterator;
+    using  TreeIterator = std::vector<TObjectTree*>::iterator;
+    
+    TObjectIteratorImpl(TObjectTree* tree = nullptr, bool parentIter = true)
+        : root_(tree)
+        , parentIter_(parentIter) {
+        if (tree) trees_.push_back(tree);
+    }
 
-    /** Iterator is pointing to the root node. */
+    TObject* get() const;
+    
+    void increment(std::size_t num = 1);
+    
+    bool isEqual(TObjectIteratorImpl& other) const;
+    
+    TObjectTree* root_;
+
+    /** Indicate if iterator is pointing to the root node. */
     bool parentIter_;
 
     /** Stack of trees being iterated (current tree is always top. */
@@ -41,26 +49,94 @@ public:
     std::vector<TreeIterator> curr_;
 };
 
+TObject*
+TObjectIteratorImpl::get() const {
+    if (parentIter_) {
+        if (root_) return root_->getValue();
+        return nullptr;
+    }
+    if (curr_.empty() ||
+        curr_.back() == trees_.back()->getChildren().end()) {
+        return nullptr;
+    }
+    
+    return (*curr_.back())->getValue();
+}
+
+void TObjectIteratorImpl::increment(std::size_t num) {
+    for (size_t idx = 0; idx < num && root_ != nullptr; ++idx) {
+        if (parentIter_) {
+            trees_.clear();
+            curr_.clear();
+            if (!root_->getChildren().empty()) {
+                trees_.push_back(root_);
+                curr_.push_back(root_->getChildren().begin());
+            }
+            parentIter_ = false;
+        } else {
+            if (curr_.empty()) {
+                root_ = 0;    // we are done
+            } else {
+                if (curr_.back() != trees_.back()->getChildren().end()) {
+                    if (!(*curr_.back())->getChildren().empty()) {
+                        trees_.push_back(*curr_.back());
+                        curr_.push_back((*curr_.back())->getChildren().begin());
+                        return;
+                    }
+                    ++curr_.back();
+                }
+                while (curr_.back() == trees_.back()->getChildren().end()) {
+                    trees_.pop_back();
+                    curr_.pop_back();
+                    if (curr_.empty()) {
+                        root_ = 0;
+                        break;
+                    }
+                    ++curr_.back();
+                }
+            }
+        }
+    }
+}
+
+bool TObjectIteratorImpl::isEqual(TObjectIteratorImpl& other) const {
+    if (root_ != other.root_) return false;
+    if (parentIter_ && other.parentIter_) return true;
+    
+    if (curr_.empty() && other.curr_.empty()) return true;
+    if (trees_.size() != other.trees_.size()) return false;
+    if (curr_.size() != other.curr_.size()) return false;
+    
+    if (trees_.back() != other.trees_.back()) return false;
+    return curr_.back() == other.curr_.back();
+}
+
+//////////////////////////////////////////////////////////////////
 
 TObjectIterator::TObjectIterator(TObjectTree* root, bool atBegin)
-    : root_(root)
-    , impl_(*new TObjectIteratorImpl(root, atBegin))
-{
+    : impl_(std::make_unique<TObjectIteratorImpl>(root, atBegin)) {
 }
 
-TObjectIterator::~TObjectIterator()
-{
-    delete &impl_;
+TObjectIterator::TObjectIterator(const TObjectIterator& other)
+: impl_(nullptr) {
+    if (other.impl_) {
+        impl_ = std::make_unique<TObjectIteratorImpl>(*other.impl_);
+    }
 }
 
-TObjectIterator& TObjectIterator::operator=(const TObjectIterator& other)
+TObjectIterator::~TObjectIterator() {
+}
+
+TObjectIterator&
+TObjectIterator::operator=(const TObjectIterator& other)
 {
-    if (this != &other)
-    {
-        root_ = other.root_;
-        impl_.parentIter_ = other.impl_.parentIter_;
-        impl_.trees_ = other.impl_.trees_;
-        impl_.curr_ = other.impl_.curr_;
+    if (this != &other) {
+        if (other.impl_ == nullptr) {
+            impl_.reset();
+        }
+        else {
+            *impl_ = *other.impl_;
+        }
     }
     return *this;
 }
@@ -68,15 +144,7 @@ TObjectIterator& TObjectIterator::operator=(const TObjectIterator& other)
 bool TObjectIterator::operator==(const TObjectIterator& other)
 {
     if (this == &other) return true;
-    if (root_ != other.root_) return false;
-    if (impl_.parentIter_ && other.impl_.parentIter_) return true;
-
-    if (impl_.curr_.empty() && other.impl_.curr_.empty()) return true;
-    if (impl_.trees_.size() != other.impl_.trees_.size()) return false;
-    if (impl_.curr_.size() != other.impl_.curr_.size()) return false;
-
-    if (impl_.trees_.back() != other.impl_.trees_.back()) return false;
-    return impl_.curr_.back() == other.impl_.curr_.back();
+    return impl_->isEqual(*other.impl_);
 }
 
 bool TObjectIterator::operator!=(const TObjectIterator& other)
@@ -104,59 +172,12 @@ TObject* TObjectIterator::operator->()
 */
 }
 
-TObjectIterator& TObjectIterator::operator++()
-{
-    if (impl_.parentIter_)
-    {
-        impl_.trees_.clear();
-        impl_.curr_.clear();
-        if (root_ && !root_->getChildren().empty())
-        {
-            impl_.trees_.push_back(root_);
-            impl_.curr_.push_back(root_->getChildren().begin());
-        }
-        impl_.parentIter_ = false;
-    } else {
-        if (impl_.curr_.empty())
-        {
-            root_ = 0;    // we are done
-        } else {
-            if (impl_.curr_.back() != impl_.trees_.back()->getChildren().end())
-            {
-                if (!(*impl_.curr_.back())->getChildren().empty())
-                {
-                    impl_.trees_.push_back(*impl_.curr_.back());
-                    impl_.curr_.push_back((*impl_.curr_.back())->getChildren().begin());
-                    return *this;
-                }
-                ++impl_.curr_.back();
-            }
-            while (impl_.curr_.back() == impl_.trees_.back()->getChildren().end())
-            {
-                impl_.trees_.pop_back();
-                impl_.curr_.pop_back();
-                if (impl_.curr_.empty())
-                {
-                    root_ = 0;
-                    break;
-                }
-                ++impl_.curr_.back();
-            }
-        }
-    }
-
+TObjectIterator&
+TObjectIterator::operator++() {
+    impl_->increment(1);
     return *this;
 }
 
-TObject* TObjectIterator::get()
-{
-    if (impl_.parentIter_)
-    {
-        if (root_) return root_->getValue();
-        return 0;
-    }
-    if (impl_.curr_.empty()) return 0;
-    if (impl_.curr_.back() == impl_.trees_.back()->getChildren().end()) return 0;
-
-    return (*impl_.curr_.back())->getValue();
+TObject* TObjectIterator::get() {
+    return impl_->get();
 }

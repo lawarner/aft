@@ -1,7 +1,7 @@
 
 #pragma once
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -44,6 +44,8 @@ public:
  *  This may be templatized later, but I doubt it.
  *  The implementation of the iterator is hidden in the TObjectIteratorImpl
  *  opaque inner class.
+ *
+ *  TODO Implement other types of iteration such as 1-level, top/left/right-first, reverse, searched, etc.
  */
 class TObjectIterator
 {
@@ -55,7 +57,10 @@ public:
      *  @param atBegin If true then iterator starts pointing to first child,
      *                 otherwise points to end().
      */
-    TObjectIterator(TObjectTree* root = 0, bool atBegin = true);
+    TObjectIterator(TObjectTree* root = nullptr, bool atBegin = true);
+    /** Copy cosntruct a TObject iterator. */
+    TObjectIterator(const TObjectIterator& other);
+    
     /** Destruct a TObject iterator. */
     ~TObjectIterator();
 
@@ -73,8 +78,7 @@ public:
     TObjectIterator& operator++();
 
 private:
-    TObjectTree* root_;
-    TObjectIteratorImpl& impl_;
+    std::unique_ptr<TObjectIteratorImpl> impl_;
 };
 
 } // namespace base

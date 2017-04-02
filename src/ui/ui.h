@@ -19,6 +19,7 @@
  */
 
 #include <cstddef>
+#include <functional>
 #include "base/proc.h"
 #include "base/result.h"
 #include "ui/uidelegate.h"
@@ -65,7 +66,8 @@ class UI : public aft::base::BaseProc
 {
 public:
     using ElementList = std::vector<Element *>;
-
+    using CallbackFunction = std::function<void(Element*)>;
+    
     /** Construct a UI with an optional top level element, optional maximum size and optional UI delegate.
      *  @param element Optional top level Element. More top level elements can be added later by
      *                 using #addElement.
@@ -82,8 +84,8 @@ public:
     /** Get a pointer to the current top level element, if any. */
     virtual Element* currentElement() const;
 
-    virtual ElementList::iterator findElement(Element* element);
-    virtual int findElementIndex(Element* element);
+    /** Return index to an element, or -1 if not found. */
+    virtual ssize_t findElement(Element* element) const;
 
     /** Switch to the first top level element.
      *  @return true if the switch to the first element was successful.
@@ -95,7 +97,7 @@ public:
     /** Switch to the next top level element if any.
      *  @return the index of the UI element after the current. Returns -1 if there is no next element.
      */
-    virtual int nextElement();
+    virtual ssize_t nextElement();
 
     /** Remove element from top level of UI hierarchy */
     virtual bool removeElement(Element* element);
@@ -103,6 +105,14 @@ public:
     // many UI's need to have an init and deinit
     virtual base::Result init(base::Context* context = nullptr);
     virtual base::Result deinit(base::Context* context = nullptr);
+    
+    // High level methods
+    virtual void draw();
+    virtual void erase();
+    virtual void input();
+    virtual void output();
+    void registerListener(CallbackFunction* listener);
+    void unregisterListener(CallbackFunction* listener);
     
     // Producer contract
     virtual bool read(base::TObject& object) override;
@@ -121,7 +131,8 @@ private:
     unsigned int maxSize_;
     unsigned int currentElement_;
     ElementList uiElements_;
-    UIDelegate* uiDelegate_;
+    std::vector<CallbackFunction*> listeners_;
+    std::unique_ptr<UIDelegate> uiDelegate_;
 };
 
 } // namespace ui

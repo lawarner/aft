@@ -34,10 +34,12 @@ TestSuite
 Get x from UI
 Do p if [ x ]
 
-Info that UI produces can be one at a time (serial) or presented/collected as a whole.
-There must be a "done" indicator, i.e., a gui button or confirmation for dumb ui.
+Info that a UI produces can be one at a time (serial) or presented/collected as a whole.
+There must be a "done" indicator, i.e., an OK button for a gui or confirmation prompt
+for a dumb ui (tty).
 Requests for data are pushed on a queue that the ui processes.
 Requests are marked as mandatory, default value, "done" action.
+
 Command execution can be suspended if input is required from the ui.
 In fact cmdexec should follow a standard pattern of:
 - fetch command and check its requirements

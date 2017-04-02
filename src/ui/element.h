@@ -37,6 +37,8 @@ class Element
 {
 public:
     Element(const std::string& name, ElementDelegate* delegate = 0);
+    Element(const Element& other);
+    Element& operator=(const Element& other);
     virtual ~Element();
 
     // work methods
@@ -79,7 +81,7 @@ public:
     virtual void setVisible(bool isVisible);
 
 private:
-    const std::string name_;
+    std::string name_;
 
 protected:
     ElementDelegate* delegate_;

@@ -46,7 +46,7 @@ public:
     /** Output the element to the user interface
      *  TODO add bool to just output value
      */
-    virtual bool output(Element* element) = 0;
+    virtual bool output(const Element* element) = 0;
 };
 
 class BaseElementDelegate : public ElementDelegate {
@@ -61,7 +61,7 @@ public:
     virtual bool setFacet(Element* element, const UIFacet& facet) override;
 
     virtual bool input(Element* element, std::string& value) override;
-    virtual bool output(Element* element) override;
+    virtual bool output(const Element* element) override;
 };
 
 }

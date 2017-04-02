@@ -25,55 +25,8 @@
 using namespace aft::core;
 
 
-namespace aft
-{
-namespace ui
-{
-
-class UIDefaultDelegate : public UIDelegate
-{
-public:
-    UIDefaultDelegate() { }
-    virtual ~UIDefaultDelegate() { }
-
-    /** Add the element to the user interface, if possible. */
-    virtual bool add(const Element& element)
-    {
-        aftlog << "Element " << element.getName() << " added for UI" << std::endl;
-        return true;
-    }
-
-    /** Get user input from the element */
-    virtual bool input(const Element& element, std::string& value)
-    {
-        value = element.getDefault();
-        aftlog << "Element " << element.getName() << " returns default: " << value << std::endl;
-        return true;
-    }
-    /** Output the element to the user interface.
-     *
-     *  The various output formats for an element is:
-     *  Fully specified:   <element_name>: <prompt> [<default_value>]?
-     *  Default missing:   <element_name>: <prompt>?
-     *  Prompt missing:    <element_name> [<default_value>]?
-     *  No Prompt,Default: <element_name>?
-     */
-    virtual bool output(const Element& element)
-    {
-        aftlog << "Element " << element.getName();
-        if (!element.getPrompt().empty()) aftlog << ": " << element.getPrompt();
-        std::string defValue = element.getDefault().empty() ? "? " : " [" + element.getDefault() + "]? ";
-        aftlog << defValue << std::endl;
-
-        return true;
-    }
-    /** Remove the element from the user interface. */
-    virtual bool remove(const Element& element)
-    {
-        aftlog << "Element " << element.getName() << " removed for UI" << std::endl;
-        return true;
-    }
-};
+namespace aft {
+namespace ui {
 
 
 Element::Element(const std::string& name, ElementDelegate* delegate)
@@ -83,6 +36,30 @@ Element::Element(const std::string& name, ElementDelegate* delegate)
 , isVisible_(false)
 {
     
+}
+
+Element::Element(const Element& other)
+    : name_(other.name_)
+    , delegate_(other.delegate_)
+    , value_(other.value_)
+    , defaultValue_(other.defaultValue_)
+    , prompt_(other.prompt_)
+    , isEnabled_(other.isEnabled_)
+    , isVisible_(other.isVisible_) {
+    
+}
+
+Element& Element::operator=(const Element& other) {
+    if (this != &other) {
+        name_ = other.name_;
+        delegate_ = other.delegate_;
+        value_ = other.value_;
+        defaultValue_ = other.defaultValue_;
+        prompt_ = other.prompt_;
+        isEnabled_ = other.isEnabled_;
+        isVisible_ = other.isVisible_;
+    }
+    return *this;
 }
 
 Element::~Element()
@@ -118,10 +95,8 @@ void Element::refresh()
     show();
 }
 
-void Element::show(bool forceShow)
-{
-    if (!isVisible_ || forceShow)
-    {
+void Element::show(bool forceShow) {
+    if (!isVisible_ || forceShow) {
         setVisible(delegate_->output(this));
     }
 }

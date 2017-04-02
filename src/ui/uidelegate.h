@@ -39,30 +39,36 @@ public:
     virtual bool add(const Element& element) = 0;
     /** Set focus to element, if possible. */
     virtual bool focus(const Element& element) = 0;
+    /** Get an element by name */
+    virtual const Element* get(const std::string& name) = 0;
     /** Hide user element from display */
     virtual bool hide(const Element& element) = 0;
     /** Get user input from element */
     virtual bool input(const Element& element, std::string& value) = 0;
     /** Output the element to the user interface */
-    virtual bool output(const Element& element) = 0;
+    virtual bool output(const Element& element) const = 0;
     /** Remove or hide element from the user interface, if possible. */
     virtual bool remove(const Element& element) = 0;
     /** Show user element */
-    virtual bool show(const Element& element) = 0;
+    virtual bool show(const Element& element, bool showValue = false) = 0;
 };
 
 class BaseUIDelegate : public UIDelegate {
 public:
+    BaseUIDelegate();
+    virtual ~BaseUIDelegate() = default;
+public:
     virtual bool add(const Element& element) override;
     virtual bool focus(const Element& element) override;
+    virtual const Element* get(const std::string& name) override;
     virtual bool hide(const Element& element) override;
     virtual bool input(const Element& element, std::string& value) override;
-    virtual bool output(const Element& element) override;
+    virtual bool output(const Element& element) const override;
     virtual bool remove(const Element& element) override;
-    virtual bool show(const Element& element) override;
+    virtual bool show(const Element& element, bool showValue = false) override;
 
 protected:
-    
+    Element* root_;
 };
 
 } // namespace ui

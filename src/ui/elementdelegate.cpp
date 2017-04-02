@@ -63,7 +63,7 @@ bool BaseElementDelegate::input(Element* element, std::string& value) {
     return true;
 }
 
-bool BaseElementDelegate::output(Element* element) {
+bool BaseElementDelegate::output(const Element* element) {
     ostringstream oss;
     string prompt = element->getPrompt();
     if (prompt.empty()) {

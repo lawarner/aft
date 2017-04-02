@@ -3,7 +3,7 @@ Abstract Framework for Testing
 
 #### Note that this project is in early stages.
 ##### Only first simple scenario written.
-##### base and core classes are still in flux
+##### base and core classes are still in flux and ui classes are still being designed.
 
 
 AFT is a toolkit for automated testing.  The core logic of defining and executing 
@@ -61,7 +61,7 @@ the tool usable is many more situations.
 Maybe another day . . .
 
 OK a little:  I have written several automated testing tools for various projects.  Each of 
-these ran only on specific plaforms, fixed transport, data formats, etc.  But in each case 
+these ran only on a specific plaform, fixed transport, data formats, etc.  But in each case 
 the actual logic of defining, recording and executing test cases was generally the same.
 
 A UI can be constructed to allow easy input of steps that are added, edited, executed, saved, restored,

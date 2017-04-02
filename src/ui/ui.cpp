@@ -36,7 +36,7 @@ UI::UI(Element* element, unsigned int maxSize, UIDelegate* uiDelegate)
     : base::BaseProc(nullptr, nullptr)
     , maxSize_(maxSize)
     , currentElement_(0)
-    , uiDelegate_(uiDelegate == nullptr ? new BaseUIDelegate : uiDelegate) {
+    , uiDelegate_(uiDelegate == nullptr ? make_unique<BaseUIDelegate>() : unique_ptr<UIDelegate>(uiDelegate)) {
 
 }
 
@@ -46,8 +46,8 @@ UI::~UI() {
 
 bool UI::addElement(Element* element) {
     if (maxSize_ == 0 || uiElements_.size() < maxSize_) {
-        auto it = findElement(element);
-        if (it == uiElements_.end()) {
+        ssize_t idx = findElement(element);
+        if (idx == -1) {
             if (uiDelegate_->add(*element)) {
                 uiElements_.push_back(element);
                 return true;
@@ -64,15 +64,12 @@ Element* UI::currentElement() const {
     return nullptr;
 }
 
-UI::ElementList::iterator
-UI::findElement(Element* element) {
-    ElementList::iterator it = std::find(uiElements_.begin(), uiElements_.end(), element);
-    return it;
-}
-
-int
-UI::findElementIndex(Element* element) {
-    ElementList::iterator it = std::find(uiElements_.begin(), uiElements_.end(), element);
+ssize_t
+UI::findElement(Element* element) const {
+    auto it = std::find(uiElements_.begin(), uiElements_.end(), element);
+    if (it == uiElements_.end()) {
+        return -1;
+    }
     return std::distance(uiElements_.begin(), it);
 }
     
@@ -87,7 +84,7 @@ Element* UI::getElement(unsigned int idx) {
     return uiElements_[idx];
 }
 
-int
+ssize_t
 UI::nextElement()
 {
     if (uiElements_.size() == 0) return -1;
@@ -98,10 +95,13 @@ UI::nextElement()
 
 bool UI::removeElement(Element* element)
 {
-    auto it = findElement(element);
-    if (it != uiElements_.end()) {
-        uiElements_.erase(it);
-        return true;
+    if (uiDelegate_->remove(*element)) {
+        ssize_t idx = findElement(element);
+        if (idx != -1) {
+            auto it = uiElements_.begin() + idx;
+            uiElements_.erase(it);
+            return true;
+        }
     }
     return false;
 }
@@ -116,6 +116,42 @@ Result UI::deinit(base::Context* context)
     return Result(true);
 }
 
+void UI::draw() {
+    for (auto element : uiElements_) {
+        uiDelegate_->output(*element);
+    }
+}
+
+void UI::erase() {
+    
+}
+
+void UI::input() {
+    auto& element = *uiElements_[currentElement_];
+    std::string value;
+    uiDelegate_->input(element, value);
+    element.setValue(value);
+}
+    
+void UI::output() {
+    auto& element = *uiElements_[currentElement_];
+    uiDelegate_->show(element, true);
+    
+}
+    
+void UI::registerListener(CallbackFunction* listener) {
+    for (auto it = begin(listeners_); it != end(listeners_); ++it) {
+        if (*it == listener) return;
+    }
+    listeners_.push_back(listener);
+}
+
+void UI::unregisterListener(CallbackFunction* listener) {
+    auto it = find(begin(listeners_), end(listeners_), listener);
+    if (it != end(listeners_)) {
+        listeners_.erase(it);
+    }
+}
 
 // Producer contract
 bool UI::read(base::TObject& object)
@@ -172,7 +208,9 @@ bool UI::hasObject(base::ProductType productType)
 // Consumer contract
 bool UI::canAcceptData()
 {
-    return !uiElements_.empty();
+    //TODO accept ui-wide commands
+    //return !uiElements_.empty();
+    return true;
 }
 
 bool UI::write(const base::TObject& object)
