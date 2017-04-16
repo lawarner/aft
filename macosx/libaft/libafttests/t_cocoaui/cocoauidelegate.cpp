@@ -1,6 +1,6 @@
 /*
- *  uidelegate.cpp
- *  libaft
+ *  cocoauidelegate.cpp
+ *  libafttests
  *
  *  Copyright © 2017 Andy Warner. All rights reserved.
  *
@@ -18,8 +18,10 @@
  */
 
 #include <iostream>
-#include "element.h"
-#include "uidelegate.h"
+#include <memory>
+#include "cocoauidelegate.h"
+#include "ui/element.h"
+#include "ui/uidelegate.h"
 #include "core/logger.h"
 
 using namespace aft::base;
@@ -27,41 +29,41 @@ using namespace aft::core;
 using namespace aft::ui;
 using namespace std;
 
-BaseUIDelegate::BaseUIDelegate()
-        : root_(nullptr) {
-
+CocoaUIDelegate::CocoaUIDelegate()
+: root_(nullptr) {
+    
 }
 
-bool BaseUIDelegate::add(const Element& element) {
+bool CocoaUIDelegate::add(const Element& element) {
     if (root_ == nullptr) {
-        root_ = new Element(element);
+        root_ = std::make_unique<Element>(element);
         return true;
     }
     return false;
 }
 
-bool BaseUIDelegate::focus(const Element& element) {
+bool CocoaUIDelegate::focus(const Element& element) {
     return false;
 }
 
 const Element*
-BaseUIDelegate::get(const std::string& name) {
+CocoaUIDelegate::get(const std::string& name) {
     if (root_ != nullptr && root_->getName() == name) {
-        return root_;
+        return root_.get();
     }
     return nullptr;
 }
 
-bool BaseUIDelegate::hide(const Element& element) {
+bool CocoaUIDelegate::hide(const Element& element) {
     return false;
 }
 
-bool BaseUIDelegate::input(const Element& element, std::string& value) {
+bool CocoaUIDelegate::input(const Element& element, std::string& value) {
     char cname[200];
     std::cin.getline(cname, sizeof(cname));
     std::string name(cname, strlen(cname));
     value = name.empty() ? element.getDefault() : name;
-
+    
     return true;
 }
 
@@ -73,7 +75,7 @@ bool BaseUIDelegate::input(const Element& element, std::string& value) {
  *  Prompt missing:    <element_name> [<default_value>]?
  *  No Prompt,Default: <element_name>?
  */
-bool BaseUIDelegate::output(const Element& element) const {
+bool CocoaUIDelegate::output(const Element& element) const {
     aftlog << "Element " << element.getName();
     if (!element.getPrompt().empty()) aftlog << ": " << element.getPrompt();
     std::string defValue = element.getDefault().empty() ? "? " : " [" + element.getDefault() + "]? ";
@@ -86,7 +88,7 @@ bool BaseUIDelegate::output(const Element& element) const {
     return true;
 }
 
-bool BaseUIDelegate::remove(const Element& element) {
+bool CocoaUIDelegate::remove(const Element& element) {
     if (root_ != nullptr && root_->getName() == element.getName()) {
         root_ = nullptr;
         return true;
@@ -94,7 +96,7 @@ bool BaseUIDelegate::remove(const Element& element) {
     return false;
 }
 
-bool BaseUIDelegate::show(const Element& element, bool showValue) {
+bool CocoaUIDelegate::show(const Element& element, bool showValue) {
     aftlog << "Element " << element.getName();
     if (!element.getPrompt().empty()) aftlog << ": " << element.getPrompt();
     std::string defValue = element.getDefault().empty() ? "? " : " [" + element.getDefault() + "]? ";

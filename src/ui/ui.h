@@ -48,7 +48,7 @@ class Element;
  *  Elements within a UI can use different ElementDelegates, but when they use a single instance then the delegate
  *  can implement various interactions between elements. StackUIDelegate in t_ui shows a simple example of this.
  *  LayoutElements will enforce that all child elements use its UI delegate (probably permanently hide or
- *  eject childen element that use a different delegate?).
+ *  eject childen elements that use a different delegate?).
  *
  *  TODO: need chain of command with order from most recently added. This is to select the proper element.
  *  TODO: need a way to specify callbacks for user actions, for example tracking mouse movements.
@@ -73,6 +73,7 @@ public:
      *                 using #addElement.
      *  @param maxSize Maximum top level Elements allowed. If not specified then size is unlimited.
      *  @param uiDelegate UI delegate to use. If not specified (or 0) then the default UI delegate is used.
+     *                    This class takes ownership of the UIDelegate.
      */
     UI(Element* element = nullptr, unsigned int maxSize = 0, UIDelegate* uiDelegate = nullptr);
     /** Destruct a UI. */

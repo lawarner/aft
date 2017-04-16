@@ -40,6 +40,10 @@ for a dumb ui (tty).
 Requests for data are pushed on a queue that the ui processes.
 Requests are marked as mandatory, default value, "done" action.
 
+When specifying a UI, there is a top-level section to override behavior for all Elements
+in that UI. For example, a gui UI could have a behavior that causes a tooltip popup on a
+mouse hover.
+
 Command execution can be suspended if input is required from the ui.
 In fact cmdexec should follow a standard pattern of:
 - fetch command and check its requirements

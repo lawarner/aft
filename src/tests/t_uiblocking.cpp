@@ -1,14 +1,6 @@
-//
-//  t_uiblocking.cpp
-//  libaft
-//
-//  Created by Lynn Warner on 3/25/17.
-//  Copyright © 2017 Andy Warner. All rights reserved.
-//
-
-#include <stdio.h>
-/*
- *   Copyright 2015, 2016 Andy Warner
+/*   t_uiblocking.cpp
+ *   libafttests
+ *   Copyright © 2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.

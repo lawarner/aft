@@ -53,11 +53,22 @@ public:
     virtual bool show(const Element& element, bool showValue = false) = 0;
 };
 
+/*
+ *  TODO:
+ *  Refactor BaseUIDelegate to be memory only with no user interaction.
+ *       The addInputValue method will hold a value for each element to use in place of
+ *       actual user input.
+ *       Then the functionality of this class will be moved to a DumbTTYUIDelegate
+ *  A similar refactoring will occur for BaseElementDelegate
+ */
 class BaseUIDelegate : public UIDelegate {
 public:
     BaseUIDelegate();
     virtual ~BaseUIDelegate() = default;
 public:
+    // This might move strictly to BaseElementDelegate
+    void addInputValue(const Element& element, const std::string& value);
+
     virtual bool add(const Element& element) override;
     virtual bool focus(const Element& element) override;
     virtual const Element* get(const std::string& name) override;

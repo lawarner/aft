@@ -10,12 +10,15 @@
 		A1122F201D23784E000FA862 /* element.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1122F1E1D23784E000FA862 /* element.cpp */; };
 		A1122F211D23784E000FA862 /* element.h in Headers */ = {isa = PBXBuildFile; fileRef = A1122F1F1D23784E000FA862 /* element.h */; };
 		A11A6B581E4FF15C000D7A4B /* elementdelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A11A6B571E4FF15C000D7A4B /* elementdelegate.cpp */; };
+		A123DB601EA1C337004ABBD4 /* cocoauidelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A123DB5E1EA1C337004ABBD4 /* cocoauidelegate.cpp */; };
+		A123DB611EA1C337004ABBD4 /* cocoauidelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A123DB5F1EA1C337004ABBD4 /* cocoauidelegate.h */; };
 		A1256C8D1DFE1CC500AE4700 /* platform-linux.h in Headers */ = {isa = PBXBuildFile; fileRef = A1256C8A1DFE1CC500AE4700 /* platform-linux.h */; };
 		A1256C8E1DFE1CC500AE4700 /* platform-posix.h in Headers */ = {isa = PBXBuildFile; fileRef = A1256C8B1DFE1CC500AE4700 /* platform-posix.h */; };
 		A1256C8F1DFE1CC500AE4700 /* platform-apple.h in Headers */ = {isa = PBXBuildFile; fileRef = A1256C8C1DFE1CC500AE4700 /* platform-apple.h */; };
 		A1256C951DFE349300AE4700 /* nativethread.h in Headers */ = {isa = PBXBuildFile; fileRef = A1256C911DFE349300AE4700 /* nativethread.h */; };
 		A1256C961DFE349300AE4700 /* nativethread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1256C921DFE349300AE4700 /* nativethread.cpp */; };
 		A1256C971DFE349300AE4700 /* nativepluginloader.h in Headers */ = {isa = PBXBuildFile; fileRef = A1256C931DFE349300AE4700 /* nativepluginloader.h */; };
+		A1272D121EAD4B2D0018E0BB /* uiaftbridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1272D111EAD4B2D0018E0BB /* uiaftbridge.mm */; };
 		A13CF6E91D1705590038665F /* operation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A13CF6E71D1705590038665F /* operation.cpp */; };
 		A13CF6EA1D1705590038665F /* operation.h in Headers */ = {isa = PBXBuildFile; fileRef = A13CF6E81D1705590038665F /* operation.h */; };
 		A14651911E919FC200C5BF04 /* uirequest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A146518F1E919FC200C5BF04 /* uirequest.cpp */; };
@@ -128,6 +131,8 @@
 		A1122F1E1D23784E000FA862 /* element.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = element.cpp; path = ../../src/ui/element.cpp; sourceTree = "<group>"; };
 		A1122F1F1D23784E000FA862 /* element.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = element.h; path = ../../src/ui/element.h; sourceTree = "<group>"; };
 		A11A6B571E4FF15C000D7A4B /* elementdelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = elementdelegate.cpp; path = ../../src/ui/elementdelegate.cpp; sourceTree = "<group>"; };
+		A123DB5E1EA1C337004ABBD4 /* cocoauidelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cocoauidelegate.cpp; path = ../../src/ui/cocoauidelegate.cpp; sourceTree = "<group>"; };
+		A123DB5F1EA1C337004ABBD4 /* cocoauidelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cocoauidelegate.h; path = ../../src/ui/cocoauidelegate.h; sourceTree = "<group>"; };
 		A1256C8A1DFE1CC500AE4700 /* platform-linux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "platform-linux.h"; sourceTree = "<group>"; };
 		A1256C8B1DFE1CC500AE4700 /* platform-posix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "platform-posix.h"; sourceTree = "<group>"; };
 		A1256C8C1DFE1CC500AE4700 /* platform-apple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "platform-apple.h"; sourceTree = "<group>"; };
@@ -135,6 +140,8 @@
 		A1256C921DFE349300AE4700 /* nativethread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = nativethread.cpp; path = native/nativethread.cpp; sourceTree = "<group>"; };
 		A1256C931DFE349300AE4700 /* nativepluginloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = nativepluginloader.h; path = native/nativepluginloader.h; sourceTree = "<group>"; };
 		A1256C941DFE349300AE4700 /* nativepluginloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = nativepluginloader.cpp; path = native/nativepluginloader.cpp; sourceTree = "<group>"; };
+		A1272D111EAD4B2D0018E0BB /* uiaftbridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = uiaftbridge.mm; path = ../../src/ui/uiaftbridge.mm; sourceTree = "<group>"; };
+		A1272D131EAD4BB30018E0BB /* uiaftbridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = uiaftbridge.h; path = ../../src/ui/uiaftbridge.h; sourceTree = "<group>"; };
 		A13CF6E71D1705590038665F /* operation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = operation.cpp; sourceTree = "<group>"; };
 		A13CF6E81D1705590038665F /* operation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = operation.h; sourceTree = "<group>"; };
 		A146518F1E919FC200C5BF04 /* uirequest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = uirequest.cpp; path = ../../src/ui/uirequest.cpp; sourceTree = "<group>"; };
@@ -480,6 +487,10 @@
 				A19725311E2B313C006389B0 /* uifacet.h */,
 				A146518F1E919FC200C5BF04 /* uirequest.cpp */,
 				A14651901E919FC200C5BF04 /* uirequest.h */,
+				A123DB5E1EA1C337004ABBD4 /* cocoauidelegate.cpp */,
+				A123DB5F1EA1C337004ABBD4 /* cocoauidelegate.h */,
+				A1272D111EAD4B2D0018E0BB /* uiaftbridge.mm */,
+				A1272D131EAD4BB30018E0BB /* uiaftbridge.h */,
 			);
 			name = ui;
 			sourceTree = "<group>";
@@ -547,6 +558,7 @@
 				A153D1061CCC71F500000A15 /* stringconsumer.h in Headers */,
 				A153D0D61CCC71F500000A15 /* hasher.h in Headers */,
 				A153D1161CCC71F500000A15 /* posixpluginloader.h in Headers */,
+				A123DB611EA1C337004ABBD4 /* cocoauidelegate.h in Headers */,
 				A18F4D551CD442F600C755FA /* tobjecttype.h in Headers */,
 				A1BCB64B1D2B5ADC0082BB87 /* basicelements.h in Headers */,
 				A153D10C1CCC71F500000A15 /* testsuite.h in Headers */,
@@ -628,6 +640,7 @@
 				A153D0FA1CCC71F500000A15 /* fileproducer.cpp in Sources */,
 				A18F4D541CD442F600C755FA /* tobjecttype.cpp in Sources */,
 				A1F2AFBC1D036BD5009FE595 /* ui.cpp in Sources */,
+				A1272D121EAD4B2D0018E0BB /* uiaftbridge.mm in Sources */,
 				A153D0DD1CCC71F500000A15 /* producer.cpp in Sources */,
 				A153D0ED1CCC71F500000A15 /* tobjectiterator.cpp in Sources */,
 				A153D0F41CCC71F500000A15 /* basicfactory.cpp in Sources */,
@@ -668,6 +681,7 @@
 				A153D0E01CCC71F500000A15 /* propertyhandler.cpp in Sources */,
 				A153D0F81CCC71F500000A15 /* fileconsumer.cpp in Sources */,
 				A153D11D1CCC71F500000A15 /* t_logger.cpp in Sources */,
+				A123DB601EA1C337004ABBD4 /* cocoauidelegate.cpp in Sources */,
 				A153D1211CCC71F500000A15 /* t_testsuite.cpp in Sources */,
 				A153D0CF1CCC71F500000A15 /* consumer.cpp in Sources */,
 				A153D0FC1CCC71F500000A15 /* logger.cpp in Sources */,

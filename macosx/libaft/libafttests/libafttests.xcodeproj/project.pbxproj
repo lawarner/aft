@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A123DB6A1EA31A79004ABBD4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A123DB691EA31A79004ABBD4 /* AppDelegate.m */; };
+		A123DB6D1EA31A79004ABBD4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A123DB6C1EA31A79004ABBD4 /* main.m */; };
+		A123DB6F1EA31A79004ABBD4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A123DB6E1EA31A79004ABBD4 /* Assets.xcassets */; };
+		A123DB721EA31A79004ABBD4 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = A123DB701EA31A79004ABBD4 /* MainMenu.xib */; };
+		A1272D161EADC2840018E0BB /* cppmain.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1272D141EADC2840018E0BB /* cppmain.mm */; };
+		A15816C71EA9BB9A00E0D17A /* cocoauidelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A15816C51EA9BB9A00E0D17A /* cocoauidelegate.cpp */; };
+		A15816C81EA9C31900E0D17A /* libaft.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A18EA8B11C416BFC00721577 /* libaft.a */; };
 		A18EA8911C41542E00721577 /* t_basetests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18EA8771C40C1BC00721577 /* t_basetests.cpp */; };
 		A18EA8941C415DFB00721577 /* libaft.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A18EA8931C415DFB00721577 /* libaft.a */; };
 		A18EA8961C41611400721577 /* libgtest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A18EA8951C41611400721577 /* libgtest.a */; };
@@ -133,6 +140,20 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A123DB661EA31A79004ABBD4 /* t_cocoaui.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = t_cocoaui.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A123DB681EA31A79004ABBD4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		A123DB691EA31A79004ABBD4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		A123DB6C1EA31A79004ABBD4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		A123DB6E1EA31A79004ABBD4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A123DB711EA31A79004ABBD4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		A123DB731EA31A79004ABBD4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A123DB781EA4735F004ABBD4 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		A123DB7A1EA47386004ABBD4 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		A123DB7C1EA473A2004ABBD4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		A1272D141EADC2840018E0BB /* cppmain.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = cppmain.mm; sourceTree = "<group>"; };
+		A1272D151EADC2840018E0BB /* cppmain.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = cppmain.hpp; sourceTree = "<group>"; };
+		A15816C51EA9BB9A00E0D17A /* cocoauidelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cocoauidelegate.cpp; sourceTree = "<group>"; };
+		A15816C61EA9BB9A00E0D17A /* cocoauidelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cocoauidelegate.h; sourceTree = "<group>"; };
 		A18EA8761C40C1BC00721577 /* sample_plugin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sample_plugin.cpp; path = ../../../../src/tests/sample_plugin.cpp; sourceTree = "<group>"; };
 		A18EA8771C40C1BC00721577 /* t_basetests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = t_basetests.cpp; path = ../../../../src/tests/t_basetests.cpp; sourceTree = "<group>"; };
 		A18EA8781C40C1BC00721577 /* t_coretests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = t_coretests.cpp; path = ../../../../src/tests/t_coretests.cpp; sourceTree = "<group>"; };
@@ -159,6 +180,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		A123DB631EA31A79004ABBD4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A15816C81EA9C31900E0D17A /* libaft.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A18EA8871C41532400721577 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -251,13 +280,50 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A123DB671EA31A79004ABBD4 /* t_cocoaui */ = {
+			isa = PBXGroup;
+			children = (
+				A123DB681EA31A79004ABBD4 /* AppDelegate.h */,
+				A123DB691EA31A79004ABBD4 /* AppDelegate.m */,
+				A123DB6E1EA31A79004ABBD4 /* Assets.xcassets */,
+				A123DB701EA31A79004ABBD4 /* MainMenu.xib */,
+				A123DB731EA31A79004ABBD4 /* Info.plist */,
+				A123DB6B1EA31A79004ABBD4 /* Supporting Files */,
+				A15816C51EA9BB9A00E0D17A /* cocoauidelegate.cpp */,
+				A15816C61EA9BB9A00E0D17A /* cocoauidelegate.h */,
+				A1272D141EADC2840018E0BB /* cppmain.mm */,
+				A1272D151EADC2840018E0BB /* cppmain.hpp */,
+			);
+			path = t_cocoaui;
+			sourceTree = "<group>";
+		};
+		A123DB6B1EA31A79004ABBD4 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A123DB6C1EA31A79004ABBD4 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A123DB771EA4735F004ABBD4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A123DB7C1EA473A2004ABBD4 /* Foundation.framework */,
+				A123DB7A1EA47386004ABBD4 /* Cocoa.framework */,
+				A123DB781EA4735F004ABBD4 /* AppKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A18EA85D1C40C15300721577 = {
 			isa = PBXGroup;
 			children = (
 				A18EA8B11C416BFC00721577 /* libaft.a */,
 				A18EA8921C415C7400721577 /* dependencies */,
 				A18EA8681C40C15300721577 /* libafttests */,
+				A123DB671EA31A79004ABBD4 /* t_cocoaui */,
 				A18EA8671C40C15300721577 /* Products */,
+				A123DB771EA4735F004ABBD4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -274,6 +340,7 @@
 				A1F763451C41B6B8009A5873 /* t_testsuite */,
 				A1BCB6361D28847B0082BB87 /* t_ui */,
 				A1CC71131E87076E00BD0946 /* t_uiblock */,
+				A123DB661EA31A79004ABBD4 /* t_cocoaui.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -317,6 +384,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		A123DB651EA31A79004ABBD4 /* t_cocoaui */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A123DB761EA31A79004ABBD4 /* Build configuration list for PBXNativeTarget "t_cocoaui" */;
+			buildPhases = (
+				A123DB621EA31A79004ABBD4 /* Sources */,
+				A123DB631EA31A79004ABBD4 /* Frameworks */,
+				A123DB641EA31A79004ABBD4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = t_cocoaui;
+			productName = t_cocoaui;
+			productReference = A123DB661EA31A79004ABBD4 /* t_cocoaui.app */;
+			productType = "com.apple.product-type.application";
+		};
 		A18EA8891C41532400721577 /* t_basetests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A18EA88E1C41532400721577 /* Build configuration list for PBXNativeTarget "t_basetests" */;
@@ -497,6 +581,10 @@
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Andy Warner";
 				TargetAttributes = {
+					A123DB651EA31A79004ABBD4 = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
+					};
 					A18EA8891C41532400721577 = {
 						CreatedOnToolsVersion = 7.2;
 					};
@@ -536,6 +624,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = A18EA85D1C40C15300721577;
 			productRefGroup = A18EA8671C40C15300721577 /* Products */;
@@ -552,11 +641,35 @@
 				A1F763441C41B6B8009A5873 /* t_testsuite */,
 				A1BCB6351D28847B0082BB87 /* t_ui */,
 				A1CC71121E87076E00BD0946 /* t_uiblock */,
+				A123DB651EA31A79004ABBD4 /* t_cocoaui */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		A123DB641EA31A79004ABBD4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A123DB6F1EA31A79004ABBD4 /* Assets.xcassets in Resources */,
+				A123DB721EA31A79004ABBD4 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		A123DB621EA31A79004ABBD4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1272D161EADC2840018E0BB /* cppmain.mm in Sources */,
+				A123DB6D1EA31A79004ABBD4 /* main.m in Sources */,
+				A123DB6A1EA31A79004ABBD4 /* AppDelegate.m in Sources */,
+				A15816C71EA9BB9A00E0D17A /* cocoauidelegate.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A18EA8861C41532400721577 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -647,7 +760,64 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		A123DB701EA31A79004ABBD4 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A123DB711EA31A79004ABBD4 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
+		A123DB741EA31A79004ABBD4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/include,
+					$PROJECT_DIR/../../../src,
+				);
+				INFOPLIST_FILE = t_cocoaui/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.winc.t-cocoaui";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A123DB751EA31A79004ABBD4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/opt/local/include,
+					$PROJECT_DIR/../../../src,
+				);
+				INFOPLIST_FILE = t_cocoaui/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.winc.t-cocoaui";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		A18EA86B1C40C15300721577 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -928,6 +1098,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		A123DB761EA31A79004ABBD4 /* Build configuration list for PBXNativeTarget "t_cocoaui" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A123DB741EA31A79004ABBD4 /* Debug */,
+				A123DB751EA31A79004ABBD4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		A18EA8611C40C15300721577 /* Build configuration list for PBXProject "libafttests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1007,6 +1186,7 @@
 				A1CC71181E87076E00BD0946 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A1F7631D1C41B541009A5873 /* Build configuration list for PBXNativeTarget "t_result" */ = {
 			isa = XCConfigurationList;
