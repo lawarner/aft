@@ -1,6 +1,6 @@
 #pragma once
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright © 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -32,15 +32,14 @@ namespace core
  */
 typedef int AftLogLevel;
 
-extern const int Trace;
-extern const int Debug;
-extern const int Info;
-extern const int Warning;
-extern const int Error;
-extern const int Fatal;
+constexpr int Trace = 0;
+constexpr int Debug = 1;
+constexpr int Info = 2;
+constexpr int Warning = 3;
+constexpr int Error = 4;
+constexpr int Fatal = 5;
 
-enum AftLogType
-{
+enum AftLogType {
     INVALID = -1,
     ALERT,
     AUDIT,
@@ -48,8 +47,7 @@ enum AftLogType
 };
 
 
-class LogStreamBuf : public std::filebuf
-{
+class LogStreamBuf : public std::filebuf {
 public:
     LogStreamBuf(AftLogType logType);
     virtual ~LogStreamBuf();
@@ -80,9 +78,9 @@ public:
      *  Set up standard loggers aftalert, aftaudit and aftlog based on a logging
      *  configuration.  This is typically called in a run context
      *
-     * Note: This currently just take sthe string parameter as a prefix for the
+     * Note: This currently just takes the string parameter as a prefix for the
      *       log file name.  It appends audit.log and log.log.
-     *       This will be replaced with a LogConfig parameter.
+     *       TODO replace this with a LogConfig parameter.
      */
     static void initStandardLoggers(const std::string& logConfig);
 

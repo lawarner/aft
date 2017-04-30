@@ -20,11 +20,11 @@
 
 #include <string>
 
-namespace aft
-{
-namespace ui
-{
+namespace aft {
+namespace ui {
+
 // Forward reference
+class BaseElementDelegate;
 class ElementDelegate;
 class UIFacet;
 
@@ -33,10 +33,9 @@ class UIFacet;
  *
  * Some possible Element types: Number, Group, Custom, CustomGroup, ...
  */
-class Element
-{
+class Element {
 public:
-    Element(const std::string& name, ElementDelegate* delegate = 0);
+    Element(const std::string& name, ElementDelegate* delegate = nullptr);
     Element(const Element& other);
     Element& operator=(const Element& other);
     virtual ~Element();
@@ -70,17 +69,28 @@ public:
     /** Set the value for this element. */
     virtual void setValue(const std::string& value);
     /** Get the default value for this element */
-    virtual std::string getDefault() const;
+    virtual const std::string& getDefault() const;
     /** Set the default value for this element */
     virtual void setDefault(const std::string& value);
-    virtual std::string getPrompt() const;
+    virtual const std::string& getPrompt() const;
     virtual void setPrompt(const std::string& prompt);
     virtual bool getEnabled() const;
     virtual void setEnabled(bool isEnabled);
     virtual bool getVisible() const;
     virtual void setVisible(bool isVisible);
 
+public:
+    /** Get the string value for this element.
+     *  This is only called from ElementDelegate.
+     */
+    virtual const std::string& _getStringValue() const;
+    /** Set the string value for this element.
+     *  This is only called from ElementDelegate.
+     */
+    virtual void _setStringValue(const std::string& value);
+    
 private:
+    //TODO unique id
     std::string name_;
 
 protected:

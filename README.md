@@ -3,7 +3,7 @@ Abstract Framework for Testing
 
 #### Note that this project is in early stages.
 ##### Only first simple scenario written.
-##### base and core classes are still in flux and ui classes are still being designed.
+##### base and core classes are fairly stable and ui classes are still in flux. More commands and plugins are needed.
 
 
 AFT is a toolkit for automated testing.  The core logic of defining and executing 
@@ -52,9 +52,11 @@ in theads and dynamic librarires, but more could be added in the future.
 
 ### Short
 
-A rethink of ipctest whose original goal was UI abstraction.  During implementation I 
-realized that almost all of the components could be similarly abstracted, thus making 
-the tool usable is many more situations.
+This project is a rethink of ipctest (a previous testing tool project) whose original
+goal was UI abstraction.  While implementing ipctest I realized that almost all of the 
+other components could be similarly abstracted, thus making 
+the tool much more useful. This project also draws from previous testing tools that I have
+written in C++ and one in Java.
 
 ### Long
 

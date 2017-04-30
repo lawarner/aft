@@ -27,10 +27,21 @@ namespace ui {
 class Element;
         
 /**
- *  Interface of basic Element interactions
+ *  Interface of basic Element interactions.
+ *
+ *  Since element delegates are meant to be shared, subclasses that implement ElementDelegate
+ *  must provide per-element storage. The Element class can be queried for properties and facets.
+ *  Element also has storage for the string representation of the element's value.
  */
 class ElementDelegate {
 public:
+    /** Get the value for this element.
+     *  @return The value of this element.
+     */
+    virtual const std::string& getValue(const Element* element) const = 0;
+    /** Set the value for this element. */
+    virtual void setValue(Element* element, const std::string& value) = 0;
+
     /** Get the focus state of the element. */
     virtual bool getFocus(Element* element) const = 0;
     /** Change focus state within element. */
@@ -54,6 +65,8 @@ public:
     BaseElementDelegate();
     virtual ~BaseElementDelegate() = default;
 
+    virtual const std::string& getValue(const Element* element) const override;
+    virtual void setValue(Element* element, const std::string& value) override;
     virtual bool getFocus(Element* element) const override;
     virtual bool setFocus(Element* element, bool hasFocus = true) override;
     virtual bool getFacet(Element* element, const std::string& name, UIFacetCategory category,

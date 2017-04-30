@@ -66,9 +66,6 @@ public:
     BaseUIDelegate();
     virtual ~BaseUIDelegate() = default;
 public:
-    // This might move strictly to BaseElementDelegate
-    void addInputValue(const Element& element, const std::string& value);
-
     virtual bool add(const Element& element) override;
     virtual bool focus(const Element& element) override;
     virtual const Element* get(const std::string& name) override;

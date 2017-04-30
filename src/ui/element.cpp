@@ -114,67 +114,66 @@ Element::getName() const
 }
 
 const std::string&
-Element::getValue() const
-{
-    return value_;
+Element::getValue() const {
+    return delegate_->getValue(this);
 }
 
-std::string Element::getValue(bool refreshValue)
-{
-    if (refreshValue)
-    {
+std::string
+Element::getValue(bool refreshValue) {
+    if (refreshValue) {
         delegate_->input(this, value_);
     }
-
-    return value_;
+    return getValue();
 }
 
-void Element::setValue(const std::string& value)
-{
-    value_ = value;
+void Element::setValue(const std::string& value) {
+    delegate_->setValue(this, value);
 }
 
-std::string Element::getDefault() const
-{
+const std::string&
+Element::getDefault() const {
     return defaultValue_;
 }
 
-void Element::setDefault(const std::string& value)
-{
+void Element::setDefault(const std::string& value) {
     defaultValue_ = value;
 }
 
-std::string Element::getPrompt() const
-{
+const std::string&
+Element::getPrompt() const {
     return prompt_;
 }
 
-void Element::setPrompt(const std::string& prompt)
-{
+void Element::setPrompt(const std::string& prompt) {
     prompt_ = prompt;
 }
 
-bool Element::getEnabled() const
-{
+bool Element::getEnabled() const {
     return isEnabled_;
 }
 
-void Element::setEnabled(bool isEnabled)
-{
+void Element::setEnabled(bool isEnabled) {
     isEnabled_ = isEnabled;
 }
 
-bool Element::getVisible() const
-{
+bool Element::getVisible() const {
     return isVisible_;
 }
 
-void Element::setVisible(bool isVisible)
-{
+void Element::setVisible(bool isVisible) {
     isVisible_ = isVisible;
     if (!isVisible_) {
         isEnabled_ = false;
     }
+}
+
+const std::string&
+Element::_getStringValue() const {
+    return value_;
+}
+
+void Element::_setStringValue(const std::string& value) {
+    value_ = value;
 }
 
 } // namespace ui

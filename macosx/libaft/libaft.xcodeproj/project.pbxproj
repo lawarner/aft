@@ -19,6 +19,8 @@
 		A1256C961DFE349300AE4700 /* nativethread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1256C921DFE349300AE4700 /* nativethread.cpp */; };
 		A1256C971DFE349300AE4700 /* nativepluginloader.h in Headers */ = {isa = PBXBuildFile; fileRef = A1256C931DFE349300AE4700 /* nativepluginloader.h */; };
 		A1272D121EAD4B2D0018E0BB /* uiaftbridge.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1272D111EAD4B2D0018E0BB /* uiaftbridge.mm */; };
+		A13C2DB71EB042B20016E9B3 /* dumbttyuidelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A13C2DB51EB042B20016E9B3 /* dumbttyuidelegate.cpp */; };
+		A13C2DB81EB042B20016E9B3 /* dumbttyuidelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A13C2DB61EB042B20016E9B3 /* dumbttyuidelegate.h */; };
 		A13CF6E91D1705590038665F /* operation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A13CF6E71D1705590038665F /* operation.cpp */; };
 		A13CF6EA1D1705590038665F /* operation.h in Headers */ = {isa = PBXBuildFile; fileRef = A13CF6E81D1705590038665F /* operation.h */; };
 		A14651911E919FC200C5BF04 /* uirequest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A146518F1E919FC200C5BF04 /* uirequest.cpp */; };
@@ -111,6 +113,8 @@
 		A16390811D038A2A00036620 /* tobasictypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A16390801D038A2A00036620 /* tobasictypes.cpp */; };
 		A16390841D03D75800036620 /* structureddataname.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A16390821D03D75800036620 /* structureddataname.cpp */; };
 		A16390851D03D75800036620 /* structureddataname.h in Headers */ = {isa = PBXBuildFile; fileRef = A16390831D03D75800036620 /* structureddataname.h */; };
+		A172903D1EB44909001454A0 /* dumbttyelementdelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A172903B1EB44909001454A0 /* dumbttyelementdelegate.cpp */; };
+		A172903E1EB44909001454A0 /* dumbttyelementdelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A172903C1EB44909001454A0 /* dumbttyelementdelegate.h */; };
 		A18F4D541CD442F600C755FA /* tobjecttype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18F4D521CD442F600C755FA /* tobjecttype.cpp */; };
 		A18F4D551CD442F600C755FA /* tobjecttype.h in Headers */ = {isa = PBXBuildFile; fileRef = A18F4D531CD442F600C755FA /* tobjecttype.h */; };
 		A19725321E2B313C006389B0 /* uifacet.h in Headers */ = {isa = PBXBuildFile; fileRef = A19725311E2B313C006389B0 /* uifacet.h */; };
@@ -142,6 +146,8 @@
 		A1256C941DFE349300AE4700 /* nativepluginloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = nativepluginloader.cpp; path = native/nativepluginloader.cpp; sourceTree = "<group>"; };
 		A1272D111EAD4B2D0018E0BB /* uiaftbridge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = uiaftbridge.mm; path = ../../src/ui/uiaftbridge.mm; sourceTree = "<group>"; };
 		A1272D131EAD4BB30018E0BB /* uiaftbridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = uiaftbridge.h; path = ../../src/ui/uiaftbridge.h; sourceTree = "<group>"; };
+		A13C2DB51EB042B20016E9B3 /* dumbttyuidelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dumbttyuidelegate.cpp; path = ../../src/ui/dumbttyuidelegate.cpp; sourceTree = "<group>"; };
+		A13C2DB61EB042B20016E9B3 /* dumbttyuidelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dumbttyuidelegate.h; path = ../../src/ui/dumbttyuidelegate.h; sourceTree = "<group>"; };
 		A13CF6E71D1705590038665F /* operation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = operation.cpp; sourceTree = "<group>"; };
 		A13CF6E81D1705590038665F /* operation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = operation.h; sourceTree = "<group>"; };
 		A146518F1E919FC200C5BF04 /* uirequest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = uirequest.cpp; path = ../../src/ui/uirequest.cpp; sourceTree = "<group>"; };
@@ -243,6 +249,8 @@
 		A16390801D038A2A00036620 /* tobasictypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tobasictypes.cpp; sourceTree = "<group>"; };
 		A16390821D03D75800036620 /* structureddataname.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = structureddataname.cpp; sourceTree = "<group>"; };
 		A16390831D03D75800036620 /* structureddataname.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = structureddataname.h; sourceTree = "<group>"; };
+		A172903B1EB44909001454A0 /* dumbttyelementdelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dumbttyelementdelegate.cpp; path = ../../src/ui/dumbttyelementdelegate.cpp; sourceTree = "<group>"; };
+		A172903C1EB44909001454A0 /* dumbttyelementdelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dumbttyelementdelegate.h; path = ../../src/ui/dumbttyelementdelegate.h; sourceTree = "<group>"; };
 		A18F4D521CD442F600C755FA /* tobjecttype.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tobjecttype.cpp; sourceTree = "<group>"; };
 		A18F4D531CD442F600C755FA /* tobjecttype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tobjecttype.h; sourceTree = "<group>"; };
 		A19725311E2B313C006389B0 /* uifacet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = uifacet.h; path = ../../src/ui/uifacet.h; sourceTree = "<group>"; };
@@ -491,6 +499,10 @@
 				A123DB5F1EA1C337004ABBD4 /* cocoauidelegate.h */,
 				A1272D111EAD4B2D0018E0BB /* uiaftbridge.mm */,
 				A1272D131EAD4BB30018E0BB /* uiaftbridge.h */,
+				A13C2DB51EB042B20016E9B3 /* dumbttyuidelegate.cpp */,
+				A13C2DB61EB042B20016E9B3 /* dumbttyuidelegate.h */,
+				A172903B1EB44909001454A0 /* dumbttyelementdelegate.cpp */,
+				A172903C1EB44909001454A0 /* dumbttyelementdelegate.h */,
 			);
 			name = ui;
 			sourceTree = "<group>";
@@ -518,6 +530,7 @@
 				A153D0FB1CCC71F500000A15 /* fileproducer.h in Headers */,
 				A153D0F11CCC71F500000A15 /* visitor.h in Headers */,
 				A153D0D41CCC71F500000A15 /* factory.h in Headers */,
+				A13C2DB81EB042B20016E9B3 /* dumbttyuidelegate.h in Headers */,
 				A153D0D01CCC71F500000A15 /* consumer.h in Headers */,
 				A1BCB6471D2B586E0082BB87 /* uicommand.h in Headers */,
 				A153D0C91CCC71F500000A15 /* aft.h in Headers */,
@@ -538,6 +551,7 @@
 				A153D1181CCC71F500000A15 /* posixthread.h in Headers */,
 				A153D0CC1CCC71F500000A15 /* callback.h in Headers */,
 				A153D0CB1CCC71F500000A15 /* blob.h in Headers */,
+				A172903E1EB44909001454A0 /* dumbttyelementdelegate.h in Headers */,
 				A153D1131CCC71F500000A15 /* platform.h in Headers */,
 				A1256C8E1DFE1CC500AE4700 /* platform-posix.h in Headers */,
 				A13CF6EA1D1705590038665F /* operation.h in Headers */,
@@ -631,12 +645,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				A153D1051CCC71F500000A15 /* stringconsumer.cpp in Sources */,
+				A172903D1EB44909001454A0 /* dumbttyelementdelegate.cpp in Sources */,
 				A153D0F61CCC71F500000A15 /* commandcontext.cpp in Sources */,
 				A153D1011CCC71F500000A15 /* queueproc.cpp in Sources */,
 				A153D0FE1CCC71F500000A15 /* loghandler.cpp in Sources */,
 				A153D1241CCD89D200000A15 /* proc.cpp in Sources */,
 				A153D11C1CCC71F500000A15 /* t_coretests.cpp in Sources */,
 				A153D11F1CCC71F500000A15 /* t_plugin.cpp in Sources */,
+				A13C2DB71EB042B20016E9B3 /* dumbttyuidelegate.cpp in Sources */,
 				A153D0FA1CCC71F500000A15 /* fileproducer.cpp in Sources */,
 				A18F4D541CD442F600C755FA /* tobjecttype.cpp in Sources */,
 				A1F2AFBC1D036BD5009FE595 /* ui.cpp in Sources */,

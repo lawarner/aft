@@ -28,6 +28,18 @@ BaseElementDelegate::BaseElementDelegate() {
     
 }
 
+const std::string&
+BaseElementDelegate::getValue(const Element* element) const {
+    if (element->_getStringValue().empty()) {
+        return element->getDefault();
+    }
+    return element->_getStringValue();
+}
+
+void BaseElementDelegate::setValue(Element* element, const std::string& value) {
+    element->_setStringValue(value);
+}
+
 bool BaseElementDelegate::getFocus(Element* element) const {
     return false;
 }
@@ -46,37 +58,10 @@ bool BaseElementDelegate::setFacet(Element* element, const UIFacet& facet) {
 }
 
 bool BaseElementDelegate::input(Element* element, std::string& value) {
-    string defValue = element->getDefault();
-    if (!defValue.empty()) {
-        defValue = " [" + defValue + "]";
-    }
-    std::cout << element->getPrompt() << defValue << ": " << std::flush;
-    char cname[100];
-    std::cin.getline(cname, sizeof(cname));
-    std::string name(cname, strlen(cname));
-    if (name.empty()) {
-        value = element->getDefault();
-    }
-    else {
-        value = name;
-    }
+    value = element->_getStringValue();
     return true;
 }
 
 bool BaseElementDelegate::output(const Element* element) {
-    ostringstream oss;
-    string prompt = element->getPrompt();
-    if (prompt.empty()) {
-        oss << "Element value";
-    }
-    else {
-        oss << prompt;
-    }
-    string defValue = element->getDefault();
-    if (!defValue.empty()) {
-        oss << " [" << defValue << "]";
-    }
-    oss << ": " << element->getValue();
-    cout << oss.str() << endl;
     return true;
 }

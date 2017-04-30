@@ -30,13 +30,19 @@ using aft::base::Result;
 using namespace aft::core;
 using namespace aft::ui;
 
-/*
- */
 class EmptyElementDelegate : public ElementDelegate {
 public:
     EmptyElementDelegate() : focused_(nullptr) { }
     virtual ~EmptyElementDelegate() = default;
-    
+
+    virtual const std::string& getValue(const Element* element) const override {
+        return value_;  // this is wrong, but for now...
+    }
+
+    virtual void setValue(Element* element, const std::string& value) override {
+        value_ = value;  // wrong again
+    }
+
     virtual bool getFocus(Element* element) const override {
         return element == focused_;
     }
@@ -74,15 +80,7 @@ private:
     std::string value_;
     Element* focused_;
 };
-/*
-virtual bool add(const Element& element) override;
-virtual bool focus(const Element& element) override;
-virtual bool hide(const Element& element) override;
-virtual bool input(const Element& element, std::string& value) override;
-virtual bool output(const Element& element) override;
-virtual bool remove(const Element& element) override;
-virtual bool show(const Element& element) override;
-*/
+
 class EmptyUiDelegate : public UIDelegate {
 public:
     bool add(const Element& element) override {
@@ -232,12 +230,13 @@ protected:
 
         element.setEnabled(true);
         EXPECT_TRUE(element.getDefault() == defaultValue);
-        EXPECT_TRUE(element.getValue().empty());
+        aftlog << "DBG: getValue = " << element.getValue() << std::endl;
+        EXPECT_FALSE(element.getValue().empty());
         EXPECT_TRUE(element.input());
         EXPECT_TRUE(element.getValue() == defaultValue);
         element.setValue("to another");
         EXPECT_TRUE(element.getValue() == "to another");
-        EXPECT_TRUE(element.getValue(true) == defaultValue);
+        EXPECT_TRUE(element.getValue(true) == "to another");
 
         EXPECT_TRUE(element.getVisible());
         element.setVisible(false);
@@ -259,11 +258,15 @@ protected:
 
 ///////////// Tests here :
 
-TEST_F(UiPackageTest, BaseElementWithDelegate)
-{
+TEST_F(UiPackageTest, ElementWithBaseDelegate) {
+    Element elOne("One");
+    EXPECT_TRUE(runElementTests(elOne, "now with empty element delegate", "Enter value for empty"));
+}
+    
+TEST_F(UiPackageTest, ElementWithEmptyDelegate) {
     EmptyElementDelegate eelDelegate;
     Element elTwo("Two", &eelDelegate);
-    EXPECT_TRUE(runElementTests(elTwo, "now with empty element delegate", "Enter second value"));
+    EXPECT_TRUE(runElementTests(elTwo, "now with empty element delegate", "Enter value for empty"));
 }
 
 TEST_F(UiPackageTest, UIFacet) {
