@@ -19,8 +19,11 @@
 #include <vector>
 
 #include "base/blob.h"
+#include "base/tobject.h"
+#include "base/tobjecttype.h"
 #include "element.h"
 #include "ui.h"
+#include "uicommand.h"
 #include "uidelegate.h"
 
 using namespace aft::base;
@@ -213,8 +216,23 @@ bool UI::canAcceptData()
     return true;
 }
 
-bool UI::write(const base::TObject& object)
-{
+bool UI::write(const base::TObject& object) {
+    if (TObjectType::TypeUiCommand != object.getType()) {
+        return false;
+    }
+    const UICommand& command = dynamic_cast<const UICommand&>(object);
+    switch (command.getCommandType()) {
+        case CommandType::Start:
+            break;
+        case CommandType::AddElement:
+            break;
+        case CommandType::RemoveElement:
+            break;
+        case CommandType::Exit:
+            break;
+        default:
+            break;
+    }
     return false;
 }
 

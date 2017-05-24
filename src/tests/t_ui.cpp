@@ -230,7 +230,6 @@ protected:
 
         element.setEnabled(true);
         EXPECT_TRUE(element.getDefault() == defaultValue);
-        aftlog << "DBG: getValue = " << element.getValue() << std::endl;
         EXPECT_FALSE(element.getValue().empty());
         EXPECT_TRUE(element.input());
         EXPECT_TRUE(element.getValue() == defaultValue);
@@ -260,7 +259,7 @@ protected:
 
 TEST_F(UiPackageTest, ElementWithBaseDelegate) {
     Element elOne("One");
-    EXPECT_TRUE(runElementTests(elOne, "now with empty element delegate", "Enter value for empty"));
+    EXPECT_TRUE(runElementTests(elOne, "using base element delegate", "Enter value"));
 }
     
 TEST_F(UiPackageTest, ElementWithEmptyDelegate) {

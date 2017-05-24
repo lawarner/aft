@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015, 2016 Andy Warner
+ *   Copyright 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -27,9 +27,13 @@
 #include <gtest/gtest.h>
 using namespace aft::base;
 using namespace aft::core;
+using std::cout;
+using std::endl;
 
 
 const std::string sampleText("This is just sample text that you can safely ignore.\n");
+const std::string sampleWords[]{"This", "is", "just", "sample", "text", "that",
+    "you", "can", "safely", "ignore."};
 
 class ObjectReader : public ReaderContract
 {
@@ -80,20 +84,17 @@ TEST(CorePackageTest, StringProducer)
     Blob blob("");
     EXPECT_TRUE(strprod.read(blob));
     EXPECT_TRUE((blob.getString() == sampleText));
-    std::cout << "string content: " << blob.getString() << std::endl;
 
     StringProducer wordprod(sampleText, ParcelType::BLOB_WORD);
     size_t words = 0;
-    while (wordprod.read(blob))
-    {
-        ++words;
-        std::cout << "word content: " << blob.getString() << std::endl;
+    while (wordprod.read(blob)) {
+        EXPECT_EQ(sampleWords[words++], blob.getString());
     }
-    EXPECT_EQ(words, 10);
+    constexpr size_t numWords = sizeof(sampleWords) / sizeof(sampleWords[0]);
+    EXPECT_EQ(numWords, words);
 }
 
-TEST(CorePackageTest, FileConsumer)
-{
+TEST(CorePackageTest, FileConsumer) {
     Blob blob("file", Blob::STRING, sampleText);
     FileConsumer filecons("/tmp/test_file_cons", true);
     EXPECT_TRUE(filecons.canAcceptData());
@@ -101,8 +102,7 @@ TEST(CorePackageTest, FileConsumer)
 }
 
 // This test assumes it runs after FileConsumer test
-TEST(CorePackageTest, FileProducer)
-{
+TEST(CorePackageTest, FileProducer) {
     FileProducer fileprod("/tmp/test_file_cons");
     EXPECT_TRUE(fileprod.hasData());
     Blob blob("");
@@ -165,25 +165,40 @@ TEST(CorePackageTest, CommandContext)
 
     std::string url = ctx.getArgument(COMMAND, ARGNAME);
     EXPECT_EQ(URL, url);
+    //TODO more getArgument tests
 }
 
-TEST(CorePackageTest, BasicCommands)
-{
+TEST(CorePackageTest, BasicCommands) {
     LogCommand logCmd("This is a logged message.");
     logCmd.setState(TObject::PREPARED);
-    logCmd.run();
-
+    Result value = logCmd.run();
+    std::cout << "-- result type: " << value.getTypeName() << std::endl;
+    EXPECT_TRUE(value);
+    
     EnvCommand setEnvCmd("set", "ABC", sampleText);
     setEnvCmd.setState(TObject::PREPARED);
-    setEnvCmd.run();
+    value = setEnvCmd.run();
+    EXPECT_TRUE(value);
 
     EnvCommand getEnvCmd("get", "ABC");
     getEnvCmd.setState(TObject::PREPARED);
-    Result value = getEnvCmd.run();
+    value = getEnvCmd.run();
+    EXPECT_EQ(value.asString(), sampleText);
+    
+    EnvCommand setXyz("set", "XYZ", "xyz");
+    setXyz.setState(TObject::PREPARED);
+    value = setXyz.run();
+    EXPECT_TRUE(value);
+    
+    EnvCommand listEnv("list", "");
+    listEnv.setState(TObject::PREPARED);
+    value = listEnv.run();
+    EXPECT_EQ("ABC=" + sampleText + "\nXYZ=xyz\n", value.asString());
+
     LogCommand logResult("", "result");
     logResult.setState(TObject::PREPARED);
-    logResult.run();
-    EXPECT_EQ(value.asString(), sampleText);
+    value = logResult.run();
+    EXPECT_TRUE(value);
 }
 
 } // namespace

@@ -2,7 +2,7 @@
  *  tobjecttype.cpp
  *  libaft
  *
- *   Copyright © 2016 Andy Warner. All rights reserved.
+ *   Copyright © 2016-2017 Andy Warner. All rights reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -31,12 +31,14 @@ const std::string TObjectType::NameBasicType("BasicType");
 const std::string TObjectType::NameCommand("Command");
 const std::string TObjectType::NameTestCase("TestCase");
 const std::string TObjectType::NameTestSuite("TestSuite");
+const std::string TObjectType::NameUiCommand("UiCommand");
 
 const TObjectType& TObjectType::TypeBase      = TObjectType::get(NameBase);
 const TObjectType& TObjectType::TypeBasicType = TObjectType::get(NameBasicType);
 const TObjectType& TObjectType::TypeCommand   = TObjectType::get(NameCommand);
 const TObjectType& TObjectType::TypeTestCase  = TObjectType::get(NameTestCase);
 const TObjectType& TObjectType::TypeTestSuite = TObjectType::get(NameTestSuite);
+const TObjectType& TObjectType::TypeUiCommand = TObjectType::get(NameUiCommand);
 
 //TODO rework this static dependency problem
 //     This is a bad workaround, but I put all static TObject initializers here
@@ -83,21 +85,18 @@ std::string TObjectType::name() const
     return name_;
 }
 
-bool TObjectType::operator==(const TObjectType& other)
-{
+bool TObjectType::operator==(const TObjectType& other) const {
     // if names are equal then it is the same type. but each name in the registry has a
     // unique TObjectType reference, so just compare that.
     return this == &other;
 }
 
-bool TObjectType::operator==(TObjectType& other)
-{
+bool TObjectType::operator==(TObjectType& other) {
     // if names are equal then it is the same type. but each name in the registry has a
     // unique TObjectType reference, so just compare that.
     return this == &other;
 }
 
-bool TObjectType::operator!=(const TObjectType& other)
-{
-    return !operator==(other);
+bool TObjectType::operator!=(const TObjectType& other) const {
+    return this != &other;
 }

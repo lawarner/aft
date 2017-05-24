@@ -142,6 +142,13 @@ private:
     int ordinal_;
 };
 
+class SubTOBlob : public TOBlob {
+public:
+    SubTOBlob(const TObjectType& blobObjType, Blob* blob)
+    : TOBlob(blobObjType, blob, "SubTOBlob") {
+        
+    }
+};
 
 namespace
 {
@@ -279,8 +286,7 @@ TEST(BasePackageTest, TObjectTypes)
     EXPECT_TRUE(totBase != totCommand);
 }
 
-TEST(BasePackageTest, BasicTypes)
-{
+TEST(BasePackageTest, BasicTypes) {
     EXPECT_EQ(TOTrue, TOTrue);
     EXPECT_NE(TOTrue, TOFalse);
     TOBool isTrue(true, "isTrue");
@@ -301,7 +307,10 @@ TEST(BasePackageTest, BasicTypes)
     EXPECT_NE(int1, int2);
     EXPECT_NE(int2, intNeg);
 
+    EXPECT_EQ(int0.compare(int0),    0);
     EXPECT_EQ(int0.compare(int1),   -1);
+    EXPECT_EQ(int0.compare(int2),   -1);
+    EXPECT_EQ(int0.compare(intNeg),  1);
     EXPECT_EQ(int1.compare(int1),    0);
     EXPECT_EQ(int1.compare(int2),   -1);
     EXPECT_EQ(int1.compare(intNeg),  1);
@@ -325,7 +334,7 @@ TEST(BasePackageTest, BasicTypes)
     byebye = hello;     // Assignment operator
     EXPECT_EQ(byebye.getValue(), "Hello");
     EXPECT_EQ(hello.getValue(), "Hello");
-    
+
     Blob blob("");
     EXPECT_TRUE(isTrue.serialize(blob));
     std::cout << "isTrue serialized: " << blob.getString() << std::endl;
@@ -338,10 +347,10 @@ TEST(BasePackageTest, BasicTypes)
     Blob blob2("two", Blob::STRING, "Aacme");
     TOBlob toBlob2(&blob2, "(blob2)");
     
-    std::cout << "Compare blob 1, 1 = " << serialHello.compare(serialHello) << std::endl;
-    std::cout << "Compare blob 1, 2 = " << serialHello.compare(toBlob2) << std::endl;
-    std::cout << "Compare blob 2, 1 = " << toBlob2.compare(serialHello) << std::endl;
-    std::cout << "Compare blob 2, 2 = " << toBlob2.compare(toBlob2) << std::endl << std::endl;
+    EXPECT_EQ( 0, serialHello.compare(serialHello));
+    EXPECT_EQ( 1, serialHello.compare(toBlob2));
+    EXPECT_EQ(-1, toBlob2.compare(serialHello));
+    EXPECT_EQ( 0, toBlob2.compare(toBlob2));
     
     Result result = hello.getValueAsResult();
     EXPECT_EQ(result.getType(), Result::STRING);
@@ -350,6 +359,13 @@ TEST(BasePackageTest, BasicTypes)
     EXPECT_EQ(strval, "Hello");
 }
 
+TEST(BasePackageTest, TOBlobSubClass) {
+    Blob blob("subBlob");
+    SubTOBlob stb(TObjectType::TypeUiCommand, &blob);
+    EXPECT_TRUE(stb.getType() == TObjectType::TypeUiCommand);
+    EXPECT_TRUE(TObjectType::TypeUiCommand == stb.getType());
+}
+    
 TEST(BasePackageTest, Blob)
 {
     const char* SOMEDATA = "Hello, Blob!";

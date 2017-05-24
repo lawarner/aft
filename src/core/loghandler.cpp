@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -30,11 +30,10 @@ LogHandler::~LogHandler()
 }
 
 // Take string from tObject and call setup(), return TOTrue
-base::TObject& LogHandler::handle(const base::TObject& tObject)
-{
+base::TObject&
+LogHandler::handle(const base::TObject& tObject) {
     const base::TOString& logConfig = dynamic_cast<const base::TOString&>(tObject);
-    if (logConfig.getValue().empty())
-    {
+    if (logConfig.getValue().empty()) {
         //TODO try to get another string
         setup("Untitled");
     } else {
@@ -43,15 +42,13 @@ base::TObject& LogHandler::handle(const base::TObject& tObject)
     return base::TOTrue;
 }
 
-base::TObject& LogHandler::handle(base::Context* context, const base::TObject& tObject)
-{
+base::TObject&
+LogHandler::handle(base::Context* context, const base::TObject& tObject) {
     // ignoring context for now
     return handle(tObject);
 }
 
 // Convenience methods.
-void LogHandler::setup(const std::string& logConfig)
-{
+void LogHandler::setup(const std::string& logConfig) {
     Logger::initStandardLoggers(logConfig);
 }
-

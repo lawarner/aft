@@ -1,6 +1,6 @@
 #pragma once
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -21,21 +21,18 @@
 #include "visitor.h"
 
 
-namespace aft
-{
-namespace base
-{
+namespace aft {
+namespace base {
 // Forward reference
 class PropertyHandler;
 class TObject;
-
 
 /**
  *  Properties held by Context.
  *  The key is a unique property name and the value is an instance of a 
  *  PropertyHandler.
  */
-typedef std::map<std::string, PropertyHandler*> Properties;
+using Properties = std::map<std::string, PropertyHandler*>;
 
 /**
  *  Context and environment runtime information.
@@ -45,8 +42,7 @@ typedef std::map<std::string, PropertyHandler*> Properties;
  *  These properties
  *  store items such as the current test case, transports, ui, logs, etc.
  */
-class Context
-{
+class Context {
 protected:
     /** Construct a context with default visitor */
     Context(const std::string& name = std::string());

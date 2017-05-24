@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015, 2016 Andy Warner
+ *   Copyright 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -33,14 +33,19 @@ public:
 
 PropertyHandler::PropertyHandler(const std::string& handlerName)
     : handlerName_(handlerName)
-    , container_(new PropertyContainer)
-{
+    , container_(std::make_unique<PropertyContainer>()) {
 
 }
 
-PropertyHandler::~PropertyHandler()
-{
-    delete container_;
+PropertyHandler::~PropertyHandler() {
+
+}
+
+void
+PropertyHandler::getPropertyNames(std::vector<std::string>& names) const {
+    for (auto const& prop : container_->nameValues) {
+        names.push_back(prop.first);
+    }
 }
 
 bool

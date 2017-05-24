@@ -1,6 +1,6 @@
 #pragma once
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright © 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -21,16 +21,11 @@
 #include "tobjecttype.h"
 
 
-namespace aft
-{
-namespace base
-{
-// Forward reference
-
+namespace aft {
+namespace base {
 
 /** Non-templated base class for TOBasicType */
-class TOBasicTypeBase : public TObject
-{
+class TOBasicTypeBase : public TObject {
 protected:
     TOBasicTypeBase(const TObjectType& type, const std::string& name = std::string());
     virtual ~TOBasicTypeBase();
@@ -53,16 +48,19 @@ public:
     /** Construct a TOBasicType with a given value and optional name */
     TOBasicType<T>(T value, const std::string& name = std::string())
     : TOBasicTypeBase(TObjectType::TypeBasicType, name)
-    , value_(value)
-    {
+    , value_(value) {
+        state_ = INITIAL;
+    }
+    
+    /** Construct a TOBasicType with a given value and optional name */
+    TOBasicType<T>(const TObjectType& objectType, T value, const std::string& name = std::string())
+    : TOBasicTypeBase(objectType, name)
+    , value_(value) {
         state_ = INITIAL;
     }
     
     /** Destruct a TOBasicType */
-    virtual ~TOBasicType()
-    {
-        
-    }
+    virtual ~TOBasicType() = default;
 
     /** Compare this basic object to another.
      *  @return If this object is greater than other returns 1.
@@ -80,20 +78,17 @@ public:
     virtual Result applyOperation(const Operation& operation)
     {
         Result result(Result::FATAL);
-        if (!operation.isValid())
-        {
+        if (!operation.isValid()) {
             return result;
         }
 
         // All of the comparison operations take 1 other object
-        if (!operation.getObjects().empty())
-        {
+        if (!operation.getObjects().empty()) {
             TObject* other = operation.getObjects().front();
             TOBasicType<T>& otherRef = dynamic_cast<TOBasicType<T> &>(*other);
             int compareResult = compare(otherRef);
             
-            switch (operation.getType())
-            {
+            switch (operation.getType()) {
                 case Operation::OperatorCompare:
                     result = Result(compareResult);
                     break;
@@ -117,21 +112,18 @@ public:
                     break;
             }
         }
-        else
-        {
-            switch (operation.getType())
-            {
+        else {
+            switch (operation.getType()) {
                 case Operation::OperatorIsTrue:
                     result = Result(operator bool());
                     break;
                 case Operation::OperatorIsFalse:
                     result = Result(!operator bool());
                     break;
-                    
                 default:
+                    result = TObject::applyOperation(operation);
                     break;
             }
-            result = TObject::applyOperation(operation);
         }
 
         return result;
@@ -169,23 +161,19 @@ public:
     }
 
     /** Copy contents of this TOBasicType from another. */
-    virtual TOBasicType<T> operator=(const TOBasicType<T>& other)
-    {
-        if (this != &other)
-        {
+    virtual TOBasicType<T> operator=(const TOBasicType<T>& other) {
+        if (this != &other) {
             TObject::operator=(other);
             value_ = other.value_;
         }
         return *this;
     }
     
-    virtual operator bool() const
-    {
+    virtual operator bool() const {
         return false;
     }
 
-    T getValue() const
-    {
+    T getValue() const {
         return value_;
     }
     
@@ -197,11 +185,14 @@ protected:
 /**
  * Hold a blob.
  */
-class TOBlob : public TOBasicType<Blob *>
-{
+class TOBlob : public TOBasicType<Blob *> {
+
 public:
     TOBlob(Blob* value, const std::string& name = std::string());
+protected:
+    TOBlob(const TObjectType& objType, Blob* value, const std::string& name = std::string());
     
+public:
     virtual operator bool() const;
     bool serialize(Blob& blob);
     bool deserialize(const Blob& blob);
@@ -251,7 +242,6 @@ public:
     bool serialize(Blob& blob);
     bool deserialize(const Blob& blob);
 };
-
 
 /**
  *  Defines some primitive TObject types that are primarily (const) data holders.

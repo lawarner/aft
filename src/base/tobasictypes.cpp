@@ -1,5 +1,5 @@
 /*
- *   Copyright 2016 Andy Warner
+ *   Copyright © 2016-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -40,13 +40,16 @@ Result TOBasicTypeBase::getValueAsResult() const
 // Specializations
 
 TOBlob::TOBlob(Blob *value, const std::string& name)
-: TOBasicType<Blob *>(value, name)
-{
+    : TOBasicType<Blob *>(value, name) {
     resultValue_.setValue(value);
 }
 
-TOBlob::operator bool() const
-{
+TOBlob::TOBlob(const TObjectType& objType, Blob* value, const std::string& name)
+    : TOBasicType<Blob *>(objType, value, name) {
+    resultValue_.setValue(value);
+}
+
+TOBlob::operator bool() const {
     return value_;
 }
 
@@ -64,27 +67,22 @@ bool TOBlob::serialize(Blob& blob)
     return sd.serialize(blob);
 }
 
-bool TOBlob::deserialize(const Blob& blob)
-{
-    if (!TObject::deserialize(blob))
-    {
+bool TOBlob::deserialize(const Blob& blob) {
+    if (!TObject::deserialize(blob)) {
         return false;
     }
     
     StructuredData sd("");
-    if (!sd.deserialize(blob))
-    {
+    if (!sd.deserialize(blob)) {
         return false;
     }
 
     int intVal;
-    if (!sd.get("blobtype", intVal))
-    {
+    if (!sd.get("blobtype", intVal)) {
         return false;
     }
     std::string strValue;
-    if (!sd.get("value", strValue))
-    {
+    if (!sd.get("value", strValue)) {
         return false;
     }
 

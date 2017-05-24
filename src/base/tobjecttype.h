@@ -3,7 +3,7 @@
  *  tobjecttype.h
  *  libaft
  *
- *   Copyright © 2016 Andy Warner. All rights reserved.
+ *   Copyright © 2016-2017 Andy Warner. All rights reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -29,6 +29,11 @@ namespace aft
 namespace base
 {
 
+/**
+ * Class to track specific types of TObject subclasses.
+ *
+ * This class maintains a unique registry of named TObjectTypes.
+ */
 class TObjectType
 {
 private:
@@ -48,11 +53,11 @@ public:
     std::string name() const;
     
     /** Test if this TObject type is equal to another. */
-    bool operator==(const TObjectType& other);
+    bool operator==(const TObjectType& other) const;
     bool operator==(TObjectType& other);
 
     /** Test if this TObject type is not equal to another. */
-    bool operator!=(const TObjectType& other);
+    bool operator!=(const TObjectType& other) const;
 
 public:
     /** Type name for base TObjects */
@@ -65,7 +70,9 @@ public:
     static const std::string NameTestCase;
     /** Type name for TestSuite TObjects */
     static const std::string NameTestSuite;
-    //TODO more command type names
+    /** Type name for UICommand TObjects */
+    static const std::string NameUiCommand;
+    //TODO more tobject type names
     
     /** Cached common reference for TypeBase */
     static const TObjectType& TypeBase;
@@ -77,6 +84,8 @@ public:
     static const TObjectType& TypeTestCase;
     /** Cached common reference for TypeTestSuite */
     static const TObjectType& TypeTestSuite;
+    /** Cached common reference for TypeUiCommand */
+    static const TObjectType& TypeUiCommand;
 
 private:
     std::string name_;

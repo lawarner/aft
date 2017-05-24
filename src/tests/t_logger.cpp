@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -19,17 +19,20 @@
 #include <core/logger.h>
 #include <gtest/gtest.h>
 using namespace aft;
+using core::aftlog;
+using std::cout;
+using std::endl;
 
-namespace
-{
+namespace {
 
 TEST(LoggerTest, TerminalLog)
 {
     char* currDir = getcwd(0, 0);
-    std::cout << "Current Directory is " << currDir << std::endl;
+    cout << "Current Directory is " << currDir << endl;
 
     ASSERT_TRUE(core::aftlog.good());
-    core::aftlog << "This is a log message." << std::endl;
+    aftlog << "This is a log message." << endl;
+    ASSERT_TRUE(core::aftlog.good());
 }
 
 } // namespace

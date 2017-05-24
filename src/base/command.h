@@ -1,6 +1,6 @@
 #pragma once
 /*
- *   Copyright 2015, 2016 Andy Warner
+ *   Copyright 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -50,13 +50,13 @@ public:
      *  If context is not specified, then command will be processed using the global context.
      *  @return Result of processing the command.
      */
-    virtual const Result process(Context* context = 0) = 0;
+    virtual const Result process(Context* context = nullptr) = 0;
 
     /** Only iterates down to CommandType level */
-    virtual const Result run(Context* context = 0);
+    virtual const Result run(Context* context = nullptr);
 
     /** Set up static info from context and optional blob parameters. */
-    virtual const Result setup(Context* context = 0, const Blob* parameters = 0);
+    virtual const Result setup(Context* context = nullptr, const Blob* parameters = nullptr);
 
     // Implement SerializeContract Interface
     virtual bool serialize(Blob& blob);

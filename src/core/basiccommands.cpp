@@ -238,7 +238,7 @@ ProdCommand::process(base::Context* context)
 
 ///////////////////////////////////////////////////////////////////////////
 
-/*  This command handles get, set (global,local), unset, [list] */
+/*  This command handles get, set (global,local), unset, list */
 
 EnvCommand::EnvCommand(const std::string& type, const std::string& name,
                const std::string& value)
@@ -294,17 +294,34 @@ EnvCommand::process(base::Context* context)
             }
         }
     }
-    else if (type_ == "unset")
-    {
-        if (parameters_.size() < 2 || parameters_[1].empty())
-        {
+    else if (type_ == "unset") {
+        if (parameters_.size() < 2 || parameters_[1].empty()) {
             aftlog << loglevel(Error) << "EnvCommand unset: missing name" << std::endl;
         }
-        else
-        {
+        else {
             base::PropertyHandler& env = ctx->getEnvironment();
             retval = env.unsetValue(parameters_[1]);
         }
+    }
+    else if (type_ == "list") {
+        std::vector<std::string> names;
+        base::PropertyHandler& env = ctx->getEnvironment();
+        env.getPropertyNames(names);
+        aftlog << loglevel(Info) << "Environment variables:" << std::endl;
+        std::ostringstream oss;
+        for (const auto& name : names) {
+            std::string value;
+            if (env.getValue(name, value)) {
+                aftlog << loglevel(Info) << name << "=" << value << std::endl;
+                oss << name << '=' << value << std::endl;
+            } else {
+                aftlog << loglevel(Info) << name << " (no value found)" << std::endl;
+                oss << name << " (no value found)" << std::endl;
+            }
+        }
+        result_ = base::Result(oss.str());
+        ctx->setLastResult(result_);
+        return result_;
     }
 
     return base::Result(retval);
@@ -312,7 +329,7 @@ EnvCommand::process(base::Context* context)
 
 
 GroupCommand::GroupCommand(const std::string& name)
-: Command("Group")
+    : Command("Group")
 {
     parameters_.push_back(name);
 }

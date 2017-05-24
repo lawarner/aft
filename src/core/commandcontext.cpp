@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -74,20 +74,28 @@ CommandContext::~CommandContext()
 
 
 bool CommandContext::getArgument(const std::string& command, int argNumber,
-                     base::TObject& tObject)
-{
-    return true;
+                     base::TObject& tObject) {
+    std::string strarg;
+    if (impl_.handler_.getValue(makeKey(command, argNumber), strarg)) {
+        tObject = base::TOString(strarg);
+        return true;
+    }
+    return false;
 }
 
 bool CommandContext::getArgument(const std::string& command, const std::string& argName,
                      base::TObject& tObject)
 {
-    return true;
+    std::string strarg;
+    if (impl_.handler_.getValue(makeKey(command, argName), strarg)) {
+        tObject = base::TOString(strarg);
+        return true;
+    }
+    return false;
 }
 
 std::string CommandContext::getArgument(const std::string& command, int argNumber,
-                                        const std::string& defValue)
-{
+                                        const std::string& defValue) {
     const std::string& retval = impl_.handler_.getValue(makeKey(command, argNumber));
     if (retval.empty())
     {

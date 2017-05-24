@@ -64,12 +64,12 @@ public:
      */
     virtual bool read(TObject& object) = 0;
     /** Read a Result from this producer.
-     *  @param object Reference to Result that receives the produced data.
+     *  @param result Reference to Result that receives the produced data.
      *  @return true if the result was read.
      */
     virtual bool read(Result& result) = 0;
     /** Read a Blob from this producer.
-     *  @param object Reference to Blob that receives the produced data.
+     *  @param blob Reference to Blob that receives the produced data.
      *  @return true if the blob was read.
      */
     virtual bool read(Blob& blob) = 0;

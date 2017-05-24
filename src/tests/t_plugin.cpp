@@ -39,12 +39,12 @@ TEST(PluginTest, BasePlugin)
     EXPECT_TRUE(plugin.isLoaded());
     std::cout << "During describe: " << plugin.describePlugins() << std::endl;
 
-    EXPECT_TRUE(plugin.getFactory() != 0);
-    EXPECT_TRUE(plugin.getPluginLoader() != 0);
+    EXPECT_TRUE(plugin.getFactory() != nullptr);
+    EXPECT_TRUE(plugin.getPluginLoader() != nullptr);
 
     Blob blob("valueBlob", Blob::STRING, "Sample TObject");
     TObject* tobject = plugin.createInstance(&blob);
-    EXPECT_TRUE(tobject != 0);
+    EXPECT_TRUE(tobject != nullptr);
 
     const Result result = tobject->run();
     TObject* tobjPtr;

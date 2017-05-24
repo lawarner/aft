@@ -15,7 +15,7 @@
  *   limitations under the License.
  */
 
-#include <string>
+#include <vector>
 
 namespace aft
 {
@@ -43,6 +43,9 @@ public:
     /** Return the name of the handler */
     const std::string& getName() const { return handlerName_; }
 
+    /** Return a list of all of the property names. */
+    void getPropertyNames(std::vector<std::string>& names) const;
+
     /** Get the value of a property.
      *  @param name Name of value to retrieve.
      *  @param value Reference to a string where the value will be copied to.
@@ -64,7 +67,7 @@ public:
 
     /** Apply the property to a TObject and return the result.
      *  Sub-classes are expected to implement specific property-specific behavior.
-     *  The base class method is just returns the given TObject (pass-thru).
+     *  The base class method just returns the given TObject (pass-thru).
      */
     virtual TObject& handle(const TObject& tObject);
     /** Apply the property to a TObject using context and return the result. */
@@ -72,7 +75,7 @@ public:
 
 private:
     std::string handlerName_;
-    PropertyContainer* container_;
+    std::unique_ptr<PropertyContainer> container_;
 };
 
 } // namespace base
