@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015, 2016 Andy Warner
+ *   Copyright 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -462,11 +462,10 @@ JsonDataDelegate::type(const StructuredDataName& name)
 StructuredData::StructuredData(const StructuredDataName& name,
                                const std::string& fromString,
                                StructuredDataDelegate* delegate)
-: name_(name)
-, delegate_(delegate ? delegate : new JsonDataDelegate)
-{
-    if (!fromString.empty())
-    {
+    : name_(name)
+    , delegate_(delegate ? delegate : new JsonDataDelegate) {
+
+    if (!fromString.empty()) {
         Blob blob("", Blob::STRING, fromString);
         deserialize(blob);
     }
@@ -587,6 +586,15 @@ bool StructuredData::getArray(const StructuredDataName& name,
                               std::vector<std::string>& values) const
 {
     return delegate_->getArray(name, values);
+}
+
+const StructuredDataName&
+StructuredData::getName() const {
+    return name_;
+}
+
+void StructuredData::setName(const StructuredDataName& name) {
+    name_ = name;
 }
 
 bool StructuredData::isArray(const StructuredDataName& name) const

@@ -20,11 +20,11 @@ DumbTtyElementDelegate::DumbTtyElementDelegate() {
 
 const std::string&
 DumbTtyElementDelegate::getValue(const Element* element) const {
-    return element->_getStringValue();
+    return element->getValue();
 }
 
 void DumbTtyElementDelegate::setValue(Element* element, const std::string& value) {
-    element->_setStringValue(value);
+    element->setValue(value);
 }
 
 bool DumbTtyElementDelegate::getFocus(Element* element) const {

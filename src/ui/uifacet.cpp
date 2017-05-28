@@ -43,23 +43,75 @@ static const std::string uiFacectCategoryName[static_cast<int>(UIFacetCategory::
     
 static const std::string toplevel("UIFacet");
 
+UIFacet::UIFacet()
+    : data_(std::make_unique<base::StructuredData>(toplevel))
+    , categoryData_(std::make_unique<base::StructuredData>(""))
+    , category_(UIFacetCategory::Unknown)
+    , isMandatory_(false) {
+
+}
+
+UIFacet::UIFacet(const UIFacet& other)
+    : data_(std::make_unique<base::StructuredData>(toplevel))
+    , categoryData_(std::make_unique<base::StructuredData>(""))
+    , category_(other.category_)
+    , isMandatory_(other.isMandatory_) {
+    
+    base::StructuredData sd("");
+    if (other.data_->get("", sd)) {
+        data_->set("", sd);
+    }
+    if (other.categoryData_->get("", sd)) {
+        categoryData_->set("", sd);
+    }
+}
 
 UIFacet::UIFacet(const std::string& name, const std::string& value, UIFacetCategory category)
-: data_(*new base::StructuredData(toplevel))
-, categoryData_(*new base::StructuredData(getCategoryName(category)))
-, category_(category)
-, isMandatory_(false) {
+    : data_(std::make_unique<base::StructuredData>(toplevel))
+    , categoryData_(std::make_unique<base::StructuredData>(getCategoryName(category)))
+    , category_(category)
+    , isMandatory_(false) {
 
     if (!name.empty()) {
-        categoryData_.add(name, value);
+        categoryData_->add(name, value);
     }
-    data_.add(getCategoryName(), categoryData_);
+    data_->add(getCategoryName(), *categoryData_);
 }
 
 UIFacet::~UIFacet() {
-    delete &data_;
+
 }
-            
+
+    
+UIFacet& UIFacet::operator=(const UIFacet& other) {
+    if (&other != this) {
+        category_ = other.category_;
+        isMandatory_ = other.isMandatory_;
+        base::StructuredData sd("");
+        if (other.data_->get("", sd)) {
+            data_->set("", sd);
+        }
+        if (other.categoryData_->get("", sd)) {
+            categoryData_->set("", sd);
+        }
+    }
+    return *this;
+}
+    
+bool UIFacet::isInitialized() const {
+    return UIFacetCategory::Unknown != category_;
+}
+
+bool UIFacet::setCategory(UIFacetCategory category) {
+    if (isInitialized()) {
+        return false;
+    }
+    category_ = category;
+    categoryData_->setName(getCategoryName(category));
+    return true;
+}
+
+
 UIFacetCategory UIFacet::getCategory() const {
     return category_;
 }
@@ -85,16 +137,16 @@ void UIFacet::setMandatory(bool isMandatory) {
 }
     
 bool UIFacet::get(const std::string& name, std::string& value) const {
-    return categoryData_.get(name, value);
+    return categoryData_->get(name, value);
 }
 
 bool UIFacet::get(const std::string& name, int& value) const {
-    return categoryData_.get(name, value);
+    return categoryData_->get(name, value);
 }
 
 bool UIFacet::get(const std::string& name, float& value) const {
     std::string strValue;
-    if (categoryData_.get(name, strValue)) {
+    if (categoryData_->get(name, strValue)) {
         std::istringstream iss(strValue);
         iss >> value;
         return true;
@@ -103,17 +155,26 @@ bool UIFacet::get(const std::string& name, float& value) const {
 }
 
 bool UIFacet::set(const std::string& name, const std::string& value) {
-    return categoryData_.add(name, value);
+    if (isInitialized()) {
+        return categoryData_->add(name, value);
+    }
+    return false;
 }
     
 bool UIFacet::set(const std::string& name, int value) {
-    return categoryData_.add(name, value);
+    if (isInitialized()) {
+        return categoryData_->add(name, value);
+    }
+    return false;
 }
     
 bool UIFacet::set(const std::string& name, float value) {
-    std::ostringstream oss;
-    oss << value;
-    return categoryData_.add(name, oss.str());
+    if (isInitialized()) {
+        std::ostringstream oss;
+        oss << value;
+        return categoryData_->add(name, oss.str());
+    }
+    return false;
 }
 
 /** Used by subclasses of UIFacet to get named values. */

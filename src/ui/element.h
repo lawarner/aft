@@ -18,6 +18,8 @@
  *   limitations under the License.
  */
 
+#include "ui/uifacet.h"
+#include <unordered_map>
 #include <string>
 
 namespace aft {
@@ -26,7 +28,6 @@ namespace ui {
 // Forward reference
 class BaseElementDelegate;
 class ElementDelegate;
-class UIFacet;
 
 /**
  * Represent an element or group of elements in a UI
@@ -35,37 +36,34 @@ class UIFacet;
  */
 class Element {
 public:
-    Element(const std::string& name, ElementDelegate* delegate = nullptr);
+    using ElementId = uint32_t;
+    using FacetCatMap = std::unordered_map<std::string, UIFacet>;
+
+public:
+    Element(const std::string& name);
     Element(const Element& other);
     Element& operator=(const Element& other);
-    virtual ~Element();
+    virtual ~Element() = default;
+    
+    bool operator==(const Element& other);
 
     // work methods
     virtual void apply(const UIFacet& facet);
+    virtual bool getFacet(std::string& value, const std::string& name,
+                          UIFacetCategory category = UIFacetCategory::Other) const;
     /** True if value has already been read/updated. */
     virtual bool hasValue() const;
-    /** Remove element from the UI */
-    virtual void hide();
-    /** Get a value from user input and store into value_ */
-    virtual bool input();
-    /** Refresh (redraw) the element in the UI */
-    virtual void refresh();
-    /** Layout and draw the element within the UI */
-    virtual void show(bool forceShow = false);
+    virtual void remove(const UIFacet& facet);
     /** Validate the value of this element.
      *  This base class implementation always returns true.
      */
     virtual bool validate();
 
     // getters and setters
+    ElementId getId() const;
     const std::string& getName() const;
+    /** Get the value stored for this element. */
     const std::string& getValue() const;
-    
-    /** Get the value for this element.
-     *  @param refreshValue if true then prompt the UI for a value, otherwise use the current value.
-     *  @return The value of this element.
-     */
-    virtual std::string getValue(bool refreshValue);
     /** Set the value for this element. */
     virtual void setValue(const std::string& value);
     /** Get the default value for this element */
@@ -79,30 +77,23 @@ public:
     virtual bool getVisible() const;
     virtual void setVisible(bool isVisible);
 
-public:
-    /** Get the string value for this element.
-     *  This is only called from ElementDelegate.
-     */
-    virtual const std::string& _getStringValue() const;
-    /** Set the string value for this element.
-     *  This is only called from ElementDelegate.
-     */
-    virtual void _setStringValue(const std::string& value);
-    
 private:
-    //TODO unique id
     std::string name_;
+    // unique id
+    ElementId id_;
+    static ElementId nextId_;
 
 protected:
-    ElementDelegate* delegate_;
-
     // current value for display
     std::string value_;
 
     std::string defaultValue_;
     std::string prompt_;
     bool isEnabled_;
+    bool isValueSet_;
     bool isVisible_;
+
+    FacetCatMap facets_;
     // entity, decor, attributes, Result
 };
 

@@ -168,6 +168,9 @@ public:
     /** Get all elements of an array. */
     bool getArray(const StructuredDataName& name, 
                   std::vector<std::string>& values) const;
+    
+    const StructuredDataName& getName() const;
+    void setName(const StructuredDataName& name);
 
     /** Check if the given element name is an array. */
     bool isArray(const StructuredDataName& name) const;

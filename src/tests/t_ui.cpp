@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015, 2016 Andy Warner
+ *   Copyright 2015 - 2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@
 using aft::base::Result;
 using namespace aft::core;
 using namespace aft::ui;
+using std::endl;
 
 class EmptyElementDelegate : public ElementDelegate {
 public:
@@ -102,7 +103,7 @@ public:
     }
     /** Output the element to the user interface */
     bool output(const Element& element) const override {
-        aftlog << "(Custom) Element " << element.getName() << std::endl;
+        aftlog << "(Custom) Element " << element.getName() << endl;
         return true;
     }
     bool remove(const Element& element) override {
@@ -154,7 +155,7 @@ public:
     /** Output the element to the user interface */
     bool output(const Element& element)
     {
-        aftlog << "(Stack) Element " << element.getName() << std::endl;
+        aftlog << "(Stack) Element " << element.getName() << endl;
         add(element);
         return true;
     }
@@ -204,8 +205,73 @@ protected:
     }
 
     bool runElementTests(Element& element, const std::string& defaultValue, const std::string& prompt) {
-        aftlog << std::endl << "++++ Start tests for element " << element.getName() << " ++++" << std::endl;
-        aftlog << "++ Show element:" << std::endl;
+        aftlog << std::endl << "++++ Start tests for element " << element.getName() << " ++++" << endl;
+#if 0
+        Element(const std::string& name);
+        Element(const Element& other);
+        Element& operator=(const Element& other);
+        
+        // work methods
+        virtual void apply(const UIFacet& facet);
+        /** True if value has already been read/updated. */
+        virtual bool hasValue() const;
+        virtual void remove(const UIFacet& facet);
+        /** Validate the value of this element.
+         *  This base class implementation always returns true.
+         */
+        virtual bool validate();
+        
+        // getters and setters
+        const ElementId getId() const;
+        const std::string& getName() const;
+        /** Get the value stored for this element. */
+        const std::string& getValue() const;
+        /** Set the value for this element. */
+        virtual void setValue(const std::string& value);
+        /** Get the default value for this element */
+        virtual const std::string& getDefault() const;
+        /** Set the default value for this element */
+        virtual void setDefault(const std::string& value);
+        virtual const std::string& getPrompt() const;
+        virtual void setPrompt(const std::string& prompt);
+        virtual bool getEnabled() const;
+        virtual void setEnabled(bool isEnabled);
+        virtual bool getVisible() const;
+        EXPECT_FALSE(element.getVisible());
+        virtual void setVisible(bool isVisible);
+        /////////////////////////
+        EXPECT_TRUE(element.getVisible());
+        aftlog << "++ Show element with prompt:" << std::endl;
+        element.setPrompt(prompt);
+        EXPECT_TRUE(element.getPrompt() == prompt);
+        aftlog << "++ Show element with prompt and default value:" << std::endl;
+        element.setDefault(defaultValue);
+
+        element.setEnabled(true);
+        EXPECT_TRUE(element.getDefault() == defaultValue);
+        EXPECT_FALSE(element.getValue().empty());
+#endif
+        EXPECT_TRUE(element.getValue() == defaultValue);
+        element.setValue("to another");
+        EXPECT_TRUE(element.getValue() == "to another");
+//        EXPECT_TRUE(element.getValue(true) == "to another");
+
+        EXPECT_TRUE(element.getVisible());
+        element.setVisible(false);
+        EXPECT_FALSE(element.getVisible());
+        EXPECT_FALSE(element.getEnabled());
+        element.setEnabled(true);
+        EXPECT_TRUE(element.getEnabled());
+
+        bool retval = element.validate();
+        aftlog << "++++ End tests for element " << element.getName()
+               << " returns " << std::boolalpha << retval << " ++++" << std::endl;
+        return retval;
+    }
+    
+    bool runUiTests(UI& ui) {
+#if 0
+        aftlog << "++ Show element:" << endl;
         EXPECT_FALSE(element.getVisible());
         element.show();
         EXPECT_TRUE(element.getVisible());
@@ -224,50 +290,75 @@ protected:
         aftlog << "++ Show element with prompt and default value:" << std::endl;
         element.setDefault(defaultValue);
         element.show(true);
-
+        
         aftlog << "++ Refresh:" << std::endl;
         element.refresh();
-
+        
         element.setEnabled(true);
         EXPECT_TRUE(element.getDefault() == defaultValue);
         EXPECT_FALSE(element.getValue().empty());
         EXPECT_TRUE(element.input());
-        EXPECT_TRUE(element.getValue() == defaultValue);
-        element.setValue("to another");
-        EXPECT_TRUE(element.getValue() == "to another");
-        EXPECT_TRUE(element.getValue(true) == "to another");
-
-        EXPECT_TRUE(element.getVisible());
-        element.setVisible(false);
-        EXPECT_FALSE(element.getVisible());
-        EXPECT_FALSE(element.getEnabled());
-        element.setEnabled(true);
-        EXPECT_TRUE(element.getEnabled());
-
-        bool retval = element.validate();
-        aftlog << "++++ End tests for element " << element.getName()
-               << " returns " << std::boolalpha << retval << " ++++" << std::endl;
-        return retval;
-    }
-    
-    bool runUiTests() {
+#endif
         return true;
     }
 };
 
 ///////////// Tests here :
 
-TEST_F(UiPackageTest, ElementWithBaseDelegate) {
-    Element elOne("One");
-    EXPECT_TRUE(runElementTests(elOne, "using base element delegate", "Enter value"));
+TEST_F(UiPackageTest, ElementConstructorTests) {
+    Element element("One");
+    element.setDefault("Default value");
+    element.setPrompt("prompt: ");
+    element.setValue("Real value");
+
+    Element otherElement(element);
+    EXPECT_TRUE(element == otherElement);
+    Element copyElement("at first");
+    copyElement = element;
+    EXPECT_TRUE(element == copyElement);
 }
     
-TEST_F(UiPackageTest, ElementWithEmptyDelegate) {
-    EmptyElementDelegate eelDelegate;
-    Element elTwo("Two", &eelDelegate);
-    EXPECT_TRUE(runElementTests(elTwo, "now with empty element delegate", "Enter value for empty"));
-}
+TEST_F(UiPackageTest, ElementMemberTests) {
+    const std::string elName("MyElement");
+    const std::string elPrompt("Enter value");
+    const std::string elDefault("Default value");
+    const std::string elValue("Real value");
+    Element element(elName);
+    UIFacet facet("facet1", "abc");
+    element.apply(facet);
+    std::string facetValue;
+    EXPECT_TRUE(element.getFacet(facetValue, "facet1"));
+    EXPECT_EQ("abc", facetValue);
+    element.remove(facet);
+    EXPECT_FALSE(element.getFacet(facetValue, "facet1"));
 
+    EXPECT_FALSE(element.hasValue());
+    element.setValue(elValue);
+    EXPECT_TRUE(element.hasValue());
+    EXPECT_TRUE(element.validate());
+    
+    Element someElement("another");
+    EXPECT_NE(element.getId(), someElement.getId());
+    EXPECT_EQ(elName, element.getName());
+    EXPECT_EQ(elValue, element.getValue());
+    
+    EXPECT_TRUE(element.getDefault().empty());
+    element.setDefault(elDefault);
+    EXPECT_EQ(elDefault, element.getDefault());
+    EXPECT_TRUE(element.getPrompt().empty());
+    element.setPrompt(elPrompt);
+    EXPECT_EQ(elPrompt, element.getPrompt());
+    EXPECT_FALSE(element.getEnabled());
+    element.setEnabled(true);
+    EXPECT_TRUE(element.getEnabled());
+    EXPECT_TRUE(element.getVisible());
+    element.setVisible(false);
+    EXPECT_FALSE(element.getVisible());
+    
+    element.setValue("to another");
+    EXPECT_EQ("to another", element.getValue());
+}
+    
 TEST_F(UiPackageTest, UIFacet) {
     UIFacet facet("facet", "other");
     EXPECT_EQ(UIFacetCategory::Other, facet.getCategory());
@@ -290,13 +381,15 @@ TEST_F(UiPackageTest, UIFacet) {
     EXPECT_EQ(0, result);
     EXPECT_TRUE(colorFacet.get("dialog.text", result));
     EXPECT_EQ(0xee0000, result);
+    
+    UIFacet copyFacet = colorFacet;
 }
 
 TEST_F(UiPackageTest, UIWithEmptyDelegate) {
     EmptyUiDelegate* uiDelegate = new EmptyUiDelegate;
     UI emptyUi(nullptr, 0, uiDelegate);
     EmptyElementDelegate eelDelegate;
-    Element element("element", &eelDelegate);
+    Element element("element");
     EXPECT_FALSE(emptyUi.addElement(&element));
     EXPECT_EQ(nullptr, emptyUi.currentElement());
 }

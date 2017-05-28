@@ -25,6 +25,7 @@ namespace aft {
 namespace ui {
 
 // Forward reference
+class DumbTtyElementDelegate;
 class Element;
 class UIFacet;
 
@@ -45,7 +46,10 @@ public:
     virtual bool output(const Element& element) const override;
     virtual bool remove(const Element& element) override;
     virtual bool show(const Element& element, bool showValue = false) override;
-    
+
+private:
+    /** All elements within this UI use this ElementDelegate */
+    std::unique_ptr<DumbTtyElementDelegate> delegate_;
 protected:
     Element* root_;
 };

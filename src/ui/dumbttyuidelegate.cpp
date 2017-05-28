@@ -17,6 +17,7 @@
  *   limitations under the License.
  */
 
+#include "dumbttyelementdelegate.h"
 #include "dumbttyuidelegate.h"
 
 #include <iostream>
@@ -30,8 +31,9 @@ using namespace aft::ui;
 using namespace std;
 
 DumbTtyUIDelegate::DumbTtyUIDelegate()
-: root_(nullptr) {
-    
+: delegate_(std::make_unique<DumbTtyElementDelegate>())
+, root_(nullptr) {
+
 }
 
 bool DumbTtyUIDelegate::add(const Element& element) {
@@ -55,10 +57,13 @@ bool DumbTtyUIDelegate::hide(const Element& element) {
 }
 
 bool DumbTtyUIDelegate::input(const Element& element, std::string& value) {
-    char cname[200];
-    std::cin.getline(cname, sizeof(cname));
-    std::string name(cname, strlen(cname));
-    value = name.empty() ? element.getDefault() : name;
+    //TODO lookup element
+    if (element.hasValue()) {
+        value = element.getValue();
+    }
+    else {
+        value = element.getDefault();
+    }
     
     return true;
 }

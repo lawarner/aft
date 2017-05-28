@@ -30,14 +30,14 @@ BaseElementDelegate::BaseElementDelegate() {
 
 const std::string&
 BaseElementDelegate::getValue(const Element* element) const {
-    if (element->_getStringValue().empty()) {
+    if (element->getValue().empty()) {
         return element->getDefault();
     }
-    return element->_getStringValue();
+    return element->getValue();
 }
 
 void BaseElementDelegate::setValue(Element* element, const std::string& value) {
-    element->_setStringValue(value);
+    element->setValue(value);
 }
 
 bool BaseElementDelegate::getFocus(Element* element) const {
@@ -54,11 +54,12 @@ bool BaseElementDelegate::getFacet(Element* element, const std::string& name,
 }
 
 bool BaseElementDelegate::setFacet(Element* element, const UIFacet& facet) {
-    return false;
+    element->apply(facet);
+    return true;
 }
 
 bool BaseElementDelegate::input(Element* element, std::string& value) {
-    value = element->_getStringValue();
+    value = element->getValue();
     return true;
 }
 

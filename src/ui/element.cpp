@@ -19,115 +19,104 @@
  */
 
 #include "element.h"
-#include "elementdelegate.h"
-#include "uidelegate.h"
-#include "core/logger.h"
-using namespace aft::core;
-
 
 namespace aft {
 namespace ui {
 
+Element::ElementId Element::nextId_ = 0;
 
-Element::Element(const std::string& name, ElementDelegate* delegate)
-: name_(name)
-, delegate_(delegate ? delegate : new BaseElementDelegate)
-, isEnabled_(false)
-, isVisible_(false)
-{
+Element::Element(const std::string& name)
+    : name_(name)
+    , id_(nextId_++)
+    , isEnabled_(false)
+    , isValueSet_(false)
+    , isVisible_(false)  {
     
 }
 
 Element::Element(const Element& other)
     : name_(other.name_)
-    , delegate_(other.delegate_)
+    , id_(other.id_)
     , value_(other.value_)
     , defaultValue_(other.defaultValue_)
     , prompt_(other.prompt_)
     , isEnabled_(other.isEnabled_)
+    , isValueSet_(other.isValueSet_)
     , isVisible_(other.isVisible_) {
     
 }
 
-Element& Element::operator=(const Element& other) {
+Element&
+Element::operator=(const Element& other) {
     if (this != &other) {
         name_ = other.name_;
-        delegate_ = other.delegate_;
+        id_ = other.id_;
         value_ = other.value_;
         defaultValue_ = other.defaultValue_;
         prompt_ = other.prompt_;
         isEnabled_ = other.isEnabled_;
+        isValueSet_ = other.isValueSet_;
         isVisible_ = other.isVisible_;
     }
     return *this;
 }
 
-Element::~Element()
-{
-
+bool Element::operator==(const Element& other) {
+    return id_ == other.id_;
 }
-
+    
 void Element::apply(const UIFacet& facet) {
+    auto categoryName = facet.getCategoryName();
+    auto it = facets_.find(categoryName);
+    if (it == facets_.end()) {
+        facets_[categoryName] = facet;
+    }
     
 }
 
-bool Element::hasValue() const
-{
-    return isEnabled_ && !value_.empty();
-}
-
-void Element::hide()
-{
-    setVisible(false);
-}
-
-bool Element::input()
-{
-    if (!isEnabled_) {
-        return false;
+bool Element::getFacet(std::string& value, const std::string& name,
+                       UIFacetCategory category) const {
+    auto categoryName = UIFacet::getCategoryName(category);
+    auto it = facets_.find(categoryName);
+    if (it != facets_.end()) {
+        const UIFacet& facet = it->second;
+        return facet.get(name, value);
     }
-    return delegate_->input(this, value_);
+    return false;
 }
 
-void Element::refresh()
-{
-    hide();
-    show();
+bool Element::hasValue() const {
+    return isValueSet_;
 }
 
-void Element::show(bool forceShow) {
-    if (!isVisible_ || forceShow) {
-        setVisible(delegate_->output(this));
-    }
+void Element::remove(const UIFacet& facet) {
+
 }
 
-bool Element::validate()
-{
+bool Element::validate() {
     return true;
 }
 
 // getters and setters
+
+Element::ElementId
+Element::getId() const {
+    return id_;
+}
+    
 const std::string&
-Element::getName() const
-{
+Element::getName() const {
     return name_;
 }
 
 const std::string&
 Element::getValue() const {
-    return delegate_->getValue(this);
-}
-
-std::string
-Element::getValue(bool refreshValue) {
-    if (refreshValue) {
-        delegate_->input(this, value_);
-    }
-    return getValue();
+    return value_;
 }
 
 void Element::setValue(const std::string& value) {
-    delegate_->setValue(this, value);
+    value_ = value;
+    isValueSet_ = true;
 }
 
 const std::string&
@@ -165,15 +154,6 @@ void Element::setVisible(bool isVisible) {
     if (!isVisible_) {
         isEnabled_ = false;
     }
-}
-
-const std::string&
-Element::_getStringValue() const {
-    return value_;
-}
-
-void Element::_setStringValue(const std::string& value) {
-    value_ = value;
 }
 
 } // namespace ui
