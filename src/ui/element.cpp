@@ -23,10 +23,11 @@
 namespace aft {
 namespace ui {
 
-Element::ElementId Element::nextId_ = 0;
+Element::ElementId Element::nextId_ = 1;
 
 Element::Element(const std::string& name)
     : name_(name)
+    , cow_(false)
     , id_(nextId_++)
     , isEnabled_(false)
     , isValueSet_(false)
@@ -35,28 +36,32 @@ Element::Element(const std::string& name)
 }
 
 Element::Element(const Element& other)
-    : name_(other.name_)
-    , id_(other.id_)
-    , value_(other.value_)
+    : name_        (other.name_)
+    , cow_         (true)
+    , id_          (other.id_)
+    , value_       (other.value_)
     , defaultValue_(other.defaultValue_)
-    , prompt_(other.prompt_)
-    , isEnabled_(other.isEnabled_)
-    , isValueSet_(other.isValueSet_)
-    , isVisible_(other.isVisible_) {
-    
+    , prompt_      (other.prompt_)
+    , isEnabled_   (other.isEnabled_)
+    , isValueSet_  (other.isValueSet_)
+    , isVisible_   (other.isVisible_)
+    , facet_       (other.facet_) {
+
 }
 
 Element&
 Element::operator=(const Element& other) {
     if (this != &other) {
-        name_ = other.name_;
-        id_ = other.id_;
-        value_ = other.value_;
+        name_         = other.name_;
+        cow_          = true;
+        id_           = other.id_;
+        value_        = other.value_;
         defaultValue_ = other.defaultValue_;
-        prompt_ = other.prompt_;
-        isEnabled_ = other.isEnabled_;
-        isValueSet_ = other.isValueSet_;
-        isVisible_ = other.isVisible_;
+        prompt_       = other.prompt_;
+        isEnabled_    = other.isEnabled_;
+        isValueSet_   = other.isValueSet_;
+        isVisible_    = other.isVisible_;
+        facet_        = other.facet_;
     }
     return *this;
 }
@@ -66,31 +71,42 @@ bool Element::operator==(const Element& other) {
 }
     
 void Element::apply(const UIFacet& facet) {
-    auto categoryName = facet.getCategoryName();
-    auto it = facets_.find(categoryName);
-    if (it == facets_.end()) {
-        facets_[categoryName] = facet;
+    auto cats = facet.getCategories();
+    for (auto cat : cats) {
+        auto names = facet.getNames(cat);
+        for (const auto& name : names) {
+            std::string value;
+            if (facet.get(name, value, cat)) {
+                //TODO check if already exists
+                if (facet_.set(name, value, cat)) {
+                    clone();
+                }
+            }
+        }
     }
-    
 }
 
 bool Element::getFacet(std::string& value, const std::string& name,
                        UIFacetCategory category) const {
-    auto categoryName = UIFacet::getCategoryName(category);
-    auto it = facets_.find(categoryName);
-    if (it != facets_.end()) {
-        const UIFacet& facet = it->second;
-        return facet.get(name, value);
-    }
-    return false;
+    return facet_.get(name, value, category);
 }
 
 bool Element::hasValue() const {
     return isValueSet_;
 }
 
+bool Element::remove(const std::string& name, UIFacetCategory category) {
+    return facet_.remove(name, category);
+}
+    
 void Element::remove(const UIFacet& facet) {
-
+    auto cats = facet.getCategories();
+    for (auto cat : cats) {
+        auto names = facet.getNames(cat);
+        for (const auto& name : names) {
+            facet_.remove(name, cat);
+        }
+    }
 }
 
 bool Element::validate() {
@@ -103,7 +119,12 @@ Element::ElementId
 Element::getId() const {
     return id_;
 }
-    
+
+ElementHandle
+Element::getHandle() const {
+    return ElementHandle(this);
+}
+
 const std::string&
 Element::getName() const {
     return name_;
@@ -117,6 +138,7 @@ Element::getValue() const {
 void Element::setValue(const std::string& value) {
     value_ = value;
     isValueSet_ = true;
+    clone();
 }
 
 const std::string&
@@ -126,6 +148,7 @@ Element::getDefault() const {
 
 void Element::setDefault(const std::string& value) {
     defaultValue_ = value;
+    clone();
 }
 
 const std::string&
@@ -135,6 +158,7 @@ Element::getPrompt() const {
 
 void Element::setPrompt(const std::string& prompt) {
     prompt_ = prompt;
+    clone();
 }
 
 bool Element::getEnabled() const {
@@ -143,6 +167,7 @@ bool Element::getEnabled() const {
 
 void Element::setEnabled(bool isEnabled) {
     isEnabled_ = isEnabled;
+    clone();
 }
 
 bool Element::getVisible() const {
@@ -153,6 +178,14 @@ void Element::setVisible(bool isVisible) {
     isVisible_ = isVisible;
     if (!isVisible_) {
         isEnabled_ = false;
+    }
+    clone();
+}
+
+void Element::clone() {
+    if (cow_) {
+        id_ = nextId_++;
+        cow_ = false;
     }
 }
 

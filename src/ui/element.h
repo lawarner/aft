@@ -18,16 +18,13 @@
  *   limitations under the License.
  */
 
+#include "ui/elementhandle.h"
 #include "ui/uifacet.h"
 #include <unordered_map>
 #include <string>
 
 namespace aft {
 namespace ui {
-
-// Forward reference
-class BaseElementDelegate;
-class ElementDelegate;
 
 /**
  * Represent an element or group of elements in a UI
@@ -37,14 +34,22 @@ class ElementDelegate;
 class Element {
 public:
     using ElementId = uint32_t;
-    using FacetCatMap = std::unordered_map<std::string, UIFacet>;
 
 public:
+    /** Construct a named element. */
     Element(const std::string& name);
+    /** Construct a copy of another element. */
     Element(const Element& other);
+    /** Set this element to the value of another element. */
     Element& operator=(const Element& other);
+    /** Destruct an element. */
     virtual ~Element() = default;
-    
+
+    /** Compare this element to another element.
+     *  Tow elements are equal only if they have the same ID.
+     *  @param  other Other element
+     *  @return true if this element is equal to other element, otherwise false.
+     */
     bool operator==(const Element& other);
 
     // work methods
@@ -53,6 +58,7 @@ public:
                           UIFacetCategory category = UIFacetCategory::Other) const;
     /** True if value has already been read/updated. */
     virtual bool hasValue() const;
+    virtual bool remove(const std::string& name, UIFacetCategory category = UIFacetCategory::Other);
     virtual void remove(const UIFacet& facet);
     /** Validate the value of this element.
      *  This base class implementation always returns true.
@@ -61,6 +67,7 @@ public:
 
     // getters and setters
     ElementId getId() const;
+    ElementHandle getHandle() const;
     const std::string& getName() const;
     /** Get the value stored for this element. */
     const std::string& getValue() const;
@@ -78,7 +85,11 @@ public:
     virtual void setVisible(bool isVisible);
 
 private:
+    void clone();
+private:
     std::string name_;
+    bool  cow_;
+    
     // unique id
     ElementId id_;
     static ElementId nextId_;
@@ -93,7 +104,7 @@ protected:
     bool isValueSet_;
     bool isVisible_;
 
-    FacetCatMap facets_;
+    UIFacet facet_;
     // entity, decor, attributes, Result
 };
 

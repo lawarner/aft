@@ -99,14 +99,14 @@ public:
 
     /** Get the path name as a string
      *
-     *  @param fullName if true then the whole path will be returned, otherwise the
+     *  @param fullPath if true then the whole path will be returned, otherwise the
      *                  last component of the path is returned.
      */
     const std::string& getPath(bool fullPath = true) const;
-    
+
     /** Compare this SD name to another */
     bool operator==(const StructuredDataName& other);
-    
+
 public:
     /** Path separator character */
     static const std::string SEPARATOR;

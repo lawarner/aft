@@ -35,6 +35,8 @@ class Element;
  */
 class ElementDelegate {
 public:
+    /** Flush an element */
+    virtual void flush(const Element* element) = 0;
     /** Get the value for this element.
      *  @return The value of this element.
      */
@@ -53,11 +55,11 @@ public:
     virtual bool setFacet(Element* element, const UIFacet& facet) = 0;
 
     /** Get user input from element */
-    virtual bool input(Element* element, std::string& value) = 0;
+    virtual bool input(const Element* element, std::string& value) = 0;
     /** Output the element to the user interface
      *  TODO add bool to just output value
      */
-    virtual bool output(const Element* element) = 0;
+    virtual bool output(const Element* element, bool showValue = false) = 0;
 };
 
 class BaseElementDelegate : public ElementDelegate {
@@ -65,6 +67,7 @@ public:
     BaseElementDelegate();
     virtual ~BaseElementDelegate() = default;
 
+    virtual void flush(const Element* element) override;
     virtual const std::string& getValue(const Element* element) const override;
     virtual void setValue(Element* element, const std::string& value) override;
     virtual bool getFocus(Element* element) const override;
@@ -73,8 +76,8 @@ public:
                           UIFacet& facet) const override;
     virtual bool setFacet(Element* element, const UIFacet& facet) override;
 
-    virtual bool input(Element* element, std::string& value) override;
-    virtual bool output(const Element* element) override;
+    virtual bool input(const Element* element, std::string& value) override;
+    virtual bool output(const Element* element, bool showValue = false) override;
 };
 
 }

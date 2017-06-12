@@ -27,6 +27,7 @@ namespace ui {
 // Forward reference
 class DumbTtyElementDelegate;
 class Element;
+class UI;
 class UIFacet;
 
 /**
@@ -34,24 +35,19 @@ class UIFacet;
  */
 class DumbTtyUIDelegate : public BaseUIDelegate {
 public:
-    DumbTtyUIDelegate();
+    DumbTtyUIDelegate(UI* ui);
     virtual ~DumbTtyUIDelegate() = default;
 public:
     void addInputValue(const Element& element, const std::string& value);
 
-    virtual bool add(const Element& element) override;
-    virtual const Element* get(const std::string& name) override;
+    virtual void flush(const Element& element) override;
     virtual bool hide(const Element& element) override;
     virtual bool input(const Element& element, std::string& value) override;
-    virtual bool output(const Element& element) const override;
-    virtual bool remove(const Element& element) override;
-    virtual bool show(const Element& element, bool showValue = false) override;
+    virtual bool output(const Element& element, bool showValue = false) const override;
+    virtual bool show(const Element& element) override;
 
 private:
-    /** All elements within this UI use this ElementDelegate */
     std::unique_ptr<DumbTtyElementDelegate> delegate_;
-protected:
-    Element* root_;
 };
     
 } // namespace ui

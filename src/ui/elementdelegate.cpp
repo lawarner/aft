@@ -28,6 +28,10 @@ BaseElementDelegate::BaseElementDelegate() {
     
 }
 
+void BaseElementDelegate::flush(const Element* element) {
+
+}
+
 const std::string&
 BaseElementDelegate::getValue(const Element* element) const {
     if (element->getValue().empty()) {
@@ -58,11 +62,11 @@ bool BaseElementDelegate::setFacet(Element* element, const UIFacet& facet) {
     return true;
 }
 
-bool BaseElementDelegate::input(Element* element, std::string& value) {
+bool BaseElementDelegate::input(const Element* element, std::string& value) {
     value = element->getValue();
     return true;
 }
 
-bool BaseElementDelegate::output(const Element* element) {
+bool BaseElementDelegate::output(const Element* element, bool showValue) {
     return true;
 }

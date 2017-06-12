@@ -10,6 +10,8 @@
 		A1122F201D23784E000FA862 /* element.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1122F1E1D23784E000FA862 /* element.cpp */; };
 		A1122F211D23784E000FA862 /* element.h in Headers */ = {isa = PBXBuildFile; fileRef = A1122F1F1D23784E000FA862 /* element.h */; };
 		A11A6B581E4FF15C000D7A4B /* elementdelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A11A6B571E4FF15C000D7A4B /* elementdelegate.cpp */; };
+		A1230D121EEE246C0003D133 /* elementhandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1230D101EEE246C0003D133 /* elementhandle.cpp */; };
+		A1230D131EEE246C0003D133 /* elementhandle.h in Headers */ = {isa = PBXBuildFile; fileRef = A1230D111EEE246C0003D133 /* elementhandle.h */; };
 		A123DB601EA1C337004ABBD4 /* cocoauidelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A123DB5E1EA1C337004ABBD4 /* cocoauidelegate.cpp */; };
 		A123DB611EA1C337004ABBD4 /* cocoauidelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A123DB5F1EA1C337004ABBD4 /* cocoauidelegate.h */; };
 		A1256C8D1DFE1CC500AE4700 /* platform-linux.h in Headers */ = {isa = PBXBuildFile; fileRef = A1256C8A1DFE1CC500AE4700 /* platform-linux.h */; };
@@ -135,6 +137,8 @@
 		A1122F1E1D23784E000FA862 /* element.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = element.cpp; path = ../../src/ui/element.cpp; sourceTree = "<group>"; };
 		A1122F1F1D23784E000FA862 /* element.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = element.h; path = ../../src/ui/element.h; sourceTree = "<group>"; };
 		A11A6B571E4FF15C000D7A4B /* elementdelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = elementdelegate.cpp; path = ../../src/ui/elementdelegate.cpp; sourceTree = "<group>"; };
+		A1230D101EEE246C0003D133 /* elementhandle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = elementhandle.cpp; path = ../../src/ui/elementhandle.cpp; sourceTree = "<group>"; };
+		A1230D111EEE246C0003D133 /* elementhandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = elementhandle.h; path = ../../src/ui/elementhandle.h; sourceTree = "<group>"; };
 		A123DB5E1EA1C337004ABBD4 /* cocoauidelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cocoauidelegate.cpp; path = ../../src/ui/cocoauidelegate.cpp; sourceTree = "<group>"; };
 		A123DB5F1EA1C337004ABBD4 /* cocoauidelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cocoauidelegate.h; path = ../../src/ui/cocoauidelegate.h; sourceTree = "<group>"; };
 		A1256C8A1DFE1CC500AE4700 /* platform-linux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "platform-linux.h"; sourceTree = "<group>"; };
@@ -485,12 +489,14 @@
 				A1122F1F1D23784E000FA862 /* element.h */,
 				A11A6B571E4FF15C000D7A4B /* elementdelegate.cpp */,
 				A15745751E1A057800265D4D /* elementdelegate.h */,
+				A1230D101EEE246C0003D133 /* elementhandle.cpp */,
+				A1230D111EEE246C0003D133 /* elementhandle.h */,
 				A1F2AFBA1D036BD5009FE595 /* ui.cpp */,
 				A1F2AFBB1D036BD5009FE595 /* ui.h */,
-				A1CC710D1E86EEB000BD0946 /* uidelegate.cpp */,
-				A1BCB62E1D27053A0082BB87 /* uidelegate.h */,
 				A1BCB6441D2B586E0082BB87 /* uicommand.cpp */,
 				A1BCB6451D2B586E0082BB87 /* uicommand.h */,
+				A1CC710D1E86EEB000BD0946 /* uidelegate.cpp */,
+				A1BCB62E1D27053A0082BB87 /* uidelegate.h */,
 				A19725331E2B3188006389B0 /* uifacet.cpp */,
 				A19725311E2B313C006389B0 /* uifacet.h */,
 				A146518F1E919FC200C5BF04 /* uirequest.cpp */,
@@ -540,6 +546,7 @@
 				A153D0EC1CCC71F500000A15 /* tobject.h in Headers */,
 				A1256C971DFE349300AE4700 /* nativepluginloader.h in Headers */,
 				A153D0EA1CCC71F500000A15 /* tobasictypes.h in Headers */,
+				A1230D131EEE246C0003D133 /* elementhandle.h in Headers */,
 				A153D1041CCC71F500000A15 /* runcontext.h in Headers */,
 				A153D0CE1CCC71F500000A15 /* command.h in Headers */,
 				A153D0FF1CCC71F500000A15 /* loghandler.h in Headers */,
@@ -675,6 +682,7 @@
 				A153D0E21CCC71F500000A15 /* result.cpp in Sources */,
 				A153D0EB1CCC71F500000A15 /* tobject.cpp in Sources */,
 				A153D1031CCC71F500000A15 /* runcontext.cpp in Sources */,
+				A1230D121EEE246C0003D133 /* elementhandle.cpp in Sources */,
 				A15745771E1AF6FF00265D4D /* t_ui.cpp in Sources */,
 				A153D0CD1CCC71F500000A15 /* command.cpp in Sources */,
 				A16390841D03D75800036620 /* structureddataname.cpp in Sources */,

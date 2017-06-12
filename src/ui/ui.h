@@ -20,25 +20,31 @@
 
 #include <cstddef>
 #include <functional>
+#include <vector>
 #include "base/proc.h"
 #include "base/result.h"
+#include "ui/element.h"
+#include "ui/elementhandle.h"
 #include "ui/uidelegate.h"
 
 
-namespace aft
-{
-namespace base
-{
+namespace aft {
+namespace base {
 // Forward reference
 class Context;
 }
 
-namespace ui
-{
-// Forward reference
-class Element;
+namespace ui {
 
-        
+enum class UiEventType {
+    Unknown,
+    Adding,
+    Removing,
+    FacetChanged,
+    StateChanged,
+    ValueChanged
+};
+
 /**
  *  A UI is basically a Producer/Consumer.
  *  The consumer receives commands and entities and the producer yields named result values.
@@ -66,8 +72,8 @@ class UI : public aft::base::BaseProc
 {
 public:
     using ElementList = std::vector<Element *>;
-    using CallbackFunction = std::function<void(Element*)>;
-    
+    using CallbackFunction = std::function<bool(UiEventType, Element*)>;
+
     /** Construct a UI with an optional top level element, optional maximum size and optional UI delegate.
      *  @param element Optional top level Element. More top level elements can be added later by
      *                 using #addElement.
@@ -80,20 +86,30 @@ public:
     virtual ~UI();
     
     /** Add an element to top level of UI hierarchy */
-    virtual bool addElement(Element* element);
+    virtual ElementHandle addElement(Element* element);
     
     /** Get a pointer to the current top level element, if any. */
     virtual Element* currentElement() const;
 
     /** Return index to an element, or -1 if not found. */
-    virtual ssize_t findElement(Element* element) const;
+    virtual ssize_t findElement(const ElementHandle& handle) const;
 
     /** Switch to the first top level element.
      *  @return true if the switch to the first element was successful.
      */
     virtual bool firstElement();
 
+    /** Get the value of the specified element. */
     Element* getElement(unsigned int idx);
+    
+    Element* getElement(const ElementHandle& handle);
+    
+    virtual ElementList& getElementList();
+    
+    virtual bool getElementValue(const ElementHandle& handle, std::string& value);
+    
+    /** Get the value of the current element. */
+    virtual bool getElementValue(std::string& value);
 
     /** Switch to the next top level element if any.
      *  @return the index of the UI element after the current. Returns -1 if there is no next element.
@@ -101,7 +117,7 @@ public:
     virtual ssize_t nextElement();
 
     /** Remove element from top level of UI hierarchy */
-    virtual bool removeElement(Element* element);
+    virtual bool removeElement(const ElementHandle& handle);
 
     // many UI's need to have an init and deinit
     virtual base::Result init(base::Context* context = nullptr);
@@ -129,10 +145,13 @@ public:
     virtual bool write(const base::Blob& blob) override;
 
 private:
+    bool callListeners(UiEventType event, Element* element);
+    
+private:
     unsigned int maxSize_;
     unsigned int currentElement_;
     ElementList uiElements_;
-    std::vector<CallbackFunction*> listeners_;
+    std::vector<CallbackFunction *> listeners_;
     std::unique_ptr<UIDelegate> uiDelegate_;
 };
 

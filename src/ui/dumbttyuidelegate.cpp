@@ -30,26 +30,14 @@ using namespace aft::core;
 using namespace aft::ui;
 using namespace std;
 
-DumbTtyUIDelegate::DumbTtyUIDelegate()
-: delegate_(std::make_unique<DumbTtyElementDelegate>())
-, root_(nullptr) {
+DumbTtyUIDelegate::DumbTtyUIDelegate(UI* ui)
+: BaseUIDelegate(ui)
+, delegate_(std::make_unique<DumbTtyElementDelegate>()) {
 
 }
 
-bool DumbTtyUIDelegate::add(const Element& element) {
-    if (root_ == nullptr) {
-        root_ = new Element(element);
-        return true;
-    }
-    return false;
-}
-
-const Element*
-DumbTtyUIDelegate::get(const std::string& name) {
-    if (root_ != nullptr && root_->getName() == name) {
-        return root_;
-    }
-    return nullptr;
+void DumbTtyUIDelegate::flush(const Element& element) {
+    delegate_->flush(&element);
 }
 
 bool DumbTtyUIDelegate::hide(const Element& element) {
@@ -58,54 +46,13 @@ bool DumbTtyUIDelegate::hide(const Element& element) {
 
 bool DumbTtyUIDelegate::input(const Element& element, std::string& value) {
     //TODO lookup element
-    if (element.hasValue()) {
-        value = element.getValue();
-    }
-    else {
-        value = element.getDefault();
-    }
-    
-    return true;
+    return delegate_->input(&element, value);
 }
 
-/** Output the element to the user interface.
- *
- *  The various output formats for an element are:
- *  Fully specified:   <element_name>: <prompt> [<default_value>]? value
- *  Default missing:   <element_name>: <prompt>?
- *  Prompt missing:    <element_name> [<default_value>]?
- *  No Prompt,Default: <element_name>?
- */
-bool DumbTtyUIDelegate::output(const Element& element) const {
-    aftlog << "Element " << element.getName();
-    if (!element.getPrompt().empty()) aftlog << ": " << element.getPrompt();
-    std::string defValue = element.getDefault().empty() ? "? " : " [" + element.getDefault() + "]? ";
-    aftlog << defValue;
-    if (element.hasValue()) {
-        aftlog << element.getValue() << " ";
-    }
-    aftlog << std::endl;
-    
-    return true;
+bool DumbTtyUIDelegate::output(const Element& element, bool showValue) const {
+    return delegate_->output(&element);
 }
 
-bool DumbTtyUIDelegate::remove(const Element& element) {
-    if (root_ != nullptr && root_->getName() == element.getName()) {
-        root_ = nullptr;
-        return true;
-    }
-    return false;
-}
-
-bool DumbTtyUIDelegate::show(const Element& element, bool showValue) {
-    aftlog << "Element " << element.getName();
-    if (!element.getPrompt().empty()) aftlog << ": " << element.getPrompt();
-    std::string defValue = element.getDefault().empty() ? "? " : " [" + element.getDefault() + "]? ";
-    aftlog << defValue;
-    if (showValue && element.hasValue()) {
-        aftlog << element.getValue() << " ";
-    }
-    aftlog << std::flush;
-    
-    return true;
+bool DumbTtyUIDelegate::show(const Element& element) {
+    return output(element);
 }

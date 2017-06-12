@@ -23,12 +23,14 @@
 #include <ui/dumbttyelementdelegate.h>
 #include <ui/dumbttyuidelegate.h>
 #include <ui/element.h>
+#include <ui/elementhandle.h>
 #include <ui/ui.h>
 #include <ui/uidelegate.h>
 #include <ui/uifacet.h>
 #include <gtest/gtest.h>
 using namespace aft::core;
 using namespace aft::ui;
+using aft::base::Result;
 using std::endl;
 
 namespace {
@@ -91,22 +93,60 @@ protected:
         << " returns " << std::boolalpha << retval << " ++++" << std::endl;
         return retval;
     }
+    
+    bool runUiTests(UI& ui) {
+        return false;
+    }
 };
 
 TEST_F(UiPackageTest, DumbTtyElementDefaultValue) {
-    DumbTtyElementDelegate elDelegate;
+    DumbTtyUIDelegate* uiDelegate = new DumbTtyUIDelegate;
+    UI baseUi(nullptr, 0, uiDelegate);
+    EXPECT_EQ(Result(true), baseUi.init());
+
     Element elOne("One");
     const std::string defaultVal("the first");
     const std::string prompt("Just hit return");
-    EXPECT_TRUE(runElementTests(elOne, defaultVal, defaultVal, prompt));
+    elOne.setDefault(defaultVal);
+    elOne.setPrompt(prompt);
+    ElementHandle handle = baseUi.addElement(&elOne);
+    EXPECT_TRUE(handle.isValid());
+
+    baseUi.output();
+    std::cout << std::endl;
+    baseUi.input();
+    std::string value;
+    EXPECT_TRUE(baseUi.getElementValue(value));
+    EXPECT_EQ(defaultVal, value);
+    value.clear();
+    EXPECT_TRUE(baseUi.getElementValue(&elOne, value));
+    EXPECT_EQ(defaultVal, value);
+    value.clear();
+    EXPECT_TRUE(baseUi.getElementValue(handle, value));
+    EXPECT_EQ(defaultVal, value);
+    //EXPECT_TRUE(runUiTests(baseUi));
+    
+    baseUi.deinit();
 }
 
 TEST_F(UiPackageTest, DumbTtyElementEnterOk) {
-    DumbTtyElementDelegate elDelegate;
-    Element elOne("One");
     const std::string defaultVal("the first");
     const std::string prompt("Please type ok");
-    EXPECT_TRUE(runElementTests(elOne, "ok", defaultVal, prompt));
+    Element elOne("One");
+    elOne.setPrompt(prompt);
+    elOne.setDefault(defaultVal);
+    UI dumbUi(&elOne, 0, new DumbTtyUIDelegate);
+    EXPECT_EQ(Result(true), dumbUi.init());
+
+    dumbUi.output();
+    std::cout << std::endl;
+    dumbUi.input();
+    std::string value;
+    EXPECT_TRUE(dumbUi.getElementValue(value));
+    EXPECT_EQ("ok", value);
+    //EXPECT_TRUE(runElementTests(elOne, "ok", defaultVal, prompt));
+
+    dumbUi.deinit();
 }
 
 TEST_F(UiPackageTest, DumbTtyUiDelegateTest) {

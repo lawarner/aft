@@ -60,6 +60,9 @@ public:
     virtual bool getArray(const StructuredDataName& name, 
                           std::vector<std::string>& values) const = 0;
 
+    /** Get the name of all top-level elements. */
+    virtual bool getMembers(std::vector<std::string>& names) const = 0;
+
     /** Create structured data from a string */
     virtual bool parse(const StructuredDataName& name, const std::string& strData) = 0;
     /** Get a string representation of the structured data */
@@ -168,7 +171,13 @@ public:
     /** Get all elements of an array. */
     bool getArray(const StructuredDataName& name, 
                   std::vector<std::string>& values) const;
-    
+
+    /** Get the name of all top-level elements.
+     *  @param names string vector where element names are written.
+     *  @return true if names was successfully populated, otherwise false.
+     */
+    bool getMembers(std::vector<std::string>& names) const;
+
     const StructuredDataName& getName() const;
     void setName(const StructuredDataName& name);
 

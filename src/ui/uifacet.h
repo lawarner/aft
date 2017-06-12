@@ -18,8 +18,9 @@
  *   limitations under the License.
  */
 
+#include <base/structureddataname.h>
 #include <string>
-
+#include <vector>
 
 namespace aft
 {
@@ -27,6 +28,7 @@ namespace base
 {
 // Forward reference
 class StructuredData;
+class StructuredDataName;
 }
     
 namespace ui
@@ -60,36 +62,50 @@ class UIFacet {
 public:
     /** Default constructor for use by STL containers. */
     UIFacet();
-    /** Construct a UIFace with name, value and category.
+    /** Construct a UIFacet with name, value and category.
+     *
+     *  UIFacet hold many name/value pairs under multiple categories.
      *  @param name Name of this facet, which should be unique within each category.
      *  @param value Initial string value of facet. This may be parsed and converted by subclasses.
      *  @param category Category of facet. Set to UIFacetCategory::Other if not specified.
      */
-    UIFacet(const std::string& name, const std::string& value, UIFacetCategory category = UIFacetCategory::Other);
+    UIFacet(const std::string& name, const std::string& value,
+            UIFacetCategory category = UIFacetCategory::Other);
+    /** Copy constructor. */
     UIFacet(const UIFacet& other);
     virtual ~UIFacet();
     
     UIFacet& operator=(const UIFacet& other);
 
-    bool isInitialized() const;
-    UIFacetCategory getCategory() const;
-    const std::string& getCategoryName() const;
+    //TODO, along with category?  bool isInitialized() const;
     bool getMandatory() const;
-    /** Can only be used once, after default construction. */
-    bool setCategory(UIFacetCategory category);
     void setMandatory(bool isMandatory);
 
-    virtual bool get(const std::string& name, std::string& value) const;
-    virtual bool get(const std::string& name, int& value) const;
-    virtual bool get(const std::string& name, float& value) const;
-    virtual bool set(const std::string& name, const std::string& value);
-    virtual bool set(const std::string& name, int value);
-    virtual bool set(const std::string& name, float value);
+    virtual bool get(const std::string& name, std::string& value,
+                     UIFacetCategory category = UIFacetCategory::Other) const;
+    virtual bool get(const std::string& name, int& value,
+                     UIFacetCategory category = UIFacetCategory::Other) const;
+    virtual bool get(const std::string& name, float& value,
+                     UIFacetCategory category = UIFacetCategory::Other) const;
+    virtual bool set(const std::string& name, const std::string& value,
+                     UIFacetCategory category = UIFacetCategory::Other);
+    virtual bool set(const std::string& name, int value,
+                     UIFacetCategory category = UIFacetCategory::Other);
+    virtual bool set(const std::string& name, float value,
+                     UIFacetCategory category = UIFacetCategory::Other);
+    
+    virtual bool remove(const std::string& name, UIFacetCategory category = UIFacetCategory::Other);
+
+    std::vector<UIFacetCategory> getCategories() const;
+    std::vector<std::string> getNames(UIFacetCategory category) const;
 
 public:
+    static UIFacetCategory getCategory(const std::string& catName);
     static const std::string& getCategoryName(UIFacetCategory category);
 
 protected:
+    static base::StructuredDataName makeKeyName(UIFacetCategory category, const std::string& name);
+    
     /** Used by subclasses of UIFacet to get named values. */
     bool getFacetValue(const std::string& name, std::string& value);
     /** Used by subclasses of UIFacet to set named values. */
@@ -97,10 +113,7 @@ protected:
 
 private:
     std::unique_ptr<base::StructuredData> data_;
-    std::unique_ptr<base::StructuredData> categoryData_;
-    UIFacetCategory category_;
     bool isMandatory_;
-    std::string categoryPrefix_;
 };
     
 } // namespace ui

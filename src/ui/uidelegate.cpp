@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include "element.h"
+#include "ui.h"
 #include "uidelegate.h"
 #include "core/logger.h"
 
@@ -27,17 +28,18 @@ using namespace aft::core;
 using namespace aft::ui;
 using namespace std;
 
-BaseUIDelegate::BaseUIDelegate()
-        : root_(nullptr) {
+BaseUIDelegate::BaseUIDelegate(UI* ui)
+    : ui_(ui)
+    , elements_(ui->getElementList()) {
 
 }
 
 bool BaseUIDelegate::add(const Element& element) {
-    if (root_ == nullptr) {
-        root_ = new Element(element);
-        return true;
-    }
-    return false;
+    return true;
+}
+
+void BaseUIDelegate::flush(const Element& element) {
+    delegate_->flush(element);
 }
 
 bool BaseUIDelegate::focus(const Element& element) {
@@ -45,9 +47,23 @@ bool BaseUIDelegate::focus(const Element& element) {
 }
 
 const Element*
+BaseUIDelegate::get(const ElementHandle& handle) {
+    auto it = std::begin(elements_);
+    for ( ; it != std::end(elements_); ++it) {
+        if (handle.getId() == (*it)->getId()) {
+            return *it;
+        }
+    }
+    return nullptr;
+}
+
+const Element*
 BaseUIDelegate::get(const std::string& name) {
-    if (root_ != nullptr && root_->getName() == name) {
-        return root_;
+    auto it = std::begin(elements_);
+    for ( ; it != std::end(elements_); ++it) {
+        if (name == (*it)->getName()) {
+            return *it;
+        }
     }
     return nullptr;
 }
@@ -57,31 +73,30 @@ bool BaseUIDelegate::hide(const Element& element) {
 }
 
 bool BaseUIDelegate::input(const Element& element, std::string& value) {
-    if (root_ == nullptr || root_->getName() != element.getName()) {
+    const Element* currEl = get(&element);
+    if (nullptr == currEl) {
         return false;
     }
-    if (root_->hasValue()) {
-        value = root_->getValue();
+    if (currEl->hasValue()) {
+        value = currEl->getValue();
     }
     else {
-        value = root_->getDefault();
+        value = currEl->getDefault();
     }
 
     return true;
 }
 
-bool BaseUIDelegate::output(const Element& element) const {
+bool BaseUIDelegate::output(const Element& element, bool showValue) const {
+    //TODO aftlog
     return true;
 }
 
 bool BaseUIDelegate::remove(const Element& element) {
-    if (root_ != nullptr && root_->getName() == element.getName()) {
-        root_ = nullptr;
-        return true;
-    }
-    return false;
+    return true;
 }
 
-bool BaseUIDelegate::show(const Element& element, bool showValue) {
+bool BaseUIDelegate::show(const Element& element) {
+    //TODO aftlog
     return true;
 }

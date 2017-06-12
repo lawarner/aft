@@ -64,7 +64,7 @@ public:
         return false;
     }
     
-    virtual bool input(Element* element, std::string& value) override {
+    virtual bool input(const Element* element, std::string& value) override {
         value = value_;
         return true;
     }
@@ -89,6 +89,9 @@ public:
     }
     bool focus(const Element& element) override {
         return false;
+    }
+    const Element* get(Element::ElementId id) override {
+        return nullptr;
     }
     const Element* get(const std::string& name) override {
         return nullptr;
@@ -119,8 +122,7 @@ class StackUiDelegate : public UIDelegate
 public:
     using ElementList = std::vector<Element*>;
 public:
-    bool add(const Element& element)
-    {
+    bool add(const Element& element) {
         ElementList::iterator it = findElement(element);
         if (it == elements_.end())
         {
@@ -180,6 +182,7 @@ private:
     ElementList::iterator findElement(const Element& element) {
         auto it = elements_.begin();
         for ( ; it != elements_.end(); ++it) {
+            //TODO find element by ID
             if ((*it)->getName() == element.getName()) {
                 break;
             }
@@ -341,7 +344,8 @@ TEST_F(UiPackageTest, ElementMemberTests) {
     EXPECT_NE(element.getId(), someElement.getId());
     EXPECT_EQ(elName, element.getName());
     EXPECT_EQ(elValue, element.getValue());
-    
+    EXPECT_TRUE(someElement.validate());
+
     EXPECT_TRUE(element.getDefault().empty());
     element.setDefault(elDefault);
     EXPECT_EQ(elDefault, element.getDefault());
@@ -351,26 +355,31 @@ TEST_F(UiPackageTest, ElementMemberTests) {
     EXPECT_FALSE(element.getEnabled());
     element.setEnabled(true);
     EXPECT_TRUE(element.getEnabled());
-    EXPECT_TRUE(element.getVisible());
-    element.setVisible(false);
     EXPECT_FALSE(element.getVisible());
+    element.setVisible(true);
+    EXPECT_TRUE(element.getVisible());
     
     element.setValue("to another");
     EXPECT_EQ("to another", element.getValue());
+    EXPECT_TRUE(element.validate());
 }
     
 TEST_F(UiPackageTest, UIFacet) {
     UIFacet facet("facet", "other");
-    EXPECT_EQ(UIFacetCategory::Other, facet.getCategory());
+    std::vector<UIFacetCategory> categories = facet.getCategories();
+    EXPECT_EQ(1, categories.size());
+    EXPECT_EQ(UIFacetCategory::Other, categories[0]);
     std::string strValue;
     EXPECT_TRUE(facet.get("facet", strValue));
-    EXPECT_TRUE(strValue == "other");
+    EXPECT_EQ("other", strValue);
     EXPECT_FALSE(facet.getMandatory());
     facet.setMandatory(true);
     EXPECT_TRUE(facet.getMandatory());
 
     UIFacet colorFacet("Colors", "Facets for Widget Colors", UIFacetCategory::Color);
-    EXPECT_EQ(UIFacetCategory::Color, colorFacet.getCategory());
+    categories = colorFacet.getCategories();
+    EXPECT_EQ(1, categories.size());
+    EXPECT_EQ(UIFacetCategory::Color, categories[0]);
     EXPECT_TRUE(colorFacet.set("foreground", 0xfefefe));
     EXPECT_TRUE(colorFacet.set("background", 0x000000));
     EXPECT_TRUE(colorFacet.set("dialog.text", 0xee0000));
@@ -390,7 +399,8 @@ TEST_F(UiPackageTest, UIWithEmptyDelegate) {
     UI emptyUi(nullptr, 0, uiDelegate);
     EmptyElementDelegate eelDelegate;
     Element element("element");
-    EXPECT_FALSE(emptyUi.addElement(&element));
+    ElementHandle handle = emptyUi.addElement(&element);
+    EXPECT_FALSE(handle.isValid());
     EXPECT_EQ(nullptr, emptyUi.currentElement());
 }
 
@@ -399,15 +409,16 @@ TEST_F(UiPackageTest, UIWithBaseDelegate) {
     EXPECT_EQ(Result(true), baseUi.init());
 
     Element element("element");
-    EXPECT_TRUE(baseUi.addElement(&element));
+    element.setPrompt("Enter your name");
+    element.setDefault("(unknown)");
+    ElementHandle handle = baseUi.addElement(&element);
+    EXPECT_TRUE(handle.isValid());
     Element* el1 = baseUi.currentElement();
     EXPECT_NE(nullptr, el1);
     EXPECT_TRUE(el1->getName() == "element");
     ssize_t idx = baseUi.findElement(&element);
     EXPECT_EQ(0, idx);
 
-    element.setPrompt("Enter your name");
-    element.setDefault("(unknown)");
     baseUi.erase();
     baseUi.draw();
     baseUi.output();
@@ -416,17 +427,24 @@ TEST_F(UiPackageTest, UIWithBaseDelegate) {
     Element element2("element2");
     idx = baseUi.findElement(&element2);
     EXPECT_EQ(-1, idx);
-    EXPECT_FALSE(baseUi.addElement(&element2));
+    handle = baseUi.addElement(&element2);
+    EXPECT_TRUE(handle.isValid());
     idx = baseUi.findElement(&element2);
-    EXPECT_EQ(-1, idx);
+    EXPECT_NE(-1, idx);
     
     EXPECT_EQ(&element, baseUi.currentElement());
     EXPECT_EQ(&element, baseUi.getElement(0));
-    EXPECT_EQ(0, baseUi.nextElement());
+    EXPECT_EQ(1, baseUi.nextElement());
+    EXPECT_EQ(&element2, baseUi.currentElement());
     
     EXPECT_TRUE(baseUi.removeElement(&element));
+    EXPECT_TRUE(baseUi.firstElement());
+    EXPECT_EQ(&element2, baseUi.currentElement());
+    
+    EXPECT_TRUE(baseUi.removeElement(&element2));
     EXPECT_FALSE(baseUi.firstElement());
-    EXPECT_TRUE(baseUi.addElement(&element2));
+    handle = baseUi.addElement(&element2);
+    EXPECT_TRUE(handle.isValid());
     idx = baseUi.findElement(&element2);
     EXPECT_EQ(0, idx);
     EXPECT_TRUE(baseUi.firstElement());
@@ -434,15 +452,32 @@ TEST_F(UiPackageTest, UIWithBaseDelegate) {
     EXPECT_EQ(Result(true), baseUi.deinit());
 }
 
+TEST_F(UiPackageTest, UIWithBaseDelegateListener) {
+    UI baseUi(nullptr, 0);
+    EXPECT_EQ(Result(true), baseUi.init());
+
+    UI::CallbackFunction listener = [](UiEventType eventType, Element* element)->bool {
+        aftlog << "Got a callback with " << static_cast<int>(eventType)
+               << " element: " << element->getName() << endl;
+        return true;
+    };
+    baseUi.registerListener(&listener);
+    Element element("element");
+    element.setPrompt("Enter your name");
+    element.setDefault("(unknown)");
+    ElementHandle handle = baseUi.addElement(&element);
+    EXPECT_TRUE(handle.isValid());
+    handle = baseUi.addElement(&element);
+    EXPECT_FALSE(handle.isValid());
+
+    baseUi.unregisterListener(&listener);
+    Element element2("element2");
+    handle = baseUi.addElement(&element2);
+    EXPECT_TRUE(handle.isValid());
+
+    EXPECT_EQ(Result(true), baseUi.deinit());
+}
 #if 0
-    // High level methods
-    virtual void draw();
-    virtual void erase();
-    virtual void input();
-    virtual void output();
-    void registerListener(CallbackFunction* listener);
-    void unregisterListener(CallbackFunction* listener);
-    
     // Producer contract
     virtual bool read(base::TObject& object) override;
     virtual bool read(base::Result& result) override;

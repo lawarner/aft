@@ -480,7 +480,13 @@ TEST(BasePackageTest, StructuredData)
     StructuredDataName member("member");
     StructuredDataName simpleSdName(SimpleName);
     StructuredData simpleSd(simpleSdName);
+    std::vector<std::string> names;
+    EXPECT_TRUE(simpleSd.getMembers(names));
+    EXPECT_TRUE(names.empty());
     EXPECT_TRUE(simpleSd.add(member, SomeValue));
+    EXPECT_TRUE(simpleSd.getMembers(names));
+    EXPECT_EQ(1, names.size());
+    EXPECT_EQ("member", names[0]);
 
     std::string value;
     EXPECT_TRUE(simpleSd.get(member, value));
