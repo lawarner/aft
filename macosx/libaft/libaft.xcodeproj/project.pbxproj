@@ -112,6 +112,8 @@
 		A153D1281CD05F8400000A15 /* entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D1261CD05F8400000A15 /* entity.cpp */; };
 		A153D1291CD05F8400000A15 /* entity.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D1271CD05F8400000A15 /* entity.h */; };
 		A15745771E1AF6FF00265D4D /* t_ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A15745761E1AF6FF00265D4D /* t_ui.cpp */; };
+		A159450A1F0B456500A087DD /* cocoaelementdelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A15945081F0B456500A087DD /* cocoaelementdelegate.cpp */; };
+		A159450B1F0B456500A087DD /* cocoaelementdelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A15945091F0B456500A087DD /* cocoaelementdelegate.h */; };
 		A16390811D038A2A00036620 /* tobasictypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A16390801D038A2A00036620 /* tobasictypes.cpp */; };
 		A16390841D03D75800036620 /* structureddataname.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A16390821D03D75800036620 /* structureddataname.cpp */; };
 		A16390851D03D75800036620 /* structureddataname.h in Headers */ = {isa = PBXBuildFile; fileRef = A16390831D03D75800036620 /* structureddataname.h */; };
@@ -250,6 +252,8 @@
 		A153D1271CD05F8400000A15 /* entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = entity.h; sourceTree = "<group>"; };
 		A15745751E1A057800265D4D /* elementdelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = elementdelegate.h; path = ../../src/ui/elementdelegate.h; sourceTree = "<group>"; };
 		A15745761E1AF6FF00265D4D /* t_ui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = t_ui.cpp; sourceTree = "<group>"; };
+		A15945081F0B456500A087DD /* cocoaelementdelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cocoaelementdelegate.cpp; path = ../../src/ui/cocoaelementdelegate.cpp; sourceTree = "<group>"; };
+		A15945091F0B456500A087DD /* cocoaelementdelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cocoaelementdelegate.h; path = ../../src/ui/cocoaelementdelegate.h; sourceTree = "<group>"; };
 		A16390801D038A2A00036620 /* tobasictypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tobasictypes.cpp; sourceTree = "<group>"; };
 		A16390821D03D75800036620 /* structureddataname.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = structureddataname.cpp; sourceTree = "<group>"; };
 		A16390831D03D75800036620 /* structureddataname.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = structureddataname.h; sourceTree = "<group>"; };
@@ -509,6 +513,8 @@
 				A13C2DB61EB042B20016E9B3 /* dumbttyuidelegate.h */,
 				A172903B1EB44909001454A0 /* dumbttyelementdelegate.cpp */,
 				A172903C1EB44909001454A0 /* dumbttyelementdelegate.h */,
+				A15945081F0B456500A087DD /* cocoaelementdelegate.cpp */,
+				A15945091F0B456500A087DD /* cocoaelementdelegate.h */,
 			);
 			name = ui;
 			sourceTree = "<group>";
@@ -585,6 +591,7 @@
 				A153D10C1CCC71F500000A15 /* testsuite.h in Headers */,
 				A153D1251CCD89D200000A15 /* proc.h in Headers */,
 				A1256C8D1DFE1CC500AE4700 /* platform-linux.h in Headers */,
+				A159450B1F0B456500A087DD /* cocoaelementdelegate.h in Headers */,
 				A153D0DF1CCC71F500000A15 /* producttype.h in Headers */,
 				A153D0EF1CCC71F500000A15 /* tobjecttree.h in Headers */,
 				A153D1081CCC71F500000A15 /* stringproducer.h in Headers */,
@@ -660,6 +667,7 @@
 				A153D11C1CCC71F500000A15 /* t_coretests.cpp in Sources */,
 				A153D11F1CCC71F500000A15 /* t_plugin.cpp in Sources */,
 				A13C2DB71EB042B20016E9B3 /* dumbttyuidelegate.cpp in Sources */,
+				A159450A1F0B456500A087DD /* cocoaelementdelegate.cpp in Sources */,
 				A153D0FA1CCC71F500000A15 /* fileproducer.cpp in Sources */,
 				A18F4D541CD442F600C755FA /* tobjecttype.cpp in Sources */,
 				A1F2AFBC1D036BD5009FE595 /* ui.cpp in Sources */,

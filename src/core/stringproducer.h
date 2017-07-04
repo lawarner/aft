@@ -1,6 +1,6 @@
 #pragma once
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -17,13 +17,10 @@
 
 #include "base/producer.h"
 
-namespace aft
-{
-namespace base
-{
+namespace aft {
+namespace base {
 // Forward reference
 class Blob;
-class Result;
 class TObject;
 }
 
@@ -47,9 +44,9 @@ public:
     virtual ~StringProducer();
 
     /** Not yet implemented. */
-    virtual bool read(aft::base::TObject& object);
+    virtual base::Result read(aft::base::TObject& object);
     /** Not yet implemented. */
-    virtual bool read(aft::base::Result& result);
+    virtual base::Result read(aft::base::Result& result);
     /** Read blobs from the file.
      *
      *  The data in the blob is either a character, word, text line or the whole file,
@@ -57,7 +54,7 @@ public:
      *  @param blob Reference of a blob object where the file contents is copied.
      *  @return true if data is copied, otherwise false
      */
-    virtual bool read(aft::base::Blob& blob);
+    virtual base::Result read(aft::base::Blob& blob);
     virtual bool hasData();
     virtual bool hasObject(aft::base::ProductType productType);
 
@@ -66,7 +63,7 @@ public:
 
 protected:
     // This is the same as writerDelegate_, but sub-classed
-    StringReaderImpl* reader_;
+    std::unique_ptr<StringReaderImpl> reader_;
 };
 
 } // namespace core

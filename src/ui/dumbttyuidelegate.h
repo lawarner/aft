@@ -28,7 +28,6 @@ namespace ui {
 class DumbTtyElementDelegate;
 class Element;
 class UI;
-class UIFacet;
 
 /**
  *  Implements the ui delegate interface for a very basic, dumb terminal.
@@ -38,8 +37,6 @@ public:
     DumbTtyUIDelegate(UI* ui);
     virtual ~DumbTtyUIDelegate() = default;
 public:
-    void addInputValue(const Element& element, const std::string& value);
-
     virtual void flush(const Element& element) override;
     virtual bool hide(const Element& element) override;
     virtual bool input(const Element& element, std::string& value) override;

@@ -21,6 +21,7 @@
 #include <string>
 #include <vector>
 #include "ui/element.h"
+#include "ui/elementdelegate.h"
 
 namespace aft {
 namespace ui {
@@ -59,13 +60,9 @@ public:
     virtual bool show(const Element& element) = 0;
 };
 
-/*
- *  TODO:
- *  Refactor BaseUIDelegate to be memory only with no user interaction.
- *       The addInputValue method will hold a value for each element to use in place of
- *       actual user input.
- *       Then the functionality of this class will be moved to a DumbTTYUIDelegate
- *  A similar refactoring will occur for BaseElementDelegate
+/**
+ *  This class implements a UI Delegate and Element Delegate that is memory only,
+ *  thus does not perform actual UI.
  */
 class BaseUIDelegate : public UIDelegate {
 public:
@@ -85,6 +82,7 @@ public:
 
 protected:
     UI* ui_;
+    std::unique_ptr<ElementDelegate> delegate_;
     ElementList& elements_;
 };
 

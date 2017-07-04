@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include "element.h"
+#include "elementdelegate.h"
 #include "ui.h"
 #include "uidelegate.h"
 #include "core/logger.h"
@@ -30,6 +31,7 @@ using namespace std;
 
 BaseUIDelegate::BaseUIDelegate(UI* ui)
     : ui_(ui)
+    , delegate_(make_unique<BaseElementDelegate>())
     , elements_(ui->getElementList()) {
 
 }
@@ -39,7 +41,7 @@ bool BaseUIDelegate::add(const Element& element) {
 }
 
 void BaseUIDelegate::flush(const Element& element) {
-    delegate_->flush(element);
+    delegate_->flush(&element);
 }
 
 bool BaseUIDelegate::focus(const Element& element) {

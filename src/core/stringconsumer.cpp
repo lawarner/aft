@@ -114,28 +114,22 @@ bool StringConsumer::canAcceptData()
     return true;
 }
 
-bool StringConsumer::write(const TObject& object)
-{
+Result StringConsumer::write(const TObject& object) {
     return false;
 }
 
-bool StringConsumer::write(const Result& result)
-{
+Result StringConsumer::write(const Result& result) {
     return false;
 }
 
-bool StringConsumer::write(const Blob& blob)
-{
+Result StringConsumer::write(const Blob& blob) {
     return writer_->dataAvailable(blob);
 }
 
-void StringConsumer::clear()
-{
+void StringConsumer::clear() {
     writer_->buffer_.clear();
 }
 
-std::string StringConsumer::getContents() const
-{
+std::string StringConsumer::getContents() const {
     return writer_->buffer_;
 }
-

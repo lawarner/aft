@@ -1,5 +1,5 @@
 /*
- *   Copyright © 2016 Andy Warner. All rights reserved.
+ *   Copyright © 2016-2017 Andy Warner. All rights reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -35,13 +35,18 @@ using namespace std;
 namespace aft {
 namespace ui {
 
+constexpr const char* EmptyElementName = "** EMPTY **";
+    
 UI::UI(Element* element, unsigned int maxSize, UIDelegate* uiDelegate)
     : base::BaseProc(nullptr, nullptr)
     , maxSize_(maxSize)
     , currentElement_(0)
-    , uiDelegate_(uiDelegate == nullptr ? make_unique<BaseUIDelegate>() : unique_ptr<UIDelegate>(uiDelegate)) {
+    , emptyElement_(make_unique<Element>(EmptyElementName))
+    , uiDelegate_(uiDelegate == nullptr ? make_unique<BaseUIDelegate>(this)
+                                        : unique_ptr<UIDelegate>(uiDelegate)) {
 
     addElement(element);
+    emptyElement_->setPrompt(EmptyElementName);
 }
 
 UI::~UI() {
@@ -69,7 +74,7 @@ UI::currentElement() const {
     if (currentElement_ < uiElements_.size()) {
         return uiElements_[currentElement_];
     }
-    return nullptr;
+    return emptyElement_.get();
 }
 
 ssize_t
@@ -82,10 +87,10 @@ UI::findElement(const ElementHandle& handle) const {
     }
     return -1;
 }
-    
+
 bool UI::firstElement() {
     if (uiElements_.empty()) return false;
-    
+
     currentElement_ = 0;
     return true;
 }
@@ -117,12 +122,9 @@ bool UI::getElementValue(const ElementHandle& handle, std::string& value) {
     value = element->getValue();
     return true;
 }
-    
+
 bool UI::getElementValue(std::string& value) {
     Element* element = currentElement();
-    if (nullptr == element) {
-        return false;
-    }
     value = element->getValue();
     return true;
 }
@@ -152,6 +154,20 @@ bool UI::removeElement(const ElementHandle& handle) {
     return false;
 }
 
+bool UI::setCurrentElement(const ElementHandle& handle) {
+    ssize_t idx = findElement(handle);
+    if (-1 == idx) {
+        return false;
+    }
+    currentElement_ = idx;
+    return true;
+}
+    
+void UI::setUiDelegate(UIDelegate* uiDelegate) {
+    uiDelegate_.reset(uiDelegate);
+}
+    
+
 Result UI::init(base::Context* context)
 {
     return Result(true);
@@ -170,20 +186,30 @@ void UI::draw() {
 }
 
 void UI::erase() {
-    
+    auto element = currentElement();
+    if (element != emptyElement_.get()) {
+        uiDelegate_->remove(*element);
+    }
+}
+
+void UI::flush() {
+    auto element = currentElement();
+    uiDelegate_->flush(*element);
 }
 
 void UI::input() {
-    auto& element = *uiElements_[currentElement_];
-    std::string value;
-    uiDelegate_->input(element, value);
-    element.setValue(value);
-    callListeners(UiEventType::ValueChanged, &element);
+    auto element = currentElement();
+    if (element != emptyElement_.get()) {
+        std::string value;
+        uiDelegate_->input(*element, value);
+        element->setValue(value);
+        callListeners(UiEventType::ValueChanged, element);
+    }
 }
     
 void UI::output() {
-    auto& element = *uiElements_[currentElement_];
-    uiDelegate_->output(element);
+    auto element = currentElement();
+    uiDelegate_->output(*element);
 }
     
 void UI::registerListener(CallbackFunction* listener) {
@@ -212,18 +238,19 @@ bool UI::callListeners(UiEventType event, Element* element) {
 }
 
 // Producer contract
-bool UI::read(base::TObject& object) {
+base::Result
+UI::read(base::TObject& object) {
     return false;
 }
 
-bool UI::read(base::Result& result) {
+base::Result UI::read(base::Result& result) {
     return false;
 }
 
-bool UI::read(base::Blob& blob) {
+base::Result UI::read(base::Blob& blob) {
 
     if (hasData()) {
-        Element* element = uiElements_[currentElement_];
+        auto element = currentElement();
         blob = Blob(element->getName(), Blob::STRING, element->getValue());
         return true;
     }
@@ -247,8 +274,8 @@ bool UI::hasObject(base::ProductType productType)
     }
     
     // ask current element for data
-    Element* currElem = uiElements_[currentElement_];
-    return currElem->hasValue();
+    auto element = currentElement();
+    return element->hasValue();
 }
 
 // Consumer contract
@@ -259,23 +286,44 @@ bool UI::canAcceptData()
     return true;
 }
 
-bool UI::write(const base::TObject& object) {
-    if (!canAcceptData()) return false;
+// For a UI these are basically the commands to construct and control the UI
+Result UI::write(const base::TObject& object) {
+    Result result(false);
+    if (!canAcceptData()) return result;
 
     if (TObjectType::TypeUiCommand != object.getType()) {
-        return false;
+        return result;
     }
-    Result result(false);
     const UICommand& command = dynamic_cast<const UICommand&>(object);
     switch (command.getCommandType()) {
         case CommandType::Start:
             result = init();
             break;
-        case CommandType::AddElement:
-            addElement(command.getElement());
+        case CommandType::AddElement: {
+            ElementHandle handle = addElement(command.getElement());
+            result = Result(handle.isValid());
+        }
+            break;
+        case CommandType::FirstElement:
+            result = firstElement();
+            break;
+        case CommandType::NextElement:
+            result = Result(static_cast<int>(nextElement()));
+            break;
+        case CommandType::Read:
+            //TODO
+            break;
+        case CommandType::Write:
+            //TODO
+            break;
+        case CommandType::SelectElement:
+            result = setCurrentElement(command.getElement());
+            break;
+        case CommandType::SetDefaultValue:
+            //TODO
             break;
         case CommandType::RemoveElement:
-            removeElement(command.getElement());
+            result = Result(removeElement(command.getElement()));
             break;
         case CommandType::Exit:
             result = deinit();
@@ -287,15 +335,15 @@ bool UI::write(const base::TObject& object) {
     return result;
 }
 
-bool UI::write(const base::Result& result) {
+Result UI::write(const base::Result& result) {
     return false;
 }
 
-// For a UI these are basically the commands to construct and control the UI
+// For a UI these are blobs of data or other bits needed
 //TODO use entities
-bool UI::write(const base::Blob& blob) {
+Result UI::write(const base::Blob& blob) {
     if (!canAcceptData()) return false;
-    
+
     //TODO These commands would result in a TObject of subclass UICommand
     if (blob.getType() == Blob::COMMAND) {
         

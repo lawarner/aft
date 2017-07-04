@@ -39,28 +39,22 @@ bool BaseConsumer::canAcceptData()
     return readerDelegate_ != 0;
 }
 
-bool BaseConsumer::write(const TObject& object)
-{
-    if (readerDelegate_)
-    {
+Result BaseConsumer::write(const TObject& object) {
+    if (readerDelegate_) {
         return readerDelegate_->dataAvailable(object);
     }
     return false;
 }
 
-bool BaseConsumer::write(const Result& result)
-{
-    if (readerDelegate_)
-    {
+Result BaseConsumer::write(const Result& result) {
+    if (readerDelegate_) {
         return readerDelegate_->dataAvailable(result);
     }
     return false;
 }
 
-bool BaseConsumer::write(const Blob& blob)
-{
-    if (readerDelegate_)
-    {
+Result BaseConsumer::write(const Blob& blob) {
+    if (readerDelegate_) {
         return readerDelegate_->dataAvailable(blob);
     }
     return false;
@@ -70,13 +64,11 @@ int BaseConsumer::write(const std::vector<TObject>& objects)
 {
     int ret = 0;
     std::vector<TObject>& tobjs = const_cast<std::vector<TObject>&>(objects);
-    std::vector<TObject>::iterator it;
-    for (it = tobjs.begin(); it != tobjs.end(); ++it, ++ret)
-    {
-        if (!write(*it))
-        {
+    for (const auto& tobj : tobjs) {
+        if (!write(tobj)) {
             break;
         }
+        ++ret;
     }
 
     return ret;

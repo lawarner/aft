@@ -29,7 +29,12 @@ class Element;
 enum class CommandType {
     Start,
     AddElement,
+    FirstElement,
+    NextElement,
     RemoveElement,
+    Read,
+    Write,
+    SelectElement,
     SetDefaultValue,
     Exit
 };

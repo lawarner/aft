@@ -134,27 +134,26 @@ private:
 
 StringProducer::StringProducer(const std::string& contents, ParcelType parcelType)
     : BaseProducer(0)
-    , reader_(new StringReaderImpl(contents, parcelType))
+    , reader_(std::make_unique<StringReaderImpl>(contents, parcelType))
 {
-    writerDelegate_ = reader_;
+    writerDelegate_ = reader_.get();
 }
 
-StringProducer::~StringProducer()
-{
-    delete reader_;
+StringProducer::~StringProducer() {
+
 }
 
-bool StringProducer::read(TObject& object)
-{
-    return false;
-}
-
-bool StringProducer::read(Result& result)
+Result StringProducer::read(TObject& object)
 {
     return false;
 }
 
-bool StringProducer::read(Blob& blob)
+Result StringProducer::read(Result& result)
+{
+    return false;
+}
+
+Result StringProducer::read(Blob& blob)
 {
     return reader_->getData(blob);
 }

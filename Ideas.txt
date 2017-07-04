@@ -1,10 +1,13 @@
 
+TObjectIterator: make generic class that takes a lambda for navigating to next element.
+
 TObject Refactor Notes:
 -----------------------
 Allow outer and inner process()?
 Need iterator types, better visitor
 - every iterator: this->process(), for each child child->run()
 Need Operation interface, method applyOperation(OperationType, list<>& parameters, list<TObject*>& objects)
+- maybe use std::functional
 
 AI module: when a test fails, tries to characterize the failure:
 - repeatability

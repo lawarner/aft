@@ -9,22 +9,24 @@
 #import "cppmain.hpp"
 
 #import <ui/uiaftbridge.h>
+using namespace aft::ui;
 
 @interface AppDelegate ()
 
 @property (weak) IBOutlet NSWindow *window;
 
-@property UiAftBridge *uiaft;
+@property aft::ui::UiAftBridge *uiaft;
 
 @end
 
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    self.uiaft = [[UiAftBridge alloc] initWithWindow:self.window];
-    [self.uiaft setCppMain:CppMain];
-    [self.uiaft setup];
-    [self.uiaft run];
+    UiAftBridge* uiaft = UiAftBridge::instance();
+    uiaft->setWindow((void *)CFBridgingRetain(self.window));
+    uiaft->setCppMain((void *)CppMain);
+    uiaft->setup();
+    uiaft->run();
 }
 
 

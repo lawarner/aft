@@ -132,17 +132,17 @@ FileConsumer::~FileConsumer()
     delete writer_;
 }
 
-bool FileConsumer::write(const TObject& object)
+Result FileConsumer::write(const TObject& object)
 {
     return false;
 }
 
-bool FileConsumer::write(const Result& result)
+Result FileConsumer::write(const Result& result)
 {
     return false;
 }
 
-bool FileConsumer::write(const Blob& blob)
+Result FileConsumer::write(const Blob& blob)
 {
     return writer_->dataAvailable(blob);
 }

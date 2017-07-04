@@ -1,21 +1,16 @@
 #pragma once
-//
-//  dumbttyelementdelegate.hpp
-//  libaft
-//
-//  Copyright © 2017 Andy Warner. All rights reserved.
-//
 
 #include "ui/elementdelegate.h"
 
 namespace aft {
 namespace ui {
 
-class DumbTtyElementDelegate : public ElementDelegate {
-public:
-    DumbTtyElementDelegate();
-    ~DumbTtyElementDelegate() = default;
 
+class CocoaElementDelegate : public ElementDelegate {
+public:
+    CocoaElementDelegate() = default;
+    virtual ~CocoaElementDelegate() = default;
+public:
     virtual void flush(const Element* element) override;
     virtual const std::string& getValue(const Element* element) const override;
     virtual void setValue(Element* element, const std::string& value) override;
@@ -27,6 +22,7 @@ public:
     
     virtual bool input(const Element* element, std::string& value) override;
     virtual bool output(const Element* element, bool showValue = false) override;
+
 };
 
 } // namespace ui

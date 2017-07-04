@@ -95,17 +95,17 @@ QueueProc::~QueueProc()
 }
 
 // Producer contract
-bool QueueProc::read(base::TObject& object)
+Result QueueProc::read(base::TObject& object)
 {
     return false;
 }
 
-bool QueueProc::read(base::Result& result)
+Result QueueProc::read(base::Result& result)
 {
     return false;
 }
 
-bool QueueProc::read(base::Blob& blob)
+Result QueueProc::read(base::Blob& blob)
 {
     return impl_.getData(blob);
 }
@@ -126,17 +126,17 @@ bool QueueProc::canAcceptData()
     return impl_.roomForData();
 }
 
-bool QueueProc::write(const base::TObject& object)
+Result QueueProc::write(const base::TObject& object)
 {
     return false;
 }
 
-bool QueueProc::write(const base::Result& result)
+Result QueueProc::write(const base::Result& result)
 {
     return false;
 }
 
-bool QueueProc::write(const base::Blob& blob)
+Result QueueProc::write(const base::Blob& blob)
 {
     return impl_.dataAvailable(blob);
 }

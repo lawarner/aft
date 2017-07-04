@@ -161,17 +161,17 @@ FileProducer::~FileProducer()
     delete reader_;
 }
 
-bool FileProducer::read(TObject& object)
+Result FileProducer::read(TObject& object)
 {
     return false;
 }
 
-bool FileProducer::read(Result& result)
+Result FileProducer::read(Result& result)
 {
     return false;
 }
 
-bool FileProducer::read(Blob& blob)
+Result FileProducer::read(Blob& blob)
 {
     return reader_->getData(blob);
 }

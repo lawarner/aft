@@ -50,7 +50,7 @@ bool DumbTtyUIDelegate::input(const Element& element, std::string& value) {
 }
 
 bool DumbTtyUIDelegate::output(const Element& element, bool showValue) const {
-    return delegate_->output(&element);
+    return delegate_->output(&element, showValue);
 }
 
 bool DumbTtyUIDelegate::show(const Element& element) {

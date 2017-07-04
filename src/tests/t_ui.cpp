@@ -36,6 +36,9 @@ public:
     EmptyElementDelegate() : focused_(nullptr) { }
     virtual ~EmptyElementDelegate() = default;
 
+    virtual void flush(const Element* element) override {
+        
+    }
     virtual const std::string& getValue(const Element* element) const override {
         return value_;  // this is wrong, but for now...
     }
@@ -68,7 +71,7 @@ public:
         value = value_;
         return true;
     }
-    virtual bool output(const Element* element) override {
+    virtual bool output(const Element* element, bool showValue = false) override {
         if (element->hasValue()) {
             value_ = element->getValue();
         }
@@ -87,10 +90,13 @@ public:
     bool add(const Element& element) override {
         return false;
     }
+    void flush(const Element& element) override {
+        
+    }
     bool focus(const Element& element) override {
         return false;
     }
-    const Element* get(Element::ElementId id) override {
+    const Element* get(const ElementHandle& handle) override {
         return nullptr;
     }
     const Element* get(const std::string& name) override {
@@ -105,14 +111,14 @@ public:
         return true;
     }
     /** Output the element to the user interface */
-    bool output(const Element& element) const override {
+    bool output(const Element& element, bool showValue = false) const override {
         aftlog << "(Custom) Element " << element.getName() << endl;
         return true;
     }
     bool remove(const Element& element) override {
         return false;
     }
-    bool show(const Element& element, bool showValue) override {
+    bool show(const Element& element) override {
         return false;
     }
 };
@@ -130,6 +136,9 @@ public:
             return true;
         }
         return false;
+    }
+    void flush() {
+        
     }
     bool focus(const Element& element) {
         return false;
@@ -401,7 +410,8 @@ TEST_F(UiPackageTest, UIWithEmptyDelegate) {
     Element element("element");
     ElementHandle handle = emptyUi.addElement(&element);
     EXPECT_FALSE(handle.isValid());
-    EXPECT_EQ(nullptr, emptyUi.currentElement());
+    // It is equal to emptyElement
+    EXPECT_NE(nullptr, emptyUi.currentElement());
 }
 
 TEST_F(UiPackageTest, UIWithBaseDelegate) {

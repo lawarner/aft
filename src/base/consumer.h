@@ -1,6 +1,6 @@
 #pragma once
 /*
- *   Copyright © 2015 Andy Warner
+ *   Copyright © 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
  */
 
 #include <vector>
-#include "producttype.h"
+#include "base/result.h"
+#include "base/producttype.h"
 
 namespace aft
 {
@@ -69,15 +70,15 @@ public:
     /** Write a TObject to this consumer.
      *  @return true if the object was consumed.
      */
-    virtual bool write(const TObject& object) = 0;
+    virtual Result write(const TObject& object) = 0;
     /** Write a Result to this consumer.
      *  @return true if the result was consumed.
      */
-    virtual bool write(const Result& result) = 0;
+    virtual Result write(const Result& result) = 0;
     /** Write a Blob to this consumer.
      *  @return true if the blob was consumed.
      */
-    virtual bool write(const Blob& blob) = 0;
+    virtual Result write(const Blob& blob) = 0;
     /** Write multiple TObject's to this consumer.
      *  @return The number of objects that were consumed.  Returns -1 if an error occurred.
      */
@@ -107,20 +108,20 @@ public:
     virtual ~BaseConsumer();
 
     /** Returns true if write can be called on this consumer without blocking */
-    virtual bool canAcceptData();
+    virtual bool canAcceptData() override;
 
-    virtual bool write(const TObject& object);
-    virtual bool write(const Result& result);
-    virtual bool write(const Blob& blob);
+    virtual Result write(const TObject& object) override;
+    virtual Result write(const Result& result) override;
+    virtual Result write(const Blob& blob) override;
     /** Returns the number of objects written. */
-    virtual int write(const std::vector<TObject>& objects);
-    virtual int write(const std::vector<Result>& results);
-    virtual int write(const std::vector<Blob>& blobs);
+    virtual int write(const std::vector<TObject>& objects) override;
+    virtual int write(const std::vector<Result>& results) override;
+    virtual int write(const std::vector<Blob>& blobs) override;
 
     /** Register as a data writer for this consumer. */
-    virtual bool registerWriteCallback(const WriterContract* writer);
+    virtual bool registerWriteCallback(const WriterContract* writer) override;
     /** Unregister as a data writer for this consumer. */
-    virtual bool unregisterWriteCallback(const WriterContract* writer);
+    virtual bool unregisterWriteCallback(const WriterContract* writer) override;
 
     /** Start loop reading from writers and writing to the reader delegate. */
     virtual void flowData();

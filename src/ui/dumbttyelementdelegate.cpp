@@ -18,6 +18,10 @@ DumbTtyElementDelegate::DumbTtyElementDelegate() {
     
 }
 
+void DumbTtyElementDelegate::flush(const Element* element) {
+    cout << endl;
+}
+
 const std::string&
 DumbTtyElementDelegate::getValue(const Element* element) const {
     return element->getValue();
@@ -54,19 +58,15 @@ bool DumbTtyElementDelegate::setFacet(Element* element, const UIFacet& facet) {
  *  No Prompt,Default: <element_name>?
  */
 bool DumbTtyElementDelegate::input(const Element* element, std::string& value) {
-    string defValue = element->getDefault();
-    if (!defValue.empty()) {
-        defValue = " [" + defValue + "]";
-    }
-    std::cout << element->getPrompt() << defValue << ": " << std::flush;
-    char cname[100];
-    std::cin.getline(cname, sizeof(cname));
-    std::string name(cname, strlen(cname));
-    if (name.empty()) {
-        value = element->getDefault();
+    output(element);
+    char cinbuf[100];
+    std::cin.getline(cinbuf, sizeof(cinbuf));
+    size_t strLen = strnlen(cinbuf, sizeof(cinbuf));
+    if (strLen > 0) {
+        value = std::string(cinbuf, strlen(cinbuf));
     }
     else {
-        value = name;
+        value = element->getDefault();
     }
     return true;
 }
@@ -88,6 +88,6 @@ bool DumbTtyElementDelegate::output(const Element* element, bool showValue) {
     if (showValue && element->hasValue()) {
         oss << element->getValue() << " ";
     }
-    cout << oss.str() << flush;
+    cout << oss.str() << std::flush;
     return true;
 }

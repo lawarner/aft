@@ -38,18 +38,18 @@ public:
     virtual ~QueueProc();
 
     // Producer contract
-    virtual bool read(base::TObject& object);
-    virtual bool read(base::Result& result);
-    virtual bool read(base::Blob& blob);
+    virtual base::Result read(base::TObject& object);
+    virtual base::Result read(base::Result& result);
+    virtual base::Result read(base::Blob& blob);
     virtual bool hasData();
     virtual bool hasObject(base::ProductType productType);
 
     // Consumer contract
     virtual bool canAcceptData();
     
-    virtual bool write(const base::TObject& object);
-    virtual bool write(const base::Result& result);
-    virtual bool write(const base::Blob& blob);
+    virtual base::Result write(const base::TObject& object);
+    virtual base::Result write(const base::Result& result);
+    virtual base::Result write(const base::Blob& blob);
 
     //TODO values and callbacks for low water/highwater
     bool setLowWater(int lowValue, base::Callback* lowWaterAction);

@@ -1,34 +1,35 @@
 #pragma once
 //
-//  cocoauidelegate.hpp
+//  cocoauidelegate.h
 //  libaft
 //
-//  Created by Lynn Warner on 4/14/17.
 //  Copyright © 2017 Andy Warner. All rights reserved.
 //
 
-#include "uidelegate.h"
+#include "ui/uidelegate.h"
 
 namespace aft {
 namespace ui {
-    
 
-class CocoaUIDelegate : public UIDelegate {
+// Forward reference
+class CocoaElementDelegate;
+class UI;
+
+class CocoaUIDelegate : public BaseUIDelegate {
 public:
-    CocoaUIDelegate();
+    CocoaUIDelegate(UI* ui);
     virtual ~CocoaUIDelegate() = default;
 public:
     virtual bool add(const Element& element) override;
+    virtual void flush(const Element& element) override;
     virtual bool focus(const Element& element) override;
-    virtual const Element* get(const std::string& name) override;
     virtual bool hide(const Element& element) override;
     virtual bool input(const Element& element, std::string& value) override;
-    virtual bool output(const Element& element) const override;
-    virtual bool remove(const Element& element) override;
-    virtual bool show(const Element& element, bool showValue = false) override;
+    virtual bool output(const Element& element, bool showValue = false) const override;
+    virtual bool show(const Element& element) override;
     
 protected:
-
+    std::unique_ptr<CocoaElementDelegate> delegate_;
 };
 
 } // namespace ui

@@ -1,6 +1,6 @@
 #pragma once
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
  */
 
 #include <vector>
-#include "producttype.h"
+#include "base/producttype.h"
+#include "base/result.h"
 
 namespace aft
 {
@@ -24,7 +25,6 @@ namespace base
 {
 // Forward reference
 class Blob;
-class Result;
 class TObject;
 class WriterContract;
 
@@ -62,17 +62,17 @@ public:
      *  @param object Reference to TObject that receives the produced data.
      *  @return true if the object was read.
      */
-    virtual bool read(TObject& object) = 0;
+    virtual Result read(TObject& object) = 0;
     /** Read a Result from this producer.
      *  @param result Reference to Result that receives the produced data.
      *  @return true if the result was read.
      */
-    virtual bool read(Result& result) = 0;
+    virtual Result read(Result& result) = 0;
     /** Read a Blob from this producer.
      *  @param blob Reference to Blob that receives the produced data.
      *  @return true if the blob was read.
      */
-    virtual bool read(Blob& blob) = 0;
+    virtual Result read(Blob& blob) = 0;
     virtual bool hasData() = 0;
     virtual bool hasObject(ProductType productType) = 0;
 
@@ -88,19 +88,23 @@ public:
 class BaseProducer : public ProducerContract
 {
 public:
+    /** Construct a producer with an optional WriterContract delegate
+     *  @param writerDelegate delegate to use, if specified. This class does not
+     *             take ownership of the delegate.
+     */
     BaseProducer(WriterContract* writerDelegate = 0);
     virtual ~BaseProducer();
 
-    virtual bool read(TObject& object);
-    virtual bool read(Result& result);
-    virtual bool read(Blob& blob);
-    virtual bool hasData();
-    virtual bool hasObject(ProductType productType);
+    virtual Result read(TObject& object) override;
+    virtual Result read(Result& result) override;
+    virtual Result read(Blob& blob) override;
+    virtual bool hasData() override;
+    virtual bool hasObject(ProductType productType) override;
 
     /** Register to receive a callback when data is available. */
-    virtual bool registerDataCallback(const ReaderContract* reader);
+    virtual bool registerDataCallback(const ReaderContract* reader) override;
     /** Unregister callback from receiving any more data. */
-    virtual bool unregisterDataCallback(const ReaderContract* reader);
+    virtual bool unregisterDataCallback(const ReaderContract* reader) override;
 
     /** Start loop reading from the writer delegate and writing to the readers.
      *

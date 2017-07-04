@@ -37,96 +37,54 @@ namespace {
 
 class UiPackageTest : public ::testing::Test {
 protected:
-    virtual void SetUp()
-    {
+    virtual void SetUp() {
+        UI dumbUi(root_, 0);
+        dumbUi_.setUiDelegate(new DumbTtyUIDelegate(&dumbUi));
+        EXPECT_EQ(Result(true), dumbUi.init());
     }
-    virtual void TearDown()
-    {
-    }
-    
-    bool runElementTests(Element& element, const std::string& expectedValue,
-                         const std::string& defaultValue, const std::string& prompt) {
-        aftlog << std::endl << "++++ Start tests for element " << element.getName() << " ++++" << std::endl;
-        aftlog << "++ Show element:" << std::endl;
-        EXPECT_FALSE(element.getVisible());
-#if 0 //TODO fix
-        element.show();
-        EXPECT_TRUE(element.getVisible());
-        aftlog << "++ Will not show element again:" << std::endl;
-        element.show();
-        aftlog << "++ But will show element after hide/show:" << std::endl;
-        element.hide();
-        element.show();
-        aftlog << "++ Show element again (force):" << std::endl;
-        element.show(true);
-        
-        aftlog << "++ Show element with prompt:" << std::endl;
-        element.setPrompt(prompt);
-        EXPECT_TRUE(element.getPrompt() == prompt);
-        element.show(true);
-        aftlog << "++ Show element with prompt and default value:" << std::endl;
-        element.setDefault(defaultValue);
-        element.show(true);
-        
-        aftlog << "++ Refresh:" << std::endl;
-        element.refresh();
-        
-        element.setEnabled(true);
-        EXPECT_TRUE(element.getDefault() == defaultValue);
-        EXPECT_TRUE(element.getValue().empty());
-        EXPECT_TRUE(element.input());
-#endif
-        EXPECT_TRUE(element.getValue() == expectedValue);
-        element.setValue("to another");
-        EXPECT_TRUE(element.getValue() == "to another");
-//        EXPECT_TRUE(element.getValue(true) == expectedValue);
-        
-        EXPECT_TRUE(element.getVisible());
-        element.setVisible(false);
-        EXPECT_FALSE(element.getVisible());
-        EXPECT_FALSE(element.getEnabled());
-        element.setEnabled(true);
-        EXPECT_TRUE(element.getEnabled());
-        
-        bool retval = element.validate();
-        aftlog << "++++ End tests for element " << element.getName()
-        << " returns " << std::boolalpha << retval << " ++++" << std::endl;
-        return retval;
+    virtual void TearDown() {
+        dumbUi_.deinit();
     }
     
-    bool runUiTests(UI& ui) {
-        return false;
+    bool runUiTests(const std::string& expected) {
+        dumbUi_.output();
+        dumbUi_.flush();
+        dumbUi_.input();
+        std::string value;
+        EXPECT_TRUE(dumbUi_.getElementValue(value));
+        EXPECT_EQ(expected, value);
+        value.clear();
+        EXPECT_TRUE(dumbUi_.getElementValue(root_, value));
+        EXPECT_EQ(expected, value);
+        value.clear();
+        EXPECT_TRUE(dumbUi_.getElementValue(handle_, value));
+        EXPECT_EQ(expected, value);
+        return expected == value;
     }
+
+    ElementHandle setRootElement(Element* rootElement) {
+        root_ = rootElement;
+        handle_ = dumbUi_.addElement(rootElement);
+        return handle_;
+    }
+
+protected:
+    UI dumbUi_;
+    DumbTtyUIDelegate* uiDelegate_;
+    Element* root_;
+    ElementHandle handle_;
 };
 
 TEST_F(UiPackageTest, DumbTtyElementDefaultValue) {
-    DumbTtyUIDelegate* uiDelegate = new DumbTtyUIDelegate;
-    UI baseUi(nullptr, 0, uiDelegate);
-    EXPECT_EQ(Result(true), baseUi.init());
-
     Element elOne("One");
     const std::string defaultVal("the first");
     const std::string prompt("Just hit return");
     elOne.setDefault(defaultVal);
     elOne.setPrompt(prompt);
-    ElementHandle handle = baseUi.addElement(&elOne);
+    ElementHandle handle = setRootElement(&elOne);
     EXPECT_TRUE(handle.isValid());
 
-    baseUi.output();
-    std::cout << std::endl;
-    baseUi.input();
-    std::string value;
-    EXPECT_TRUE(baseUi.getElementValue(value));
-    EXPECT_EQ(defaultVal, value);
-    value.clear();
-    EXPECT_TRUE(baseUi.getElementValue(&elOne, value));
-    EXPECT_EQ(defaultVal, value);
-    value.clear();
-    EXPECT_TRUE(baseUi.getElementValue(handle, value));
-    EXPECT_EQ(defaultVal, value);
-    //EXPECT_TRUE(runUiTests(baseUi));
-    
-    baseUi.deinit();
+    EXPECT_TRUE(runUiTests(defaultVal));
 }
 
 TEST_F(UiPackageTest, DumbTtyElementEnterOk) {
@@ -135,22 +93,32 @@ TEST_F(UiPackageTest, DumbTtyElementEnterOk) {
     Element elOne("One");
     elOne.setPrompt(prompt);
     elOne.setDefault(defaultVal);
-    UI dumbUi(&elOne, 0, new DumbTtyUIDelegate);
-    EXPECT_EQ(Result(true), dumbUi.init());
+    ElementHandle handle = setRootElement(&elOne);
+    EXPECT_TRUE(handle.isValid());
 
-    dumbUi.output();
-    std::cout << std::endl;
-    dumbUi.input();
-    std::string value;
-    EXPECT_TRUE(dumbUi.getElementValue(value));
-    EXPECT_EQ("ok", value);
-    //EXPECT_TRUE(runElementTests(elOne, "ok", defaultVal, prompt));
-
-    dumbUi.deinit();
+    EXPECT_TRUE(runUiTests("ok"));
 }
 
+TEST_F(UiPackageTest, DumbTtyUiTwoTopElements) {
+    Element elOne("One");
+    const std::string defaultVal("the first");
+    const std::string prompt("Just hit return");
+    elOne.setDefault(defaultVal);
+    elOne.setPrompt(prompt);
+    ElementHandle handle = setRootElement(&elOne);
+    EXPECT_TRUE(handle.isValid());
+
+    Element elTwo("Two");
+    const std::string defaultVal2("the second");
+    const std::string prompt2("Hit return");
+    elOne.setDefault(defaultVal2);
+    elOne.setPrompt(prompt2);
+    ElementHandle handle2 = dumbUi_.addElement(&elTwo);
+    EXPECT_TRUE(handle2.isValid());
+}
+    
 TEST_F(UiPackageTest, DumbTtyUiDelegateTest) {
-    DumbTtyUIDelegate uiDelegate;
+
 }
     
 } // namespace

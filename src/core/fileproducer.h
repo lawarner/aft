@@ -23,7 +23,6 @@ namespace base
 {
 // Forward reference
 class Blob;
-class Result;
 class TObject;
 }
 
@@ -48,9 +47,9 @@ public:
     virtual ~FileProducer();
 
     /** Not yet implemented. */
-    virtual bool read(aft::base::TObject& object);
+    virtual base::Result read(aft::base::TObject& object);
     /** Not yet implemented. */
-    virtual bool read(aft::base::Result& result);
+    virtual base::Result read(aft::base::Result& result);
     /** Read blobs from the file.
      *
      *  The data in the blob is either a character, word, text line or the whole file,
@@ -58,7 +57,7 @@ public:
      *  @param blob Reference of a blob object where the file contents is copied.
      *  @return true if data is copied, otherwise false
      */
-    virtual bool read(aft::base::Blob& blob);
+    virtual base::Result read(aft::base::Blob& blob);
     virtual bool hasData();
     virtual bool hasObject(aft::base::ProductType productType);
 

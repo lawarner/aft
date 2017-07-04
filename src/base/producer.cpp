@@ -34,7 +34,7 @@ BaseProducer::~BaseProducer()
 }
 
 
-bool BaseProducer::read(TObject& object)
+Result BaseProducer::read(TObject& object)
 {
     if (writerDelegate_ && writerDelegate_->hasData() == ProductType::TOBJECT)
     {
@@ -43,7 +43,7 @@ bool BaseProducer::read(TObject& object)
     return false;
 }
 
-bool BaseProducer::read(Result& result)
+Result BaseProducer::read(Result& result)
 {
     if (writerDelegate_ && writerDelegate_->hasData() == ProductType::RESULT)
     {
@@ -52,7 +52,7 @@ bool BaseProducer::read(Result& result)
     return false;
 }
 
-bool BaseProducer::read(Blob& blob)
+Result BaseProducer::read(Blob& blob)
 {
     if (writerDelegate_ && writerDelegate_->hasData() == ProductType::BLOB)
     {
@@ -179,4 +179,3 @@ void BaseProducer::flowData()
     } while (productType != ProductType::NONE);
 
 }
-

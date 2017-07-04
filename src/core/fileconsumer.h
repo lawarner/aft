@@ -23,7 +23,6 @@ namespace base
 {
 // Forward reference
 class Blob;
-class Result;
 class ReaderContract;
 class TObject;
 class WriterContract;
@@ -54,9 +53,9 @@ public:
     FileConsumer(const std::string& fileName, bool overwrite = false);
     virtual ~FileConsumer();
 
-    virtual bool write(const aft::base::TObject& object);
-    virtual bool write(const aft::base::Result& result);
-    virtual bool write(const aft::base::Blob& blob);
+    virtual base::Result write(const aft::base::TObject& object);
+    virtual base::Result write(const aft::base::Result& result);
+    virtual base::Result write(const aft::base::Blob& blob);
     /** Returns true if write can be called on this consumer without blocking */
     virtual bool canAcceptData();
 

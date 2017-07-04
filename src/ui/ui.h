@@ -118,6 +118,12 @@ public:
 
     /** Remove element from top level of UI hierarchy */
     virtual bool removeElement(const ElementHandle& handle);
+    
+    /** Set the current top-level element, if possible */
+    virtual bool setCurrentElement(const ElementHandle& handle);
+
+    /** Set the UI delegate */
+    virtual void setUiDelegate(UIDelegate* uiDelegate);
 
     // many UI's need to have an init and deinit
     virtual base::Result init(base::Context* context = nullptr);
@@ -126,23 +132,25 @@ public:
     // High level methods
     virtual void draw();
     virtual void erase();
+    virtual void flush();
     virtual void input();
     virtual void output();
+    //TODO Result checkStatus() const;
     void registerListener(CallbackFunction* listener);
     void unregisterListener(CallbackFunction* listener);
     
     // Producer contract
-    virtual bool read(base::TObject& object) override;
-    virtual bool read(base::Result& result) override;
-    virtual bool read(base::Blob& blob) override;
+    virtual base::Result read(base::TObject& object) override;
+    virtual base::Result read(base::Result& result) override;
+    virtual base::Result read(base::Blob& blob) override;
     virtual bool hasData() override;
     virtual bool hasObject(base::ProductType productType) override;
     
     // Consumer contract
     virtual bool canAcceptData() override;
-    virtual bool write(const base::TObject& object) override;
-    virtual bool write(const base::Result& result) override;
-    virtual bool write(const base::Blob& blob) override;
+    virtual base::Result write(const base::TObject& object) override;
+    virtual base::Result write(const base::Result& result) override;
+    virtual base::Result write(const base::Blob& blob) override;
 
 private:
     bool callListeners(UiEventType event, Element* element);
@@ -151,6 +159,8 @@ private:
     unsigned int maxSize_;
     unsigned int currentElement_;
     ElementList uiElements_;
+    // Returned instead of nullptr in currentElement() method. Saves a lot of checks for nullptr
+    std::unique_ptr<Element> emptyElement_;
     std::vector<CallbackFunction *> listeners_;
     std::unique_ptr<UIDelegate> uiDelegate_;
 };
