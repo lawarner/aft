@@ -29,23 +29,21 @@
 
 using namespace aft::base;
 using aft::core::aftlog;
-using namespace std;
-
+using std::endl;
 
 namespace aft {
 namespace ui {
 
 constexpr const char* EmptyElementName = "** EMPTY **";
-    
-UI::UI(Element* element, unsigned int maxSize, UIDelegate* uiDelegate)
+
+UI::UI(unsigned int maxSize, UIDelegate* uiDelegate)
     : base::BaseProc(nullptr, nullptr)
     , maxSize_(maxSize)
     , currentElement_(0)
-    , emptyElement_(make_unique<Element>(EmptyElementName))
-    , uiDelegate_(uiDelegate == nullptr ? make_unique<BaseUIDelegate>(this)
-                                        : unique_ptr<UIDelegate>(uiDelegate)) {
+    , emptyElement_(std::make_unique<Element>(EmptyElementName))
+    , uiDelegate_(uiDelegate == nullptr ? std::make_unique<BaseUIDelegate>(this)
+                                        : std::unique_ptr<UIDelegate>(uiDelegate)) {
 
-    addElement(element);
     emptyElement_->setPrompt(EmptyElementName);
 }
 
@@ -129,6 +127,14 @@ bool UI::getElementValue(std::string& value) {
     return true;
 }
 
+bool UI::getElementValue(std::vector<std::string>& value) {
+    value.clear();
+    Element* element = currentElement();
+    std::string strval = element->getValue();
+    value.push_back(strval);
+    return true;
+}
+
 ssize_t
 UI::nextElement() {
     if (uiElements_.size() == 0) return -1;
@@ -164,9 +170,14 @@ bool UI::setCurrentElement(const ElementHandle& handle) {
 }
     
 void UI::setUiDelegate(UIDelegate* uiDelegate) {
-    uiDelegate_.reset(uiDelegate);
+    if (uiDelegate != uiDelegate_.get()) {
+        if (uiElements_.empty()) {
+            uiDelegate_.reset(uiDelegate);
+        } else {
+            aftlog << loglevel(Error) << "Must set UI delegate before adding UI elements" << endl;
+        }
+    }
 }
-    
 
 Result UI::init(base::Context* context)
 {

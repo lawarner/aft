@@ -1,5 +1,5 @@
 /*   cppmain.mm
- *   libafttests
+ *   libafttests that is part of AFT
  *   Copyright © 2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +34,7 @@ int CppMain(int argc, const char* argv[]) {
     Element elOne("One");
     elOne.setPrompt(prompt);
     elOne.setDefault(defaultVal);
-    UI cocoaUi(nullptr, 0);
+    UI cocoaUi;
     cocoaUi.setUiDelegate(new CocoaUIDelegate(&cocoaUi));
     cocoaUi.addElement(&elOne);
     if (cocoaUi.init()) {

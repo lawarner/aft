@@ -178,7 +178,7 @@ bool JsonDataDelegate::add(const StructuredDataName& name, const StructuredData&
     JsonDataDelegate* jsonDelegate = dynamic_cast<JsonDataDelegate *>(delegate);
 
     if (name.getPath().empty()) {
-        json_[name.getName()] = jsonDelegate->json_;
+        json_ = jsonDelegate->json_;
     }
     else {
         Json::Value* val = (Json::Value*) getJsonPtr(name, true);
@@ -261,14 +261,19 @@ bool JsonDataDelegate::get(const StructuredDataName& name, StructuredData& value
     //TODO Check that value also has a JsonDataDelegate.  Cannot mix delegates.
     JsonDataDelegate* delegate = dynamic_cast<JsonDataDelegate *>(getDelegate(value));
 
-    if (val->isArray())
+    if (name.empty()) {
+        delegate->json_ = json_;
+        return true;
+    }
+    else if (val->isArray())
     {
         if (name.getName().empty()) return false;
         int idx = 0;
         std::istringstream iss(name.getName());
         iss >> idx;
         delegate->json_ = (*val)[idx];
-    } else {
+    }
+    else {
         delegate->json_ = (*val)[name.getName()];
     }
     setSDName(value, name);
@@ -306,12 +311,15 @@ bool JsonDataDelegate::getMembers(std::vector<std::string>& names) const {
 
 Json::Value*
 JsonDataDelegate::getJsonPtr(const StructuredDataName& name, bool pathOnly) const {
+    if (name.empty()) {
+        return &json_;
+    }
     Json::Value* retval = nullptr;
     const auto& names = name.getComponents();
     size_t numElements = names.size();
     if (numElements == 0) return retval;
     if (pathOnly) --numElements;
-
+    
     //TODO should we check json_.isNull()?
     retval = &json_;
     for (size_t idx = 0; idx < numElements; ++idx) {

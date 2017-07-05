@@ -47,7 +47,7 @@ UiAftBridge* UiAftBridge::instance_ = nullptr;
     NSView *mainView = mainWindow.contentView;
     [mainView addSubview:self.labelView];
     [mainView addSubview:self.editView];
-    //[mainWindow display];
+
     return YES;
 }
 
@@ -180,17 +180,6 @@ void UiAftBridge::setCppMain(void* cppMainFunction) {
     [mainView addSubview:self.okButton];
     [self.window setContentView:mainView];
     return YES;
-}
-
-- (void)setCppMain:(void *)cppMainFunction {
-    cppMain = (CppMainFunction)cppMainFunction;
-}
-
-- (void)handleOkButton:(NSButton *)sender {
-    NSString *inputText = [[self.editView textStorage] string];
-    NSLog(@"OK already %@", inputText);
-    NSApplication *app = [NSApplication sharedApplication];
-    [app terminate:self];
 }
 
 @end

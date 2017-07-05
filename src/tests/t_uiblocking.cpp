@@ -38,7 +38,7 @@ namespace {
 class UiPackageTest : public ::testing::Test {
 protected:
     virtual void SetUp() {
-        UI dumbUi(root_, 0);
+        UI dumbUi;
         dumbUi_.setUiDelegate(new DumbTtyUIDelegate(&dumbUi));
         EXPECT_EQ(Result(true), dumbUi.init());
     }

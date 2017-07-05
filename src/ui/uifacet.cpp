@@ -42,16 +42,16 @@ static const std::string uiFacectCategoryName[static_cast<int>(UIFacetCategory::
     "Theme"
 };
     
-static const std::string toplevel("UIFacet");
+static const std::string TopLevel("UIFacet");
 
 UIFacet::UIFacet()
-    : data_(std::make_unique<base::StructuredData>(toplevel))
+    : data_(std::make_unique<base::StructuredData>(TopLevel))
     , isMandatory_(false) {
 
 }
 
 UIFacet::UIFacet(const std::string& name, const std::string& value, UIFacetCategory category)
-    : data_(std::make_unique<base::StructuredData>(toplevel))
+    : data_(std::make_unique<base::StructuredData>(TopLevel))
     , isMandatory_(false) {
 
     if (!name.empty()) {
@@ -60,12 +60,12 @@ UIFacet::UIFacet(const std::string& name, const std::string& value, UIFacetCateg
 }
 
 UIFacet::UIFacet(const UIFacet& other)
-    : data_(std::make_unique<base::StructuredData>(toplevel))
+    : data_(std::make_unique<base::StructuredData>(TopLevel))
     , isMandatory_(other.isMandatory_) {
         
-        base::StructuredData sd("");
+        base::StructuredData sd(TopLevel);
         if (other.data_->get("", sd)) {
-            data_->set("", sd);
+            data_->add("", sd);
         }
     }
 

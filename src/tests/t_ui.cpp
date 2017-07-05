@@ -401,11 +401,18 @@ TEST_F(UiPackageTest, UIFacet) {
     EXPECT_EQ(0xee0000, result);
     
     UIFacet copyFacet = colorFacet;
+    //EXPECT_EQ(copyFacet, colorFacet);
+    EXPECT_TRUE(copyFacet.get("foreground", result));
+    EXPECT_EQ(0xfefefe, result);
+    EXPECT_TRUE(copyFacet.get("background", result));
+    EXPECT_EQ(0, result);
+    EXPECT_TRUE(copyFacet.get("dialog.text", result));
+    EXPECT_EQ(0xee0000, result);
 }
 
 TEST_F(UiPackageTest, UIWithEmptyDelegate) {
     EmptyUiDelegate* uiDelegate = new EmptyUiDelegate;
-    UI emptyUi(nullptr, 0, uiDelegate);
+    UI emptyUi(0, uiDelegate);
     EmptyElementDelegate eelDelegate;
     Element element("element");
     ElementHandle handle = emptyUi.addElement(&element);
@@ -415,7 +422,7 @@ TEST_F(UiPackageTest, UIWithEmptyDelegate) {
 }
 
 TEST_F(UiPackageTest, UIWithBaseDelegate) {
-    UI baseUi(nullptr, 0);
+    UI baseUi;
     EXPECT_EQ(Result(true), baseUi.init());
 
     Element element("element");
@@ -463,7 +470,7 @@ TEST_F(UiPackageTest, UIWithBaseDelegate) {
 }
 
 TEST_F(UiPackageTest, UIWithBaseDelegateListener) {
-    UI baseUi(nullptr, 0);
+    UI baseUi;
     EXPECT_EQ(Result(true), baseUi.init());
 
     UI::CallbackFunction listener = [](UiEventType eventType, Element* element)->bool {

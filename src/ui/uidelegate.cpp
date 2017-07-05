@@ -17,7 +17,6 @@
  *   limitations under the License.
  */
 
-#include <iostream>
 #include "element.h"
 #include "elementdelegate.h"
 #include "ui.h"
@@ -27,11 +26,10 @@
 using namespace aft::base;
 using namespace aft::core;
 using namespace aft::ui;
-using namespace std;
 
 BaseUIDelegate::BaseUIDelegate(UI* ui)
     : ui_(ui)
-    , delegate_(make_unique<BaseElementDelegate>())
+    , delegate_(std::make_unique<BaseElementDelegate>())
     , elements_(ui->getElementList()) {
 
 }

@@ -74,14 +74,12 @@ public:
     using ElementList = std::vector<Element *>;
     using CallbackFunction = std::function<bool(UiEventType, Element*)>;
 
-    /** Construct a UI with an optional top level element, optional maximum size and optional UI delegate.
-     *  @param element Optional top level Element. More top level elements can be added later by
-     *                 using #addElement.
+    /** Construct a UI with an optional maximum size and optional UI delegate.
      *  @param maxSize Maximum top level Elements allowed. If not specified then size is unlimited.
      *  @param uiDelegate UI delegate to use. If not specified (or 0) then the default UI delegate is used.
      *                    This class takes ownership of the UIDelegate.
      */
-    UI(Element* element = nullptr, unsigned int maxSize = 0, UIDelegate* uiDelegate = nullptr);
+    UI(unsigned int maxSize = 0, UIDelegate* uiDelegate = nullptr);
     /** Destruct a UI. */
     virtual ~UI();
     
@@ -110,6 +108,8 @@ public:
     
     /** Get the value of the current element. */
     virtual bool getElementValue(std::string& value);
+    /** Get the value of the current compound element. */
+    virtual bool getElementValue(std::vector<std::string>& value);
 
     /** Switch to the next top level element if any.
      *  @return the index of the UI element after the current. Returns -1 if there is no next element.
