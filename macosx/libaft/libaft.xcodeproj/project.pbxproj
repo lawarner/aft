@@ -10,10 +10,14 @@
 		A1122F201D23784E000FA862 /* element.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1122F1E1D23784E000FA862 /* element.cpp */; };
 		A1122F211D23784E000FA862 /* element.h in Headers */ = {isa = PBXBuildFile; fileRef = A1122F1F1D23784E000FA862 /* element.h */; };
 		A11A6B581E4FF15C000D7A4B /* elementdelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A11A6B571E4FF15C000D7A4B /* elementdelegate.cpp */; };
+		A122FCB91F4A2DA3004C2610 /* osx-cocoa.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A122FCB71F4A2DA3004C2610 /* osx-cocoa.cpp */; };
+		A122FCBA1F4A2DA3004C2610 /* osx-cocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = A122FCB81F4A2DA3004C2610 /* osx-cocoa.h */; };
+		A122FCBF1F4A317B004C2610 /* cocoaelementdelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A122FCBB1F4A317B004C2610 /* cocoaelementdelegate.cpp */; };
+		A122FCC01F4A317B004C2610 /* cocoaelementdelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A122FCBC1F4A317B004C2610 /* cocoaelementdelegate.h */; };
+		A122FCC11F4A317B004C2610 /* cocoauidelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A122FCBD1F4A317B004C2610 /* cocoauidelegate.cpp */; };
+		A122FCC21F4A317B004C2610 /* cocoauidelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A122FCBE1F4A317B004C2610 /* cocoauidelegate.h */; };
 		A1230D121EEE246C0003D133 /* elementhandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1230D101EEE246C0003D133 /* elementhandle.cpp */; };
 		A1230D131EEE246C0003D133 /* elementhandle.h in Headers */ = {isa = PBXBuildFile; fileRef = A1230D111EEE246C0003D133 /* elementhandle.h */; };
-		A123DB601EA1C337004ABBD4 /* cocoauidelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A123DB5E1EA1C337004ABBD4 /* cocoauidelegate.cpp */; };
-		A123DB611EA1C337004ABBD4 /* cocoauidelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A123DB5F1EA1C337004ABBD4 /* cocoauidelegate.h */; };
 		A1256C8D1DFE1CC500AE4700 /* platform-linux.h in Headers */ = {isa = PBXBuildFile; fileRef = A1256C8A1DFE1CC500AE4700 /* platform-linux.h */; };
 		A1256C8E1DFE1CC500AE4700 /* platform-posix.h in Headers */ = {isa = PBXBuildFile; fileRef = A1256C8B1DFE1CC500AE4700 /* platform-posix.h */; };
 		A1256C8F1DFE1CC500AE4700 /* platform-apple.h in Headers */ = {isa = PBXBuildFile; fileRef = A1256C8C1DFE1CC500AE4700 /* platform-apple.h */; };
@@ -112,8 +116,6 @@
 		A153D1281CD05F8400000A15 /* entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D1261CD05F8400000A15 /* entity.cpp */; };
 		A153D1291CD05F8400000A15 /* entity.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D1271CD05F8400000A15 /* entity.h */; };
 		A15745771E1AF6FF00265D4D /* t_ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A15745761E1AF6FF00265D4D /* t_ui.cpp */; };
-		A159450A1F0B456500A087DD /* cocoaelementdelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A15945081F0B456500A087DD /* cocoaelementdelegate.cpp */; };
-		A159450B1F0B456500A087DD /* cocoaelementdelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A15945091F0B456500A087DD /* cocoaelementdelegate.h */; };
 		A16390811D038A2A00036620 /* tobasictypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A16390801D038A2A00036620 /* tobasictypes.cpp */; };
 		A16390841D03D75800036620 /* structureddataname.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A16390821D03D75800036620 /* structureddataname.cpp */; };
 		A16390851D03D75800036620 /* structureddataname.h in Headers */ = {isa = PBXBuildFile; fileRef = A16390831D03D75800036620 /* structureddataname.h */; };
@@ -139,10 +141,14 @@
 		A1122F1E1D23784E000FA862 /* element.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = element.cpp; path = ../../src/ui/element.cpp; sourceTree = "<group>"; };
 		A1122F1F1D23784E000FA862 /* element.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = element.h; path = ../../src/ui/element.h; sourceTree = "<group>"; };
 		A11A6B571E4FF15C000D7A4B /* elementdelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = elementdelegate.cpp; path = ../../src/ui/elementdelegate.cpp; sourceTree = "<group>"; };
+		A122FCB71F4A2DA3004C2610 /* osx-cocoa.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = "osx-cocoa.cpp"; path = "ui/osx-cocoa.cpp"; sourceTree = "<group>"; };
+		A122FCB81F4A2DA3004C2610 /* osx-cocoa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "osx-cocoa.h"; path = "ui/osx-cocoa.h"; sourceTree = "<group>"; };
+		A122FCBB1F4A317B004C2610 /* cocoaelementdelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cocoaelementdelegate.cpp; path = ui/cocoaelementdelegate.cpp; sourceTree = "<group>"; };
+		A122FCBC1F4A317B004C2610 /* cocoaelementdelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cocoaelementdelegate.h; path = ui/cocoaelementdelegate.h; sourceTree = "<group>"; };
+		A122FCBD1F4A317B004C2610 /* cocoauidelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cocoauidelegate.cpp; path = ui/cocoauidelegate.cpp; sourceTree = "<group>"; };
+		A122FCBE1F4A317B004C2610 /* cocoauidelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cocoauidelegate.h; path = ui/cocoauidelegate.h; sourceTree = "<group>"; };
 		A1230D101EEE246C0003D133 /* elementhandle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = elementhandle.cpp; path = ../../src/ui/elementhandle.cpp; sourceTree = "<group>"; };
 		A1230D111EEE246C0003D133 /* elementhandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = elementhandle.h; path = ../../src/ui/elementhandle.h; sourceTree = "<group>"; };
-		A123DB5E1EA1C337004ABBD4 /* cocoauidelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cocoauidelegate.cpp; path = ../../src/ui/cocoauidelegate.cpp; sourceTree = "<group>"; };
-		A123DB5F1EA1C337004ABBD4 /* cocoauidelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cocoauidelegate.h; path = ../../src/ui/cocoauidelegate.h; sourceTree = "<group>"; };
 		A1256C8A1DFE1CC500AE4700 /* platform-linux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "platform-linux.h"; sourceTree = "<group>"; };
 		A1256C8B1DFE1CC500AE4700 /* platform-posix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "platform-posix.h"; sourceTree = "<group>"; };
 		A1256C8C1DFE1CC500AE4700 /* platform-apple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "platform-apple.h"; sourceTree = "<group>"; };
@@ -252,8 +258,6 @@
 		A153D1271CD05F8400000A15 /* entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = entity.h; sourceTree = "<group>"; };
 		A15745751E1A057800265D4D /* elementdelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = elementdelegate.h; path = ../../src/ui/elementdelegate.h; sourceTree = "<group>"; };
 		A15745761E1AF6FF00265D4D /* t_ui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = t_ui.cpp; sourceTree = "<group>"; };
-		A15945081F0B456500A087DD /* cocoaelementdelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cocoaelementdelegate.cpp; path = ../../src/ui/cocoaelementdelegate.cpp; sourceTree = "<group>"; };
-		A15945091F0B456500A087DD /* cocoaelementdelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cocoaelementdelegate.h; path = ../../src/ui/cocoaelementdelegate.h; sourceTree = "<group>"; };
 		A16390801D038A2A00036620 /* tobasictypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tobasictypes.cpp; sourceTree = "<group>"; };
 		A16390821D03D75800036620 /* structureddataname.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = structureddataname.cpp; sourceTree = "<group>"; };
 		A16390831D03D75800036620 /* structureddataname.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = structureddataname.h; sourceTree = "<group>"; };
@@ -289,6 +293,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A122FCB61F4A2A41004C2610 /* ui */ = {
+			isa = PBXGroup;
+			children = (
+				A122FCBB1F4A317B004C2610 /* cocoaelementdelegate.cpp */,
+				A122FCBC1F4A317B004C2610 /* cocoaelementdelegate.h */,
+				A122FCBD1F4A317B004C2610 /* cocoauidelegate.cpp */,
+				A122FCBE1F4A317B004C2610 /* cocoauidelegate.h */,
+				A122FCB71F4A2DA3004C2610 /* osx-cocoa.cpp */,
+				A122FCB81F4A2DA3004C2610 /* osx-cocoa.h */,
+			);
+			name = ui;
+			sourceTree = "<group>";
+		};
 		A1256C901DFE347E00AE4700 /* native */ = {
 			isa = PBXGroup;
 			children = (
@@ -424,6 +441,7 @@
 		A153D0B21CCC71F500000A15 /* osdep */ = {
 			isa = PBXGroup;
 			children = (
+				A122FCB61F4A2A41004C2610 /* ui */,
 				A1256C901DFE347E00AE4700 /* native */,
 				A153D0B31CCC71F500000A15 /* Makefile */,
 				A153D0B41CCC71F500000A15 /* platform.h */,
@@ -505,16 +523,12 @@
 				A19725311E2B313C006389B0 /* uifacet.h */,
 				A146518F1E919FC200C5BF04 /* uirequest.cpp */,
 				A14651901E919FC200C5BF04 /* uirequest.h */,
-				A123DB5E1EA1C337004ABBD4 /* cocoauidelegate.cpp */,
-				A123DB5F1EA1C337004ABBD4 /* cocoauidelegate.h */,
 				A1272D111EAD4B2D0018E0BB /* uiaftbridge.mm */,
 				A1272D131EAD4BB30018E0BB /* uiaftbridge.h */,
 				A13C2DB51EB042B20016E9B3 /* dumbttyuidelegate.cpp */,
 				A13C2DB61EB042B20016E9B3 /* dumbttyuidelegate.h */,
 				A172903B1EB44909001454A0 /* dumbttyelementdelegate.cpp */,
 				A172903C1EB44909001454A0 /* dumbttyelementdelegate.h */,
-				A15945081F0B456500A087DD /* cocoaelementdelegate.cpp */,
-				A15945091F0B456500A087DD /* cocoaelementdelegate.h */,
 			);
 			name = ui;
 			sourceTree = "<group>";
@@ -557,6 +571,7 @@
 				A153D0CE1CCC71F500000A15 /* command.h in Headers */,
 				A153D0FF1CCC71F500000A15 /* loghandler.h in Headers */,
 				A153D0F71CCC71F500000A15 /* commandcontext.h in Headers */,
+				A122FCC01F4A317B004C2610 /* cocoaelementdelegate.h in Headers */,
 				A153D0DE1CCC71F500000A15 /* producer.h in Headers */,
 				A153D0FD1CCC71F500000A15 /* logger.h in Headers */,
 				A19725321E2B313C006389B0 /* uifacet.h in Headers */,
@@ -564,6 +579,7 @@
 				A153D1181CCC71F500000A15 /* posixthread.h in Headers */,
 				A153D0CC1CCC71F500000A15 /* callback.h in Headers */,
 				A153D0CB1CCC71F500000A15 /* blob.h in Headers */,
+				A122FCC21F4A317B004C2610 /* cocoauidelegate.h in Headers */,
 				A172903E1EB44909001454A0 /* dumbttyelementdelegate.h in Headers */,
 				A153D1131CCC71F500000A15 /* platform.h in Headers */,
 				A1256C8E1DFE1CC500AE4700 /* platform-posix.h in Headers */,
@@ -583,15 +599,14 @@
 				A153D0E61CCC71F500000A15 /* structureddata.h in Headers */,
 				A153D0DA1CCC71F500000A15 /* outlet.h in Headers */,
 				A153D1061CCC71F500000A15 /* stringconsumer.h in Headers */,
+				A122FCBA1F4A2DA3004C2610 /* osx-cocoa.h in Headers */,
 				A153D0D61CCC71F500000A15 /* hasher.h in Headers */,
 				A153D1161CCC71F500000A15 /* posixpluginloader.h in Headers */,
-				A123DB611EA1C337004ABBD4 /* cocoauidelegate.h in Headers */,
 				A18F4D551CD442F600C755FA /* tobjecttype.h in Headers */,
 				A1BCB64B1D2B5ADC0082BB87 /* basicelements.h in Headers */,
 				A153D10C1CCC71F500000A15 /* testsuite.h in Headers */,
 				A153D1251CCD89D200000A15 /* proc.h in Headers */,
 				A1256C8D1DFE1CC500AE4700 /* platform-linux.h in Headers */,
-				A159450B1F0B456500A087DD /* cocoaelementdelegate.h in Headers */,
 				A153D0DF1CCC71F500000A15 /* producttype.h in Headers */,
 				A153D0EF1CCC71F500000A15 /* tobjecttree.h in Headers */,
 				A153D1081CCC71F500000A15 /* stringproducer.h in Headers */,
@@ -667,8 +682,9 @@
 				A153D11C1CCC71F500000A15 /* t_coretests.cpp in Sources */,
 				A153D11F1CCC71F500000A15 /* t_plugin.cpp in Sources */,
 				A13C2DB71EB042B20016E9B3 /* dumbttyuidelegate.cpp in Sources */,
-				A159450A1F0B456500A087DD /* cocoaelementdelegate.cpp in Sources */,
+				A122FCBF1F4A317B004C2610 /* cocoaelementdelegate.cpp in Sources */,
 				A153D0FA1CCC71F500000A15 /* fileproducer.cpp in Sources */,
+				A122FCC11F4A317B004C2610 /* cocoauidelegate.cpp in Sources */,
 				A18F4D541CD442F600C755FA /* tobjecttype.cpp in Sources */,
 				A1F2AFBC1D036BD5009FE595 /* ui.cpp in Sources */,
 				A1272D121EAD4B2D0018E0BB /* uiaftbridge.mm in Sources */,
@@ -713,13 +729,13 @@
 				A153D0E01CCC71F500000A15 /* propertyhandler.cpp in Sources */,
 				A153D0F81CCC71F500000A15 /* fileconsumer.cpp in Sources */,
 				A153D11D1CCC71F500000A15 /* t_logger.cpp in Sources */,
-				A123DB601EA1C337004ABBD4 /* cocoauidelegate.cpp in Sources */,
 				A153D1211CCC71F500000A15 /* t_testsuite.cpp in Sources */,
 				A153D0CF1CCC71F500000A15 /* consumer.cpp in Sources */,
 				A153D0FC1CCC71F500000A15 /* logger.cpp in Sources */,
 				A153D0F21CCC71F500000A15 /* basiccommands.cpp in Sources */,
 				A153D11A1CCC71F500000A15 /* sample_plugin.cpp in Sources */,
 				A153D0D91CCC71F500000A15 /* outlet.cpp in Sources */,
+				A122FCB91F4A2DA3004C2610 /* osx-cocoa.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,6 +1,6 @@
 #pragma once
 /*
- *   Copyright 2015, 2016 Andy Warner
+ *   Copyright 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -15,19 +15,17 @@
  *   limitations under the License.
  */
 
+/* TODO
+ *  Need platform definitions for thread, plug-in loader, ui, etc.
+ */
 // Pull in platform specific definitions. Fallback to posix if nothing else applicable
 #if __APPLE__
 # include "osdep/platform-apple.h"
-# include "osdep/posix/posixpluginloader.h"
-# include "osdep/native/nativethread.h"
 
 #elif __linux__
 # include "osdep/platform-linux.h"
-# include "osdep/posix/posixpluginloader.h"
-# include "osdep/posix/posixthread.h"
 
 #else
 # include "osdep/platform-posix.h"
-# include "osdep/posix/posixpluginloader.h"
-# include "osdep/posix/posixthread.h"
+
 #endif

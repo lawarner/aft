@@ -144,6 +144,12 @@ bool JsonDataDelegate::add(const StructuredDataName& name, int intValue)
 bool JsonDataDelegate::add(const StructuredDataName& name, const std::string& value)
 {
     if (name.getPath().empty()) {
+        if (name.getName().empty()) {
+            return false;
+        }
+        if (json_.type() != Json::objectValue) {
+            json_ = Json::Value(Json::objectValue);
+        }
         json_[name.getName()] = value;
     }
     else {
@@ -178,7 +184,14 @@ bool JsonDataDelegate::add(const StructuredDataName& name, const StructuredData&
     JsonDataDelegate* jsonDelegate = dynamic_cast<JsonDataDelegate *>(delegate);
 
     if (name.getPath().empty()) {
-        json_ = jsonDelegate->json_;
+        if (name.getName().empty()) {
+            json_ = jsonDelegate->json_;;
+        } else {
+            if (json_.type() != Json::objectValue) {
+                json_ = Json::Value(Json::objectValue);
+            }
+            json_[name.getName()] = jsonDelegate->json_;
+        }
     }
     else {
         Json::Value* val = (Json::Value*) getJsonPtr(name, true);
@@ -231,6 +244,9 @@ bool JsonDataDelegate::get(const StructuredDataName& name, int& intValue) const 
         iss >> idx;
         intValue = (*val)[idx].asInt();
     } else {
+        if (!val->isMember(name.getName())) {
+            return false;
+        }
         intValue = (*val)[name.getName()].asInt();
     }
 
@@ -248,6 +264,9 @@ bool JsonDataDelegate::get(const StructuredDataName& name, std::string& value) c
         iss >> idx;
         value = (*val)[idx].asString();
     } else {
+        if (!val->isMember(name.getName())) {
+            return false;
+        }
         value = (*val)[name.getName()].asString();
     }
 
@@ -274,6 +293,9 @@ bool JsonDataDelegate::get(const StructuredDataName& name, StructuredData& value
         delegate->json_ = (*val)[idx];
     }
     else {
+        if (!val->isMember(name.getName())) {
+            return false;
+        }
         delegate->json_ = (*val)[name.getName()];
     }
     setSDName(value, name);

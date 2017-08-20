@@ -78,7 +78,7 @@ UIFacet& UIFacet::operator=(const UIFacet& other) {
         isMandatory_ = other.isMandatory_;
         base::StructuredData sd("");
         if (other.data_->get("", sd)) {
-            data_->set("", sd);
+            data_->add("", sd);
         }
     }
     return *this;

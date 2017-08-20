@@ -20,3 +20,9 @@
 
 #define PosixPluginLoader PlatformPluginLoader
 #define NativeThreadHandler PlatformThreadHandler
+#define CocoaUI PlatformUI
+
+# include "osdep/posix/posixpluginloader.h"
+# include "osdep/native/nativethread.h"
+#include "osdep/ui/osx-cocoa.h"
+

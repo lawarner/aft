@@ -22,6 +22,7 @@
 #include "element.h"
 #include "uiaftbridge.h"
 using namespace aft::base;
+using namespace aft::osdep;
 using namespace aft::ui;
 
 CocoaUIDelegate::CocoaUIDelegate(UI* ui)

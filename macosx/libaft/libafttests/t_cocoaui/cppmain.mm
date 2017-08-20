@@ -18,10 +18,11 @@
 #include <iostream>
 
 #include "cppmain.hpp"
-#include <ui/cocoauidelegate.h>
+#include <osdep/ui/cocoauidelegate.h>
 #include <ui/element.h>
 #include <ui/elementhandle.h>
 #include <ui/ui.h>
+// using namespace aft::osdep;
 using namespace aft::ui;
 using aft::base::Result;
 using std::cout;
@@ -35,7 +36,7 @@ int CppMain(int argc, const char* argv[]) {
     elOne.setPrompt(prompt);
     elOne.setDefault(defaultVal);
     UI cocoaUi;
-    cocoaUi.setUiDelegate(new CocoaUIDelegate(&cocoaUi));
+    cocoaUi.setUiDelegate(new aft::osdep::CocoaUIDelegate(&cocoaUi));
     cocoaUi.addElement(&elOne);
     if (cocoaUi.init()) {
         cocoaUi.output();

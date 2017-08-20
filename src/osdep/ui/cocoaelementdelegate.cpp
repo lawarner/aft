@@ -7,7 +7,8 @@
 //
 
 #include "cocoaelementdelegate.h"
-#include "element.h"
+#include "ui/element.h"
+using namespace aft::osdep;
 using namespace aft::ui;
 
 void CocoaElementDelegate::flush(const Element* element) {
