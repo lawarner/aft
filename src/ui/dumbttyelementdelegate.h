@@ -25,7 +25,7 @@ public:
                           UIFacet& facet) const override;
     virtual bool setFacet(Element* element, const UIFacet& facet) override;
     
-    virtual bool input(const Element* element, std::string& value) override;
+    virtual bool input(Element* element, std::string& value) override;
     virtual bool output(const Element* element, bool showValue = false) override;
 };
 

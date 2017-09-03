@@ -72,7 +72,7 @@ bool BaseUIDelegate::hide(const Element& element) {
     return false;
 }
 
-bool BaseUIDelegate::input(const Element& element, std::string& value) {
+bool BaseUIDelegate::input(Element& element, std::string& value) {
     const Element* currEl = get(&element);
     if (nullptr == currEl) {
         return false;

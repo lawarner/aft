@@ -62,7 +62,7 @@ bool BaseElementDelegate::setFacet(Element* element, const UIFacet& facet) {
     return true;
 }
 
-bool BaseElementDelegate::input(const Element* element, std::string& value) {
+bool BaseElementDelegate::input(Element* element, std::string& value) {
     value = element->getValue();
     return true;
 }

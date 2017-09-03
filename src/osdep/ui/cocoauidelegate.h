@@ -28,7 +28,7 @@ public:
     virtual void flush(const ui::Element& element) override;
     virtual bool focus(const ui::Element& element) override;
     virtual bool hide(const ui::Element& element) override;
-    virtual bool input(const ui::Element& element, std::string& value) override;
+    virtual bool input(ui::Element& element, std::string& value) override;
     virtual bool output(const ui::Element& element, bool showValue = false) const override;
     virtual bool show(const ui::Element& element) override;
     

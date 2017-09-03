@@ -7,3 +7,6 @@
 //  Copyright © 2017 Andy Warner. All rights reserved.
 //
 
+#include "ui/ui.h"
+
+extern aft::ui::UI* cocoaUI;

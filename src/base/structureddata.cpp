@@ -113,6 +113,9 @@ JsonDataDelegate::~JsonDataDelegate()
 bool JsonDataDelegate::add(const StructuredDataName& name, int intValue)
 {
     if (name.getPath().empty()) {
+        if (name.getName().empty() || json_.type() != Json::objectValue) {
+            return false;
+        }
         json_[name.getName()] = intValue;
     }
     else {
@@ -144,11 +147,8 @@ bool JsonDataDelegate::add(const StructuredDataName& name, int intValue)
 bool JsonDataDelegate::add(const StructuredDataName& name, const std::string& value)
 {
     if (name.getPath().empty()) {
-        if (name.getName().empty()) {
+        if (name.getName().empty() || json_.type() != Json::objectValue) {
             return false;
-        }
-        if (json_.type() != Json::objectValue) {
-            json_ = Json::Value(Json::objectValue);
         }
         json_[name.getName()] = value;
     }
@@ -188,7 +188,7 @@ bool JsonDataDelegate::add(const StructuredDataName& name, const StructuredData&
             json_ = jsonDelegate->json_;;
         } else {
             if (json_.type() != Json::objectValue) {
-                json_ = Json::Value(Json::objectValue);
+                return false;
             }
             json_[name.getName()] = jsonDelegate->json_;
         }

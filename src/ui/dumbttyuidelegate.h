@@ -39,7 +39,7 @@ public:
 public:
     virtual void flush(const Element& element) override;
     virtual bool hide(const Element& element) override;
-    virtual bool input(const Element& element, std::string& value) override;
+    virtual bool input(Element& element, std::string& value) override;
     virtual bool output(const Element& element, bool showValue = false) const override;
     virtual bool show(const Element& element) override;
 

@@ -44,7 +44,7 @@ bool DumbTtyUIDelegate::hide(const Element& element) {
     return false;
 }
 
-bool DumbTtyUIDelegate::input(const Element& element, std::string& value) {
+bool DumbTtyUIDelegate::input(Element& element, std::string& value) {
     //TODO lookup element
     return delegate_->input(&element, value);
 }

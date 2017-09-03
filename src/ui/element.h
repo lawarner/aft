@@ -54,12 +54,15 @@ public:
 
     // work methods
     virtual void apply(const UIFacet& facet);
+    virtual void block();
     virtual bool getFacet(std::string& value, const std::string& name,
                           UIFacetCategory category = UIFacetCategory::Other) const;
     /** True if value has already been read/updated. */
     virtual bool hasValue() const;
+    virtual bool isBlocked() const;
     virtual bool remove(const std::string& name, UIFacetCategory category = UIFacetCategory::Other);
     virtual void remove(const UIFacet& facet);
+    virtual void unblock();
     /** Validate the value of this element.
      *  This base class implementation always returns true.
      */
@@ -89,6 +92,7 @@ private:
 private:
     std::string name_;
     bool  cow_;
+    std::atomic<bool> isBlocked_;
     
     // unique id
     ElementId id_;

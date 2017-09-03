@@ -51,7 +51,7 @@ public:
     /** Hide user element from display */
     virtual bool hide(const Element& element) = 0;
     /** Get user input from element */
-    virtual bool input(const Element& element, std::string& value) = 0;
+    virtual bool input(Element& element, std::string& value) = 0;
     /** Output the element to the user interface */
     virtual bool output(const Element& element, bool showValue = false) const = 0;
     /** Remove or hide element from the user interface, if possible. */
@@ -75,7 +75,7 @@ public:
     virtual const Element* get(const ElementHandle& handle) override;
     virtual const Element* get(const std::string& name) override;
     virtual bool hide(const Element& element) override;
-    virtual bool input(const Element& element, std::string& value) override;
+    virtual bool input(Element& element, std::string& value) override;
     virtual bool output(const Element& element, bool showValue = false) const override;
     virtual bool remove(const Element& element) override;
     virtual bool show(const Element& element) override;

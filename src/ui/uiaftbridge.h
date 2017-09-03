@@ -8,6 +8,7 @@
 //
 
 #include "ui/element.h"
+#include <future>
 
 namespace aft {
 namespace ui {
@@ -28,6 +29,7 @@ public:
     void setCppMain(void* cppMainFunction);
 private:
     CppMainFunction cppMain_;
+    std::future<int> mainThread_;
     static UiAftBridge* instance_;
 };
     

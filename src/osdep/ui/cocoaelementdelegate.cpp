@@ -2,12 +2,13 @@
 //  cocoaelementdelegate.cpp
 //  libaft
 //
-//  Created by Lynn Warner on 7/3/17.
 //  Copyright © 2017 Andy Warner. All rights reserved.
 //
 
 #include "cocoaelementdelegate.h"
 #include "ui/element.h"
+#include <unistd.h>
+
 using namespace aft::osdep;
 using namespace aft::ui;
 
@@ -41,8 +42,13 @@ bool CocoaElementDelegate::setFacet(Element* element, const UIFacet& facet) {
     return false;
 }
     
-bool CocoaElementDelegate::input(const Element* element, std::string& value) {
-    return false;
+bool CocoaElementDelegate::input(Element* element, std::string& value) {
+    element->block();
+    while (element->isBlocked()) {
+        usleep(1);
+    }
+    value = element->getValue();
+    return true;
 }
 
 bool CocoaElementDelegate::output(const Element* element, bool showValue) {

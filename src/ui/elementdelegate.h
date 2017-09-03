@@ -55,7 +55,7 @@ public:
     virtual bool setFacet(Element* element, const UIFacet& facet) = 0;
 
     /** Get user input from element */
-    virtual bool input(const Element* element, std::string& value) = 0;
+    virtual bool input(Element* element, std::string& value) = 0;
     /** Output the element to the user interface
      *  TODO add bool to just output value
      */
@@ -76,7 +76,7 @@ public:
                           UIFacet& facet) const override;
     virtual bool setFacet(Element* element, const UIFacet& facet) override;
 
-    virtual bool input(const Element* element, std::string& value) override;
+    virtual bool input(Element* element, std::string& value) override;
     virtual bool output(const Element* element, bool showValue = false) override;
 };
 

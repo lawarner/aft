@@ -2,8 +2,13 @@
 //  osx-cocoa.cpp
 //  libaft
 //
-//  Created by Lynn Warner on 8/20/17.
 //  Copyright © 2017 Andy Warner. All rights reserved.
 //
 
 #include "osx-cocoa.h"
+
+aft::ui::UI* cocoaUI = nullptr;
+
+bool initCocoaUI() {
+    return false;
+}

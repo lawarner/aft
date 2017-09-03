@@ -48,7 +48,7 @@ bool CocoaUIDelegate::hide(const Element& element) {
     return false;
 }
 
-bool CocoaUIDelegate::input(const Element& element, std::string& value) {
+bool CocoaUIDelegate::input(Element& element, std::string& value) {
     return delegate_->input(&element, value);
 }
 

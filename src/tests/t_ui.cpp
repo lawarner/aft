@@ -67,7 +67,7 @@ public:
         return false;
     }
     
-    virtual bool input(const Element* element, std::string& value) override {
+    virtual bool input(Element* element, std::string& value) override {
         value = value_;
         return true;
     }
@@ -106,7 +106,7 @@ public:
         return false;
     }
     /** Get user input from element */
-    bool input(const Element& element, std::string& value) override {
+    bool input(Element& element, std::string& value) override {
         value = element.getDefault();
         return true;
     }

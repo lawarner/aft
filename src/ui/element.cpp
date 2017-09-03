@@ -86,6 +86,10 @@ void Element::apply(const UIFacet& facet) {
     }
 }
 
+void Element::block() {
+    isBlocked_ = true;
+}
+
 bool Element::getFacet(std::string& value, const std::string& name,
                        UIFacetCategory category) const {
     return facet_.get(name, value, category);
@@ -95,6 +99,10 @@ bool Element::hasValue() const {
     return isValueSet_;
 }
 
+bool Element::isBlocked() const {
+    return isBlocked_;
+}
+    
 bool Element::remove(const std::string& name, UIFacetCategory category) {
     return facet_.remove(name, category);
 }
@@ -108,6 +116,11 @@ void Element::remove(const UIFacet& facet) {
         }
     }
 }
+
+void Element::unblock() {
+    isBlocked_ = false;
+}
+    
 
 bool Element::validate() {
     return true;

@@ -57,7 +57,7 @@ bool DumbTtyElementDelegate::setFacet(Element* element, const UIFacet& facet) {
  *  Prompt missing:    <element_name> [<default_value>]?
  *  No Prompt,Default: <element_name>?
  */
-bool DumbTtyElementDelegate::input(const Element* element, std::string& value) {
+bool DumbTtyElementDelegate::input(Element* element, std::string& value) {
     output(element);
     char cinbuf[100];
     std::cin.getline(cinbuf, sizeof(cinbuf));
