@@ -36,6 +36,7 @@
 		A1CC711A1E87078900BD0946 /* libaft.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A18EA8B11C416BFC00721577 /* libaft.a */; };
 		A1CC711B1E87087900BD0946 /* libgtest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A18EA8951C41611400721577 /* libgtest.a */; };
 		A1CC711E1E87092C00BD0946 /* t_uiblocking.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1CC711C1E87092100BD0946 /* t_uiblocking.cpp */; };
+		A1D27AE31F68DB4F00B1788D /* libgtest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A1D27AE21F68DB4F00B1788D /* libgtest.a */; };
 		A1F7631E1C41B558009A5873 /* t_result.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18EA87C1C40C1BC00721577 /* t_result.cpp */; };
 		A1F7631F1C41B564009A5873 /* libaft.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A18EA8B11C416BFC00721577 /* libaft.a */; };
 		A1F763201C41B570009A5873 /* libgtest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A18EA8951C41611400721577 /* libgtest.a */; };
@@ -172,6 +173,7 @@
 		A1BCB6361D28847B0082BB87 /* t_ui */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = t_ui; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1CC71131E87076E00BD0946 /* t_uiblock */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = t_uiblock; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1CC711C1E87092100BD0946 /* t_uiblocking.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = t_uiblocking.cpp; path = ../../../../src/tests/t_uiblocking.cpp; sourceTree = "<group>"; };
+		A1D27AE21F68DB4F00B1788D /* libgtest.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgtest.a; path = ../../../../opensource/googletest/build/googletest/libgtest.a; sourceTree = "<group>"; };
 		A1F763171C41B541009A5873 /* t_result */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = t_result; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1F763451C41B6B8009A5873 /* t_testsuite */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = t_testsuite; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -182,6 +184,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A15816C81EA9C31900E0D17A /* libaft.a in Frameworks */,
+				A1D27AE31F68DB4F00B1788D /* libgtest.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,6 +306,7 @@
 		A123DB771EA4735F004ABBD4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A1D27AE21F68DB4F00B1788D /* libgtest.a */,
 				A123DB7C1EA473A2004ABBD4 /* Foundation.framework */,
 				A123DB7A1EA47386004ABBD4 /* Cocoa.framework */,
 				A123DB781EA4735F004ABBD4 /* AppKit.framework */,
@@ -783,7 +787,10 @@
 				);
 				INFOPLIST_FILE = t_cocoaui/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					$PROJECT_DIR/../../../lib,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.winc.t-cocoaui";
@@ -808,7 +815,10 @@
 				);
 				INFOPLIST_FILE = t_cocoaui/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					$PROJECT_DIR/../../../lib,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.winc.t-cocoaui";

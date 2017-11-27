@@ -24,8 +24,10 @@ public:
     static void setWindow(void* window);
 
     bool addElement(Element* element);
+    bool outputElement(Element* element);
     int run();
     bool setup();
+    void setValue(Element* element);
     void setCppMain(void* cppMainFunction);
 private:
     CppMainFunction cppMain_;

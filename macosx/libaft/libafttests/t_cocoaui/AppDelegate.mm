@@ -8,7 +8,7 @@
 #import "AppDelegate.h"
 #import "cppmain.hpp"
 
-#import <ui/uiaftbridge.h>
+#import <osdep/ui/uiaftbridge.h>
 using namespace aft::ui;
 
 @interface AppDelegate ()

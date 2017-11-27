@@ -6,8 +6,10 @@
 //
 
 #include "cocoaelementdelegate.h"
+#include "uiaftbridge.h"
 #include "ui/element.h"
-#include <unistd.h>
+#include <chrono>
+#include <thread>
 
 using namespace aft::osdep;
 using namespace aft::ui;
@@ -45,38 +47,20 @@ bool CocoaElementDelegate::setFacet(Element* element, const UIFacet& facet) {
 bool CocoaElementDelegate::input(Element* element, std::string& value) {
     element->block();
     while (element->isBlocked()) {
-        usleep(1);
+        std::this_thread::sleep_for(std::chrono::milliseconds(40));
     }
     value = element->getValue();
+    if (value.empty()) {
+        value = element->getDefault();
+    }
     return true;
 }
 
 bool CocoaElementDelegate::output(const Element* element, bool showValue) {
-    return false;
+    UiAftBridge* uiaft = UiAftBridge::instance();
+    return uiaft->outputElement(const_cast<Element *>(element));
 }
 #if 0
-    /** Output the element to the user interface.
-     *
-     *  The various output formats for an element are:
-     *  Fully specified:   <element_name>: <prompt> [<default_value>]? value
-     *  Default missing:   <element_name>: <prompt>?
-     *  Prompt missing:    <element_name> [<default_value>]?
-     *  No Prompt,Default: <element_name>?
-     */
-    bool DumbTtyElementDelegate::input(const Element* element, std::string& value) {
-        output(element);
-        char cinbuf[100];
-        std::cin.getline(cinbuf, sizeof(cinbuf));
-        size_t strLen = strnlen(cinbuf, sizeof(cinbuf));
-        if (strLen > 0) {
-            value = std::string(cinbuf, strlen(cinbuf));
-        }
-        else {
-            value = element->getDefault();
-        }
-        return true;
-    }
-    
     bool DumbTtyElementDelegate::output(const Element* element, bool showValue) {
         ostringstream oss;
         string prompt = element->getPrompt();

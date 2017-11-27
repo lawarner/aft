@@ -59,14 +59,12 @@ bool DumbTtyElementDelegate::setFacet(Element* element, const UIFacet& facet) {
  */
 bool DumbTtyElementDelegate::input(Element* element, std::string& value) {
     output(element);
-    char cinbuf[100];
-    std::cin.getline(cinbuf, sizeof(cinbuf));
-    size_t strLen = strnlen(cinbuf, sizeof(cinbuf));
-    if (strLen > 0) {
-        value = std::string(cinbuf, strlen(cinbuf));
-    }
-    else {
+    std::string inbuf;
+    std::getline(std::cin, inbuf);
+    if (inbuf.empty()) {
         value = element->getDefault();
+    } else {
+        value = inbuf;
     }
     return true;
 }

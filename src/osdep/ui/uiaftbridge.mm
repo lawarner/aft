@@ -25,6 +25,8 @@ UiAftBridge* UiAftBridge::instance_ = nullptr;
 
 - (BOOL)addFieldWithPrompt:(NSString *)prompt andData:(void *)data;
 
+- (BOOL)outputField:(NSString *)data;
+
 - (BOOL)setup;
 
 - (void)setWindow:(NSWindow *)window;
@@ -35,15 +37,17 @@ UiAftBridge* UiAftBridge::instance_ = nullptr;
     NSWindow *mainWindow;
 }
 
+//TODO andFacets:
 - (BOOL)addFieldWithPrompt:(NSString *)prompt andData:(void *)data {
-    float textHeight = 22;
+    constexpr float TextHeight = 22;
+    constexpr float TextWidth  = 200;
     float wh = self.windowHeight;
     float ww = self.windowWidth;
 
-    self.labelView = [[NSTextView alloc] initWithFrame:NSMakeRect(0, wh - textHeight, 100, textHeight)];
+    self.labelView = [[NSTextView alloc] initWithFrame:NSMakeRect(0, wh - TextHeight, TextWidth, TextHeight)];
     [self.labelView insertText:prompt replacementRange:NSMakeRange(0, 1)];
     self.labelView.editable = NO;
-    self.editView = [[NSTextView alloc] initWithFrame:NSMakeRect(102, wh - textHeight, 100, textHeight)];
+    self.editView = [[NSTextView alloc] initWithFrame:NSMakeRect(TextWidth + 2, wh - TextHeight, 100, TextHeight)];
     self.editView.editable = YES;
     self.data = data;
 
@@ -51,6 +55,11 @@ UiAftBridge* UiAftBridge::instance_ = nullptr;
     [mainView addSubview:self.labelView];
     [mainView addSubview:self.editView];
 
+    return YES;
+}
+
+- (BOOL)outputField:(NSString *)data {
+    [self.editView setString:data];
     return YES;
 }
 
@@ -81,11 +90,16 @@ UiAftBridge* UiAftBridge::instance_ = nullptr;
     mainWindow = window;
 }
 
+- (void)showValue:(NSString *)value {
+    [self.editView setString:value];
+}
+
 - (void)handleOkButton:(NSButton *)sender {
     self.inputText = [[self.editView textStorage] string];
     NSLog(@"OK already %@", self.inputText);
     Element* element = (Element *)self.data;
-    char chInput[512];
+    NSUInteger inputSize = [self.inputText length];
+    char chInput[inputSize + 1];
     if ([self.inputText getCString:chInput maxLength:sizeof(chInput) encoding:NSASCIIStringEncoding]) {
         element->setValue(chInput);
     }
@@ -123,14 +137,17 @@ bool UiAftBridge::addElement(Element* element) {
     return [cocoaData addFieldWithPrompt:prompt andData:element] == YES;
 }
 
+bool UiAftBridge::outputElement(Element* element) {
+    return false;
+}
+
 int UiAftBridge::run() {
-    //TODO run in a thread so the ui is not blocked
+    // Run in a thread so the ui is not blocked
     if (cppMain_) {
         const char *args[] = { "AftCocoa" };
         constexpr int numArgs = sizeof(args) / sizeof(args[0]);
         mainThread_ = std::async(std::launch::async, cppMain_, numArgs, args);
         return 0;
-        //return cppMain_(numArgs, args);
     }
     return -1;
 }
@@ -140,68 +157,12 @@ bool UiAftBridge::setup() {
     return ret;
 }
 
+void UiAftBridge::setValue(Element* element) {
+    const char* cstr = element->getValue().c_str();
+    NSString *value = [NSString stringWithUTF8String:cstr];
+    
+}
+
 void UiAftBridge::setCppMain(void* cppMainFunction) {
     cppMain_ = (CppMainFunction)cppMainFunction;
 }
-
-
-#if 0
-@interface UiAftBridge ()
-
-@property NSWindow *window;
-//@property CppMainFunction cppMain;
-
-@property NSTextView *labelView;
-@property NSTextView *editView;
-@property NSButton   *okButton;
-
-@end
-
-@implementation UiAftBridge {
-    CppMainFunction cppMain;
-}
-
-- (instancetype)initWithWindow:(NSWindow *)window {
-    self = [super init];
-    if (self) {
-        _window = window;
-    }
-    return self;
-}
-
-- (void)run {
-    if (cppMain) {
-        const char *args[] = { "AftCocoa" };
-        constexpr int numArgs = sizeof(args) / sizeof(args[0]);
-        cppMain(numArgs, args);
-    }
-}
-
-- (BOOL)setup {
-    NSRect rect = self.window.contentLayoutRect;
-    float wh = rect.size.height;
-    float ww = rect.size.width;
-    NSLog(@"Window rect is (%f, %f, %f, %f)", rect.origin.x, rect.origin.y, ww, wh);
-    
-    self.okButton = [[NSButton alloc] initWithFrame:NSMakeRect(ww / 2, 2, 30, 28)];
-    [self.okButton setTitle:@"OK"];
-    [self.okButton setTarget:self];
-    [self.okButton setAction:@selector(handleOkButton:)];
-    
-    float textHeight = 22;
-    self.labelView = [[NSTextView alloc] initWithFrame:NSMakeRect(0, wh - textHeight, 100, textHeight)];
-    [self.labelView insertText:@"Hello there, aft!" replacementRange:NSMakeRange(0, 1)];
-    self.labelView.editable = NO;
-    self.editView = [[NSTextView alloc] initWithFrame:NSMakeRect(102, wh - textHeight, 100, textHeight)];
-    self.editView.editable = YES;
-    
-    NSView *mainView = [[NSView alloc] init];
-    [mainView addSubview:self.labelView];
-    [mainView addSubview:self.editView];
-    [mainView addSubview:self.okButton];
-    [self.window setContentView:mainView];
-    return YES;
-}
-
-@end
-#endif

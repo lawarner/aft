@@ -14,7 +14,7 @@ namespace ui {
 // Forward reference
 class Element;
 
-/** An element handle is way to identify a given element within a UI. */
+/** An element handle is a way to identify a given element within a UI. */
 
 class ElementHandle {
 public:

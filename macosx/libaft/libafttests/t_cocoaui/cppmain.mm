@@ -22,61 +22,94 @@
 #include <ui/element.h>
 #include <ui/elementhandle.h>
 #include <ui/ui.h>
-// using namespace aft::osdep;
+#include <gtest/gtest.h>
 using namespace aft::ui;
 using aft::base::Result;
+using aft::osdep::CocoaUIDelegate;
+using std::cerr;
 using std::cout;
 using std::endl;
 
-int CppMain(int argc, const char* argv[]) {
-    cout << "Hello from CppMain" << endl;
+namespace {
+    
+class UiPackageTest : public ::testing::Test {
+protected:
+    virtual void SetUp() {
+        uiDelegate_ = new CocoaUIDelegate(&cocoaUi_);
+        cocoaUi_.setUiDelegate(uiDelegate_);
+        EXPECT_EQ(Result(true), cocoaUi_.init());
+    }
+    virtual void TearDown() {
+        cocoaUi_.deinit();
+    }
+    
+    bool runUiTests(const std::string& expected) {
+        cocoaUi_.output();
+        cocoaUi_.flush();
+        cocoaUi_.input();
+        std::string value;
+        EXPECT_TRUE(cocoaUi_.getElementValue(value));
+        EXPECT_EQ(expected, value);
+        value.clear();
+        EXPECT_TRUE(cocoaUi_.getElementValue(root_, value));
+        EXPECT_EQ(expected, value);
+        value.clear();
+        EXPECT_TRUE(cocoaUi_.getElementValue(handle_, value));
+        EXPECT_EQ(expected, value);
+        return expected == value;
+    }
+
+    ElementHandle setRootElement(Element* rootElement) {
+        root_ = rootElement;
+        handle_ = cocoaUi_.addElement(rootElement);
+        return handle_;
+    }
+
+protected:
+    UI cocoaUi_;
+    CocoaUIDelegate* uiDelegate_;
+    Element* root_;
+    ElementHandle handle_;
+};
+
+TEST_F(UiPackageTest, CocoaUiElementDefaultValue) {
+    Element elOne("One");
+    const std::string defaultVal("the first");
+    const std::string prompt("Just click OK button");
+    elOne.setDefault(defaultVal);
+    elOne.setPrompt(prompt);
+    ElementHandle handle = setRootElement(&elOne);
+    EXPECT_TRUE(handle.isValid());
+    
+    EXPECT_TRUE(runUiTests(defaultVal));
+}
+
+TEST_F(UiPackageTest, CocoaUiElementEnterOk) {
     const std::string defaultVal("the first");
     const std::string prompt("Please type ok");
     Element elOne("One");
     elOne.setPrompt(prompt);
     elOne.setDefault(defaultVal);
-    UI cocoaUi;
-    cocoaUi.setUiDelegate(new aft::osdep::CocoaUIDelegate(&cocoaUi));
-    cocoaUi.addElement(&elOne);
-    if (cocoaUi.init()) {
-        cocoaUi.output();
-        cocoaUi.flush();
-        cocoaUi.input();
-        std::string value;
-        if (cocoaUi.getElementValue(value)) {
-            cout << "Value entered: " << value << endl;
-        }
-        cocoaUi.deinit();
-    }
-    else {
-        cout << "Got error in init of Cocoa UI" << endl;
-    }
+    ElementHandle handle = setRootElement(&elOne);
+    EXPECT_TRUE(handle.isValid());
+    
+    EXPECT_TRUE(runUiTests("ok"));
+    Element* currElement = cocoaUi_.currentElement();
+    ASSERT_TRUE(nullptr != currElement);
+    currElement->setValue("Press Cancel to exit.");
+    cocoaUi_.output();
+    cocoaUi_.flush();
+    cocoaUi_.input();
+}
 
-    cout << "Exit CppMain" << endl;
-    return 0;
+} // (anon) namespace
+
+int CppMain(int argc, const char* argv[]) {
+    ::testing::InitGoogleTest(&argc, const_cast<char **>(argv));
+    return RUN_ALL_TESTS();
 }
 
 #if 0
-#include <core/logger.h>
-#include <ui/dumbttyelementdelegate.h>
-#include <ui/dumbttyuidelegate.h>
-#include <ui/uidelegate.h>
-#include <ui/uifacet.h>
-#include <gtest/gtest.h>
-
-namespace {
-    
-    class UiPackageTest : public ::testing::Test {
-    protected:
-        virtual void SetUp() {
-            UI dumbUi(root_, 0);
-            dumbUi_.setUiDelegate(new DumbTtyUIDelegate(&dumbUi));
-            EXPECT_EQ(Result(true), dumbUi.init());
-        }
-        virtual void TearDown() {
-            dumbUi_.deinit();
-        }
-        
         bool runUiTests(const std::string& expected) {
             dumbUi_.output();
             dumbUi_.flush();
@@ -98,37 +131,6 @@ namespace {
             handle_ = dumbUi_.addElement(rootElement);
             return handle_;
         }
-        
-    protected:
-        UI dumbUi_;
-        DumbTtyUIDelegate* uiDelegate_;
-        Element* root_;
-        ElementHandle handle_;
-    };
-    
-    TEST_F(UiPackageTest, DumbTtyElementDefaultValue) {
-        Element elOne("One");
-        const std::string defaultVal("the first");
-        const std::string prompt("Just hit return");
-        elOne.setDefault(defaultVal);
-        elOne.setPrompt(prompt);
-        ElementHandle handle = setRootElement(&elOne);
-        EXPECT_TRUE(handle.isValid());
-        
-        EXPECT_TRUE(runUiTests(defaultVal));
-    }
-    
-    TEST_F(UiPackageTest, DumbTtyElementEnterOk) {
-        const std::string defaultVal("the first");
-        const std::string prompt("Please type ok");
-        Element elOne("One");
-        elOne.setPrompt(prompt);
-        elOne.setDefault(defaultVal);
-        ElementHandle handle = setRootElement(&elOne);
-        EXPECT_TRUE(handle.isValid());
-        
-        EXPECT_TRUE(runUiTests("ok"));
-    }
     
     TEST_F(UiPackageTest, DumbTtyUiTwoTopElements) {
         Element elOne("One");
@@ -148,15 +150,4 @@ namespace {
         EXPECT_TRUE(handle2.isValid());
     }
     
-    TEST_F(UiPackageTest, DumbTtyUiDelegateTest) {
-        
-    }
-    
-} // namespace
-
-int main(int argc, char* argv[])
-{
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
 #endif

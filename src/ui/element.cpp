@@ -28,6 +28,7 @@ Element::ElementId Element::nextId_ = 1;
 Element::Element(const std::string& name)
     : name_(name)
     , cow_(false)
+    , isBlocked_(false)
     , id_(nextId_++)
     , isEnabled_(false)
     , isValueSet_(false)
@@ -38,6 +39,7 @@ Element::Element(const std::string& name)
 Element::Element(const Element& other)
     : name_        (other.name_)
     , cow_         (true)
+    , isBlocked_   (other.isBlocked_.load())
     , id_          (other.id_)
     , value_       (other.value_)
     , defaultValue_(other.defaultValue_)
@@ -54,6 +56,7 @@ Element::operator=(const Element& other) {
     if (this != &other) {
         name_         = other.name_;
         cow_          = true;
+        isBlocked_    = other.isBlocked_.load();
         id_           = other.id_;
         value_        = other.value_;
         defaultValue_ = other.defaultValue_;
