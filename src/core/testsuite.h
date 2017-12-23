@@ -1,6 +1,6 @@
 #pragma once
 /*
- *   Copyright 2015, 2016 Andy Warner
+ *   Copyright © 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -19,15 +19,12 @@
 
 #include "base/tobject.h"
 
-namespace aft
-{
-namespace base
-{
-    class Context;
+namespace aft {
+namespace base {
+class Context;
 }
 
-namespace core
-{
+namespace core {
 class RunContext;
 
 /**
@@ -38,21 +35,24 @@ class RunContext;
  * TODO mode: run, edit, view
  * TODO outlets, variables
  */
-class TestSuite : public aft::base::TObjectContainer
-{
+class TestSuite : public aft::base::TObjectContainer {
 public:
     /** Construct test suite with an optional name. */
     TestSuite(const std::string& name = std::string());
 
     /** Destruct test suite */
-    ~TestSuite();
+    ~TestSuite() = default;
 
     /** Get the value of an environment variable.
-     *   @return true if value was successfully set, otherwise false.
+     *  @param name Name of variable to get
+     *  @param value The value of the variable is copied to this parameter
+     *  @return true if value was successfully set, otherwise false.
      */
     bool getEnv(const std::string& name, std::string& value) const;
 
-    /** Set the value of an environment variable. */
+    /** Set the value of an environment variable.
+     *  @param name Name of variable to set
+     */
     void setEnv(const std::string& name, const std::string& value);
 
     /** Open test suite and prepare to run. */

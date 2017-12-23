@@ -1,6 +1,6 @@
 #pragma once
 /*
- *   Copyright 2015, 2016 Andy Warner
+ *   Copyright 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -21,10 +21,8 @@
 #include "base/structureddataname.h"
 
 
-namespace aft
-{
-namespace base
-{
+namespace aft {
+namespace base {
 // Forward reference
 class Blob;
 
@@ -111,7 +109,7 @@ public:
      */
     StructuredData(const StructuredDataName& name,
                    const std::string& fromString = std::string(),
-                   StructuredDataDelegate* delegate = 0);
+                   StructuredDataDelegate* delegate = nullptr);
 
     /** Construct a structured data object.
      *
@@ -123,7 +121,7 @@ public:
      *             delegate is not provided, then the default json delegate is used.
      */
     StructuredData(const StructuredDataName& name, const Blob& blob,
-                   StructuredDataDelegate* delegate = 0);
+                   StructuredDataDelegate* delegate = nullptr);
 
     /** Destruct a structured data object. */
     virtual ~StructuredData();
@@ -149,7 +147,7 @@ public:
 
     /** Add a named (empty) array to the structured data.
      *  @param name Name of the new array
-     *  @return true if the array cannot be created, otherwise false.
+     *  @return false if the array cannot be created, otherwise true.
      *          Delegates that do not implement arrays return false.
      *          Also, if a non-array element exists with the same name then false
      *          is returned.

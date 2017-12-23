@@ -19,11 +19,8 @@
 #include "base/producer.h"
 
 
-namespace aft
-{
-namespace base
-{
-// Forward reference
+namespace aft {
+namespace base {
 
 class ReaderWriterContract : public ReaderContract, public WriterContract
 {
@@ -41,12 +38,47 @@ class ProcContract : public ProducerContract, public ConsumerContract
 /**
  *  Base implementation of the ProducerContract/ConsumerContract interface.
  */
-class BaseProc : public BaseProducer, public BaseConsumer
+class BaseProc : public ProcContract
 {
 public:
     BaseProc(WriterContract* writerDelegate = nullptr, ReaderContract* readerDelegate = nullptr);
     virtual ~BaseProc() = default;
 
+    virtual Result read(TObject& object) override;
+    virtual Result read(Result& result) override;
+    virtual Result read(Blob& blob) override;
+    virtual bool hasData() override;
+    virtual bool hasObject(ProductType productType) override;
+    
+    /** Register to receive a callback when data is available. */
+    virtual bool registerDataCallback(const ReaderContract* reader) override;
+    /** Unregister callback from receiving any more data. */
+    virtual bool unregisterDataCallback(const ReaderContract* reader) override;
+    
+    /** Start loop reading from the writer delegate and writing to the readers.
+     *
+     *  TODO This method may need to either be overloaded or templatize.
+     */
+    virtual void flowData();
+
+    /** Returns true if write can be called on this consumer without blocking */
+    virtual bool canAcceptData() override;
+    
+    virtual Result write(const TObject& object) override;
+    virtual Result write(const Result& result) override;
+    virtual Result write(const Blob& blob) override;
+    /** Returns the number of objects written. */
+    virtual int write(const std::vector<TObject>& objects) override;
+    virtual int write(const std::vector<Result>& results) override;
+    virtual int write(const std::vector<Blob>& blobs) override;
+    
+    /** Register as a data writer for this consumer. */
+    virtual bool registerWriteCallback(const WriterContract* writer) override;
+    /** Unregister as a data writer for this consumer. */
+    virtual bool unregisterWriteCallback(const WriterContract* writer) override;
+private:
+    BaseProducer producer_;
+    BaseConsumer consumer_;
 };
 
 } // namespace base

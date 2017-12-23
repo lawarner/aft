@@ -1,6 +1,6 @@
 #pragma once
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright © 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -17,10 +17,8 @@
 
 #include <vector>
 
-namespace aft
-{
-namespace base
-{
+namespace aft {
+namespace base {
 // Forward reference
 class Context;
 class PropertyContainer;
@@ -31,6 +29,9 @@ class TObject;
  * Handle TObject's based on a given property or functionality.
  * A TObject can be handled either contextually or non-contextually.
  * A set of name/value pairs is also available for handlers to use.
+ *
+ * An example usage could be a serializer handler that reads property
+ * "filename", opens the file and writes the contents of the give TObject.
  */
 class PropertyHandler
 {

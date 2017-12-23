@@ -78,8 +78,9 @@ public:
 
     /** Destruct a StructuredDataName */
     virtual ~StructuredDataName();
-    
-    /** @return true if name is empty, otherwise false. */
+
+    /** Detect an empty name.
+     *  @return true if name is empty, otherwise false. */
     bool empty() const;
     
     /** Get the name as a vector of components.
@@ -104,7 +105,7 @@ public:
      */
     const std::string& getPath(bool fullPath = true) const;
 
-    /** Compare this SD name to another */
+    /** Compare this StructuredDataName to another */
     bool operator==(const StructuredDataName& other);
 
 public:

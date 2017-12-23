@@ -58,14 +58,15 @@ Entity::Entity(const std::string& name, const TObjectType& toType, const std::st
     }
 }
 
-Entity::~Entity()
-{
-
+Entity::Entity(Entity& other)
+: name_(other.name_)
+, tObject_(other.tObject_)
+, matchLevel_(other.matchLevel_) {
+    
 }
 
 const TObject&
-Entity::getTObject() const
-{
+Entity::getTObject() const {
     return tObject_;
 }
 
@@ -102,6 +103,13 @@ bool Entity::matches(const Entity& other) const
     if (operator==(other)) return true;
 
     return matches(other.tObject_);
+}
+
+Entity& Entity::operator=(Entity& other) {
+    name_ = other.name_;
+    tObject_ = other.tObject_;
+    matchLevel_ = other.matchLevel_;
+    return *this;
 }
 
 bool Entity::operator==(const Entity& other) const

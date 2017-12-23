@@ -24,7 +24,7 @@ namespace aft
 {
 namespace ui
 {
-
+#if 0
 class BinaryElement : public Element
 {
 public:
@@ -36,9 +36,9 @@ class TrinaryElement : public Element
 public:
     virtual bool validate();
 };
+#endif
 
-class IntegerElement : public Element
-{
+class IntegerElement : public Element {
 public:
     virtual bool validate();
 };
@@ -59,5 +59,11 @@ public:
     virtual bool next(Element& element) const;
 };
 
+class FormElement : public ContainerElement {
+public:
+    const std::string& getValue() const;
+    virtual void setValue(const std::string& value);
+};
+    
 } // namespace ui
 } // namespace aft

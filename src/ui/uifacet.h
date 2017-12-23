@@ -48,6 +48,7 @@ enum class UIFacetCategory {
     Output,
     Other,
     Theme,
+    Widget,
     // add new categories above this line
     LAST,
     SIZE = LAST - START

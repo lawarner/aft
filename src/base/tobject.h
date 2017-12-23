@@ -1,6 +1,6 @@
 #pragma once
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -105,30 +105,31 @@ public:
 
     /**
      *  Processing logic of this TObject, if any.
-     *  This base class implementation just returns current result of this TObject without running anything.
+     *  This base class implementation just returns the current result of this
+     *  TObject without running anything.
      */
-    virtual const Result process(Context* context = 0);
+    virtual const Result process(Context* context = nullptr);
 
-    /** Run TObject in the given context.
+    /** Run a TObject in a given context.
      *
      *  This base method sets up context, calls process() and returns the Result.
      *
      *  Subclasses can override this method implement to obtain specific behavior.
      *  For example, see TObjectContainer.
      */
-    virtual const Result run(Context* context = 0);
+    virtual const Result run(Context* context = nullptr);
 
-    /** Start this TObject in the given context asynchronously.
+    /** Start this TObject in a given context asynchronously.
      *
      *  Subclasses must implement specific behavior.  This base method spawns
-     *  this TObject in a ThreadHandler and returns the result from the thread.
-     *  If the context is 0 then starts non-contextually.
+     *  the current TObject in a ThreadHandler and returns the result from the thread.
+     *  If the context is nullptr then the TObject is started non-contextually.
      *
      *  Typically a sub-class would return the result of starting the thread,
      *  either a TOBool or perhaps a TOThread, etc.  Then when the thread finishes
      *  the final result is delivered to the callback.
      */
-    virtual const Result start(Context* context = 0, Callback* callback = 0);
+    virtual const Result start(Context* context = nullptr, Callback* callback = nullptr);
 
     /** Stop this TObject if it is running in a thread.
      *
@@ -190,7 +191,7 @@ public:
      *                     wrapper is allocated.
      *  @return the child's TObjectTree wrapper.
      */
-    virtual TObjectTree* add(TObject* tObject, TObjectTree* tObjWrapper = 0);
+    virtual TObjectTree* add(TObject* tObject, TObjectTree* tObjWrapper = nullptr);
 
     /** Find the object with given name among children */
     TObject* find(const TObjectKey& key);
@@ -204,22 +205,22 @@ public:
     /**
      *  Override run() to call process() iteratively for all children in the tree.
      */
-    virtual const Result run(Context* context = 0);
+    virtual const Result run(Context* context = nullptr);
     
     /** Visit all children and stop when an object returns true.
      *  @return iterator to child that was last visited. Returns TObjectTree::end() if
      *          none of the children produced a true Result.
      */
-    virtual const TObjectIterator& visitUntil(Context* context = 0);
+    virtual const TObjectIterator& visitUntil(Context* context = nullptr);
 
     /** Visit all children and stop when an object returns a false Result. */
-    virtual const TObjectIterator& visitWhile(Context* context = 0);
+    virtual const TObjectIterator& visitWhile(Context* context = nullptr);
 
     /** Copy from another TObjectContainer. */
     virtual TObjectContainer& operator=(const TObjectContainer& other);
 
 protected:
-    /** Construct a TObjectContainer with a given optional name */
+    /** Construct a TObjectContainer with an optional name */
     TObjectContainer(const std::string& name = std::string());
 
     /** Construct a TObjectContainer with a given type and optional name */

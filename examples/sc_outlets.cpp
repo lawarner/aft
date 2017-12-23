@@ -1,5 +1,5 @@
 /*
- *   Copyright © 2015-2017 Andy Warner
+ *   Copyright © 2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -17,22 +17,22 @@
 // scenario: create objects (testcase, commands), run, serialize to file, deserialize and run again.
 /* File contents is:
  { "commands":[{"name":"Log","parameters":["This is the first message.",""]},
-               {"name":"Cons","parameters":["openw","/tmp/sc1-file.txt"]},
-               {"name":"Cons","parameters":["write","/tmp/sc1-file.txt","Hello World!\n"]},
-               {"name":"Cons","parameters":["close","/tmp/sc1-file.txt"]},
-               {"name":"Prod","parameters":["open","/tmp/sc1-file.txt"]},
-               {"name":"Prod","parameters":["read","/tmp/sc1-file.txt"]},
-               {"name":"Log","parameters":["","result"]},
-               {"name":"Prod","parameters":["close","/tmp/sc1-file.txt"]},
-               {"name":"Log","parameters":["This is the last message.",""]}],
-   "name":"Scenario 1",
-   "result":"true",
-   "state":1,
-   "type":"TestCase"}
-
-  Scenario 2 will also have for loop, if-then-else and group commands.
-  Scenario 3 will start adding entities and dependencies.
-  Scenario 4 will be a Test Suite containing the testcases from Scenarios 1-3.
+ {"name":"Cons","parameters":["openw","/tmp/sc1-file.txt"]},
+ {"name":"Cons","parameters":["write","/tmp/sc1-file.txt","Hello World!\n"]},
+ {"name":"Cons","parameters":["close","/tmp/sc1-file.txt"]},
+ {"name":"Prod","parameters":["open","/tmp/sc1-file.txt"]},
+ {"name":"Prod","parameters":["read","/tmp/sc1-file.txt"]},
+ {"name":"Log","parameters":["","result"]},
+ {"name":"Prod","parameters":["close","/tmp/sc1-file.txt"]},
+ {"name":"Log","parameters":["This is the last message.",""]}],
+ "name":"Scenario 1",
+ "result":"true",
+ "state":1,
+ "type":"TestCase"}
+ 
+ Scenario 2 will also have for loop, if-then-else and group commands.
+ Scenario 3 will start adding entities and dependencies.
+ Scenario 4 will be a Test Suite containing the testcases from Scenarios 1-3.
  */
 
 #include <string>
@@ -50,8 +50,7 @@ using namespace aft::base;
 using namespace aft::core;
 using std::endl;
 
-bool initMec()
-{
+bool initMec() {
     MecFactory* mec = MecFactory::instance();
     mec->addFactory(new BasicCommandFactory);
 
@@ -59,15 +58,18 @@ bool initMec()
 }
 
 int main(int argc, char* argv[]) {
-    aftlog << "Starting Scenario 1: " << argv[0] << std::endl;
+    aftlog << "Starting Scenario 2: " << argv[0] << endl;
     if (!initMec()) {
-        aftlog << loglevel(Error) << "Cannot initialize the MEC." << std::endl;
+        aftlog << loglevel(Error) << "Cannot initialize the MEC." << endl;
         return 1;
     }
-
-    TestCase testCase("Scenario 1");
-    const std::string consumerName("/tmp/sc1-file.txt");
     
+    TestCase testCase("Scenario 2");
+    const std::string consumerName("/tmp/sc2-file.txt");
+    const std::string outletName("outlet1");
+
+    testCase.addOutlet(new Outlet(outletName));
+
     testCase.add(new LogCommand("This is the first message."));
     testCase.add(new ConsCommand("openw", consumerName));
     ConsCommand* writeCmd = new ConsCommand("write", consumerName);
@@ -81,29 +83,29 @@ int main(int argc, char* argv[]) {
     testCase.add(new ProdCommand("close", consumerName));
     
     testCase.add(new LogCommand("This is the last message."));
-
+    
     // First run
     aftlog << "\n==================== Running initial testcase: "<< testCase.getName() << endl;
     RunContext context;
     testCase.open();
     testCase.run(&context);
     testCase.close();
-
+    
     Blob blob("");
     if (testCase.serialize(blob)) {
-        FileConsumer filecons("/tmp/scenario1.aft", true);
+        FileConsumer filecons("/tmp/scenario2.aft", true);
         if (!filecons.canAcceptData()) {
             aftlog << loglevel(Error) << "Cannot write to testcase file" << endl;
             return 1;
         }
-
+        
         filecons.write(blob);
     } else {
         aftlog << loglevel(Error) << "Cannot serialize testcase" << endl;
         return 2;
     }
-
-    FileProducer fileprod("/tmp/scenario1.aft");
+    
+    FileProducer fileprod("/tmp/scenario2.aft");
     if (!fileprod.hasData()) {
         aftlog << loglevel(Error) << "Cannot open testcase file" << endl;
         return 3;
@@ -123,8 +125,8 @@ int main(int argc, char* argv[]) {
         aftlog << loglevel(Error) << "Cannot read testcase file" << endl;
         return 5;
     }
-
-    aftlog << "\n==================== Finished Scenario 1" << endl;
-
+    
+    aftlog << "\n==================== Finished Scenario 2" << endl;
+    
     return 0;
 }

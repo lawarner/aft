@@ -33,9 +33,9 @@ public:
     FileWriterImpl(const std::string& fileName, bool overwrite);
     virtual ~FileWriterImpl();
 
-    virtual bool dataAvailable(const TObject& object);
-    virtual bool dataAvailable(const Result& result);
-    virtual bool dataAvailable(const Blob& blob);
+    virtual bool pushData(const TObject& object) override;
+    virtual bool pushData(const Result& result) override;
+    virtual bool pushData(const Blob& blob) override;
 
     bool roomForData() const;
     bool roomForObject(ProductType productType) const;
@@ -62,17 +62,17 @@ FileWriterImpl::~FileWriterImpl()
 }
 
 
-bool FileWriterImpl::dataAvailable(const TObject& object)
+bool FileWriterImpl::pushData(const TObject& object)
 {
     return false;
 }
 
-bool FileWriterImpl::dataAvailable(const Result& result)
+bool FileWriterImpl::pushData(const Result& result)
 {
     return false;
 }
 
-bool FileWriterImpl::dataAvailable(const Blob& blob)
+bool FileWriterImpl::pushData(const Blob& blob)
 {
     const std::string& strBlob = blob.getString();
     outfile_.write(strBlob.c_str(), strBlob.length());
@@ -81,15 +81,12 @@ bool FileWriterImpl::dataAvailable(const Blob& blob)
     return !(outfile_.rdstate() & std::ofstream::failbit);
 }
 
-bool FileWriterImpl::roomForData() const
-{
+bool FileWriterImpl::roomForData() const {
     return outfile_.good();
 }
 
-bool FileWriterImpl::roomForObject(ProductType productType) const
-{
-    if (roomForData() && productType == ProductType::BLOB)
-    {
+bool FileWriterImpl::roomForObject(ProductType productType) const {
+    if (roomForData() && productType == ProductType::BLOB) {
         return true;
     }
     return false;
@@ -134,17 +131,17 @@ FileConsumer::~FileConsumer()
 
 Result FileConsumer::write(const TObject& object)
 {
-    return false;
+    return writer_->pushData(object);
 }
 
 Result FileConsumer::write(const Result& result)
 {
-    return false;
+    return writer_->pushData(result);
 }
 
 Result FileConsumer::write(const Blob& blob)
 {
-    return writer_->dataAvailable(blob);
+    return writer_->pushData(blob);
 }
 
 bool FileConsumer::canAcceptData()

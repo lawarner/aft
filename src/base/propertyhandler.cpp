@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015-2017 Andy Warner
+ *   Copyright © 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -14,20 +14,18 @@
  *   limitations under the License.
  */
 
-#include <map>
+#include <unordered_map>
 #include "context.h"
 #include "propertyhandler.h"
 
 using namespace aft::base;
-using namespace std;
-
+using std::string;
 
 static const std::string emptyString;
 
-class aft::base::PropertyContainer
-{
+class aft::base::PropertyContainer {
 public:
-    map<string, string> nameValues;
+    std::unordered_map<string, string> nameValues;
 };
 
 
@@ -49,20 +47,16 @@ PropertyHandler::getPropertyNames(std::vector<std::string>& names) const {
 }
 
 bool
-PropertyHandler::getValue(const std::string& name, std::string& value) const
-{
-    map<string,string>::const_iterator it = container_->nameValues.find(name);
+PropertyHandler::getValue(const std::string& name, std::string& value) const {
+    auto it = container_->nameValues.find(name);
     if (it == container_->nameValues.end())  return false;
-
     value = it->second;
     return true;
 }
 
 const std::string&
-PropertyHandler::getValue(const std::string& name) const
-{
-    map<string,string>::const_iterator it = container_->nameValues.find(name);
-
+PropertyHandler::getValue(const std::string& name) const {
+    auto it = container_->nameValues.find(name);
     if (it == container_->nameValues.end())  return emptyString;
     return it->second;
 }
@@ -74,11 +68,9 @@ PropertyHandler::setValue(const std::string& name, const std::string& value)
 }
 
 bool
-PropertyHandler::unsetValue(const std::string& name)
-{
-    map<string, string>::iterator it = container_->nameValues.find(name);
-    if (it == container_->nameValues.end())
-    {
+PropertyHandler::unsetValue(const std::string& name) {
+    auto it = container_->nameValues.find(name);
+    if (it == container_->nameValues.end()) {
         return false;
     }
     
@@ -95,7 +87,9 @@ PropertyHandler::handle(const TObject& tObject)
 TObject&
 PropertyHandler::handle(Context* context, const TObject& tObject)
 {
-    if (context) return context->apply(tObject);
+    if (nullptr != context) {
+        return context->apply(tObject);
+    }
 
     return const_cast<TObject&>(tObject);
 }

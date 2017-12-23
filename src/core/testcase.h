@@ -1,6 +1,6 @@
 #pragma once
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright © 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -15,36 +15,39 @@
  *   limitations under the License.
  */
 
-#include <string>
+#include "outlet.h"
 #include "base/tobject.h"
+#include <string>
+#include <vector>
 
-namespace aft
-{
-// Forward reference
-namespace base
-{
+namespace aft {
+namespace base {
+    // Forward reference
     class Blob;
     class Context;
 }
 
-namespace core
-{
+namespace core {
 
 /**
  * Contains a test case that can be run.
  */
-class TestCase : public aft::base::TObjectContainer
-{
+class TestCase : public aft::base::TObjectContainer {
+public:
+    using OutletList = std::vector<Outlet*>;
 public:
     TestCase(const std::string& name = std::string());
     virtual ~TestCase();
 
-    /** Open the test case */
+    /** Open the test case
+     *  @return true if testcase was succesfully opened.
+     */
     virtual bool open();
 
     /** Rewind the test case.
      *
      *  It is not always possible to rewind/reset a testcase.
+     *  @param context Context used to perform the rewind
      *  @return true if testcase was succesfully rewound.
      */
     virtual bool rewind(base::Context* context);
@@ -56,7 +59,7 @@ public:
      *  and executing them in the context.
      *
      *  @param context The context (environment) where objects are run.  The Context
-     *         past in will likely be modified as a side effect of running.
+     *         passed in will likely be modified as a side effect of running.
      *  @return A Result specifying the final outcome of running this test case (TOTrue,
      *          TOFalse or Result::FATAL).
      */
@@ -65,14 +68,18 @@ public:
     /** Close the test case */
     void close();
 
+    bool addOutlet(Outlet* outlet);
+    Outlet* getOutlet(const std::string& name) const;
+    bool removeOutlet(const std::string& name);
+
     //TODO Branch(true, false, exception)
 
     // implement SerializeContract interface
-    virtual bool serialize(base::Blob& blob);
-    virtual bool deserialize(const base::Blob& blob);
+    virtual bool serialize(base::Blob& blob) override;
+    virtual bool deserialize(const base::Blob& blob) override;
 
 private:
-
+    OutletList outlets_;
 };
 
 } // namespace core

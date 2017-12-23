@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright © 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@
  *   limitations under the License.
  */
 
+#include <algorithm>
 #include <vector>
 
 #include "base/blob.h"
@@ -60,17 +61,14 @@ TestCase::rewind(base::Context* context)
 }
 
 const base::Result
-TestCase::run(base::Context* context)
-{
-    if (state_ != PREPARED)
-    {
+TestCase::run(base::Context* context) {
+    if (state_ != PREPARED) {
         return base::Result(base::Result::FATAL);
     }
 
     base::Result retval = base::TObjectContainer::run(context);
     if (retval.getType() == base::Result::BOOLEAN ||
-        retval.getType() == base::Result::FATAL)
-    {
+        retval.getType() == base::Result::FATAL) {
         return retval;
     }
 
@@ -87,24 +85,56 @@ TestCase::close()
     }
 }
 
-bool TestCase::serialize(base::Blob& blob)
-{
-    if (!base::TObject::serialize(blob))
-    {
+bool TestCase::addOutlet(Outlet* a_outlet) {
+    for (auto outlet : outlets_) {
+        if (outlet->name() == a_outlet->name()) {
+            return false;
+        }
+    }
+    outlets_.push_back(a_outlet);
+    return true;
+}
+
+Outlet* TestCase::getOutlet(const std::string& name) const {
+    for (auto outlet : outlets_) {
+        if (outlet->name() == name) {
+            return outlet;
+        }
+    }
+    return nullptr;
+}
+
+bool TestCase::removeOutlet(const std::string& name) {
+    for (auto it = std::begin(outlets_); it != std::end(outlets_); ++it) {
+        if ((*it)->name() == name) {
+            outlets_.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool TestCase::serialize(base::Blob& blob) {
+    if (!base::TObject::serialize(blob)) {
         return false;
     }
 
     base::StructuredData sd("TestCase", blob.getString());
 
-    sd.addArray("commands");
+    sd.addArray("outlets");
+    for (auto outlet : outlets_) {
+        base::Blob outletBl("");
+        outlet->serialize(outletBl);
+        base::StructuredData sdOutlet("outlet", outletBl.getString());
+        sd.add("outlets.", sdOutlet);
+    }
 
+    sd.addArray("commands");
     base::TObjectTree::Children& cmds = children_->getChildren();
     base::TObjectTree::Children::iterator it;
-    for (it = cmds.begin(); it != cmds.end(); ++it)
-    {
+    for (it = cmds.begin(); it != cmds.end(); ++it) {
         TObject* tObj = (*it)->getValue();
-        if (tObj)
-        {
+        if (tObj) {
             base::Blob cmdBlob("");
             tObj->serialize(cmdBlob);
             base::StructuredData sdcmd("command", cmdBlob.getString());
@@ -117,18 +147,24 @@ bool TestCase::serialize(base::Blob& blob)
 
 bool TestCase::deserialize(const base::Blob& blob)
 {
-    if (!base::TObject::deserialize(blob))
-    {
+    if (!base::TObject::deserialize(blob)) {
         return false;
     }
 
     base::StructuredData sd("");
     if (!sd.deserialize(blob)) return false;
 
+    // outlets
+    std::vector<std::string> outletNames;
+    if (sd.getArray("outlets", outletNames)) {
+        for (const auto& oname : outletNames) {
+            outlets_.push_back(new Outlet(oname));
+        }
+    }
+
     // commands
     std::vector<std::string> cmds;
-    if (!sd.getArray("commands", cmds))
-    {
+    if (!sd.getArray("commands", cmds)) {
         return false;
     }
 

@@ -1,6 +1,6 @@
 #pragma once
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright © 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -19,10 +19,8 @@
 #include <vector>
 
 
-namespace aft
-{
-namespace base
-{
+namespace aft {
+namespace base {
 
 /**
  *  Serialized representation of a class instance.
@@ -32,11 +30,9 @@ namespace base
  *  or both data and blobs.
  *  Blobs can optionally be named.
  */
-class Blob
-{
+class Blob {
 public:
-    enum Type
-    {
+    enum Type {
         UNKNOWN = -1,
         RAWDATA,
         STRING,

@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015, 2016 Andy Warner
+ *   Copyright 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -266,8 +266,7 @@ bool TObject::supportsOperation(const Operation& operation)
 bool
 TObject::serialize(Blob& blob)
 {
-    if (state_ == INVALID)
-    {
+    if (state_ == INVALID) {
         return false;
     }
 

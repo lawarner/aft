@@ -1,6 +1,6 @@
 #pragma once
 /*
- *   Copyright 2015, 2016 Andy Warner
+ *   Copyright 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -15,24 +15,23 @@
  *   limitations under the License.
  */
 
-#include <map>
 #include <vector>
 
 #include "base/command.h"
 #include "base/result.h"
 
-namespace aft
-{
-namespace base
-{
+namespace aft {
+namespace base {
 // Forward reference
 class BaseConsumer;
 class BaseProducer;
+class BaseProc;
 class Context;
 }
 
-namespace core
-{
+namespace core {
+class Outlet;
+
 /**
  *  Basic, built-in commands.
  *  Commands hold no state or values of their own, but use the context.
@@ -54,7 +53,7 @@ public:
     LogCommand(const std::vector<std::string>& parameters);
 
     // Implement Command interface
-    virtual const base::Result process(base::Context* context = 0);
+    virtual const base::Result process(base::Context* context = nullptr);
 
 private:
     std::string message_;
@@ -72,14 +71,13 @@ class ConsCommand : public aft::base::Command
 {
 public:
     ConsCommand(const std::string& type, const std::string& name = std::string());
-    virtual ~ConsCommand();
+    virtual ~ConsCommand() = default;
     
     // Implement Command interface
-    virtual const base::Result process(base::Context* context = 0);
+    virtual const base::Result process(base::Context* context = nullptr);
 
 private:
     std::string type_;      //TODO convert to enum
-    base::BaseConsumer* consumer_;
 };
 
 /** Handle producers.
@@ -99,7 +97,38 @@ public:
 private:
     std::string type_;      //TODO convert to enum
     base::Blob* buffer_;    // holds temporary results
-    base::BaseProducer* producer_;
+};
+
+/** Handle procs.
+ *
+ */
+class ProcCommand : public aft::base::Command {
+public:
+    ProcCommand(const std::string& type, const std::string& name = std::string());
+    virtual ~ProcCommand();
+
+    // Implement Command interface
+    virtual const base::Result process(base::Context* context = 0);
+
+private:
+    std::string type_;      //TODO convert to enum
+    base::Blob* buffer_;    // holds temporary results
+};
+
+/** Handle outlets.
+ *
+ */
+class OutletCommand : public aft::base::Command {
+public:
+    OutletCommand(const std::string& type, const std::string& name,
+                  const std::string& value = std::string());
+    virtual ~OutletCommand();
+    
+    // Implement Command interface
+    virtual const base::Result process(base::Context* context = 0);
+    
+private:
+    std::string type_;      //TODO convert to enum
 };
 
 /** Handle environment variables

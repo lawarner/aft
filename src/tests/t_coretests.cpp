@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015-2017 Andy Warner
+ *   Copyright © 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@
 #include <core/commandcontext.h>
 #include <core/fileconsumer.h>
 #include <core/fileproducer.h>
+#include <core/outlet.h>
 #include <core/queueproc.h>
 #include <core/stringconsumer.h>
 #include <core/stringproducer.h>
@@ -29,26 +30,26 @@ using namespace aft::base;
 using namespace aft::core;
 using std::cout;
 using std::endl;
+using std::string;
 
 
 const std::string sampleText("This is just sample text that you can safely ignore.\n");
 const std::string sampleWords[]{"This", "is", "just", "sample", "text", "that",
     "you", "can", "safely", "ignore."};
 
-class ObjectReader : public ReaderContract
-{
+class ObjectReader : public ReaderContract {
 public:
-    virtual bool dataAvailable(const TObject& object)
+    virtual bool pushData(const TObject& object) override
     {
         return false;
     }
-    virtual bool dataAvailable(const Result& result)
+    virtual bool pushData(const Result& result) override
     {
         return false;
     }
-    virtual bool dataAvailable(const Blob& blob)
+    virtual bool pushData(const Blob& blob) override
     {
-        std::cout << "ObjectReader blob:  " << blob.getString() << std::endl;
+        std::cout << "ObjectReader blob:  " << blob.getString() << endl;
         return true;
     }
     virtual bool roomForData() const
@@ -200,6 +201,84 @@ TEST(CorePackageTest, BasicCommands) {
     value = logResult.run();
     EXPECT_TRUE(value);
 }
+
+TEST(CorePackageTest, Outlet) {
+    const string outletName("Test outlet");
+    Outlet outlet(outletName);
+    EXPECT_EQ(outletName, outlet.name());
+    EXPECT_EQ(OutletType::None, outlet.type());
+
+    const string sampleText("This is just some sample text.");
+    StringProducer strprod(sampleText);
+    EXPECT_TRUE(outlet.plugin(&strprod));
+    EXPECT_EQ(OutletType::In, outlet.type());
+    EXPECT_TRUE(outlet.hasData());
+
+    Blob blob("");
+    EXPECT_TRUE(outlet.read(blob));
+    EXPECT_EQ(sampleText, blob.getString());
+
+    EXPECT_TRUE(outlet.unplug(&strprod));
+    EXPECT_EQ(OutletType::None, outlet.type());
+
+    StringConsumer strcons;
+    EXPECT_TRUE(outlet.plugin(&strcons));
+    EXPECT_EQ(OutletType::Out, outlet.type());
+    EXPECT_TRUE(outlet.canAcceptData());
+    EXPECT_TRUE(outlet.write(blob));
+    EXPECT_EQ(sampleText, strcons.getContents());
+
+    EXPECT_FALSE(outlet.unplug(&strprod));
+    EXPECT_EQ(OutletType::Out, outlet.type());
+    EXPECT_TRUE(outlet.unplug(&strcons));
+    EXPECT_EQ(OutletType::None, outlet.type());
+
+    QueueProc qproc;
+    EXPECT_TRUE(outlet.plugin(&qproc));
+    EXPECT_EQ(OutletType::InOut, outlet.type());
+    EXPECT_TRUE(outlet.write(blob));
+    Blob blob1("");
+    EXPECT_TRUE(outlet.read(blob1));
+    EXPECT_EQ(sampleText, blob1.getString());
+    Blob blobName("name", Blob::STRING, outletName);
+    EXPECT_TRUE(outlet.write(blobName));
+    EXPECT_TRUE(outlet.read(blob1));
+    EXPECT_EQ(outletName, blob1.getString());
+
+    EXPECT_FALSE(outlet.read(blob1));
+    EXPECT_TRUE(outlet.unplug(&qproc));
+    EXPECT_EQ(OutletType::None, outlet.type());
+
+    EXPECT_TRUE(outlet.plugin(&strprod));
+    EXPECT_EQ(OutletType::In, outlet.type());
+    EXPECT_TRUE(outlet.unplug());
+    EXPECT_EQ(OutletType::None, outlet.type());
+    EXPECT_TRUE(outlet.plugin(&strcons));
+    EXPECT_EQ(OutletType::Out, outlet.type());
+    EXPECT_TRUE(outlet.unplug());
+    EXPECT_EQ(OutletType::None, outlet.type());
+    EXPECT_TRUE(outlet.plugin(&qproc));
+    EXPECT_EQ(OutletType::InOut, outlet.type());
+    EXPECT_TRUE(outlet.unplug());
+    EXPECT_EQ(OutletType::None, outlet.type());
+#if 0
+        // An Entity can be at TObject type level, or an actual named TObject.
+        const EntityList& consumes() const;
+        const EntityList& provides() const;
+        const EntityList& requires() const;
+        void consumes(const EntityList& entities);
+        void provides(const EntityList& entities);
+        void requires(const EntityList& entities);
+        // Implement ProcContract (ProviderContract)
+        virtual Result read(TObject& object) override;
+        virtual Result read(Result& result) override;
+        virtual bool hasObject(ProductType productType) override;
+        // Implement ProcContract (ConsumerContract)
+        virtual Result write(const TObject& object) override;
+        virtual Result write(const Result& result) override;
+#endif
+    }
+    
 
 } // namespace
 

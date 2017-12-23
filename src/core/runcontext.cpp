@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015 Andy Warner
+ *   Copyright 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -14,87 +14,100 @@
  *   limitations under the License.
  */
 
-#include <map>
-
 #include "base/consumer.h"
 #include "base/producer.h"
 #include "base/result.h"
 #include "loghandler.h"
+#include "outlet.h"
 #include "runcontext.h"
+#include "testcase.h"
 using namespace aft;
 using namespace aft::core;
 
+static RunContext* globalInstance = nullptr;
 
-static RunContext* globalInstance = 0;
+static constexpr char* PrefixCons = "cons$";
+static constexpr char* PrefixProc = "proc$";
+static constexpr char* PrefixProd = "prod$";
 
-class aft::core::RunContextImpl
-{
+
+class aft::core::RunContextImpl {
 public:
-    RunContextImpl(LogHandler& logHandler);
+    RunContextImpl(LogHandler& logHandler, TestCase* testCase);
     ~RunContextImpl();
 
     LogHandler& logHandler_;
-    std::map<std::string, base::BaseConsumer*> consumers_;
-    std::map<std::string, base::BaseProducer*> producers_;
-    
+    TestCase* testCase_;
     base::Result lastResult_;
 };
 
-RunContextImpl::RunContextImpl(LogHandler& logHandler)
+RunContextImpl::RunContextImpl(LogHandler& logHandler, TestCase* testCase)
     : logHandler_(logHandler)
-{
+    , testCase_(testCase) {
 }
 
-RunContextImpl::~RunContextImpl()
-{
+RunContextImpl::~RunContextImpl() {
     delete &logHandler_;
 }
 
-RunContext* RunContext::global()
-{
-    if (!globalInstance)
-    {
-        globalInstance = new RunContext;
+RunContext* RunContext::global() {
+    if (!globalInstance) {
+        globalInstance = new RunContext(new TestCase);
     }
     return globalInstance;
 }
 
-RunContext::RunContext()
-: impl_(*new RunContextImpl(*new LogHandler))
-{
+RunContext::RunContext(TestCase* testCase)
+    : impl_(*new RunContextImpl(*new LogHandler, testCase)) {
 }
 
-RunContext::~RunContext()
-{
+RunContext::~RunContext() {
     delete &impl_;
 }
 
-void RunContext::addConsumer(const std::string& name, base::BaseConsumer* consumer)
-{
-    impl_.consumers_[name] = consumer;
+void RunContext::addOutlet(const std::string& name, Outlet* outlet) {
+    impl_.testCase_->addOutlet(outlet);
 }
 
-void RunContext::addProducer(const std::string& name, base::BaseProducer* producer)
-{
-    impl_.producers_[name] = producer;
+Outlet* RunContext::getOutlet(const std::string& name) {
+    return impl_.testCase_->getOutlet(name);
 }
 
-base::BaseConsumer*
-RunContext::getConsumer(const std::string& name)
-{
-    std::map<std::string,base::BaseConsumer*>::iterator it = impl_.consumers_.find(name);
-    if (it == impl_.consumers_.end()) return 0;
-
-    return it->second;
+void RunContext::removeOutlet(const std::string& name) {
+    impl_.testCase_->removeOutlet(name);
 }
 
-base::BaseProducer*
-RunContext::getProducer(const std::string& name)
-{
-    std::map<std::string,base::BaseProducer*>::iterator it = impl_.producers_.find(name);
-    if (it == impl_.producers_.end()) return 0;
+void RunContext::addConsumer(const std::string& name, base::ConsumerContract* consumer) {
+    auto outlet = new Outlet(PrefixCons + name);
+    outlet->plugin(consumer);
+    impl_.testCase_->addOutlet(outlet);
+}
 
-    return it->second;
+void RunContext::addProducer(const std::string& name, base::ProducerContract* producer) {
+    auto outlet = new Outlet(PrefixProd + name);
+    outlet->plugin(producer);
+    impl_.testCase_->addOutlet(outlet);
+}
+
+void RunContext::addProcess(const std::string& name, base::ProcContract* process) {
+    auto procOutlet = new Outlet(PrefixProc + name);
+    procOutlet->plugin(process);
+    impl_.testCase_->addOutlet(procOutlet);
+}
+
+base::ConsumerContract*
+RunContext::getConsumer(const std::string& name) {
+    return impl_.testCase_->getOutlet(PrefixCons + name);
+}
+
+base::ProducerContract*
+RunContext::getProducer(const std::string& name) {
+    return impl_.testCase_->getOutlet(PrefixProd + name);
+}
+
+base::ProcContract*
+RunContext::getProcess(const std::string& name) {
+    return impl_.testCase_->getOutlet(PrefixProc + name);
 }
 
 base::Result&
@@ -108,22 +121,16 @@ void RunContext::setLastResult(const base::Result& result)
     impl_.lastResult_ = result;
 }
 
-void RunContext::removeConsumer(const std::string& name)
-{
-    std::map<std::string,base::BaseConsumer*>::iterator it = impl_.consumers_.find(name);
-    if (it != impl_.consumers_.end())
-    {
-        impl_.consumers_.erase(it);
-    }
+void RunContext::removeConsumer(const std::string& name) {
+    impl_.testCase_->removeOutlet(PrefixCons + name);
 }
 
-void RunContext::removeProducer(const std::string& name)
-{
-    std::map<std::string,base::BaseProducer*>::iterator it = impl_.producers_.find(name);
-    if (it != impl_.producers_.end())
-    {
-        impl_.producers_.erase(it);
-    }
+void RunContext::removeProducer(const std::string& name) {
+    impl_.testCase_->removeOutlet(PrefixProd + name);
+}
+
+void RunContext::removeProcess(const std::string& name) {
+    impl_.testCase_->removeOutlet(PrefixProc + name);
 }
 
 void RunContext::setupLogs(const std::string& logConfig)

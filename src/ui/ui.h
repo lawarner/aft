@@ -67,9 +67,10 @@ enum class UiEventType {
  *  to perform its operations, also in a platform specific way.
  *  UI operations include refresh, getBounds, draw, hide, focus, describe, etc.
  *  Element operations include setups, getValue, setValue, getUserInput, setUserOutput, etc.
+ *
+ *  TODO: create subclasses for tty, term, batch, html, gui
  */
-class UI : public aft::base::BaseProc
-{
+class UI : public aft::base::BaseProc {
 public:
     using ElementList = std::vector<Element *>;
     using CallbackFunction = std::function<bool(UiEventType, Element*)>;
@@ -135,6 +136,7 @@ public:
     virtual void flush();
     virtual void input();
     virtual void output();
+
     //TODO Result checkStatus() const;
     void registerListener(CallbackFunction* listener);
     void unregisterListener(CallbackFunction* listener);

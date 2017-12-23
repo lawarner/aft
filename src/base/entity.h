@@ -3,7 +3,7 @@
  *  entity.h
  *  libaft
  *
- *  Copyright © 2016 Andy Warner. All rights reserved.
+ *  Copyright © 2016-2017 Andy Warner. All rights reserved.
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -17,12 +17,11 @@
  *   See the License for the specific language governing permissions and
  *   limitations under the License.
  */
+#include "tobject.h"
 #include <string>
 
-namespace aft
-{
-namespace base
-{
+namespace aft {
+namespace base {
         
 // Forward references
 class TObject;
@@ -35,8 +34,7 @@ class TObjectType;
 class Entity
 {
 public:
-    enum MatchLevel
-    {
+    enum MatchLevel {
         LevelNone,
         LevelAny,
         LevelTOType,
@@ -51,7 +49,9 @@ public:
      *  A TObject is synthesized to hold the matching values. */
     Entity(const std::string& name, const TObjectType& toType, const std::string& toName = std::string());
 
-    virtual ~Entity();
+    Entity(Entity& other);
+
+    virtual ~Entity() = default;
 
     const TObject& getTObject() const;
 
@@ -65,12 +65,14 @@ public:
      */
     bool matches(const Entity& other) const;
 
+    Entity& operator=(Entity& other);
+
     /** Check if this entity is equal to another */
     bool operator==(const Entity& other) const;
 
 private:
     std::string name_;
-    const TObject& tObject_;
+    TObject tObject_;
     MatchLevel matchLevel_;
 };
 

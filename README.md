@@ -17,7 +17,7 @@ more of these components.  It is used for testing running components and sub-sys
 
 AFT is not intented as a unit test framework (for C++).  There are many good C++ unit 
 test frameworks such as googletest, cppunit and cxxunit.  This project uses googletest
-for unit testing the various AFT C++ class libraries.
+for unit testing the various AFT C++ classes.
 
 ## Building
 
@@ -28,25 +28,27 @@ The main library and functionality relies on very few dependencies:
 - GNU make
 
 The unit tests depend on googletest, but these are optional and can be removed from 
-default targets.
+default 'make' targets.
 
 The plugin directory and specific UI tools will have additional dependencies, as needed.
 
-Will probably switch the cmake when the project's structure gets more complex.
+The AFT Makefile structure is very minimal (read "primitive").
+Will probably switch to cmake when the project's structure gets more complex.
 
 ### MacOSX
 
-An xcode workspace is in the aft/macosx folder, that contains the following xcode projects:
+An xcode workspace is in the aft/macosx folder that contains the following xcode projects:
 - **libaft** Builds the static library.
 - **libafttests** Builds unit/module test programs.  The test programs depend on googletest so the project searches for
   headers in /opt/local/include.  You need to copy libgtest.a to the aft/lib folder.  Or modify the project if you
   have installed googletest elsewhere.
+- **examples** Builds example programs that illustrate using the AFT framework.
 
 ### Other Platforms
 
 Any platform that supports POSIX, g++ and the c++14 standard should compile and run without problems. But any
 errors that may arise should be isolated to classes within osdep. Currently the osdep section is only involved
-in theads and dynamic librarires, but more could be added in the future.
+in the UI, threads and dynamic librarires, but more could be added in the future.
 
 ## History
 

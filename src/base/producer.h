@@ -37,15 +37,15 @@ public:
     /** Called by the Producer to deliver a TObject to readers.
      *  @return true if the reader consumed the data, otherwise false
      */
-    virtual bool dataAvailable(const TObject& object) = 0;
+    virtual bool pushData(const TObject& object) = 0;
     /** Called by the Producer to deliver a Result to readers.
      *  @return true if the reader consumed the data, otherwise false
      */
-    virtual bool dataAvailable(const Result& result) = 0;
+    virtual bool pushData(const Result& result) = 0;
     /** Called by the Producer to deliver a Blob to readers.
      *  @return true if the reader consumed the data, otherwise false
      */
-    virtual bool dataAvailable(const Blob& blob) = 0;
+    virtual bool pushData(const Blob& blob) = 0;
     
     /** Indicate if the reader can accept data */
     virtual bool roomForData() const = 0;

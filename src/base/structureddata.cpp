@@ -447,12 +447,15 @@ bool JsonDataDelegate::parse(const StructuredDataName& name, const std::string& 
     return true;
 }
 
-bool JsonDataDelegate::unparse(const StructuredDataName& name, std::string& strData)
-{
-    if (name.empty())
-    {
+bool JsonDataDelegate::unparse(const StructuredDataName& name, std::string& strData) {
+    if (name.empty()) {
+#if 1
+        Json::StyledWriter writer;
+        strData = writer.write(json_);
+#else
         Json::FastWriter writer;
         strData = writer.write(json_);
+#endif
     } else {
         Json::Value value;
         if (!getJsonValue(name, value)) return false;
@@ -703,8 +706,7 @@ bool StructuredData::set(const StructuredDataName& name, const std::string& valu
 bool StructuredData::serialize(Blob& blob)
 {
     std::string strData;
-    if (delegate_->unparse(StructuredDataName(""), strData))
-    {
+    if (delegate_->unparse("", strData)) {
         blob = Blob(name_.getName(true), Blob::STRING, strData); // or JSON?
         return true;
     }

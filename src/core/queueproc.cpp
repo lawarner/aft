@@ -50,15 +50,15 @@ public:
     }
 
     // Reader contract
-    virtual bool dataAvailable(const TObject& object)
+    virtual bool pushData(const TObject& object)
     {
         return false;
     }
-    virtual bool dataAvailable(const Result& result)
+    virtual bool pushData(const Result& result)
     {
         return false;
     }
-    virtual bool dataAvailable(const Blob& blob)
+    virtual bool pushData(const Blob& blob)
     {
         if (queue_.size() < maxSize_)
         {
@@ -138,5 +138,5 @@ Result QueueProc::write(const base::Result& result)
 
 Result QueueProc::write(const base::Blob& blob)
 {
-    return impl_.dataAvailable(blob);
+    return impl_.pushData(blob);
 }

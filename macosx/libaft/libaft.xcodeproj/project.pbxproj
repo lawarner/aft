@@ -25,6 +25,8 @@
 		A1256C961DFE349300AE4700 /* nativethread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1256C921DFE349300AE4700 /* nativethread.cpp */; };
 		A1256C971DFE349300AE4700 /* nativepluginloader.h in Headers */ = {isa = PBXBuildFile; fileRef = A1256C931DFE349300AE4700 /* nativepluginloader.h */; };
 		A128D77C1FBBD1FE0096C7CC /* cocoatextentry.m in Sources */ = {isa = PBXBuildFile; fileRef = A128D77B1FBBD1FE0096C7CC /* cocoatextentry.m */; };
+		A12A31831FCCFDB200394D7D /* basicuis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12A31811FCCFDB200394D7D /* basicuis.cpp */; };
+		A12A31841FCCFDB200394D7D /* basicuis.h in Headers */ = {isa = PBXBuildFile; fileRef = A12A31821FCCFDB200394D7D /* basicuis.h */; };
 		A13C2DB71EB042B20016E9B3 /* dumbttyuidelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A13C2DB51EB042B20016E9B3 /* dumbttyuidelegate.cpp */; };
 		A13C2DB81EB042B20016E9B3 /* dumbttyuidelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = A13C2DB61EB042B20016E9B3 /* dumbttyuidelegate.h */; };
 		A13CF6E91D1705590038665F /* operation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A13CF6E71D1705590038665F /* operation.cpp */; };
@@ -48,8 +50,6 @@
 		A153D0D51CCC71F500000A15 /* hasher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0701CCC71F500000A15 /* hasher.cpp */; };
 		A153D0D61CCC71F500000A15 /* hasher.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0711CCC71F500000A15 /* hasher.h */; };
 		A153D0D71CCC71F500000A15 /* iterator.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0721CCC71F500000A15 /* iterator.h */; };
-		A153D0D91CCC71F500000A15 /* outlet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0741CCC71F500000A15 /* outlet.cpp */; };
-		A153D0DA1CCC71F500000A15 /* outlet.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0751CCC71F500000A15 /* outlet.h */; };
 		A153D0DB1CCC71F500000A15 /* plugin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0761CCC71F500000A15 /* plugin.cpp */; };
 		A153D0DC1CCC71F500000A15 /* plugin.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D0771CCC71F500000A15 /* plugin.h */; };
 		A153D0DD1CCC71F500000A15 /* producer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D0781CCC71F500000A15 /* producer.cpp */; };
@@ -118,6 +118,8 @@
 		A153D1281CD05F8400000A15 /* entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A153D1261CD05F8400000A15 /* entity.cpp */; };
 		A153D1291CD05F8400000A15 /* entity.h in Headers */ = {isa = PBXBuildFile; fileRef = A153D1271CD05F8400000A15 /* entity.h */; };
 		A15745771E1AF6FF00265D4D /* t_ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A15745761E1AF6FF00265D4D /* t_ui.cpp */; };
+		A15976D81FEEFBA200C1DD49 /* outlet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A15976D61FEEFBA200C1DD49 /* outlet.cpp */; };
+		A15976D91FEEFBA200C1DD49 /* outlet.h in Headers */ = {isa = PBXBuildFile; fileRef = A15976D71FEEFBA200C1DD49 /* outlet.h */; };
 		A16390811D038A2A00036620 /* tobasictypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A16390801D038A2A00036620 /* tobasictypes.cpp */; };
 		A16390841D03D75800036620 /* structureddataname.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A16390821D03D75800036620 /* structureddataname.cpp */; };
 		A16390851D03D75800036620 /* structureddataname.h in Headers */ = {isa = PBXBuildFile; fileRef = A16390831D03D75800036620 /* structureddataname.h */; };
@@ -160,6 +162,8 @@
 		A1256C941DFE349300AE4700 /* nativepluginloader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = nativepluginloader.cpp; path = native/nativepluginloader.cpp; sourceTree = "<group>"; };
 		A128D77B1FBBD1FE0096C7CC /* cocoatextentry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = cocoatextentry.m; sourceTree = "<group>"; };
 		A128D77D1FBBD2590096C7CC /* cocoatextentry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = cocoatextentry.h; path = ui/cocoatextentry.h; sourceTree = "<group>"; };
+		A12A31811FCCFDB200394D7D /* basicuis.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = basicuis.cpp; path = ../../src/ui/basicuis.cpp; sourceTree = "<group>"; };
+		A12A31821FCCFDB200394D7D /* basicuis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basicuis.h; path = ../../src/ui/basicuis.h; sourceTree = "<group>"; };
 		A13C2DB51EB042B20016E9B3 /* dumbttyuidelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dumbttyuidelegate.cpp; path = ../../src/ui/dumbttyuidelegate.cpp; sourceTree = "<group>"; };
 		A13C2DB61EB042B20016E9B3 /* dumbttyuidelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = dumbttyuidelegate.h; path = ../../src/ui/dumbttyuidelegate.h; sourceTree = "<group>"; };
 		A13CF6E71D1705590038665F /* operation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = operation.cpp; sourceTree = "<group>"; };
@@ -184,8 +188,6 @@
 		A153D0711CCC71F500000A15 /* hasher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = hasher.h; sourceTree = "<group>"; };
 		A153D0721CCC71F500000A15 /* iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iterator.h; sourceTree = "<group>"; };
 		A153D0731CCC71F500000A15 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		A153D0741CCC71F500000A15 /* outlet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = outlet.cpp; sourceTree = "<group>"; };
-		A153D0751CCC71F500000A15 /* outlet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = outlet.h; sourceTree = "<group>"; };
 		A153D0761CCC71F500000A15 /* plugin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = plugin.cpp; sourceTree = "<group>"; };
 		A153D0771CCC71F500000A15 /* plugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = plugin.h; sourceTree = "<group>"; };
 		A153D0781CCC71F500000A15 /* producer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = producer.cpp; sourceTree = "<group>"; };
@@ -262,6 +264,8 @@
 		A153D1271CD05F8400000A15 /* entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = entity.h; sourceTree = "<group>"; };
 		A15745751E1A057800265D4D /* elementdelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = elementdelegate.h; path = ../../src/ui/elementdelegate.h; sourceTree = "<group>"; };
 		A15745761E1AF6FF00265D4D /* t_ui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = t_ui.cpp; sourceTree = "<group>"; };
+		A15976D61FEEFBA200C1DD49 /* outlet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = outlet.cpp; sourceTree = "<group>"; };
+		A15976D71FEEFBA200C1DD49 /* outlet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = outlet.h; sourceTree = "<group>"; };
 		A16390801D038A2A00036620 /* tobasictypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tobasictypes.cpp; sourceTree = "<group>"; };
 		A16390821D03D75800036620 /* structureddataname.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = structureddataname.cpp; sourceTree = "<group>"; };
 		A16390831D03D75800036620 /* structureddataname.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = structureddataname.h; sourceTree = "<group>"; };
@@ -362,8 +366,6 @@
 				A153D0731CCC71F500000A15 /* Makefile */,
 				A13CF6E71D1705590038665F /* operation.cpp */,
 				A13CF6E81D1705590038665F /* operation.h */,
-				A153D0741CCC71F500000A15 /* outlet.cpp */,
-				A153D0751CCC71F500000A15 /* outlet.h */,
 				A153D0761CCC71F500000A15 /* plugin.cpp */,
 				A153D0771CCC71F500000A15 /* plugin.h */,
 				A153D1221CCD89D200000A15 /* proc.cpp */,
@@ -417,6 +419,8 @@
 				A153D09C1CCC71F500000A15 /* loghandler.cpp */,
 				A153D09D1CCC71F500000A15 /* loghandler.h */,
 				A153D09E1CCC71F500000A15 /* Makefile */,
+				A15976D61FEEFBA200C1DD49 /* outlet.cpp */,
+				A15976D71FEEFBA200C1DD49 /* outlet.h */,
 				A153D09F1CCC71F500000A15 /* queueproc.cpp */,
 				A153D0A01CCC71F500000A15 /* queueproc.h */,
 				A153D0A11CCC71F500000A15 /* runcontext.cpp */,
@@ -535,6 +539,8 @@
 				A13C2DB61EB042B20016E9B3 /* dumbttyuidelegate.h */,
 				A172903B1EB44909001454A0 /* dumbttyelementdelegate.cpp */,
 				A172903C1EB44909001454A0 /* dumbttyelementdelegate.h */,
+				A12A31811FCCFDB200394D7D /* basicuis.cpp */,
+				A12A31821FCCFDB200394D7D /* basicuis.h */,
 			);
 			name = ui;
 			sourceTree = "<group>";
@@ -560,8 +566,10 @@
 				A153D0F01CCC71F500000A15 /* tree.h in Headers */,
 				A153D0DC1CCC71F500000A15 /* plugin.h in Headers */,
 				A153D0FB1CCC71F500000A15 /* fileproducer.h in Headers */,
+				A15976D91FEEFBA200C1DD49 /* outlet.h in Headers */,
 				A153D0F11CCC71F500000A15 /* visitor.h in Headers */,
 				A153D0D41CCC71F500000A15 /* factory.h in Headers */,
+				A12A31841FCCFDB200394D7D /* basicuis.h in Headers */,
 				A13C2DB81EB042B20016E9B3 /* dumbttyuidelegate.h in Headers */,
 				A153D0D01CCC71F500000A15 /* consumer.h in Headers */,
 				A1BCB6471D2B586E0082BB87 /* uicommand.h in Headers */,
@@ -604,7 +612,6 @@
 				A14651921E919FC200C5BF04 /* uirequest.h in Headers */,
 				A153D0F51CCC71F500000A15 /* basicfactory.h in Headers */,
 				A153D0E61CCC71F500000A15 /* structureddata.h in Headers */,
-				A153D0DA1CCC71F500000A15 /* outlet.h in Headers */,
 				A153D1061CCC71F500000A15 /* stringconsumer.h in Headers */,
 				A122FCBA1F4A2DA3004C2610 /* osx-cocoa.h in Headers */,
 				A153D0D61CCC71F500000A15 /* hasher.h in Headers */,
@@ -704,9 +711,11 @@
 				A1256C961DFE349300AE4700 /* nativethread.cpp in Sources */,
 				A153D1201CCC71F500000A15 /* t_result.cpp in Sources */,
 				A1BCB6461D2B586E0082BB87 /* uicommand.cpp in Sources */,
+				A12A31831FCCFDB200394D7D /* basicuis.cpp in Sources */,
 				A1BCB64A1D2B5ADC0082BB87 /* basicelements.cpp in Sources */,
 				A1122F201D23784E000FA862 /* element.cpp in Sources */,
 				A14651911E919FC200C5BF04 /* uirequest.cpp in Sources */,
+				A15976D81FEEFBA200C1DD49 /* outlet.cpp in Sources */,
 				A153D0E51CCC71F500000A15 /* structureddata.cpp in Sources */,
 				A153D0E71CCC71F500000A15 /* thread.cpp in Sources */,
 				A153D10B1CCC71F500000A15 /* testsuite.cpp in Sources */,
@@ -742,7 +751,6 @@
 				A153D0FC1CCC71F500000A15 /* logger.cpp in Sources */,
 				A153D0F21CCC71F500000A15 /* basiccommands.cpp in Sources */,
 				A153D11A1CCC71F500000A15 /* sample_plugin.cpp in Sources */,
-				A153D0D91CCC71F500000A15 /* outlet.cpp in Sources */,
 				A122FCB91F4A2DA3004C2610 /* osx-cocoa.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

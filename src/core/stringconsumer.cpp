@@ -32,9 +32,9 @@ public:
     StringWriterImpl(std::string& contents, bool overwrite);
     virtual ~StringWriterImpl();
 
-    virtual bool dataAvailable(const TObject& object);
-    virtual bool dataAvailable(const Result& result);
-    virtual bool dataAvailable(const Blob& blob);
+    virtual bool pushData(const TObject& object);
+    virtual bool pushData(const Result& result);
+    virtual bool pushData(const Blob& blob);
 
     virtual bool roomForData() const;
     virtual bool roomForObject(ProductType productType) const;
@@ -63,17 +63,17 @@ StringWriterImpl::~StringWriterImpl()
 }
 
 
-bool StringWriterImpl::dataAvailable(const TObject& object)
+bool StringWriterImpl::pushData(const TObject& object)
 {
     return false;
 }
 
-bool StringWriterImpl::dataAvailable(const Result& result)
+bool StringWriterImpl::pushData(const Result& result)
 {
     return false;
 }
 
-bool StringWriterImpl::dataAvailable(const Blob& blob)
+bool StringWriterImpl::pushData(const Blob& blob)
 {
     const std::string& strBlob = blob.getString();
     buffer_.append(strBlob);
@@ -123,7 +123,7 @@ Result StringConsumer::write(const Result& result) {
 }
 
 Result StringConsumer::write(const Blob& blob) {
-    return writer_->dataAvailable(blob);
+    return writer_->pushData(blob);
 }
 
 void StringConsumer::clear() {

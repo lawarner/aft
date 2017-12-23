@@ -131,7 +131,7 @@ void BaseProducer::flowData()
                 std::vector<ReaderContract*>::iterator it;
                 for (it = readers_.begin(); it != readers_.end(); ++it)
                 {
-                    if ((*it)->dataAvailable(tobject))
+                    if ((*it)->pushData(tobject))
                     {
                         break;
                     }
@@ -148,7 +148,7 @@ void BaseProducer::flowData()
                 std::vector<ReaderContract*>::iterator it;
                 for (it = readers_.begin(); it != readers_.end(); ++it)
                 {
-                    if ((*it)->dataAvailable(result))
+                    if ((*it)->pushData(result))
                     {
                         break;
                     }
@@ -159,13 +159,12 @@ void BaseProducer::flowData()
         case ProductType::BLOB:
         {
             Blob blob("");
-            if (writerDelegate_->getData(blob))
-            {
+            if (writerDelegate_->getData(blob)) {
                 // iterate thru readers until one reads the object
                 std::vector<ReaderContract*>::iterator it;
                 for (it = readers_.begin(); it != readers_.end(); ++it)
                 {
-                    if ((*it)->dataAvailable(blob))
+                    if ((*it)->pushData(blob))
                     {
                         break;
                     }

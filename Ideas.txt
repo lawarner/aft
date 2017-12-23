@@ -1,5 +1,13 @@
+Outlets:
+=======
+Models use outlets for (external) input/output. In place of talking directly to cons/prod/proc's,
+the models call outlets. Configurable consprodprocs are plugged into the Outlets before
+the model is run. It is also possible to plug and unplug Outlets while the model is running.
 
-TObjectIterator: make generic class that takes a lambda for navigating to next element.
+MultiOutlet that controls several cons/prod/proc's using selector rules and timeouts.
+Typically this cycles thru all cons on a getcons call. Rules for cons are one of:
+ - get result from first cons that is ready
+ - wait for result from each cons in order; if not ready within a timeout, try the next cons
 
 TObject Refactor Notes:
 -----------------------
@@ -8,6 +16,7 @@ Need iterator types, better visitor
 - every iterator: this->process(), for each child child->run()
 Need Operation interface, method applyOperation(OperationType, list<>& parameters, list<TObject*>& objects)
 - maybe use std::functional
+TObjectIterator: make generic class that takes a lambda for navigating to next element.
 
 AI module: when a test fails, tries to characterize the failure:
 - repeatability
@@ -34,8 +43,16 @@ TestSuite
     TestCase
         ...
 
-Get x from UI
-Do p if [ x ]
+UI:
+==
+Update 12/17: UI class will be changed with higher and lower level APIs. UI is subclassed
+to handle different input modalities.
+
+The Element hierarchy can be moved up into UI so that each UI instance is a separate input
+(think main screen, file picker, dialogs, shared menu bars, etc.).
+
+  Get x from UI
+  Do p if [ x ]
 
 Info that a UI produces can be one at a time (serial) or presented/collected as a whole.
 There must be a "done" indicator, i.e., an OK button for a gui or confirmation prompt
@@ -46,6 +63,31 @@ Requests are marked as mandatory, default value, "done" action.
 When specifying a UI, there is a top-level section to override behavior for all Elements
 in that UI. For example, a gui UI could have a behavior that causes a tooltip popup on a
 mouse hover.
+At the base/core level, the UI must be abstracted.  An abstract UI can handle
+the following types:
+- tty:   prompts testcase, inputs, outputs.  finally command prompt.  can also
+         prompt along as input is needed.
+- term:  tty with addressable cursor, like ncurses
+- html:  webforms, tables, pagers, frames(?)
+- gui:   regular UI with menu, widgets, panels
+
+The different types vary in their interaction.  But for each piece of data, a
+UI would have the following possible interactions:
+- input:   prompt directly for info
+- output:  display info directly
+- push:    prepare output and send to UI
+- pull:    call UI hook to get info
+- get:     the UI calls this to request info from the model
+- put:     the UI calls this to give info to the model
+
+For example, a GUI could send a Cancel or enter new data in a field at any time and
+without an explicit prompt (put).  But a tty cannot enter data in a field or chose
+Cancel without it being prompted (input).
+
+A stylesheet can optionally be used to adjust the look-n-feel of the UI.  Multiple
+styles can exist similar to css.
+--------------
+(EO UI)
 
 Command execution can be suspended if input is required from the ui.
 In fact cmdexec should follow a standard pattern of:
@@ -159,38 +201,12 @@ Then first instance resolvable is the winner.  This implies a specific order
 of search, i.e., a PATH
 
 Can have "final" state that does not allow (further) plug-ins.
+
+Should serialization be related to plugin?
 ---------------------------------------------------------------
 TODO Exception handling
 
 dispositions?
------------------------------------------------------------------
-Should serialization be related to plugin?
------------------------------------------------------------------
-At the base/core level, the UI must be abstracted.  An abstract UI can handle
-the following types:
-- batch: initial testcase/testsuite is loaded and run. Any prompts come from
-         an input file, output goes to file.
-- tty:   prompts testcase, inputs, outputs.  finally command prompt.  can also
-         prompt along as input is needed.
-- term:  tty with addressable cursor, like ncurses
-- html:  webforms, tables, pagers, frames(?)
-- gui:   regular UI with menu, widgets, panels
-
-The different types vary in their interaction.  But for each piece of data, a
-UI would have the following possible interactions:
-- input:   prompt directly for info
-- output:  display info directly
-- push:    prepare output and send to UI
-- pull:    call UI hook to get info
-- get:     the UI calls this to request info from the model
-- put:     the UI calls this to give info to the model
-
-For example, a GUI could send a Cancel or enter new data in a field at any time and
-without an explicit prompt (put).  But a tty cannot enter data in a field or chose
-Cancel without it being prompted (input).
-
-A stylesheet can optionally be used to adjust the look-n-feel of the UI.  Multiple
-styles can exist similar to css.
 -----------------------------------------------------------------
 Blobs could have a serialized/non-serialized form.
 There must be some rule, api, mapping, etc. to get from one form to the other.

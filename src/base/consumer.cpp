@@ -41,21 +41,21 @@ bool BaseConsumer::canAcceptData()
 
 Result BaseConsumer::write(const TObject& object) {
     if (readerDelegate_) {
-        return readerDelegate_->dataAvailable(object);
+        return readerDelegate_->pushData(object);
     }
     return false;
 }
 
 Result BaseConsumer::write(const Result& result) {
     if (readerDelegate_) {
-        return readerDelegate_->dataAvailable(result);
+        return readerDelegate_->pushData(result);
     }
     return false;
 }
 
 Result BaseConsumer::write(const Blob& blob) {
     if (readerDelegate_) {
-        return readerDelegate_->dataAvailable(blob);
+        return readerDelegate_->pushData(blob);
     }
     return false;
 }
@@ -76,6 +76,13 @@ int BaseConsumer::write(const std::vector<TObject>& objects)
 
 int BaseConsumer::write(const std::vector<Result>& results)
 {
+    int ret = 0;
+    for (const auto& result : results) {
+        if (!write(result)) {
+            break;
+        }
+        ++ret;
+    }
     return -1;
 }
 
@@ -119,39 +126,33 @@ void BaseConsumer::flowData()
 
     ProductType productType;
     std::vector<WriterContract*>::iterator it;
-    for (it = writers_.begin(); it != writers_.end(); ++it)
-    {
-        do
-        {
+    for (it = writers_.begin(); it != writers_.end(); ++it) {
+        do {
             productType = (*it)->hasData();
             if (productType == ProductType::NONE) break;
 
-            switch (productType)
-            {
+            switch (productType) {
             case ProductType::TOBJECT:
             {
                 TObject tobject;
-                if ((*it)->getData(tobject))
-                {
-                    readerDelegate_->dataAvailable(tobject);
+                if ((*it)->getData(tobject)) {
+                    readerDelegate_->pushData(tobject);
                 }
             }
             break;
             case ProductType::RESULT:
             {
                 Result result;
-                if ((*it)->getData(result))
-                {
-                    readerDelegate_->dataAvailable(result);
+                if ((*it)->getData(result)) {
+                    readerDelegate_->pushData(result);
                 }
             }
             break;
             case ProductType::BLOB:
             {
                 Blob blob("");
-                if ((*it)->getData(blob))
-                {
-                    readerDelegate_->dataAvailable(blob);
+                if ((*it)->getData(blob)) {
+                    readerDelegate_->pushData(blob);
                 }
             }
             break;

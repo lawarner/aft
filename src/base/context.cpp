@@ -38,7 +38,6 @@ Context::Context(VisitorContract& visitor, const std::string& name)
 
 }
 
-
 Context::~Context()
 {
     delete &env_;
@@ -93,7 +92,7 @@ PropertyHandler*
 Context::handler(const std::string& propertyName) const
 {
     Properties::const_iterator it = properties_.find(propertyName);
-    if (it == properties_.end()) return 0;
+    if (it == properties_.end()) return nullptr;
 
     return it->second;
 }

@@ -33,6 +33,7 @@
 #include <gtest/gtest.h>
 using namespace aft::base;
 using namespace aft::core;
+using std::string;
 
 const std::string FullName("one.two.three.four");
 const std::string FullPath("one.two.three");
@@ -332,8 +333,8 @@ TEST(BasePackageTest, BasicTypes) {
     EXPECT_EQ(byebye.compare(byebye), 0);
 
     byebye = hello;     // Assignment operator
-    EXPECT_EQ(byebye.getValue(), "Hello");
-    EXPECT_EQ(hello.getValue(), "Hello");
+    EXPECT_EQ("Hello", byebye.getValue());
+    EXPECT_EQ("Hello", hello.getValue());
 
     Blob blob("");
     EXPECT_TRUE(isTrue.serialize(blob));
@@ -717,7 +718,7 @@ TEST(BasePackageTest, Operation)
     EXPECT_TRUE(anInt.applyOperation(setTo123));
     EXPECT_EQ(anInt.getValue(), 123);
 }
-
+    
 } // namespace
 
 int main(int argc, char* argv[])

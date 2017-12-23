@@ -1,5 +1,5 @@
 /*
- *   Copyright 2015, 2016 Andy Warner
+ *   Copyright © 2015-2017 Andy Warner
  *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
@@ -29,13 +29,8 @@ using namespace aft::core;
 
 
 TestSuite::TestSuite(const std::string& name)
-: TObjectContainer(base::TObjectType::TypeTestSuite, name)
-{
+: TObjectContainer(base::TObjectType::TypeTestSuite, name) {
     state_ = INITIAL;
-}
-
-TestSuite::~TestSuite()
-{
 }
 
 void TestSuite::copyEnv(RunContext* runContext) const
@@ -108,8 +103,7 @@ TestSuite::run(base::Context* context, bool stopOnError)
             }
             result = testcase->run(context);
             testcase->close();
-            if (!result)
-            {
+            if (!result) {
                 aftlog << " - FAILED " << testcaseName << std::endl;
                 ++ranBad;
                 if (stopOnError || result.getType() == base::Result::FATAL) {
@@ -154,31 +148,24 @@ TestSuite::close()
 }
 
 
-bool TestSuite::serialize(base::Blob& blob)
-{
-    if (!TObject::serialize(blob))
-    {
+bool TestSuite::serialize(base::Blob& blob) {
+    if (!TObject::serialize(blob)) {
         return false;
     }
 
     base::StructuredData sd(base::TObjectType::NameTestSuite, blob);
 
     sd.addArray("environment");
-    std::map<std::string,std::string>::const_iterator itEnv;
-    for (itEnv = environment_.begin(); itEnv != environment_.end(); ++itEnv)
-    {
-        base::StructuredData sdEnvar(itEnv->first, itEnv->second);
+    for (const auto& envvar : environment_) {
+        base::StructuredData sdEnvar(envvar.first, envvar.second);
         sd.add("environment.", sdEnvar);
     }
 
     sd.addArray("testcases");
     base::TObjectTree::Children& testcases = children_->getChildren();
-    base::TObjectTree::Children::iterator it;
-    for (it = testcases.begin(); it != testcases.end(); ++it)
-    {
-        TObject* tObj = (*it)->getValue();
-        if (tObj)
-        {
+    for (const auto testcase : testcases) {
+        TObject* tObj = testcase->getValue();
+        if (tObj) {
             base::Blob tcBlob("");
             tObj->serialize(tcBlob);
             base::StructuredData sdtc("testcase", tcBlob.getString());
