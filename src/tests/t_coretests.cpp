@@ -52,11 +52,11 @@ public:
         std::cout << "ObjectReader blob:  " << blob.getString() << endl;
         return true;
     }
-    virtual bool roomForData() const
+    virtual bool roomForData() const override
     {
         return true;
     }
-    virtual bool roomForObject(ProductType productType) const
+    virtual bool roomForObject(ProductType productType) const override
     {
         if (roomForData() && productType == ProductType::BLOB)
         {

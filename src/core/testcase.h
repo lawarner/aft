@@ -50,7 +50,7 @@ public:
      *  @param context Context used to perform the rewind
      *  @return true if testcase was succesfully rewound.
      */
-    virtual bool rewind(base::Context* context);
+    virtual bool rewind(base::Context* context) override;
 
     /**
      *  Run the test case within a context.
@@ -63,7 +63,7 @@ public:
      *  @return A Result specifying the final outcome of running this test case (TOTrue,
      *          TOFalse or Result::FATAL).
      */
-    virtual const base::Result run(base::Context* context);
+    virtual const base::Result run(base::Context* context) override;
 
     /** Close the test case */
     void close();

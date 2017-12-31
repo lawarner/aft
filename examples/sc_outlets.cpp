@@ -86,7 +86,7 @@ int main(int argc, char* argv[]) {
     
     // First run
     aftlog << "\n==================== Running initial testcase: "<< testCase.getName() << endl;
-    RunContext context;
+    RunContext context("Run Context", &testCase);
     testCase.open();
     testCase.run(&context);
     testCase.close();
@@ -117,7 +117,7 @@ int main(int argc, char* argv[]) {
             return 4;
         }
         aftlog << "\n==================== Running testcase from file: " << tc2.getName() << endl;
-        RunContext context2;
+        RunContext context2("Run Context 2", &tc2);
         tc2.open();
         Result result = tc2.run(&context2);
         tc2.close();

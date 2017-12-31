@@ -18,13 +18,16 @@
 #include "propertyhandler.h"
 #include "tobject.h"
 using namespace aft::base;
+using std::string;
 
 Visitor defaultVisitor;
+
+static Context* globalInstance = nullptr;
 
 
 Context::Context(const std::string& name)
 : name_(name)
-, env_(*new PropertyHandler("Environment"))
+, env_(*new BasePropertyHandler("Environment"))
 , visitor_(defaultVisitor)
 {
 
@@ -32,22 +35,25 @@ Context::Context(const std::string& name)
 
 Context::Context(VisitorContract& visitor, const std::string& name)
 : name_(name)
-, env_(*new PropertyHandler("Environment"))
-, visitor_(visitor)
-{
+, env_(*new BasePropertyHandler("Environment"))
+, visitor_(visitor) {
 
 }
 
-Context::~Context()
-{
+Context::~Context() {
     delete &env_;
 }
 
+Context* Context::global() {
+    if (!globalInstance) {
+        globalInstance = new Context("(global)");
+    }
+    return globalInstance;
+}
+
 bool
-Context::addProperty(const std::string& propertyName, PropertyHandler* handler)
-{
-    if (!handler || properties_.find(propertyName) != properties_.end())
-    {
+Context::addProperty(const std::string& propertyName, PropertyHandler* handler) {
+    if (!handler || properties_.find(propertyName) != properties_.end()) {
         return false;
     }
     properties_[propertyName] = handler;
@@ -60,7 +66,7 @@ Context::apply(const TObject& tObject)
     return const_cast<TObject&>(tObject);
 }
 
-PropertyHandler&
+BasePropertyHandler&
 Context::getEnvironment() const
 {
     return env_;
@@ -95,6 +101,17 @@ Context::handler(const std::string& propertyName) const
     if (it == properties_.end()) return nullptr;
 
     return it->second;
+}
+
+/**
+ *  Get a property handler with the given type.
+ *  This currently just maps the give propertyType into a string that
+ *  is used as the name of the property handler.
+ */
+PropertyHandler*
+Context::handler(HandlerType propertyType) const {
+    const std::string& name = PropertyHandler::handlerTypeName(propertyType);
+    return handler(name);
 }
 
 Result

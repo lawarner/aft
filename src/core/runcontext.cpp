@@ -19,6 +19,7 @@
 #include "base/result.h"
 #include "loghandler.h"
 #include "outlet.h"
+#include "runpropertyhandler.h"
 #include "runcontext.h"
 #include "testcase.h"
 using namespace aft;
@@ -33,108 +34,28 @@ static constexpr char* PrefixProd = "prod$";
 
 class aft::core::RunContextImpl {
 public:
-    RunContextImpl(LogHandler& logHandler, TestCase* testCase);
-    ~RunContextImpl();
+    RunContextImpl(TestCase* testCase)
+        : propHandler("RunContextImpl", testCase) { }
+    ~RunContextImpl() = default;
 
-    LogHandler& logHandler_;
-    TestCase* testCase_;
-    base::Result lastResult_;
+    RunPropertyHandler propHandler;
 };
 
-RunContextImpl::RunContextImpl(LogHandler& logHandler, TestCase* testCase)
-    : logHandler_(logHandler)
-    , testCase_(testCase) {
-}
-
-RunContextImpl::~RunContextImpl() {
-    delete &logHandler_;
-}
-
+/////////////////////////////////////////////////////////////////////////////////////////
 RunContext* RunContext::global() {
     if (!globalInstance) {
-        globalInstance = new RunContext(new TestCase);
+        globalInstance = new RunContext("Run Context (global)", new TestCase);
     }
     return globalInstance;
 }
 
-RunContext::RunContext(TestCase* testCase)
-    : impl_(*new RunContextImpl(*new LogHandler, testCase)) {
+RunContext::RunContext(const std::string& name, TestCase* testCase)
+    : base::Context(name)
+    , impl_(*new RunContextImpl(testCase)) {
+    addProperty(base::PropertyHandler::handlerTypeName(base::HandlerType::Run),
+                &impl_.propHandler);
 }
 
 RunContext::~RunContext() {
     delete &impl_;
 }
-
-void RunContext::addOutlet(const std::string& name, Outlet* outlet) {
-    impl_.testCase_->addOutlet(outlet);
-}
-
-Outlet* RunContext::getOutlet(const std::string& name) {
-    return impl_.testCase_->getOutlet(name);
-}
-
-void RunContext::removeOutlet(const std::string& name) {
-    impl_.testCase_->removeOutlet(name);
-}
-
-void RunContext::addConsumer(const std::string& name, base::ConsumerContract* consumer) {
-    auto outlet = new Outlet(PrefixCons + name);
-    outlet->plugin(consumer);
-    impl_.testCase_->addOutlet(outlet);
-}
-
-void RunContext::addProducer(const std::string& name, base::ProducerContract* producer) {
-    auto outlet = new Outlet(PrefixProd + name);
-    outlet->plugin(producer);
-    impl_.testCase_->addOutlet(outlet);
-}
-
-void RunContext::addProcess(const std::string& name, base::ProcContract* process) {
-    auto procOutlet = new Outlet(PrefixProc + name);
-    procOutlet->plugin(process);
-    impl_.testCase_->addOutlet(procOutlet);
-}
-
-base::ConsumerContract*
-RunContext::getConsumer(const std::string& name) {
-    return impl_.testCase_->getOutlet(PrefixCons + name);
-}
-
-base::ProducerContract*
-RunContext::getProducer(const std::string& name) {
-    return impl_.testCase_->getOutlet(PrefixProd + name);
-}
-
-base::ProcContract*
-RunContext::getProcess(const std::string& name) {
-    return impl_.testCase_->getOutlet(PrefixProc + name);
-}
-
-base::Result&
-RunContext::getLastResult() const
-{
-    return impl_.lastResult_;
-}
-
-void RunContext::setLastResult(const base::Result& result)
-{
-    impl_.lastResult_ = result;
-}
-
-void RunContext::removeConsumer(const std::string& name) {
-    impl_.testCase_->removeOutlet(PrefixCons + name);
-}
-
-void RunContext::removeProducer(const std::string& name) {
-    impl_.testCase_->removeOutlet(PrefixProd + name);
-}
-
-void RunContext::removeProcess(const std::string& name) {
-    impl_.testCase_->removeOutlet(PrefixProc + name);
-}
-
-void RunContext::setupLogs(const std::string& logConfig)
-{
-    impl_.logHandler_.setup(logConfig);
-}
-

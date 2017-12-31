@@ -18,24 +18,22 @@
 #include "base/propertyhandler.h"
 
 
-namespace aft
-{
-namespace base
-{
+namespace aft {
+namespace base {
+    // Forward reference
     class TObject;
 }
 
-namespace core
-{
+namespace core {
 
 /**
  *  Handler for logging in a context.
  */
-class LogHandler : public aft::base::PropertyHandler
+class LogHandler : public aft::base::BasePropertyHandler
 {
 public:
     LogHandler();
-    virtual ~LogHandler();
+    virtual ~LogHandler() = default;
 
     virtual aft::base::TObject& handle(const aft::base::TObject& tObject);
     virtual aft::base::TObject& handle(aft::base::Context* context,

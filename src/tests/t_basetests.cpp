@@ -108,11 +108,10 @@ private:
     EvalVisitor evalVisitor_;
 };
 
-class SamplePropertyHandler : public PropertyHandler
-{
+class SamplePropertyHandler : public BasePropertyHandler {
 public:
     SamplePropertyHandler()
-        : PropertyHandler("SampleProperty")
+        : BasePropertyHandler("SampleProperty")
     { }
     virtual ~SamplePropertyHandler() { }
 
@@ -161,7 +160,7 @@ TEST(BasePackageTest, PropertyHandler)
     TObject tobj("tobj");
     TObject& refTobj = handler.handle(tobj);
 
-    EXPECT_EQ(handler.getValue("Setting1"), "123456");
+    EXPECT_EQ(handler.getValue("Setting1", ""), "123456");
     EXPECT_EQ(tobj.getName(), refTobj.getName());
     EXPECT_TRUE(tobj.getType() == refTobj.getType());
 }

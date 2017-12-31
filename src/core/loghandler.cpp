@@ -21,13 +21,7 @@ using namespace aft;
 using namespace aft::core;
 
 LogHandler::LogHandler()
-    : base::PropertyHandler("LogHandler")
-{
-}
-
-LogHandler::~LogHandler()
-{
-}
+    : base::BasePropertyHandler("LogHandler") { }
 
 // Take string from tObject and call setup(), return TOTrue
 base::TObject&

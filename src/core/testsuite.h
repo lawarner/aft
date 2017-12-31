@@ -25,7 +25,7 @@ class Context;
 }
 
 namespace core {
-class RunContext;
+class RunPropertyHandler;
 
 /**
  *  Test suite is a collection of test cases.
@@ -78,10 +78,10 @@ public:
     virtual bool deserialize(const base::Blob& blob);
 
 private:
-    void copyEnv(RunContext* runContext) const;
+    void copyEnv(base::Context* context) const;
 
 private:
-    /** Global environment for the test suite which is copied to the RunContext
+    /** Global environment for the test suite which is copied to the RunPropertyHandler
      *  used for running the testcases.
      *  This may change to a PropertyHandler instead. Or maybe allow testsuites to 
      *  own a Context so parts of it can be de/serialized.

@@ -21,7 +21,7 @@
 #include "base/tobjecttree.h"
 #include "base/tobjecttype.h"
 #include "core/logger.h"
-#include "core/runcontext.h"
+#include "core/runpropertyhandler.h"
 #include "core/testcase.h"
 #include "core/testsuite.h"
 using namespace aft;
@@ -29,15 +29,13 @@ using namespace aft::core;
 
 
 TestSuite::TestSuite(const std::string& name)
-: TObjectContainer(base::TObjectType::TypeTestSuite, name) {
+    : TObjectContainer(base::TObjectType::TypeTestSuite, name) {
     state_ = INITIAL;
 }
 
-void TestSuite::copyEnv(RunContext* runContext) const
-{
-    for (auto it = environment_.begin(); it != environment_.end(); ++it)
-    {
-        runContext->setEnv(it->first, it->second);
+void TestSuite::copyEnv(base::Context* context) const {
+    for (auto it = environment_.begin(); it != environment_.end(); ++it) {
+        context->setEnv(it->first, it->second);
     }
 }
 
@@ -58,12 +56,10 @@ void TestSuite::setEnv(const std::string& name, const std::string& value)
 bool
 TestSuite::open()
 {
-    if (state_ == INITIAL)
-    {
+    if (state_ == INITIAL) {
         state_ = PREPARED;
         return true;
     }
-
     return false;
 }
 
@@ -78,11 +74,9 @@ const base::Result
 TestSuite::run(base::Context* context, bool stopOnError)
 {
     base::Result result(true);
-    if (state_ == PREPARED && children_)
-    {
+    if (state_ == PREPARED && children_) {
         aftlog << "Running test suite \"" << getName() << "\"" << std::endl;
-        RunContext* runContext = context ? dynamic_cast<RunContext *>(context) : RunContext::global();
-        copyEnv(runContext);
+        copyEnv(context);
         
         int ranGood = 0;
         int ranBad  = 0;

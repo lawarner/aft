@@ -20,17 +20,14 @@
 #include "base/tobject.h"
 
 
-namespace aft
-{
-namespace core
-{
+namespace aft {
+namespace core {
 // Forward reference
 class CommandContextImpl;
 
 /**
  *  Used for running commands.
- *  @deprecated Will probably refactor to set of interfaces that various sub-classes
- *              of Context can implement (see RunContext).
+ *  @deprecated Will refactor to a CommandPropertyHandler.
  */
 class CommandContext : public aft::base::Context
 {

@@ -14,82 +14,53 @@
  *   limitations under the License.
  */
 
-#include <unordered_map>
 #include "context.h"
 #include "propertyhandler.h"
 
 using namespace aft::base;
 using std::string;
 
-static const std::string emptyString;
-
-class aft::base::PropertyContainer {
-public:
-    std::unordered_map<string, string> nameValues;
+static const string strPropertyNames[] = {
+    "Unknown",
+    "Base",
+    "Command",
+    "Logging",
+    "String",
+    "TObject",
+    "UI",
+    "Run",
+    "Extended"
 };
 
 
-PropertyHandler::PropertyHandler(const std::string& handlerName)
+PropertyHandler::PropertyHandler(const std::string& handlerName, HandlerType type)
     : handlerName_(handlerName)
-    , container_(std::make_unique<PropertyContainer>()) {
+    , type_(type) {
 
 }
 
-PropertyHandler::~PropertyHandler() {
-
-}
-
-void
-PropertyHandler::getPropertyNames(std::vector<std::string>& names) const {
-    for (auto const& prop : container_->nameValues) {
-        names.push_back(prop.first);
-    }
-}
-
-bool
-PropertyHandler::getValue(const std::string& name, std::string& value) const {
-    auto it = container_->nameValues.find(name);
-    if (it == container_->nameValues.end())  return false;
-    value = it->second;
-    return true;
-}
-
-const std::string&
-PropertyHandler::getValue(const std::string& name) const {
-    auto it = container_->nameValues.find(name);
-    if (it == container_->nameValues.end())  return emptyString;
-    return it->second;
-}
-
-void
-PropertyHandler::setValue(const std::string& name, const std::string& value)
-{
-    container_->nameValues[name] = value;
-}
-
-bool
-PropertyHandler::unsetValue(const std::string& name) {
-    auto it = container_->nameValues.find(name);
-    if (it == container_->nameValues.end()) {
-        return false;
-    }
-    
-    container_->nameValues.erase(it);
-    return true;
-}
-
-TObject&
-PropertyHandler::handle(const TObject& tObject)
-{
+TObject& PropertyHandler::handle(const TObject& tObject) {
     return const_cast<TObject&>(tObject);
 }
 
-TObject&
-PropertyHandler::handle(Context* context, const TObject& tObject)
-{
+TObject& PropertyHandler::handle(Context* context, const TObject& tObject) {
     if (nullptr != context) {
         return context->apply(tObject);
     }
-
     return const_cast<TObject&>(tObject);
+}
+
+const std::string&
+PropertyHandler::handlerTypeName(HandlerType type) {
+    size_t idx = 0;
+    if (HandlerType::Unknown <= type && HandlerType::Extended >= type) {
+        idx = static_cast<size_t>(type);
+    }
+    return strPropertyNames[idx];
+}
+
+
+BasePropertyHandler::BasePropertyHandler(const std::string& handlerName)
+    : PropertyHandler(handlerName) {
+
 }

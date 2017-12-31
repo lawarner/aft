@@ -26,7 +26,7 @@
 #include "fileproducer.h"
 #include "logger.h"
 #include "outlet.h"
-#include "runcontext.h"
+#include "runpropertyhandler.h"
 using namespace aft;
 using namespace aft::core;
 using std::endl;
@@ -50,22 +50,23 @@ LogCommand::LogCommand(const std::vector<std::string>& parameters)
 }
 
 const base::Result
-LogCommand::process(base::Context* context)
-{
-    if (type_.empty() && !message_.empty())     // The most common case
-    {
+LogCommand::process(base::Context* context) {
+    if (type_.empty() && !message_.empty()) {    // The most common case
         aftlog << "Command logger: " << message_ << std::endl;
-    } else if (type_ == "context")
-    {
-        base::Context* ctx = context ? context : RunContext::global();
+    } else if (type_ == "context") {
+        base::Context* ctx = context ? context : base::Context::global();
         aftlog << "Command logger: Context=" << ctx->getName() << endl;
-    } else if (type_ == "result")
-    {
-        RunContext* ctx = context ? dynamic_cast<RunContext *>(context) : RunContext::global();
-        base::Result& lastResult = ctx->getLastResult();
+    } else if (type_ == "result") {
+        base::Context* ctx = context ? context : base::Context::global();
+        auto propHandler = dynamic_cast<RunPropertyHandler*>(ctx->handler(base::HandlerType::Run));
         std::ostringstream oss("Command logger: Result Type=");
         oss.seekp(0, std::ostringstream::end);
-        oss << lastResult.getTypeName() << ",  Value=" << lastResult.asString();
+        if (nullptr == propHandler) {
+            oss << "(ERROR: No RunPropertyHandler found)";
+        } else {
+            base::Result& lastResult = propHandler->getLastResult();
+            oss << lastResult.getTypeName() << ",  Value=" << lastResult.asString();
+        }
         aftlog << oss.str() << std::endl;
     }
 
@@ -92,26 +93,28 @@ ConsCommand::process(base::Context* context) {
         return base::Result(retval);
     }
 
-    RunContext* ctx = context ? dynamic_cast<RunContext *>(context) : RunContext::global();
+    base::Context* ctx = context ? context : base::Context::global();
+    auto propHandler = dynamic_cast<RunPropertyHandler*>(ctx->handler(base::HandlerType::Run));
+    //TODO check propHandler and error out if nullptr
     std::string consName = parameters_[1];
     if (type_ == "open" || type_ == "openw") {
-        if (nullptr != ctx->getConsumer(consName)) {
+        if (nullptr != propHandler->getConsumer(consName)) {
             aftlog << loglevel(Error) << "ConsCommand " << type_ << ": " << consName
                    << " already opened" << std::endl;
             return retval;
         }
         auto consumer = new FileConsumer(consName, type_ == "openw");
-        ctx->addConsumer(consName, consumer);
+        propHandler->addConsumer(consName, consumer);
         retval = true;
     } else {
-        auto consumer = ctx->getConsumer(consName);
+        auto consumer = propHandler->getConsumer(consName);
         if (nullptr == consumer) {
             aftlog << loglevel(Error) << "ConsCommand: " << consName << " not yet open" << endl;
             return base::Result(retval);
         }
 
         if (type_ == "close") {
-            ctx->removeConsumer(consName);
+            propHandler->removeConsumer(consName);
             retval = true;
         }
         else if (type_ == "canAcceptData") {
@@ -160,36 +163,35 @@ ProdCommand::process(base::Context* context) {
         aftlog << loglevel(Error) << "ProdCommand: Not enough parameters to process" << std::endl;
         return base::Result(retval);
     }
-    
-    RunContext* ctx = context ? dynamic_cast<RunContext *>(context) : RunContext::global();
+
+    base::Context* ctx = context ? context : base::Context::global();
+    auto propHandler = dynamic_cast<RunPropertyHandler*>(ctx->handler(base::HandlerType::Run));
     std::string prodName = parameters_[1];
     if (type_ == "open") {
         auto producer = new FileProducer(prodName);
-        ctx->addProducer(prodName, producer);
+        propHandler->addProducer(prodName, producer);
     }
     else {
-        auto producer = ctx->getProducer(prodName);
+        auto producer = propHandler->getProducer(prodName);
         if (nullptr == producer) {
             aftlog << loglevel(Error) << "ProdCommand: " << prodName << " not yet open" << std::endl;
             return base::Result(retval);
         }
         if (type_ == "close") {
-            ctx->removeProducer(prodName);
+            propHandler->removeProducer(prodName);
         }
-        else if (type_ == "hasData")
-        {
+        else if (type_ == "hasData") {
             aftlog << "ProdCommand hasData" << std::endl;
             return base::Result(producer->hasData());
         }
-        else if (type_ == "read")
-        {
+        else if (type_ == "read") {
             aftlog << "ProdCommand read" << std::endl;
             if (producer->hasData()) {
                 if (producer->read(*buffer_))
                 {
                     aftlog << "- read: " << buffer_->getString();
                     base::Result result(buffer_);
-                    ctx->setLastResult(result);     //TODO this should be done by the runVisitor for all commands
+                    propHandler->setLastResult(result);     //TODO this should be done by the runVisitor for all commands
                     return result;
                 }
             }
@@ -232,10 +234,42 @@ OutletCommand::~OutletCommand() {
 
 const base::Result
 OutletCommand::process(base::Context* context) {
+/*
+    add, remove, type, (name,handle) (un)plug, read, write
+    const std::string& name() const;
+    OutletType type() const;
     
+    bool plugin(base::ProducerContract* producer);
+    bool plugin(base::ProcContract* proc);
+    bool plugin(base::ConsumerContract* consumer);
+    bool unplug();
+    bool unplug(base::ProducerContract* producer);
+    bool unplug(base::ProcContract* proc);
+    bool unplug(base::ConsumerContract* consumer);
+    
+    // An Entity can be at TObject type level, or an actual named TObject.
+    const EntityList& consumes() const;
+    const EntityList& provides() const;
+    const EntityList& requires() const;
+    void consumes(const EntityList& entities);
+    void provides(const EntityList& entities);
+    void requires(const EntityList& entities);
+    
+    // Implement ProcContract (ProviderContract)
+    virtual base::Result read(base::TObject& object) override;
+    virtual base::Result read(base::Result& result) override;
+    virtual base::Result read(base::Blob& blob) override;
+    virtual bool hasData() override;
+    virtual bool hasObject(base::ProductType productType) override;
+    
+    // Implement ProcContract (ConsumerContract)
+    virtual bool canAcceptData() override;
+    virtual base::Result write(const base::TObject& object) override;
+    virtual base::Result write(const base::Result& result) override;
+    virtual base::Result write(const base::Blob& blob) override;
+*/
+    return false;   //TODO implement
 }
-    
-//    Outlet* outlet_;
 
 //////  ENV  //////////////////////////////////////////////////////////////////////////////
 
@@ -260,19 +294,18 @@ EnvCommand::~EnvCommand()
 }
 
 const base::Result
-EnvCommand::process(base::Context* context)
-{
+EnvCommand::process(base::Context* context) {
     bool retval = false;
-    RunContext* ctx = context ? dynamic_cast<RunContext *>(context) : RunContext::global();
-    if (type_ == "set")
-    {
+    base::Context* ctx = context ? context : base::Context::global();
+    auto propHandler = dynamic_cast<RunPropertyHandler*>(ctx->handler(base::HandlerType::Run));
+    if (type_ == "set") {
         if (parameters_.size() < 3 || parameters_[1].empty())
         {
             aftlog << loglevel(Error) << "EnvCommand set: missing value" << std::endl;
         }
         else
         {
-            base::PropertyHandler& env = ctx->getEnvironment();
+            base::BasePropertyHandler& env = ctx->getEnvironment();
             env.setValue(parameters_[1], parameters_[2]);
             retval = true;
         }
@@ -285,12 +318,12 @@ EnvCommand::process(base::Context* context)
         }
         else
         {
-            base::PropertyHandler& env = ctx->getEnvironment();
+            base::BasePropertyHandler& env = ctx->getEnvironment();
             std::string value;
             if (env.getValue(parameters_[1], value))
             {
                 result_ = base::Result(value);
-                ctx->setLastResult(result_);
+                propHandler->setLastResult(result_);
                 return result_;
             }
         }
@@ -300,15 +333,16 @@ EnvCommand::process(base::Context* context)
             aftlog << loglevel(Error) << "EnvCommand unset: missing name" << std::endl;
         }
         else {
-            base::PropertyHandler& env = ctx->getEnvironment();
+            base::BasePropertyHandler& env = ctx->getEnvironment();
             retval = env.unsetValue(parameters_[1]);
         }
     }
     else if (type_ == "list") {
         std::vector<std::string> names;
-        base::PropertyHandler& env = ctx->getEnvironment();
+        base::BasePropertyHandler& env = ctx->getEnvironment();
         env.getPropertyNames(names);
-        aftlog << loglevel(Info) << "Environment variables:" << std::endl;
+        std::sort(names.begin(), names.end());
+        //aftlog << loglevel(Info) << "Environment variables:" << std::endl;
         std::ostringstream oss;
         for (const auto& name : names) {
             std::string value;
@@ -321,7 +355,7 @@ EnvCommand::process(base::Context* context)
             }
         }
         result_ = base::Result(oss.str());
-        ctx->setLastResult(result_);
+        propHandler->setLastResult(result_);
         return result_;
     }
 
@@ -359,8 +393,7 @@ IfCommand::IfCommand(const std::string& name, const base::Operation& condition,
 : Command("If")
 , condition_(condition)
 , trueCommand_(trueCommand)
-, falseCommand_(falseCommand)
-{
+, falseCommand_(falseCommand) {
     
 }
 
@@ -369,22 +402,16 @@ IfCommand::~IfCommand()
     
 }
 
-const base::Result IfCommand::process(base::Context* context)
-{
+const base::Result IfCommand::process(base::Context* context) {
     //TODO Command needs to override Operations so they apply to children, not the command itself
     //     Or if Operation contains an extra TObject then use that.
-    if (supportsOperation(condition_))
-    {
-        if (applyOperation(condition_))
-        {
+    if (supportsOperation(condition_)) {
+        if (applyOperation(condition_)) {
             if (trueCommand_) return trueCommand_->process(context);
-        }
-        else
-        {
+        } else {
             if (falseCommand_) return falseCommand_->process(context);
         }
     }
 
     return base::Result(base::Result::FATAL);
 }
-

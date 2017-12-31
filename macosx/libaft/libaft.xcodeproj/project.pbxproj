@@ -136,6 +136,9 @@
 		A1BCB64B1D2B5ADC0082BB87 /* basicelements.h in Headers */ = {isa = PBXBuildFile; fileRef = A1BCB6491D2B5ADC0082BB87 /* basicelements.h */; };
 		A1CC710C1E86E29500BD0946 /* t_uiblocking.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1CC710B1E86E29500BD0946 /* t_uiblocking.cpp */; };
 		A1CC710E1E86EEB000BD0946 /* uidelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1CC710D1E86EEB000BD0946 /* uidelegate.cpp */; };
+		A1D8461E1FF8384100CDF49D /* propertymap.h in Headers */ = {isa = PBXBuildFile; fileRef = A1D8461C1FF8384100CDF49D /* propertymap.h */; };
+		A1D846211FF850B700CDF49D /* runpropertyhandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1D8461F1FF850B700CDF49D /* runpropertyhandler.cpp */; };
+		A1D846221FF850B700CDF49D /* runpropertyhandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A1D846201FF850B700CDF49D /* runpropertyhandler.h */; };
 		A1F2AFBC1D036BD5009FE595 /* ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F2AFBA1D036BD5009FE595 /* ui.cpp */; };
 		A1F2AFBD1D036BD5009FE595 /* ui.h in Headers */ = {isa = PBXBuildFile; fileRef = A1F2AFBB1D036BD5009FE595 /* ui.h */; };
 		A1F9919A1CF1488A00EF3D66 /* tobjecttree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F991991CF1488A00EF3D66 /* tobjecttree.cpp */; };
@@ -283,6 +286,9 @@
 		A1CC710B1E86E29500BD0946 /* t_uiblocking.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = t_uiblocking.cpp; sourceTree = "<group>"; };
 		A1CC710D1E86EEB000BD0946 /* uidelegate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = uidelegate.cpp; path = ../../src/ui/uidelegate.cpp; sourceTree = "<group>"; };
 		A1D59B631C3D7DE100BE6298 /* libaft.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libaft.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1D8461C1FF8384100CDF49D /* propertymap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = propertymap.h; sourceTree = "<group>"; };
+		A1D8461F1FF850B700CDF49D /* runpropertyhandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = runpropertyhandler.cpp; sourceTree = "<group>"; };
+		A1D846201FF850B700CDF49D /* runpropertyhandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = runpropertyhandler.h; sourceTree = "<group>"; };
 		A1F2AFBA1D036BD5009FE595 /* ui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ui.cpp; path = ../../src/ui/ui.cpp; sourceTree = "<group>"; };
 		A1F2AFBB1D036BD5009FE595 /* ui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ui.h; path = ../../src/ui/ui.h; sourceTree = "<group>"; };
 		A1F763891C41C05E009A5873 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../README.md; sourceTree = "<group>"; };
@@ -375,6 +381,7 @@
 				A153D07A1CCC71F500000A15 /* producttype.h */,
 				A153D07B1CCC71F500000A15 /* propertyhandler.cpp */,
 				A153D07C1CCC71F500000A15 /* propertyhandler.h */,
+				A1D8461C1FF8384100CDF49D /* propertymap.h */,
 				A153D07D1CCC71F500000A15 /* result.cpp */,
 				A153D07E1CCC71F500000A15 /* result.h */,
 				A153D07F1CCC71F500000A15 /* serialize.h */,
@@ -425,6 +432,8 @@
 				A153D0A01CCC71F500000A15 /* queueproc.h */,
 				A153D0A11CCC71F500000A15 /* runcontext.cpp */,
 				A153D0A21CCC71F500000A15 /* runcontext.h */,
+				A1D8461F1FF850B700CDF49D /* runpropertyhandler.cpp */,
+				A1D846201FF850B700CDF49D /* runpropertyhandler.h */,
 				A153D0A31CCC71F500000A15 /* stringconsumer.cpp */,
 				A153D0A41CCC71F500000A15 /* stringconsumer.h */,
 				A153D0A51CCC71F500000A15 /* stringproducer.cpp */,
@@ -577,6 +586,7 @@
 				A1F2AFBD1D036BD5009FE595 /* ui.h in Headers */,
 				A153D10D1CCC71F500000A15 /* json-forwards.h in Headers */,
 				A153D0F31CCC71F500000A15 /* basiccommands.h in Headers */,
+				A1D8461E1FF8384100CDF49D /* propertymap.h in Headers */,
 				A153D0EC1CCC71F500000A15 /* tobject.h in Headers */,
 				A1256C971DFE349300AE4700 /* nativepluginloader.h in Headers */,
 				A153D0EA1CCC71F500000A15 /* tobasictypes.h in Headers */,
@@ -585,6 +595,7 @@
 				A153D0CE1CCC71F500000A15 /* command.h in Headers */,
 				A153D0FF1CCC71F500000A15 /* loghandler.h in Headers */,
 				A153D0F71CCC71F500000A15 /* commandcontext.h in Headers */,
+				A1D846221FF850B700CDF49D /* runpropertyhandler.h in Headers */,
 				A122FCC01F4A317B004C2610 /* cocoaelementdelegate.h in Headers */,
 				A153D0DE1CCC71F500000A15 /* producer.h in Headers */,
 				A153D0FD1CCC71F500000A15 /* logger.h in Headers */,
@@ -732,6 +743,7 @@
 				A153D11E1CCC71F500000A15 /* t_osdep.cpp in Sources */,
 				A153D11B1CCC71F500000A15 /* t_basetests.cpp in Sources */,
 				A153D0DB1CCC71F500000A15 /* plugin.cpp in Sources */,
+				A1D846211FF850B700CDF49D /* runpropertyhandler.cpp in Sources */,
 				A153D1071CCC71F500000A15 /* stringproducer.cpp in Sources */,
 				A16390811D038A2A00036620 /* tobasictypes.cpp in Sources */,
 				A11A6B581E4FF15C000D7A4B /* elementdelegate.cpp in Sources */,

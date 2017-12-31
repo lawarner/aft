@@ -17,6 +17,7 @@
 
 #include <map>
 #include <string>
+#include "propertyhandler.h"
 #include "result.h"
 #include "visitor.h"
 
@@ -24,7 +25,6 @@
 namespace aft {
 namespace base {
 // Forward reference
-class PropertyHandler;
 class TObject;
 
 /**
@@ -61,13 +61,19 @@ public:
     /** Get the environment.
      *  TODO make better interface
      */
-    PropertyHandler& getEnvironment() const;
+    BasePropertyHandler& getEnvironment() const;
     bool getEnv(const std::string& name, std::string& value) const;
     void setEnv(const std::string& name, const std::string& value);
 
     /** Get the name of this context. */
     const std::string& getName() const;
 
+    /** Get the singleton global Context.
+     *
+     *  This is used when no local context is provided.
+     */
+    static Context* global();
+    
     /**
      *  Add a named property handler if the name is not yet used.
      *  @param propertyName Name of property
@@ -79,7 +85,16 @@ public:
 
     VisitorContract& getVisitor() const;
 
+    /**
+     *  Get a property handler with the given name.
+     */
     PropertyHandler* handler(const std::string& propertyName) const;
+    /**
+     *  Get a property handler with the given type.
+     *  This currently just maps the give propertyType into a string that
+     *  is used as the name of the property handler.
+     */
+    PropertyHandler* handler(HandlerType propertyType) const;
 
     /** Default process handling for this context (i.e., logging) */
     virtual Result process(const TObject* tObject);
@@ -89,7 +104,7 @@ protected:
     Properties properties_;
 
     /** Environment variables */
-    PropertyHandler& env_;
+    BasePropertyHandler& env_;
 
     /** Default visitor */
     VisitorContract& visitor_;

@@ -18,26 +18,20 @@
 #include "base/context.h"
 
 namespace aft {
-namespace base {
-// Forward reference
-class ConsumerContract;
-class ProcContract;
-class ProducerContract;
-class Result;
-}
 
 namespace core {
 // Forward reference
-class Outlet;
 class RunContextImpl;
 class TestCase;
 
 /**
  *  Context used to run test cases.
+ *  The constructor for this class adds RunPropertyHandler and other
+ *  properties.
  */
 class RunContext : public aft::base::Context {
 public:
-    RunContext(TestCase* testCase);
+    RunContext(const std::string& name, TestCase* testCase);
     virtual ~RunContext();
     
     /** Get the singleton global RunContext.
@@ -46,31 +40,7 @@ public:
      */
     static RunContext* global();
 
-    void addOutlet(const std::string& name, Outlet* outlet);
-    Outlet* getOutlet(const std::string& name);
-    void removeOutlet(const std::string& name);
-
-    void addConsumer(const std::string& name, base::ConsumerContract* consumer);
-    void addProducer(const std::string& name, base::ProducerContract* producer);
-    void addProcess(const std::string& name, base::ProcContract* process);
-
-    base::ConsumerContract* getConsumer(const std::string& name);
-    base::ProducerContract* getProducer(const std::string& name);
-    base::ProcContract* getProcess(const std::string& name);
-
-    /** Get the result of the last command */
-    base::Result& getLastResult() const;
-    /** Set the last result */
-    void setLastResult(const base::Result& result);
-
-    void removeConsumer(const std::string& name);
-    void removeProducer(const std::string& name);
-    void removeProcess(const std::string& name);
-
-    void setupLogs(const std::string& logConfig);
-
-    // gui, dispositions
-    // Need RunVisitor
+    //TODO Need RunVisitor
 
 private:
     RunContextImpl& impl_;

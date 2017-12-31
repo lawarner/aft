@@ -40,11 +40,9 @@ class SampleCallback : public Callback
 };
 
 
-namespace
-{
+namespace {
 
-TEST(OsdepPackageTest, ThreadHandler)
-{
+TEST(OsdepPackageTest, ThreadHandler) {
     ThreadManager* tman = ThreadManager::instance();
     EXPECT_TRUE(tman != nullptr);
 

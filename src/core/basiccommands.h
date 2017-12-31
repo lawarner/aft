@@ -92,7 +92,7 @@ public:
     virtual ~ProdCommand();
     
     // Implement Command interface
-    virtual const base::Result process(base::Context* context = 0);
+    virtual const base::Result process(base::Context* context = nullptr);
 
 private:
     std::string type_;      //TODO convert to enum
@@ -108,7 +108,7 @@ public:
     virtual ~ProcCommand();
 
     // Implement Command interface
-    virtual const base::Result process(base::Context* context = 0);
+    virtual const base::Result process(base::Context* context = nullptr);
 
 private:
     std::string type_;      //TODO convert to enum
@@ -125,7 +125,7 @@ public:
     virtual ~OutletCommand();
     
     // Implement Command interface
-    virtual const base::Result process(base::Context* context = 0);
+    virtual const base::Result process(base::Context* context = nullptr);
     
 private:
     std::string type_;      //TODO convert to enum
@@ -143,7 +143,7 @@ public:
     virtual ~EnvCommand();
     
     // Implement Command interface
-    virtual const base::Result process(base::Context* context = 0);
+    virtual const base::Result process(base::Context* context = nullptr);
 
 private:
     std::string type_;      //TODO convert to enum
@@ -161,7 +161,7 @@ public:
     aft::base::TObjectTree* add(aft::base::TObject* tObject, aft::base::TObjectTree* tObjWrapper = 0);
     
     // Implement Command interface
-    virtual const base::Result process(base::Context* context = 0);
+    virtual const base::Result process(base::Context* context = nullptr);
     //TODO implement run()
 };
 
