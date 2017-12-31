@@ -45,11 +45,11 @@ PLUGINSO = sample_plugin.so
 SUBDIRS =
 
 OBJS := t_basetests.o t_coretests.o t_logger.o t_osdep.o t_plugin.o t_result.o \
-        t_testsuite.o t_ui.o
+        t_testsuite.o t_ui.o t_uiblocking.o
 SRCS := $(OBJS:.o=.cpp)
 
 PROGRAMS = t_basetests t_coretests t_logger t_osdep t_plugin t_result \
-           t_testsuite t_ui
+           t_testsuite t_ui t_uiblocking
 
 DEPCPPFLAGS = -std=c++14 -I. $(INCS)
 DEPLIBS = $(LIBAFT) $(LIBGTEST)
@@ -71,7 +71,7 @@ $(PROGRAMS): $(DEPLIBS)
 #     g++ class_user.cc -o class_user
 
 $(PLUGINSO): $(LIBAFT) $(PLUGINSRC)
-	$(CC) -fPIC -shared $(INCS) $(PLUGINSRC) $(LIBAFT) -o $(PLUGINSO)
+	$(CC) $(CCFLAGS) -fPIC -shared $(INCS) $(PLUGINSRC) $(LIBAFT) -o $(PLUGINSO)
 
 arm:
 	for dir in $(SUBDIRS); do \

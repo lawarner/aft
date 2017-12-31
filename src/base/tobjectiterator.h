@@ -16,10 +16,10 @@
  *   limitations under the License.
  */
 
-namespace aft
-{
-namespace base
-{
+#include <memory>
+
+namespace aft {
+namespace base {
 // Forward reference
 class TObject;
 class TObjectIterator;

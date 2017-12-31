@@ -1,7 +1,55 @@
-basicelements.o: basicelements.cpp basicelements.h element.h
-element.o: element.cpp element.h uidelegate.h ../../src/core/logger.h
-uicommand.o: uicommand.cpp uicommand.h
-ui.o: ui.cpp ../../src/base/blob.h element.h ui.h ../../src/base/proc.h \
+basicelements.o: basicelements.cpp basicelements.h element.h \
+ ../../src/ui/elementhandle.h ../../src/ui/uifacet.h \
+ ../../src/base/structureddataname.h ../../src/base/serialize.h
+basicuis.o: basicuis.cpp basicuis.h ui.h ../../src/base/proc.h \
+ ../../src/base/consumer.h ../../src/base/result.h \
+ ../../src/base/producttype.h ../../src/base/producer.h \
+ ../../src/ui/element.h ../../src/ui/elementhandle.h \
+ ../../src/ui/uifacet.h ../../src/base/structureddataname.h \
+ ../../src/base/serialize.h ../../src/ui/uidelegate.h \
+ ../../src/ui/elementdelegate.h
+dumbttyelementdelegate.o: dumbttyelementdelegate.cpp \
+ dumbttyelementdelegate.h ../../src/ui/elementdelegate.h \
+ ../../src/ui/uifacet.h ../../src/base/structureddataname.h \
+ ../../src/base/serialize.h element.h ../../src/ui/elementhandle.h
+dumbttyuidelegate.o: dumbttyuidelegate.cpp dumbttyelementdelegate.h \
+ ../../src/ui/elementdelegate.h ../../src/ui/uifacet.h \
+ ../../src/base/structureddataname.h ../../src/base/serialize.h \
+ dumbttyuidelegate.h ../../src/ui/uidelegate.h ../../src/ui/element.h \
+ ../../src/ui/elementhandle.h ../../src/core/logger.h
+element.o: element.cpp element.h ../../src/ui/elementhandle.h \
+ ../../src/ui/uifacet.h ../../src/base/structureddataname.h \
+ ../../src/base/serialize.h
+elementdelegate.o: elementdelegate.cpp element.h \
+ ../../src/ui/elementhandle.h ../../src/ui/uifacet.h \
+ ../../src/base/structureddataname.h ../../src/base/serialize.h \
+ elementdelegate.h
+elementhandle.o: elementhandle.cpp elementhandle.h element.h \
+ ../../src/ui/uifacet.h ../../src/base/structureddataname.h \
+ ../../src/base/serialize.h
+uicommand.o: uicommand.cpp element.h ../../src/ui/elementhandle.h \
+ ../../src/ui/uifacet.h ../../src/base/structureddataname.h \
+ ../../src/base/serialize.h uicommand.h ../../src/base/tobasictypes.h \
+ ../../src/base/result.h ../../src/base/structureddata.h \
+ ../../src/base/tobject.h ../../src/base/operation.h \
+ ../../src/base/tobjectiterator.h ../../src/base/tobjecttype.h \
+ ../../src/base/blob.h
+ui.o: ui.cpp ../../src/base/blob.h ../../src/base/tobject.h \
+ ../../src/base/operation.h ../../src/base/result.h \
+ ../../src/base/serialize.h ../../src/base/tobjectiterator.h \
+ ../../src/base/tobjecttype.h ../../src/core/logger.h element.h \
+ ../../src/ui/elementhandle.h ../../src/ui/uifacet.h \
+ ../../src/base/structureddataname.h ui.h ../../src/base/proc.h \
  ../../src/base/consumer.h ../../src/base/producttype.h \
- ../../src/base/producer.h ../../src/base/result.h \
- ../../src/ui/uidelegate.h
+ ../../src/base/producer.h ../../src/ui/uidelegate.h \
+ ../../src/ui/elementdelegate.h uicommand.h ../../src/base/tobasictypes.h \
+ ../../src/base/structureddata.h
+uidelegate.o: uidelegate.cpp element.h ../../src/ui/elementhandle.h \
+ ../../src/ui/uifacet.h ../../src/base/structureddataname.h \
+ ../../src/base/serialize.h elementdelegate.h ui.h ../../src/base/proc.h \
+ ../../src/base/consumer.h ../../src/base/result.h \
+ ../../src/base/producttype.h ../../src/base/producer.h \
+ ../../src/ui/uidelegate.h ../../src/core/logger.h
+uifacet.o: uifacet.cpp uifacet.h ../../src/base/structureddataname.h \
+ ../../src/base/serialize.h ../../src/base/structureddata.h
+uirequest.o: uirequest.cpp uirequest.h

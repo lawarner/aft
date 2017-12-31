@@ -28,7 +28,7 @@ CCFLAGS = -std=c++14 -Wall -g -fPIC -I$(TOP) -I$(INCDIR)
 DEPCPPFLAGS = -std=c++14 -I$(TOP) -I$(INCDIR)
 
 OBJS := blob.o command.o consumer.o context.o entity.o factory.o hasher.o operation.o \
-    outlet.o plugin.o proc.o producer.o propertyhandler.o result.o structureddata.o \
+    plugin.o proc.o producer.o propertyhandler.o result.o structureddata.o \
     structureddataname.o thread.o tobasictypes.o tobject.o tobjectiterator.o \
     tobjecttree.o tobjecttype.o
 

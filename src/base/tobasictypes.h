@@ -188,12 +188,15 @@ protected:
 class TOBlob : public TOBasicType<Blob *> {
 
 public:
+    /** If name is not given then then name of the Blob is used. */
     TOBlob(Blob* value, const std::string& name = std::string());
 protected:
     TOBlob(const TObjectType& objType, Blob* value, const std::string& name = std::string());
     
 public:
     virtual operator bool() const;
+    virtual int compare(const TOBlob& other) const;
+
     bool serialize(Blob& blob);
     bool deserialize(const Blob& blob);
 };

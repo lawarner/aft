@@ -39,7 +39,7 @@ public:
 };
 
 
-Entity::Entity(const std::string& name, const TObject& tObject, MatchLevel matchLevel)
+Entity::Entity(const std::string& name, TObject* tObject, MatchLevel matchLevel)
 : name_(name)
 , tObject_(tObject)
 , matchLevel_(matchLevel)
@@ -49,7 +49,7 @@ Entity::Entity(const std::string& name, const TObject& tObject, MatchLevel match
 
 Entity::Entity(const std::string& name, const TObjectType& toType, const std::string& toName)
 : name_(name)
-, tObject_(*new TObjectMatcher(toType, toName))
+, tObject_(new TObjectMatcher(toType, toName))
 , matchLevel_(LevelTOType)
 {
     if (!toName.empty())
@@ -58,21 +58,21 @@ Entity::Entity(const std::string& name, const TObjectType& toType, const std::st
     }
 }
 
-Entity::Entity(Entity& other)
+Entity::Entity(const Entity& other)
 : name_(other.name_)
 , tObject_(other.tObject_)
 , matchLevel_(other.matchLevel_) {
     
 }
 
-const TObject&
+const TObject*
 Entity::getTObject() const {
     return tObject_;
 }
 
 bool Entity::matches(const TObject& other) const
 {
-    if (tObject_ == other) return true;
+    if (*tObject_ == other) return true;
 
     bool ret = false;
 
@@ -83,13 +83,13 @@ bool Entity::matches(const TObject& other) const
             ret = true;
             break;
         case LevelTOType:
-            ret = const_cast<TObjectType&>(tObject_.getType()) == other.getType();
+            ret = const_cast<TObjectType&>(tObject_->getType()) == other.getType();
             break;
         case LevelTOValue:
-            ret = tObject_ == other;
+            //ret = tObject_ == other;
             break;
         case LevelTOName:
-            ret = tObject_.getName() == other.getName();
+            ret = tObject_->getName() == other.getName();
             break;
         default:
             break;
@@ -102,25 +102,23 @@ bool Entity::matches(const Entity& other) const
 {
     if (operator==(other)) return true;
 
-    return matches(other.tObject_);
+    return matches(*other.tObject_);
 }
 
-Entity& Entity::operator=(Entity& other) {
+Entity& Entity::operator=(const Entity& other) {
     name_ = other.name_;
     tObject_ = other.tObject_;
     matchLevel_ = other.matchLevel_;
     return *this;
 }
 
-bool Entity::operator==(const Entity& other) const
-{
+bool Entity::operator==(const Entity& other) const {
     if (this == &other) return true;
 
     if (matchLevel_ == other.matchLevel_ &&
         name_ == other.name_ &&
-        const_cast<TObjectType&>(tObject_.getType()) == other.tObject_.getType() &&
-        tObject_ == other.tObject_)
-    {
+        const_cast<TObjectType&>(tObject_->getType()) == other.tObject_->getType() &&
+        *tObject_ == *other.tObject_) {
         return true;
     }
 

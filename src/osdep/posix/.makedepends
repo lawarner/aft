@@ -4,5 +4,4 @@ posixpluginloader.o: posixpluginloader.cpp ../../../src/base/factory.h \
  ../../../src/osdep/native/nativethread.h ../../../src/base/thread.h \
  ../../../src/base/result.h ../../../src/base/tobject.h \
  ../../../src/base/operation.h ../../../src/base/serialize.h \
- ../../../src/base/tobjectiterator.h \
- ../../../src/osdep/posix/posixthread.h
+ ../../../src/base/tobjectiterator.h

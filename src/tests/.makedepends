@@ -1,26 +1,29 @@
 t_basetests.o: t_basetests.cpp ../../src/base/blob.h \
- ../../src/base/context.h ../../src/base/result.h \
+ ../../src/base/context.h ../../src/base/propertyhandler.h \
+ ../../src/base/propertymap.h ../../src/base/result.h \
  ../../src/base/visitor.h ../../src/base/tobject.h \
  ../../src/base/operation.h ../../src/base/serialize.h \
  ../../src/base/tobjectiterator.h ../../src/base/entity.h \
  ../../src/base/factory.h ../../src/base/hasher.h \
- ../../src/base/propertyhandler.h ../../src/base/structureddata.h \
- ../../src/base/structureddataname.h ../../src/base/tobasictypes.h \
- ../../src/base/tobjecttype.h ../../src/base/tobjecttree.h \
- ../../src/core/logger.h
+ ../../src/base/structureddata.h ../../src/base/structureddataname.h \
+ ../../src/base/tobasictypes.h ../../src/base/tobjecttype.h \
+ ../../src/base/tobjecttree.h ../../src/core/logger.h
 t_coretests.o: t_coretests.cpp ../../src/base/blob.h \
  ../../src/core/basiccommands.h ../../src/base/command.h \
  ../../src/base/result.h ../../src/base/tobject.h \
  ../../src/base/operation.h ../../src/base/serialize.h \
  ../../src/base/tobjectiterator.h ../../src/core/commandcontext.h \
- ../../src/base/context.h ../../src/base/visitor.h \
- ../../src/base/propertyhandler.h ../../src/core/fileconsumer.h \
- ../../src/base/consumer.h ../../src/base/producttype.h \
- ../../src/core/fileproducer.h ../../src/base/producer.h \
- ../../src/core/queueproc.h ../../src/base/proc.h \
- ../../src/core/stringconsumer.h ../../src/core/stringproducer.h
+ ../../src/base/context.h ../../src/base/propertyhandler.h \
+ ../../src/base/propertymap.h ../../src/base/visitor.h \
+ ../../src/core/fileconsumer.h ../../src/base/consumer.h \
+ ../../src/base/producttype.h ../../src/core/fileproducer.h \
+ ../../src/base/producer.h ../../src/core/outlet.h \
+ ../../src/base/entity.h ../../src/base/proc.h ../../src/core/queueproc.h \
+ ../../src/base/callback.h ../../src/core/stringconsumer.h \
+ ../../src/core/stringproducer.h
 t_logger.o: t_logger.cpp ../../src/core/logger.h
 t_osdep.o: t_osdep.cpp ../../src/base/callback.h ../../src/base/context.h \
+ ../../src/base/propertyhandler.h ../../src/base/propertymap.h \
  ../../src/base/result.h ../../src/base/visitor.h \
  ../../src/base/tobject.h ../../src/base/operation.h \
  ../../src/base/serialize.h ../../src/base/tobjectiterator.h \
@@ -31,17 +34,32 @@ t_plugin.o: t_plugin.cpp ../../src/base/blob.h ../../src/base/factory.h \
  ../../src/base/plugin.h ../../src/base/tobject.h \
  ../../src/base/operation.h ../../src/base/result.h \
  ../../src/base/serialize.h ../../src/base/tobjectiterator.h
-t_result.o: t_result.cpp ../../src/base/result.h ../../src/base/tobject.h \
- ../../src/base/operation.h ../../src/base/serialize.h \
- ../../src/base/tobjectiterator.h ../../src/core/logger.h
+t_result.o: t_result.cpp ../../src/base/command.h ../../src/base/result.h \
+ ../../src/base/tobject.h ../../src/base/operation.h \
+ ../../src/base/serialize.h ../../src/base/tobjectiterator.h \
+ ../../src/core/logger.h
 t_testsuite.o: t_testsuite.cpp ../../src/base/context.h \
+ ../../src/base/propertyhandler.h ../../src/base/propertymap.h \
  ../../src/base/result.h ../../src/base/visitor.h \
  ../../src/base/tobject.h ../../src/base/operation.h \
  ../../src/base/serialize.h ../../src/base/tobjectiterator.h \
  ../../src/core/basiccommands.h ../../src/base/command.h \
  ../../src/core/logger.h ../../src/core/testcase.h \
- ../../src/core/testsuite.h
-t_ui.o: t_ui.cpp ../../src/core/logger.h ../../src/ui/element.h \
+ ../../src/core/outlet.h ../../src/base/entity.h ../../src/base/proc.h \
+ ../../src/base/consumer.h ../../src/base/producttype.h \
+ ../../src/base/producer.h ../../src/core/testsuite.h
+t_ui.o: t_ui.cpp ../../src/base/result.h ../../src/core/logger.h \
+ ../../src/ui/element.h ../../src/ui/elementhandle.h \
+ ../../src/ui/uifacet.h ../../src/base/structureddataname.h \
+ ../../src/base/serialize.h ../../src/ui/elementdelegate.h \
  ../../src/ui/ui.h ../../src/base/proc.h ../../src/base/consumer.h \
  ../../src/base/producttype.h ../../src/base/producer.h \
- ../../src/base/result.h ../../src/ui/uidelegate.h
+ ../../src/ui/uidelegate.h
+t_uiblocking.o: t_uiblocking.cpp ../../src/core/logger.h \
+ ../../src/ui/dumbttyelementdelegate.h ../../src/ui/elementdelegate.h \
+ ../../src/ui/uifacet.h ../../src/base/structureddataname.h \
+ ../../src/base/serialize.h ../../src/ui/dumbttyuidelegate.h \
+ ../../src/ui/uidelegate.h ../../src/ui/element.h \
+ ../../src/ui/elementhandle.h ../../src/ui/ui.h ../../src/base/proc.h \
+ ../../src/base/consumer.h ../../src/base/result.h \
+ ../../src/base/producttype.h ../../src/base/producer.h

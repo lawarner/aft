@@ -27,9 +27,9 @@ using namespace aft::core;
 
 static RunPropertyHandler* globalInstance = nullptr;
 
-static constexpr char* PrefixCons = "cons$";
-static constexpr char* PrefixProc = "proc$";
-static constexpr char* PrefixProd = "prod$";
+static constexpr char PrefixCons[] { "cons$" };
+static constexpr char PrefixProc[] { "proc$" };
+static constexpr char PrefixProd[] { "prod$" };
 
 class aft::core::RunPropertyHandlerImpl {
 public:

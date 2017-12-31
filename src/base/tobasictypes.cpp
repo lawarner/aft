@@ -40,13 +40,22 @@ Result TOBasicTypeBase::getValueAsResult() const
 // Specializations
 
 TOBlob::TOBlob(Blob *value, const std::string& name)
-    : TOBasicType<Blob *>(value, name) {
+    : TOBasicType<Blob *>(value, (name.empty() && value)
+                                  ? value->getName() : name) {
     resultValue_.setValue(value);
 }
 
 TOBlob::TOBlob(const TObjectType& objType, Blob* value, const std::string& name)
-    : TOBasicType<Blob *>(objType, value, name) {
+    : TOBasicType<Blob *>(objType, value, (name.empty() && value)
+                                           ? value->getName() : name) {
     resultValue_.setValue(value);
+}
+
+int TOBlob::compare(const TOBlob& other) const {
+    if (this == &other) return 0;
+    if (*value_ > *other.value_) return  1;
+    if (*value_ < *other.value_) return -1;
+    return 0;
 }
 
 TOBlob::operator bool() const {
@@ -150,8 +159,7 @@ TOBool::operator bool() const
 
 bool TOBool::serialize(Blob& blob)
 {
-    if (!TObject::serialize(blob))
-    {
+    if (!TObject::serialize(blob)) {
         return false;
     }
     
@@ -163,20 +171,17 @@ bool TOBool::serialize(Blob& blob)
 
 bool TOBool::deserialize(const Blob& blob)
 {
-    if (!TObject::deserialize(blob))
-    {
+    if (!TObject::deserialize(blob)) {
         return false;
     }
     
     StructuredData sd("");
-    if (!sd.deserialize(blob))
-    {
+    if (!sd.deserialize(blob)) {
         return false;
     }
     
     int intValue;
-    if (!sd.get("value", intValue))
-    {
+    if (!sd.get("value", intValue)) {
         return false;
     }
     value_ = intValue != 0;

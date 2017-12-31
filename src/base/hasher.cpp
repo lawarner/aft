@@ -37,16 +37,14 @@ Hasher::Hasher(const std::vector<std::string>& names)
 }
 
 Hasher::Hasher(const char* names[], std::size_t nameCount)
-: hashes_(nameCount > 0 ? new HashType[nameCount] : 0)
+: hashes_(nameCount > 0 ? new HashType[nameCount] : nullptr)
 {
-    if (nameCount == 0)
-    {
+    if (nameCount == 0) {
         while (names[nameCount]) nameCount++;  // do nothing but count
         hashes_ = new HashType[nameCount];
     }
     
-    for (int idx = 0; idx < nameCount; ++idx)
-    {
+    for (std::size_t idx = 0; idx < nameCount; ++idx) {
         putHashValue(names[idx], idx);
     }
 }

@@ -24,12 +24,12 @@ namespace aft {
 namespace base {
         
 // Forward references
-class TObject;
 class TObjectType;
     
 
 /**
- *  Entity is a minimalist TObject container class used in Consume, Provide and Require expressions.
+ *  Entity is a minimalist TObject container class used in Consume, Provide and
+ *  Require expressions.
  */
 class Entity
 {
@@ -43,17 +43,18 @@ public:
     };
 public:
     /** Construct a named entity wrapping a TObject */
-    Entity(const std::string& name, const TObject& tObject, MatchLevel matchLevel = LevelTOName);
-    
+    Entity(const std::string& name, TObject* tObject, MatchLevel matchLevel = LevelTOName);
+
     /** Construct a named entity used for matching other entities.
      *  A TObject is synthesized to hold the matching values. */
-    Entity(const std::string& name, const TObjectType& toType, const std::string& toName = std::string());
+    Entity(const std::string& name, const TObjectType& toType,
+           const std::string& toName = std::string());
 
-    Entity(Entity& other);
+    Entity(const Entity& other);
 
     virtual ~Entity() = default;
 
-    const TObject& getTObject() const;
+    const TObject* getTObject() const;
 
     /**
      *  Check if a given TObject matches this entity's requirements.
@@ -65,14 +66,14 @@ public:
      */
     bool matches(const Entity& other) const;
 
-    Entity& operator=(Entity& other);
+    Entity& operator=(const Entity& other);
 
     /** Check if this entity is equal to another */
     bool operator==(const Entity& other) const;
 
 private:
     std::string name_;
-    TObject tObject_;
+    TObject* tObject_;
     MatchLevel matchLevel_;
 };
 

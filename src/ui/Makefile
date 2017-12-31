@@ -25,7 +25,9 @@ CC = g++
 CCFLAGS = -std=c++14 -Wall -g -fPIC -I$(TOP) -I$(INCDIR)
 DEPCPPFLAGS = -std=c++14 -I$(TOP) -I$(INCDIR)
 
-OBJS := basicelements.o element.o uicommand.o ui.o
+OBJS := basicelements.o basicuis.o dumbttyelementdelegate.o dumbttyuidelegate.o \
+        element.o elementdelegate.o elementhandle.o uicommand.o ui.o \
+        uidelegate.o uifacet.o uirequest.o
 
 SRCS := $(OBJS:.o=.cpp)
 INCS = $(OBJS:.o=.h)

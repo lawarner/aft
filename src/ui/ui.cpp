@@ -29,6 +29,8 @@
 
 using namespace aft::base;
 using aft::core::aftlog;
+using aft::core::loglevel;
+using aft::core::Error;
 using std::endl;
 
 namespace aft {

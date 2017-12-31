@@ -19,13 +19,12 @@
  */
 
 #include <base/structureddataname.h>
+#include <memory>
 #include <string>
 #include <vector>
 
-namespace aft
-{
-namespace base
-{
+namespace aft {
+namespace base {
 // Forward reference
 class StructuredData;
 class StructuredDataName;

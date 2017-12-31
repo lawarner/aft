@@ -20,8 +20,9 @@
 
 #include "ui/elementhandle.h"
 #include "ui/uifacet.h"
-#include <unordered_map>
+#include <atomic>
 #include <string>
+#include <unordered_map>
 
 namespace aft {
 namespace ui {

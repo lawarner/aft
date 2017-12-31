@@ -14,6 +14,7 @@
  *   limitations under the License.
  */
 
+#include <cstring>
 #include <iomanip>
 #include <sstream>
 
@@ -30,7 +31,7 @@ Blob::Blob(const std::string& name, void* data, int dataLength)
 
 Blob::Blob(const std::string& name, Blob::Type type, const std::string& stringData)
 : name_(name)
-, data_(0)
+, data_(nullptr)
 , dataLength_(0)
 , type_(type)
 , stringData_(stringData)
@@ -74,11 +75,9 @@ bool Blob::addData(void* data, int dataLength)
     data_ = data;
     dataLength_ = dataLength;
 
-    if (data_)
-    {
+    if (nullptr != data_) {
         std::ostringstream oss;
-        if (dataLength_ < 0)
-        {
+        if (dataLength_ < 0) {
             oss << "<pointer>";
         }
         else
@@ -110,6 +109,21 @@ bool Blob::addMember(Blob* blob)
     return true;
 }
 
+int Blob::compareData(const Blob& other) const {
+    if (dataLength_ <= 0 || other.dataLength_ <= 0) {
+        if (dataLength_ > 0) {
+            return 1;
+        } else if (other.dataLength_ > 0) {
+            return -1;
+        } else {
+            return static_cast<uint8_t*>(data_) - static_cast<uint8_t*>(other.data_);
+        }
+    }
+
+    size_t szCmp = dataLength_ < other.dataLength_ ? dataLength_ : other.dataLength_;
+    return memcmp(data_, other.data_, szCmp);
+}
+
 const void*
 Blob::getData() const
 {
@@ -135,28 +149,22 @@ Blob::getString() const
 }
 
 Blob::Type
-Blob::getType() const
-{
+Blob::getType() const {
     return type_;
 }
 
-bool Blob::operator==(const Blob& other)
-{
+bool Blob::operator==(const Blob& other) {
     if (this == &other) return true;
-    if (type_ != other.type_ ||
-        name_ != other.name_)
-    {
-        return false;
-    }
+    if (type_ != other.type_) return false;
     
-    if (members_.size() != other.members_.size()) return false; //TODO more strict testing of members
+    //TODO more strict testing of members
+    if (members_.size() != other.members_.size()) return false;
 
-    switch (type_)
-    {
+    switch (type_) {
         case UNKNOWN:
             return true;
         case RAWDATA:
-            return data_ == other.data_;
+            return compareData(other) == 0;
         case STRING:
             return stringData_ == other.stringData_;
         case JSON:
@@ -171,7 +179,56 @@ bool Blob::operator==(const Blob& other)
     return false;
 }
 
-bool Blob::operator!=(const Blob& other)
-{
+bool Blob::operator!=(const Blob& other) {
     return !operator==(other);
+}
+
+bool Blob::operator<(const Blob& other) {
+    if (this == &other) return false;
+    if (type_ < other.type_) {
+        return true;
+    }
+
+    switch (type_) {
+        case UNKNOWN:
+            return false;
+        case RAWDATA:
+            return compareData(other) < 0;
+        case STRING:
+            return stringData_ < other.stringData_;
+        case JSON:
+            return stringData_ < other.stringData_;
+        case COMMAND:
+            return false;   //TODO figure out if this is even used
+        case URL:
+            return stringData_ < other.stringData_;
+        default:
+            break;
+    }
+    return members_.size() < other.members_.size();
+}
+
+bool Blob::operator>(const Blob& other) {
+    if (this == &other) return false;
+    if (type_ > other.type_) {
+        return true;
+    }
+    
+    switch (type_) {
+        case UNKNOWN:
+            return false;
+        case RAWDATA:
+            return compareData(other) > 0;
+        case STRING:
+            return stringData_ > other.stringData_;
+        case JSON:
+            return stringData_ > other.stringData_;
+        case COMMAND:
+            return false;   //TODO figure out if this is even used
+        case URL:
+            return stringData_ > other.stringData_;
+        default:
+            break;
+    }
+    return members_.size() > other.members_.size();
 }

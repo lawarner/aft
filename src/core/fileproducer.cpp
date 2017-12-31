@@ -75,9 +75,8 @@ public:
         {
             bool retval = false;
 
-            switch (parcelType_)
-            {
-                case ParcelType::BLOB_CHARACTER:
+            switch (parcelType_) {
+            case ParcelType::BLOB_CHARACTER:
             {
                 int ch = infile_.get();
                 if (ch != EOF)
@@ -100,6 +99,9 @@ public:
                     retval = true;
                 }
             }
+                break;
+            case ParcelType::BLOB_PARAGRAPH:
+                //TODO implement
                 break;
             case ParcelType::BLOB_FILE:
             {

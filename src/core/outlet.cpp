@@ -221,7 +221,7 @@ void Outlet::provides(const EntityList& entities) {
 }
 
 void Outlet::requires(const EntityList& entities) {
-    
+    impl_.required = entities;
 }
 
 Result Outlet::read(TObject& object) {

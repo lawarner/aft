@@ -33,6 +33,8 @@
 #include <gtest/gtest.h>
 using namespace aft::base;
 using namespace aft::core;
+using std::cout;
+using std::endl;
 using std::string;
 
 const std::string FullName("one.two.three.four");
@@ -150,8 +152,7 @@ public:
     }
 };
 
-namespace
-{
+namespace {
 
 TEST(BasePackageTest, PropertyHandler)
 {
@@ -267,8 +268,7 @@ TEST(BasePackageTest, TObjectContainer)
     }
 }
 
-TEST(BasePackageTest, TObjectTypes)
-{
+TEST(BasePackageTest, TObjectTypes) {
     TObjectType& totBase  = TObjectType::get(TObjectType::NameBase);
     TObjectType& totBase2 = TObjectType::get(TObjectType::NameBase);
     TObjectType& totCommand = TObjectType::get(TObjectType::NameCommand);
@@ -337,21 +337,37 @@ TEST(BasePackageTest, BasicTypes) {
 
     Blob blob("");
     EXPECT_TRUE(isTrue.serialize(blob));
-    std::cout << "isTrue serialized: " << blob.getString() << std::endl;
+    //std::cout << "isTrue serialized: " << blob.getString() << std::endl;
     EXPECT_TRUE(hello.serialize(blob));
-    std::cout << "hello serialized: " << blob.getString() << std::endl;
+    //std::cout << "hello serialized: " << blob.getString() << std::endl;
     
     TOBlob serialHello(&blob, "(hello)");
     EXPECT_EQ(serialHello.getValue(), &blob);
-    
-    Blob blob2("two", Blob::STRING, "Aacme");
-    TOBlob toBlob2(&blob2, "(blob2)");
-    
-    EXPECT_EQ( 0, serialHello.compare(serialHello));
-    EXPECT_EQ( 1, serialHello.compare(toBlob2));
-    EXPECT_EQ(-1, toBlob2.compare(serialHello));
-    EXPECT_EQ( 0, toBlob2.compare(toBlob2));
-    
+
+    {
+        Blob blob2("two", Blob::STRING, "Aacme");
+        TOBlob toBlob2(&blob2, "(blob2)");
+        Blob blob3("three", Blob::STRING, "Bears");
+        TOBlob toBlob3(&blob3, "(blob3)");
+        EXPECT_EQ( 0, serialHello.compare(serialHello));
+        EXPECT_EQ( 1, toBlob3.compare(toBlob2));
+        EXPECT_EQ(-1, toBlob2.compare(toBlob3));
+        EXPECT_EQ( 0, toBlob2.compare(toBlob2));
+        EXPECT_EQ( 0, toBlob3.compare(toBlob3));
+    }
+    {
+        constexpr size_t SZDATA = 8;
+        uint8_t data1[SZDATA] { 1, 2, 3, 4, 5, 6, 7, 8 };
+        uint8_t data2[SZDATA] { 1, 2, 3, 4, 5, 6, 7, 9 };
+        Blob rawBlob1("rawBlob1", data1, SZDATA);
+        Blob rawBlob2("rawBlob2", data2, SZDATA);
+        TOBlob rtb1(&rawBlob1);
+        TOBlob rtb2(&rawBlob2);
+        EXPECT_EQ( 0, rtb1.compare(rtb1));
+        EXPECT_EQ(-1, rtb1.compare(rtb2));
+        EXPECT_EQ( 1, rtb2.compare(rtb1));
+        EXPECT_EQ( 0, rtb2.compare(rtb2));
+    }
     Result result = hello.getValueAsResult();
     EXPECT_EQ(result.getType(), Result::STRING);
     std::string strval;
@@ -717,7 +733,7 @@ TEST(BasePackageTest, Operation)
     EXPECT_TRUE(anInt.applyOperation(setTo123));
     EXPECT_EQ(anInt.getValue(), 123);
 }
-    
+
 } // namespace
 
 int main(int argc, char* argv[])

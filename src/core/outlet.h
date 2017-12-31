@@ -28,7 +28,6 @@ namespace aft {
 namespace base {
 // Forward references
 class ConsumerContract;
-class Entity;
 class ProducerContract;
 }
 

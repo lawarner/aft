@@ -351,7 +351,7 @@ JsonDataDelegate::getJsonPtr(const StructuredDataName& name, bool pathOnly) cons
         else if (retval->isArray()) {
             if (string::npos == names[idx].find_first_not_of("0123456789")) {
                 int iname = std::stoi(names[idx]);
-                if (iname >= 0 && iname < retval->size()) {
+                if (iname >= 0 && iname < (int)retval->size()) {
                     retval = &(*retval)[iname];
                 }
                 else {

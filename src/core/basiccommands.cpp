@@ -14,6 +14,7 @@
  *   limitations under the License.
  */
 
+#include <algorithm>
 #include <sstream>
 
 #include "base/blob.h"
@@ -320,10 +321,11 @@ EnvCommand::process(base::Context* context) {
         {
             base::BasePropertyHandler& env = ctx->getEnvironment();
             std::string value;
-            if (env.getValue(parameters_[1], value))
-            {
+            if (env.getValue(parameters_[1], value)) {
                 result_ = base::Result(value);
-                propHandler->setLastResult(result_);
+                if (nullptr != propHandler) {
+                    propHandler->setLastResult(result_);
+                }
                 return result_;
             }
         }
@@ -355,7 +357,9 @@ EnvCommand::process(base::Context* context) {
             }
         }
         result_ = base::Result(oss.str());
-        propHandler->setLastResult(result_);
+        if (nullptr != propHandler) {
+            propHandler->setLastResult(result_);
+        }
         return result_;
     }
 

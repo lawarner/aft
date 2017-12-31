@@ -39,10 +39,10 @@ LDLIBS =
 
 SUBDIRS =
 
-OBJS := sc_testcase.o
+OBJS := sc_testcase.o sc_outlets.o
 SRCS := $(OBJS:.o=.cpp)
 
-PROGRAMS = sc_testcase
+PROGRAMS = sc_testcase sc_outlets
 
 DEPCPPFLAGS = -std=c++14 -I. $(INCS)
 DEPLIBS = $(LIBAFT)

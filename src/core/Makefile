@@ -26,7 +26,7 @@ CCFLAGS = -std=c++14 -Wall -g -fPIC -I$(TOP) -I$(INCDIR)
 DEPCPPFLAGS = -std=c++14 -I$(TOP) -I$(INCDIR)
 
 OBJS := basiccommands.o basicfactory.o commandcontext.o fileconsumer.o fileproducer.o \
-        logger.o loghandler.o queueproc.o runcontext.o \
+        logger.o loghandler.o outlet.o queueproc.o runcontext.o runpropertyhandler.o \
         stringconsumer.o stringproducer.o testcase.o testsuite.o
 
 SRCS := $(OBJS:.o=.cpp)

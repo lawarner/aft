@@ -41,7 +41,7 @@ public:
         URL
     };
 
-    Blob(const std::string& name, void* data = 0, int dataLength = -1);
+    Blob(const std::string& name, void* data = nullptr, int dataLength = -1);
     Blob(const std::string& name, Type type, const std::string& stringData);
     Blob(const Blob& other);
     virtual ~Blob();
@@ -52,8 +52,10 @@ public:
     //TODO a general read/write interface?
 
     bool addData(void* data, int dataLength = -1);
-
     bool addMember(Blob* blob);
+
+    int compareData(const Blob& other) const;
+
     const void* getData() const;
     const std::vector<Blob*>& getMembers() const;
     const std::string& getName() const;
@@ -64,6 +66,8 @@ public:
     
     bool operator==(const Blob& other);
     bool operator!=(const Blob& other);
+    bool operator<(const Blob& other);
+    bool operator>(const Blob& other);
 
 protected:
     std::string name_;
